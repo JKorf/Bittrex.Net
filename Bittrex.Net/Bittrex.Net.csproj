@@ -1,81 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3762140C-7FF9-46E5-8EC3-BFB3FC7ADB9B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Bittrex.Net</RootNamespace>
-    <AssemblyName>Bittrex.Net</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworks>net45;net46</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  
+  <PropertyGroup>
+    <Version>0.0.1</Version>
+    <FileVersion>0.0.1</FileVersion>
+    <Authors>JKorf</Authors>
+    <Description>Bittrex .Net API wrapper</Description>
+    <Copyright></Copyright>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  
+  <PropertyGroup>
+    <PackageId>Bittrex.Net</PackageId>
+	<Authors>JKorf</Authors>
+    <PackageVersion>0.0.1</PackageVersion>
+	<Description>Bittrex .Net API wrapper</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
+    <PackageProjectUrl>https://github.com/JKorf/Bittrex.Net</PackageProjectUrl>
+	<PackageLicenseUrl>https://github.com/JKorf/Bittrex.Net/blob/master/LICENSE</PackageLicenseUrl>
+	<NeutralLanguage>en</NeutralLanguage>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<PackageReleaseNotes>0.0.1 - Initial commit</PackageReleaseNotes>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BittrexAbstractClient.cs" />
-    <Compile Include="BittrexClient.cs" />
-    <Compile Include="Converters\FillTypeConverter.cs" />
-    <Compile Include="Converters\OrderBookTypeConverter.cs" />
-    <Compile Include="Converters\OrderTypeConverter.cs" />
-    <Compile Include="Converters\OrderTypeExtendedConverter.cs" />
-    <Compile Include="Implementations\Request.cs" />
-    <Compile Include="Implementations\RequestFactory.cs" />
-    <Compile Include="Implementations\Response.cs" />
-    <Compile Include="Interfaces\IRequest.cs" />
-    <Compile Include="Interfaces\IRequestFactory.cs" />
-    <Compile Include="Interfaces\IResponse.cs" />
-    <Compile Include="Logging\Log.cs" />
-    <Compile Include="Logging\TraceTextWriter.cs" />
-    <Compile Include="Objects\BittrexAccountOrder.cs" />
-    <Compile Include="Objects\BittrexApiResult.cs" />
-    <Compile Include="Objects\BittrexBalance.cs" />
-    <Compile Include="Objects\BittrexCurrencies.cs" />
-    <Compile Include="Objects\BittrexDeposit.cs" />
-    <Compile Include="Objects\BittrexDepositAddress.cs" />
-    <Compile Include="Objects\BittrexMarketHistory.cs" />
-    <Compile Include="Objects\BittrexMarkets.cs" />
-    <Compile Include="Objects\BittrexMarketSummary.cs" />
-    <Compile Include="Objects\BittrexOrder.cs" />
-    <Compile Include="Objects\BittrexOrderBook.cs" />
-    <Compile Include="Objects\BittrexGuid.cs" />
-    <Compile Include="Objects\BittrexPrice.cs" />
-    <Compile Include="Objects\BittrexEnums.cs" />
-    <Compile Include="Objects\BittrexWithdrawal.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  
 </Project>
