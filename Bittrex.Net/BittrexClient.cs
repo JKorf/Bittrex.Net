@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net
 {
-    public class BittrexClient: BittrexAbstractClient
+    public class BittrexClient: BittrexAbstractClient, IDisposable
     {
         #region fields
         private const string BaseAddress = "https://www.bittrex.com";
@@ -57,6 +57,11 @@ namespace Bittrex.Net
         public BittrexClient(string apiKey, string apiSecret)
         {
             SetApiCredentials(apiKey, apiSecret);
+        }
+
+        ~BittrexClient()
+        {
+            Dispose(false);
         }
         #endregion
 
@@ -310,6 +315,15 @@ namespace Bittrex.Net
             foreach (byte t in buff)
                 sbinary += t.ToString("X2"); /* hex format */
             return sbinary;
+        }
+
+        private void Dispose(bool disposing)
+        {
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
         #endregion
         #endregion
