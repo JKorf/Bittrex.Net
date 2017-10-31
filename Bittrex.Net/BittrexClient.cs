@@ -67,20 +67,47 @@ namespace Bittrex.Net
 
         #region methods
         #region public
-
+        /// <summary>
+        /// Synchronized version of the <see cref="GetMarketsAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexMarket[]> GetMarkets() => GetMarketsAsync().Result;
+
+        /// <summary>
+        /// Gets information about all available markets
+        /// </summary>
+        /// <returns>List of markets</returns>
         public async Task<BittrexApiResult<BittrexMarket[]>> GetMarketsAsync()
         {
             return await ExecuteRequest<BittrexMarket[]>(GetUrl(MarketsEndpoint, Api, ApiVersion));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetCurrenciesAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexCurrencies[]> GetCurrencies() => GetCurrenciesAsync().Result;
+
+        /// <summary>
+        /// Gets information about all available currencies
+        /// </summary>
+        /// <returns>List of currencies</returns>
         public async Task<BittrexApiResult<BittrexCurrencies[]>> GetCurrenciesAsync()
         {
             return await ExecuteRequest<BittrexCurrencies[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetTickerAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexPrice> GetTicker(string market) => GetTickerAsync(market).Result;
+
+        /// <summary>
+        /// Gets the price of a market
+        /// </summary>
+        /// <param name="market">Market to get price for</param>
+        /// <returns>The current ask, bid and last prices for the market</returns>
         public async Task<BittrexApiResult<BittrexPrice>> GetTickerAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -91,7 +118,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion, parameters));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetMarketSummaryAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexMarketSummary[]> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
+
+        /// <summary>
+        /// Gets a summary of the market
+        /// </summary>
+        /// <param name="market">The market to get info for</param>
+        /// <returns>List with single entry containing info for the market</returns>
         public async Task<BittrexApiResult<BittrexMarketSummary[]>> GetMarketSummaryAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -102,13 +139,32 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetMarketSummariesAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexMarketSummary[]> GetMarketSummaries() => GetMarketSummariesAsync().Result;
+
+        /// <summary>
+        /// Gets a summary for all markets
+        /// </summary>
+        /// <returns>List of summaries for all markets</returns>
         public async Task<BittrexApiResult<BittrexMarketSummary[]>> GetMarketSummariesAsync()
         {
             return await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummariesEndpoint, Api, ApiVersion));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetOrderBookAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexOrderBook> GetOrderBook(string market) => GetOrderBookAsync(market).Result;
+
+        /// <summary>
+        /// Gets the order book with bids and asks for a market
+        /// </summary>
+        /// <param name="market">The market to get the order book for</param>
+        /// <returns>Orderbook for the market</returns>
         public async Task<BittrexApiResult<BittrexOrderBook>> GetOrderBookAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -120,7 +176,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetBuyOrderBookAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market) => GetBuyOrderBookAsync(market).Result;
+
+        /// <summary>
+        /// Gets the order book with asks for a market
+        /// </summary>
+        /// <param name="market">Market to get the order book for</param>
+        /// <returns>Orderbook for the market</returns>
         public async Task<BittrexApiResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -132,7 +198,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetSellOrderBookAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market) => GetSellOrderBookAsync(market).Result;
+
+        /// <summary>
+        /// Gets the order book with bids for a market
+        /// </summary>
+        /// <param name="market">Market to get the order book for</param>
+        /// <returns>Orderbook for the market</returns>
         public async Task<BittrexApiResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -144,7 +220,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetMarketHistoryAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexMarketHistory[]> GetMarketHistory(string market) => GetMarketHistoryAsync(market).Result;
+
+        /// <summary>
+        /// Gets the last trades on a market
+        /// </summary>
+        /// <param name="market">Market to get history for</param>
+        /// <returns>List of trade aggregations</returns>
         public async Task<BittrexApiResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
@@ -155,7 +241,20 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters));
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="PlaceOrderAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexGuid> PlaceOrder(OrderType type, string market, double quantity, double rate) => PlaceOrderAsync(type, market, quantity, rate).Result;
+        
+        /// <summary>
+        /// Places an order
+        /// </summary>
+        /// <param name="type">Type of the order</param>
+        /// <param name="market">Market to place the order on</param>
+        /// <param name="quantity">The quantity of the order</param>
+        /// <param name="rate">The rate per unit of the order</param>
+        /// <returns></returns>
         public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, double quantity, double rate)
         {
             var parameters = new Dictionary<string, string>()
@@ -174,7 +273,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexGuid>(uri, true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="CancelOrderAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<object> CancelOrder(Guid guid) => CancelOrderAsync(guid).Result;
+        
+        /// <summary>
+        /// Cancels an open order
+        /// </summary>
+        /// <param name="guid">The Guid of the order to cancel</param>
+        /// <returns></returns>
         public async Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid)
         {
             var parameters = new Dictionary<string, string>()
@@ -185,7 +294,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<object>(GetUrl(CancelEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetOpenOrdersAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
+
+        /// <summary>
+        /// Gets a list of open orders
+        /// </summary>
+        /// <param name="market">Filter list by market</param>
+        /// <returns>List of open orders</returns>
         public async Task<BittrexApiResult<BittrexOrder[]>> GetOpenOrdersAsync(string market = null)
         {
             var parameters = new Dictionary<string, string>();
@@ -194,7 +313,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetBalanceAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexBalance> GetBalance(string currency) => GetBalanceAsync(currency).Result;
+
+        /// <summary>
+        /// Gets the balance of a single currency
+        /// </summary>
+        /// <param name="currency">Currency to get the balance for</param>
+        /// <returns>The balance of the currency</returns>
         public async Task<BittrexApiResult<BittrexBalance>> GetBalanceAsync(string currency)
         {
             var parameters = new Dictionary<string, string>()
@@ -204,13 +333,32 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetBalancesAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexBalance[]> GetBalances() => GetBalancesAsync().Result;
+
+        /// <summary>
+        /// Gets a list of all balances for the current account
+        /// </summary>
+        /// <returns>List of balances</returns>
         public async Task<BittrexApiResult<BittrexBalance[]>> GetBalancesAsync()
         {
             return await ExecuteRequest<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetDepositAddressAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexDepositAddress> GetDepositAddress(string currency) => GetDepositAddressAsync(currency).Result;
+
+        /// <summary>
+        /// Gets the desposit address for a specific currency
+        /// </summary>
+        /// <param name="currency">Currency to get deposit address for</param>
+        /// <returns>The deposit address of the currency</returns>
         public async Task<BittrexApiResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
         {
             var parameters = new Dictionary<string, string>()
@@ -220,7 +368,20 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="WithdrawAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexGuid> Withdraw(string currency, double quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
+
+        /// <summary>
+        /// Places a withdraw request on Bittrex
+        /// </summary>
+        /// <param name="currency">The currency to withdraw</param>
+        /// <param name="quantity">The quantity to withdraw</param>
+        /// <param name="address">The address to withdraw to</param>
+        /// <param name="paymentId">Optional string identifier to add to the withdraw</param>
+        /// <returns>Guid of the withdrawal</returns>
         public async Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, double quantity, string address, string paymentId = null)
         {
             var parameters = new Dictionary<string, string>()
@@ -234,7 +395,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetOrderAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexAccountOrder> GetOrder(Guid guid) => GetOrderAsync(guid).Result;
+
+        /// <summary>
+        /// Gets an order by it's guid
+        /// </summary>
+        /// <param name="guid">The guid of the order</param>
+        /// <returns>The requested order</returns>
         public async Task<BittrexApiResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
         {
             var parameters = new Dictionary<string, string>()
@@ -244,7 +415,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetOrderHistoryAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
+
+        /// <summary>
+        /// Gets the order history for the current account
+        /// </summary>
+        /// <param name="market">Filter on market</param>
+        /// <returns>List of orders</returns>
         public async Task<BittrexApiResult<BittrexOrder[]>> GetOrderHistoryAsync(string market = null)
         {
             var parameters = new Dictionary<string, string>();
@@ -252,7 +433,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetWithdrawalHistoryAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null) => GetWithdrawalHistoryAsync(currency).Result;
+
+        /// <summary>
+        /// Gets the withdrawal history of the current account
+        /// </summary>
+        /// <param name="currency">Filter on currency</param>
+        /// <returns>List of withdrawals</returns>
         public async Task<BittrexApiResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
         {
             var parameters = new Dictionary<string, string>();
@@ -260,7 +451,17 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true);
         }
 
+        /// <summary>
+        /// Synchronized version of the <see cref="GetDepositHistoryAsync"/> method
+        /// </summary>
+        /// <returns></returns>
         public BittrexApiResult<BittrexDeposit[]> GetDepositHistory(string currency = null) => GetDepositHistoryAsync(currency).Result;
+
+        /// <summary>
+        /// Gets the deposit history of the current account
+        /// </summary>
+        /// <param name="currency">Filter on currency</param>
+        /// <returns>List of deposits</returns>
         public async Task<BittrexApiResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
         {
             var parameters = new Dictionary<string, string>();
