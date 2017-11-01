@@ -8,6 +8,7 @@ pm> Install-Package Bittrex.Net
 ```
 
 ## Examples
+A example project has been provided in the Examples folder. This project provides the basic interactions with Bittrex.Net.
 
 ## Usage
 Start using the API by including `using Bittrex.Net;` in your usings.
