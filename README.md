@@ -1,6 +1,6 @@
 # Bittrex.Net
 
-A .Net wrapper for the Binance API as described on [Bittrex](https://bittrex.com/Home/Api), including all features.
+A .Net wrapper for the Bittrex API as described on [Bittrex](https://bittrex.com/Home/Api), including all features.
 ## Installation
 Bittrex.Net is available on [Nuget](https://www.nuget.org/packages/Bittrex.Net/).
 ```
@@ -146,5 +146,5 @@ BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
 	* Added example project
 
 * Version 0.0.2 - 1 nov 2017
-	* Added BinanceSocketClient
+	* Added BittrexSocketClient
 	* Updated documentation
