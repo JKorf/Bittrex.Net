@@ -10,7 +10,7 @@ namespace Bittrex.Net.Logging
 
         public override void WriteLine(string line)
         {
-            Trace.Write(line);
+            Trace.WriteLine(line);
         }
     }
 }

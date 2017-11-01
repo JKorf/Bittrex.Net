@@ -50,10 +50,18 @@ namespace Bittrex.Net
         #endregion
 
         #region constructor/destructor
+        /// <summary>
+        /// Create a new instance of BittrexClient
+        /// </summary>
         public BittrexClient()
         {
         }
 
+        /// <summary>
+        /// Create a new instance of BittrexClient using provided credentials. Api keys can be managed at https://bittrex.com/Manage#sectionApi
+        /// </summary>
+        /// <param name="apiKey">The api key</param>
+        /// <param name="apiSecret">The api secret associated with the key</param>
         public BittrexClient(string apiKey, string apiSecret)
         {
             SetApiCredentials(apiKey, apiSecret);
@@ -264,12 +272,7 @@ namespace Bittrex.Net
                 { "rate", rate.ToString(CultureInfo.InvariantCulture) }
             };
 
-            Uri uri;
-            if (type == OrderType.Buy)
-                uri = GetUrl(BuyLimitEndpoint, Api, ApiVersion, parameters);
-            else
-                uri = GetUrl(SellLimitEndpoint, Api, ApiVersion, parameters);
-
+            var uri = GetUrl(type == OrderType.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion, parameters);
             return await ExecuteRequest<BittrexGuid>(uri, true);
         }
 

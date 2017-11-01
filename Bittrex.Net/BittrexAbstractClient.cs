@@ -16,6 +16,15 @@ namespace Bittrex.Net
         protected BittrexAbstractClient()
         {
             log = new Log();
+
+            if (BittrexDefaults.LogWriter != null)
+                SetLogOutput(BittrexDefaults.LogWriter);
+
+            if (BittrexDefaults.LogVerbositySet)
+                SetLogVerbosity(BittrexDefaults.LogVerbosity);
+
+            if (BittrexDefaults.ApiKey != null && BittrexDefaults.ApiSecret != null)
+                SetApiCredentials(BittrexDefaults.ApiKey, BittrexDefaults.ApiSecret);
         }
 
         public void SetApiCredentials(string apiKey, string apiSecret)
@@ -25,7 +34,7 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Sets the API Key. Api keys can be managed at https://www.binance.com/userCenter/createApi.html
+        /// Sets the API Key. Api keys can be managed at https://bittrex.com/Manage#sectionApi
         /// </summary>
         /// <param name="apiKey">The api key</param>
         public void SetApiKey(string apiKey)
@@ -37,7 +46,7 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Sets the API Secret. Api keys can be managed at https://www.binance.com/userCenter/createApi.html
+        /// Sets the API Secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
         /// </summary>
         /// <param name="apiSecret">The api secret</param>
         public void SetApiSecret(string apiSecret)
