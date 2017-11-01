@@ -265,6 +265,9 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, double quantity, double rate)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexGuid>("No api credentials provided, can't request private endpoints");
+            
             var parameters = new Dictionary<string, string>()
             {
                 { "market", market },
@@ -289,6 +292,9 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<object>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>()
             {
                 {"uuid", guid.ToString()}
@@ -310,6 +316,9 @@ namespace Bittrex.Net
         /// <returns>List of open orders</returns>
         public async Task<BittrexApiResult<BittrexOrder[]>> GetOpenOrdersAsync(string market = null)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexOrder[]>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
 
@@ -329,6 +338,9 @@ namespace Bittrex.Net
         /// <returns>The balance of the currency</returns>
         public async Task<BittrexApiResult<BittrexBalance>> GetBalanceAsync(string currency)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexBalance>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>()
             {
                 {"currency", currency}
@@ -348,6 +360,9 @@ namespace Bittrex.Net
         /// <returns>List of balances</returns>
         public async Task<BittrexApiResult<BittrexBalance[]>> GetBalancesAsync()
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexBalance[]>("No api credentials provided, can't request private endpoints");
+
             return await ExecuteRequest<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true);
         }
 
@@ -364,6 +379,9 @@ namespace Bittrex.Net
         /// <returns>The deposit address of the currency</returns>
         public async Task<BittrexApiResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexDepositAddress>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>()
             {
                 {"currency", currency}
@@ -387,6 +405,9 @@ namespace Bittrex.Net
         /// <returns>Guid of the withdrawal</returns>
         public async Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, double quantity, string address, string paymentId = null)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexGuid>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>()
             {
                 {"currency", currency},
@@ -411,6 +432,9 @@ namespace Bittrex.Net
         /// <returns>The requested order</returns>
         public async Task<BittrexApiResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexAccountOrder>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>()
             {
                 {"uuid", guid.ToString()}
@@ -431,6 +455,9 @@ namespace Bittrex.Net
         /// <returns>List of orders</returns>
         public async Task<BittrexApiResult<BittrexOrder[]>> GetOrderHistoryAsync(string market = null)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexOrder[]>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
             return await ExecuteRequest<BittrexOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true);
@@ -449,6 +476,9 @@ namespace Bittrex.Net
         /// <returns>List of withdrawals</returns>
         public async Task<BittrexApiResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexWithdrawal[]>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "currency", currency);
             return await ExecuteRequest<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true);
@@ -467,6 +497,9 @@ namespace Bittrex.Net
         /// <returns>List of deposits</returns>
         public async Task<BittrexApiResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
         {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexDeposit[]>("No api credentials provided, can't request private endpoints");
+
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "currency", currency);
             return await ExecuteRequest<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion, parameters), true);

@@ -5,8 +5,8 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>0.0.1</Version>
-    <FileVersion>0.0.1</FileVersion>
+    <Version>0.0.3</Version>
+    <FileVersion>0.0.3</FileVersion>
     <Authors>JKorf</Authors>
     <Description>Bittrex .Net API wrapper</Description>
     <Copyright></Copyright>
@@ -15,7 +15,7 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>0.0.1</PackageVersion>
+    <PackageVersion>0.0.3</PackageVersion>
 	<Description>Bittrex .Net API wrapper</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -23,7 +23,10 @@
 	<PackageLicenseUrl>https://github.com/JKorf/Bittrex.Net/blob/master/LICENSE</PackageLicenseUrl>
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageReleaseNotes>0.0.1 - Initial commit</PackageReleaseNotes>
+	<PackageReleaseNotes>0.0.3 - * Small naming changes in socket client
+	* Added api key checks in private endpoints
+	* Updated documentation
+	* Added example project</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

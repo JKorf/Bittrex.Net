@@ -62,7 +62,7 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToMarketDelta(string marketName, Action<BittrexMarketSummary> onUpdate)
+        public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate)
         {
             log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
             ConnectionState state;
@@ -93,7 +93,7 @@ namespace Bittrex.Net
         /// Unsubsribe from updates of a specific stream using the stream id acquired when subscribing
         /// </summary>
         /// <param name="streamId">The stream id of the stream to unsubscribe</param>
-        public void UnsubscribeFromMarketDelta(int streamId)
+        public void UnsubscribeFromStream(int streamId)
         {
             log.Write(LogVerbosity.Debug, $"Unsubscribing stream with id {streamId}");
             lock (registrationLock)
@@ -108,7 +108,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Unsubscribes all streams on this client
         /// </summary>
-        public void UnsubscribeAll()
+        public void UnsubscribeAllStreams()
         {
             log.Write(LogVerbosity.Debug, "Unsubscribing all streams on this client");
             lock (registrationLock)
@@ -194,7 +194,7 @@ namespace Bittrex.Net
 
         private void Dispose(bool disposing)
         {
-            UnsubscribeAll();
+            UnsubscribeAllStreams();
         }
         #endregion
         #endregion
