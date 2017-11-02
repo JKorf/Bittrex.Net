@@ -94,15 +94,15 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="GetCurrenciesAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexCurrencies[]> GetCurrencies() => GetCurrenciesAsync().Result;
+        public BittrexApiResult<BittrexCurrency[]> GetCurrencies() => GetCurrenciesAsync().Result;
 
         /// <summary>
         /// Gets information about all available currencies
         /// </summary>
         /// <returns>List of currencies</returns>
-        public async Task<BittrexApiResult<BittrexCurrencies[]>> GetCurrenciesAsync()
+        public async Task<BittrexApiResult<BittrexCurrency[]>> GetCurrenciesAsync()
         {
-            return await ExecuteRequest<BittrexCurrencies[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion));
+            return await ExecuteRequest<BittrexCurrency[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion));
         }
 
         /// <summary>
@@ -130,21 +130,25 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="GetMarketSummaryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexMarketSummary[]> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
+        public BittrexApiResult<BittrexMarketSummary> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
 
         /// <summary>
         /// Gets a summary of the market
         /// </summary>
         /// <param name="market">The market to get info for</param>
         /// <returns>List with single entry containing info for the market</returns>
-        public async Task<BittrexApiResult<BittrexMarketSummary[]>> GetMarketSummaryAsync(string market)
+        public async Task<BittrexApiResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "market", market }
             };
 
-            return await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters));
+            var result = await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters));
+            if (!result.Success || result.Result.Length == 0)
+                return new BittrexApiResult<BittrexMarketSummary>() {Message = result.Message};
+
+            return new BittrexApiResult<BittrexMarketSummary>() { Result = result.Result[0], Success = true, Message = result.Message};
         }
 
         /// <summary>
@@ -522,7 +526,8 @@ namespace Bittrex.Net
 
                 var request = RequestFactory.Create(uriString);
                 if (signed)
-                    request.Headers.Add("apisign", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uriString))));
+                    request.Headers.Add("apisign",
+                        ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uriString))));
 
                 log.Write(LogVerbosity.Debug, $"Sending request to {uriString}");
                 var response = request.GetResponse();
@@ -534,14 +539,23 @@ namespace Bittrex.Net
             }
             catch (WebException we)
             {
-                var response = (HttpWebResponse)we.Response;
-                var errorMessage = $"Request to {uri} failed because of a webexception. Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}";
+                var response = (HttpWebResponse) we.Response;
+                var errorMessage =
+                    $"Request to {uri} failed because of a webexception. Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}";
                 log.Write(LogVerbosity.Warning, errorMessage);
                 return ThrowErrorMessage<T>(errorMessage);
             }
             catch (JsonReaderException jre)
             {
-                var errorMessage = $"Request to {uri} failed, couldn't parse the returned data. Error occured at Path: {jre.Path}, LineNumber: {jre.LineNumber}, LinePosition: {jre.LinePosition}. Received data: {returnedData}";
+                var errorMessage =
+                    $"Request to {uri} failed, couldn't parse the returned data. Error occured at Path: {jre.Path}, LineNumber: {jre.LineNumber}, LinePosition: {jre.LinePosition}. Received data: {returnedData}";
+                log.Write(LogVerbosity.Warning, errorMessage);
+                return ThrowErrorMessage<T>(errorMessage);
+            }
+            catch (JsonSerializationException jse)
+            {
+                var errorMessage =
+                    $"Request to {uri} failed, couldn't deserialize the returned data. Message: {jse.Message}. Received data: {returnedData}";
                 log.Write(LogVerbosity.Warning, errorMessage);
                 return ThrowErrorMessage<T>(errorMessage);
             }

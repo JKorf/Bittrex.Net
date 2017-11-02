@@ -5,7 +5,7 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Information about a currency
     /// </summary>
-    public class BittrexCurrencies
+    public class BittrexCurrency
     {
         /// <summary>
         /// The abbreviation of the currency
