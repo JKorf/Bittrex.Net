@@ -47,7 +47,7 @@ using(var client = new BittrexClient())
 {
 	var priceResult = client.GetTicker("BTC-ETH");
 	if (priceResult.Success)
-		Console.WriteLine($"BTC-ETH price: {priceResult.Last}");
+		Console.WriteLine($"BTC-ETH price: {priceResult.Result.Last}");
 	else
 		Console.WriteLine($"Error: {priceResult.Message}");
 }
