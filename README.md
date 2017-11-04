@@ -1,4 +1,4 @@
-# Bittrex.Net
+# Bittrex.Net ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Resources/icon.png?raw=true)
 
 A .Net wrapper for the Bittrex API as described on [Bittrex](https://bittrex.com/Home/Api), including all features.
 ## Installation
@@ -140,6 +140,9 @@ BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
 
 
 ## Release notes
+* Version 0.04 - 4 nov 2017
+	* Added icon
+
 * Version 0.0.3 - 1 nov 2017
 	* Small naming changes in socket client
 	* Added api key checks in private endpoints
