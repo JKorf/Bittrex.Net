@@ -26,7 +26,7 @@ using(var client = new BittrexSocketClient())
 For most API methods Bittrex.Net provides two versions, synchronized and async calls. 
 
 ### Setting API credentials
-For private endpoints (trading, order history, account info etc) an API key and secret has to be provided. For this the `SetApiCredentials` method can be used in both clients, or the credentials can be provided as arguments:
+For private endpoints (trading, order history, account info etc) an API key and secret has to be provided. For this the `SetApiCredentials` method can be used, or the credentials can be provided as arguments:
 ```C#
 using(var client = new BittrexClient("APIKEY", "APISECRET"))
 {
@@ -140,7 +140,13 @@ BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
 
 
 ## Release notes
-* Version 0.04 - 4 nov 2017
+* Version 1.0.0 - 6 nov 2017
+	* Release version 1.0.0
+	* Additional unit tests, also for the socket client	
+	* Small refactoring for unit testability
+	* Small cleanup
+	
+* Version 0.0.4 - 4 nov 2017
 	* Added icon
 
 * Version 0.0.3 - 1 nov 2017

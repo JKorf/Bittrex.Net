@@ -222,6 +222,48 @@ namespace Bittrex.Net.UnitTests
         }
 
         [TestCase()]
+        public void GetBuyOrderBook_Should_ReturnBuyOrderBook()
+        {
+            // arrange
+
+            var expected = new []
+            {
+                new BittrexOrderBookEntry() {Quantity = 1.1, Rate = 2.2},
+                new BittrexOrderBookEntry() {Quantity = 3.3, Rate = 3.3},
+            };
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
+
+            // act
+            var result = client.GetBuyOrderBook("TestMarket");
+
+            // assert
+            Assert.IsTrue(result.Success);
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+        }
+
+        [TestCase()]
+        public void GetSellOrderBook_Should_ReturnSellOrderBook()
+        {
+            // arrange
+
+            var expected = new[]
+            {
+                new BittrexOrderBookEntry() {Quantity = 1.1, Rate = 2.2},
+                new BittrexOrderBookEntry() {Quantity = 3.3, Rate = 3.3},
+            };
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
+
+            // act
+            var result = client.GetSellOrderBook("TestMarket");
+
+            // assert
+            Assert.IsTrue(result.Success);
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+        }
+
+        [TestCase()]
         public void GetMarketHistory_Should_ReturnMarketHistoryList()
         {
             // arrange

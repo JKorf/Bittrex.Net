@@ -5,8 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
-using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
+using Bittrex.Net.Interfaces;
+using Bittrex.Net.Implementations;
+using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 
 namespace Bittrex.Net
 {
@@ -18,7 +21,7 @@ namespace Bittrex.Net
         private const string HubName = "coreHub";
         private const string UpdateEvent = "updateSummaryState";
 
-        private static HubConnection connection;
+        private static Interfaces.IHubConnection connection;
 
         private readonly List<BittrexStreamRegistration> localRegistrations;
         private static readonly List<BittrexStreamRegistration> registrations = new List<BittrexStreamRegistration>();
@@ -41,11 +44,14 @@ namespace Bittrex.Net
         }
         #endregion
 
+        #region properties
+        public IConnectionFactory ConnectionFactory = new ConnectionFactory();
+        #endregion
+
         #region ctor
         public BittrexSocketClient()
         {
             localRegistrations = new List<BittrexStreamRegistration>();
-            CreateConnection();
         }
 
         ~BittrexSocketClient()
@@ -65,6 +71,8 @@ namespace Bittrex.Net
         public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate)
         {
             log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
+            CreateConnection();
+
             ConnectionState state;
             lock (connection)
                 state = connection.State;
@@ -83,7 +91,7 @@ namespace Bittrex.Net
             var registration = new BittrexStreamRegistration() {Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId};
             lock (registrationLock)
             {
-                registrations.Add(registration);
+                registrations.Add(registration);    
                 localRegistrations.Add(registration);
             }
             return new BittrexApiResult<int>() {Result = registration.StreamId, Success = true};
@@ -174,21 +182,32 @@ namespace Bittrex.Net
                 if (connection != null)
                     return;
 
-                connection = new HubConnection(BaseAddress);
+                connection = ConnectionFactory.Create(BaseAddress);
                 var proxy = connection.CreateHubProxy(HubName);
 
-                connection.StateChanged += (state) => log.Write(LogVerbosity.Debug, $"Socket state: {state.OldState} -> {state.NewState}");
+                connection.StateChanged += state => log.Write(LogVerbosity.Debug, $"Socket state: {state.OldState} -> {state.NewState}");
                 connection.Closed += () => log.Write(LogVerbosity.Debug, "Socket closed");
                 connection.Error += exception => log.Write(LogVerbosity.Error, $"Socket error: {exception.Message}");
                 connection.ConnectionSlow += () => log.Write(LogVerbosity.Warning, "Socket connection slow");
 
-                proxy.On(UpdateEvent, (jsonData) =>
+                Subscription sub = proxy.Subscribe(UpdateEvent);
+                sub.Received += jsonData =>
                 {
-                    var data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData.ToString());
-                    foreach (var delta in data.Deltas)
-                    foreach (var update in registrations.Where(r => r.MarketName == delta.MarketName))
-                        update.Callback(delta);
-                });
+                    if (jsonData.Count == 0)
+                        return;
+
+                    try
+                    {
+                        var data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData[0].ToString());
+                        foreach (var delta in data.Deltas)
+                        foreach (var update in registrations.Where(r => r.MarketName == delta.MarketName))
+                            update.Callback(delta);
+                    }
+                    catch (Exception e)
+                    {
+                        log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
+                    }
+                };
             }
         }
 
