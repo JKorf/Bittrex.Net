@@ -5,8 +5,8 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <Version>1.0.0</Version>
-    <FileVersion>1.0.0</FileVersion>
+    <Version>1.0.1</Version>
+    <FileVersion>1.0.1</FileVersion>
     <Authors>JKorf</Authors>
     <Description>Bittrex .Net API wrapper</Description>
     <Copyright></Copyright>
@@ -15,7 +15,7 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
 	<Description>Bittrex .Net API wrapper</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -25,8 +25,7 @@
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageReleaseNotes>
-	1.0.0 - * Added additional unit tests, also for socket client, small refactoring for unit testability
-			* Released to v1.0.0</PackageReleaseNotes>
+	1.0.1 - * Added reconnect to socket if there are subscription open</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

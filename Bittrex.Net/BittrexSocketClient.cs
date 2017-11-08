@@ -186,7 +186,11 @@ namespace Bittrex.Net
                 var proxy = connection.CreateHubProxy(HubName);
 
                 connection.StateChanged += state => log.Write(LogVerbosity.Debug, $"Socket state: {state.OldState} -> {state.NewState}");
-                connection.Closed += () => log.Write(LogVerbosity.Debug, "Socket closed");
+                connection.Closed += () =>
+                {
+                    log.Write(LogVerbosity.Debug, "Socket closed");
+                    Task.Run(() => TryReconnect());
+                };
                 connection.Error += exception => log.Write(LogVerbosity.Error, $"Socket error: {exception.Message}");
                 connection.ConnectionSlow += () => log.Write(LogVerbosity.Warning, "Socket connection slow");
 
@@ -208,6 +212,15 @@ namespace Bittrex.Net
                         log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
                     }
                 };
+            }
+        }
+
+        private void TryReconnect()
+        {
+            if (registrations.Any())
+            {
+                if(!WaitForConnection())
+                    TryReconnect();
             }
         }
 
