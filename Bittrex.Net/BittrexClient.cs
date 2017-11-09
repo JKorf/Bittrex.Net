@@ -49,7 +49,7 @@ namespace Bittrex.Net
         private long nonce => DateTime.UtcNow.Ticks;
         public IRequestFactory RequestFactory { get; set; } = new RequestFactory();
 
-        public int MaxRetry { get; set; } = 2;
+        public int MaxRetries { get; set; } = 2;
         #endregion
 
         #region constructor/destructor
@@ -59,7 +59,7 @@ namespace Bittrex.Net
         public BittrexClient()
         {
             if (BittrexDefaults.MaxCallRetry != null)
-                MaxRetry = BittrexDefaults.MaxCallRetry.Value;
+                MaxRetries = BittrexDefaults.MaxCallRetry.Value;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Bittrex.Net
         public BittrexClient(string apiKey, string apiSecret)
         {
             if (BittrexDefaults.MaxCallRetry != null)
-                MaxRetry = BittrexDefaults.MaxCallRetry.Value;
+                MaxRetries = BittrexDefaults.MaxCallRetry.Value;
 
             SetApiCredentials(apiKey, apiSecret);
         }
@@ -555,7 +555,7 @@ namespace Bittrex.Net
             catch (WebException we)
             {
                 var response = (HttpWebResponse) we.Response;
-                if (currentTry < MaxRetry)
+                if (currentTry < MaxRetries)
                     return await ExecuteRequest<T>(uri, signed, ++currentTry);
 
                 return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ErrorWeb), $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}");
