@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Bittrex.Net.Errors;
 using Bittrex.Net.Implementations;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Logging;
@@ -146,9 +147,9 @@ namespace Bittrex.Net
 
             var result = await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters));
             if (!result.Success || result.Result.Length == 0)
-                return new BittrexApiResult<BittrexMarketSummary>() {Message = result.Message};
+                return ThrowErrorMessage<BittrexMarketSummary>(result.Error);
 
-            return new BittrexApiResult<BittrexMarketSummary>() { Result = result.Result[0], Success = true, Message = result.Message};
+            return new BittrexApiResult<BittrexMarketSummary>() { Result = result.Result[0], Success = true, Error = result.Error};
         }
 
         /// <summary>
@@ -270,7 +271,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, double quantity, double rate)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexGuid>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
             
             var parameters = new Dictionary<string, string>()
             {
@@ -297,7 +298,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<object>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<object>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>()
             {
@@ -321,7 +322,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexOrder[]>> GetOpenOrdersAsync(string market = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOrder[]>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
@@ -343,7 +344,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexBalance>> GetBalanceAsync(string currency)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexBalance>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexBalance>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>()
             {
@@ -365,7 +366,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexBalance[]>> GetBalancesAsync()
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexBalance[]>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexBalance[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             return await ExecuteRequest<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true);
         }
@@ -384,7 +385,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexDepositAddress>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexDepositAddress>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>()
             {
@@ -410,7 +411,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, double quantity, string address, string paymentId = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexGuid>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>()
             {
@@ -437,7 +438,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexAccountOrder>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexAccountOrder>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>()
             {
@@ -460,7 +461,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexOrder[]>> GetOrderHistoryAsync(string market = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOrder[]>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
@@ -481,7 +482,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexWithdrawal[]>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexWithdrawal[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "currency", currency);
@@ -502,7 +503,7 @@ namespace Bittrex.Net
         public async Task<BittrexApiResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexDeposit[]>("No api credentials provided, can't request private endpoints");
+                return ThrowErrorMessage<BittrexDeposit[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "currency", currency);
@@ -534,36 +535,32 @@ namespace Bittrex.Net
                 using (var reader = new StreamReader(response.GetResponseStream()))
                 {
                     returnedData = await reader.ReadToEndAsync();
-                    return JsonConvert.DeserializeObject<BittrexApiResult<T>>(returnedData);
+                    var result = JsonConvert.DeserializeObject<BittrexApiResult<T>>(returnedData);
+                    if (!result.Success)
+                    {
+                        log.Write(LogVerbosity.Debug, $"Call failed to {uri}, Error message: {result.Message}");
+                        result.Error = new BittrexError(6000, result.Message);
+                        result.Message = null;
+                    }
+                    return result;
                 }
             }
             catch (WebException we)
             {
                 var response = (HttpWebResponse) we.Response;
-                var errorMessage =
-                    $"Request to {uri} failed because of a webexception. Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}";
-                log.Write(LogVerbosity.Warning, errorMessage);
-                return ThrowErrorMessage<T>(errorMessage);
+                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ErrorWeb), $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}");
             }
             catch (JsonReaderException jre)
             {
-                var errorMessage =
-                    $"Request to {uri} failed, couldn't parse the returned data. Error occured at Path: {jre.Path}, LineNumber: {jre.LineNumber}, LinePosition: {jre.LinePosition}. Received data: {returnedData}";
-                log.Write(LogVerbosity.Warning, errorMessage);
-                return ThrowErrorMessage<T>(errorMessage);
+                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ParseErrorReader), $"Error occured at Path: {jre.Path}, LineNumber: {jre.LineNumber}, LinePosition: {jre.LinePosition}. Received data: {returnedData}");
             }
             catch (JsonSerializationException jse)
             {
-                var errorMessage =
-                    $"Request to {uri} failed, couldn't deserialize the returned data. Message: {jse.Message}. Received data: {returnedData}";
-                log.Write(LogVerbosity.Warning, errorMessage);
-                return ThrowErrorMessage<T>(errorMessage);
+                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ParseErrorSerialization), $"Message: {jse.Message}. Received data: {returnedData}");
             }
             catch (Exception e)
             {
-                var errorMessage = $"Request to {uri} failed with unknown error: " + e.Message;
-                log.Write(LogVerbosity.Warning, errorMessage);
-                return ThrowErrorMessage<T>(errorMessage);
+                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.UnknownError), $"Message: {e.Message}");
             }
         }
 

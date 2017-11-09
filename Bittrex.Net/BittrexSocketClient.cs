@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Bittrex.Net.Errors;
 using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
@@ -82,9 +83,7 @@ namespace Bittrex.Net
                 log.Write(LogVerbosity.Debug, "Starting connection to bittrex server");
                 if (!WaitForConnection())
                 {
-                    var errorMessage = "Could not make a connecting to the bittrex server";
-                    log.Write(LogVerbosity.Error, errorMessage);
-                    return ThrowErrorMessage<int>(errorMessage);
+                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
                 }
             }
 

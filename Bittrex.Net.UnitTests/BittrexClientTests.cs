@@ -681,7 +681,7 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsFalse(result.Success);
-            Assert.AreEqual(errorMessage, result.Message);
+            Assert.AreEqual(errorMessage, result.Error.ErrorMessage);
         }
 
         [TestCase()]
@@ -695,8 +695,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Message);
-            Assert.IsTrue(result.Message.Contains("TestErrorNotValidJson"));
+            Assert.IsNotNull(result.Error.ErrorMessage);
+            Assert.IsTrue(result.Error.ErrorMessage.Contains("TestErrorNotValidJson"));
         }
 
         [TestCase()]
@@ -710,8 +710,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Message);
-            Assert.IsTrue(result.Message.Contains("InvalidStatusCodeResponse"));
+            Assert.IsNotNull(result.Error);
+            Assert.IsTrue(result.Error.ErrorMessage.Contains("InvalidStatusCodeResponse"));
         }
 
         private BittrexApiResult<T> WrapInResult<T>(T data, bool success = true, string message = null)
@@ -719,7 +719,7 @@ namespace Bittrex.Net.UnitTests
             var result = new BittrexApiResult<T>();
             result.GetType().GetProperty("Result").SetValue(result, data);
             result.GetType().GetProperty("Success").SetValue(result, success);
-            result.GetType().GetProperty("Message").SetValue(result, message);
+            result.GetType().GetProperty("Message", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(result, message);
             return result;
         }
 

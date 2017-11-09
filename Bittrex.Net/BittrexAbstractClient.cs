@@ -75,11 +75,18 @@ namespace Bittrex.Net
             log.TextWriter = writer;
         }
 
-        protected BittrexApiResult<T> ThrowErrorMessage<T>(string message)
+        protected BittrexApiResult<T> ThrowErrorMessage<T>(BittrexError error)
         {
-            log.Write(LogVerbosity.Warning, $"Call failed: {message}");
+            return ThrowErrorMessage<T>(error, null);
+        }
+
+        protected BittrexApiResult<T> ThrowErrorMessage<T>(BittrexError error, string extraInformation)
+        {
+            log.Write(LogVerbosity.Warning, $"Call failed: {error.ErrorMessage}");
             var result = (BittrexApiResult<T>)Activator.CreateInstance(typeof(BittrexApiResult<T>));
-            result.Message = message;
+            result.Error = error;
+            if (extraInformation != null)
+                result.Error.ErrorMessage += Environment.NewLine + extraInformation;
             return result;
         }
     }

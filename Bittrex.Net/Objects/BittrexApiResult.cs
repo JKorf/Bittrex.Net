@@ -18,10 +18,14 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("result")]
         public T Result { get; internal set; }
-        /// <summary>
-        /// The message if the call wasn't successful
-        /// </summary>
+
         [JsonProperty("message")]
-        public string Message { get; internal set; }
+        internal string Message { get; set; }
+
+        /// <summary>
+        /// The error if the call wasn't successful
+        /// </summary>
+        [JsonIgnore]
+        public BittrexError Error { get; internal set; }
     }
 }
