@@ -39,8 +39,8 @@ BittrexDefaults.SetDefaultApiCredentials("APIKEY", "APISECRET");
 ```
 API credentials can be managed at https://bittrex.com/Manage#sectionApi. Make sure to enable the required permission for the right API calls.
 
-### Response handling
-All API requests will respond with an BittrexApiResult object. This object contains whether the call was successful, the data returned from the call and an error message if the call wasn't successful. As such, one should always check the Success flag when processing a response.
+### Error handling
+All API requests will respond with an BittrexApiResult object. This object contains whether the call was successful, the data returned from the call and an error if the call wasn't successful. As such, one should always check the Success flag when processing a response.
 For example:
 ```C#
 using(var client = new BittrexClient())
@@ -49,9 +49,26 @@ using(var client = new BittrexClient())
 	if (priceResult.Success)
 		Console.WriteLine($"BTC-ETH price: {priceResult.Result.Last}");
 	else
-		Console.WriteLine($"Error: {priceResult.Message}");
+		Console.WriteLine($"Error: {priceResult.Error.ErrorMessage}");
 }
 ```
+If not successful the Error object will contain an error code and an error message as to what went wrong. Error codes are divided in 3 categories:
+
+* 5000 - 5999: input errors. There was a problem when validating the input for a method. Check the input and try again.
+* 6000 - 6999: returned errors. The server indicated that there was a problem with the request (parameters). Check the input and try again. Can also be a server side problem.
+* 7000 - 7999: output errors. The server returned data, but we we're unable to successfully parse the response. If this error is persistent please open an Issue.
+
+The `BittrexClient` provides an automatic retry for when the server returns error status codes, for example when a gateway timeout occures or the service is temporarily unavailable. 
+The amount of retries can be set in the client by setting the `MaxRetry` property. This can also be set to a default value by the `SetDefaultRetries` funtion in `BittrexDefaults.`:
+```C#
+// On a single client
+var client = new BittrexClient();
+client.MaxRetries = 3;
+
+// On all new clients:
+BittrexDefaults.SetDefaultRetries(3);
+```
+The default amount of retries is 2, setting it to 0 will disable the functionality.
 
 ### Requests
 Public requests:
@@ -140,6 +157,13 @@ BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
 
 
 ## Release notes
+* Version 1.1.0 - 9 nov 2017
+	* Added automatic configurable retry on server errors
+	* Refactor on error returns
+
+* Version 1.0.1 - 8 nov 2017
+	* Added reconnect functionality in socket client as long as there are still subscriptions open
+
 * Version 1.0.0 - 6 nov 2017
 	* Release version 1.0.0
 	* Additional unit tests, also for the socket client	
