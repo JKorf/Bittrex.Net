@@ -55,10 +55,10 @@ using(var client = new BittrexClient())
 If not successful the Error object will contain an error code and an error message as to what went wrong. Error codes are divided in 3 categories:
 
 * 5000 - 5999: input errors. There was a problem when validating the input for a method. Check the input and try again.
-* 6000 - 6999: returned errors. The server indicated that there was a problem with the request (parameters). Check the input and try again. Can also be a server side problem.
+* 6000 - 6999: returned errors. The server indicated that there was a problem with the request or the service is temporarily unavailable. If this error is persistent check the input and if Binance is online or has any status updates regarding connectivity. If this issue persists please open an Issue.
 * 7000 - 7999: output errors. The server returned data, but we we're unable to successfully parse the response. If this error is persistent please open an Issue.
 
-The `BittrexClient` provides an automatic retry for when the server returns error status codes, for example when a gateway timeout occures or the service is temporarily unavailable. 
+The `BittrexClient` provides an automatic retry for when the server returns error status codes, for example when a gateway timeout occurs or the service is temporarily unavailable. 
 The amount of retries can be set in the client by setting the `MaxRetry` property. This can also be set to a default value by the `SetDefaultRetries` funtion in `BittrexDefaults.`:
 ```C#
 // On a single client
@@ -157,6 +157,10 @@ BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
 
 
 ## Release notes
+* Version 1.1.1 - 9 nov 2017
+	* Fix for error in wrong category
+	* Small code documentation fixes
+
 * Version 1.1.0 - 9 nov 2017
 	* Added automatic configurable retry on server errors
 	* Refactor on error returns

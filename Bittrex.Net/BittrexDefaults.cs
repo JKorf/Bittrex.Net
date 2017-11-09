@@ -48,7 +48,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Sets the maximum times to retry a call when there is a server error
         /// </summary>
-        /// <param name="retry">The maximum retriesr</param>
+        /// <param name="retry">The maximum retries</param>
         public static void SetDefaultRetries(int retry)
         {
             MaxCallRetry = retry;

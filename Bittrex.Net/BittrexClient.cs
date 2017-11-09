@@ -49,6 +49,9 @@ namespace Bittrex.Net
         private long nonce => DateTime.UtcNow.Ticks;
         public IRequestFactory RequestFactory { get; set; } = new RequestFactory();
 
+        /// <summary>
+        /// The max amount of retries to do if the Bittrex service is temporarily unavailable
+        /// </summary>
         public int MaxRetries { get; set; } = 2;
         #endregion
 
