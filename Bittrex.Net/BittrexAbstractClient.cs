@@ -20,8 +20,8 @@ namespace Bittrex.Net
             if (BittrexDefaults.LogWriter != null)
                 SetLogOutput(BittrexDefaults.LogWriter);
 
-            if (BittrexDefaults.LogVerbositySet)
-                SetLogVerbosity(BittrexDefaults.LogVerbosity);
+            if (BittrexDefaults.LogVerbosity != null)
+                SetLogVerbosity(BittrexDefaults.LogVerbosity.Value);
 
             if (BittrexDefaults.ApiKey != null && BittrexDefaults.ApiSecret != null)
                 SetApiCredentials(BittrexDefaults.ApiKey, BittrexDefaults.ApiSecret);

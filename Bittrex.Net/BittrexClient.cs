@@ -48,6 +48,8 @@ namespace Bittrex.Net
         #region properties
         private long nonce => DateTime.UtcNow.Ticks;
         public IRequestFactory RequestFactory { get; set; } = new RequestFactory();
+
+        public int MaxRetry { get; set; } = 2;
         #endregion
 
         #region constructor/destructor
@@ -56,6 +58,8 @@ namespace Bittrex.Net
         /// </summary>
         public BittrexClient()
         {
+            if (BittrexDefaults.MaxCallRetry != null)
+                MaxRetry = BittrexDefaults.MaxCallRetry.Value;
         }
 
         /// <summary>
@@ -65,6 +69,9 @@ namespace Bittrex.Net
         /// <param name="apiSecret">The api secret associated with the key</param>
         public BittrexClient(string apiKey, string apiSecret)
         {
+            if (BittrexDefaults.MaxCallRetry != null)
+                MaxRetry = BittrexDefaults.MaxCallRetry.Value;
+
             SetApiCredentials(apiKey, apiSecret);
         }
 
@@ -511,7 +518,7 @@ namespace Bittrex.Net
         }
         #endregion
         #region private
-        private async Task<BittrexApiResult<T>> ExecuteRequest<T>(Uri uri, bool signed = false)
+        private async Task<BittrexApiResult<T>> ExecuteRequest<T>(Uri uri, bool signed = false, int currentTry = 0)
         {
             string returnedData = "";
             try
@@ -548,6 +555,9 @@ namespace Bittrex.Net
             catch (WebException we)
             {
                 var response = (HttpWebResponse) we.Response;
+                if (currentTry < MaxRetry)
+                    return await ExecuteRequest<T>(uri, signed, ++currentTry);
+
                 return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ErrorWeb), $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}");
             }
             catch (JsonReaderException jre)

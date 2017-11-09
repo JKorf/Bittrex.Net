@@ -8,10 +8,10 @@ namespace Bittrex.Net
     {
         internal static string ApiKey { get; private set; }
         internal static string ApiSecret { get; private set; }
-
-        internal static bool LogVerbositySet { get; private set; }
-        internal static LogVerbosity LogVerbosity { get; private set; }
+        
+        internal static LogVerbosity? LogVerbosity { get; private set; }
         internal static TextWriter LogWriter { get; private set; }
+        internal static int? MaxCallRetry { get; private set; }
 
         /// <summary>
         /// Sets the API credentials to use. Api keys can be managed at https://bittrex.com/Manage#sectionApi
@@ -33,7 +33,6 @@ namespace Bittrex.Net
         /// <param name="logVerbosity">The minimal verbosity to log</param>
         public static void SetDefaultLogVerbosity(LogVerbosity logVerbosity)
         {
-            LogVerbositySet = true;
             LogVerbosity = logVerbosity;
         }
 
@@ -44,6 +43,15 @@ namespace Bittrex.Net
         public static void SetDefaultLogOutput(TextWriter writer)
         {
             LogWriter = writer;
+        }
+
+        /// <summary>
+        /// Sets the maximum times to retry a call when there is a server error
+        /// </summary>
+        /// <param name="retry">The maximum retriesr</param>
+        public static void SetDefaultRetries(int retry)
+        {
+            MaxCallRetry = retry;
         }
     }
 }
