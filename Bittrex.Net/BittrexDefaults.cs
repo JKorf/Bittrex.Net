@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Bittrex.Net.Logging;
+using Bittrex.Net.RateLimiter;
 
 namespace Bittrex.Net
 {
@@ -12,6 +14,7 @@ namespace Bittrex.Net
         internal static LogVerbosity? LogVerbosity { get; private set; }
         internal static TextWriter LogWriter { get; private set; }
         internal static int? MaxCallRetry { get; private set; }
+        internal static List<IRateLimiter> RateLimiters { get; } = new List<IRateLimiter>();
 
         /// <summary>
         /// Sets the API credentials to use. Api keys can be managed at https://bittrex.com/Manage#sectionApi
@@ -52,6 +55,23 @@ namespace Bittrex.Net
         public static void SetDefaultRetries(int retry)
         {
             MaxCallRetry = retry;
+        }
+        
+        /// <summary>
+        /// Adds a rate limiter for all new clients.
+        /// </summary>
+        /// <param name="rateLimiter">The ratelimiter</param>
+        public static void AddDefaultRateLimiter(IRateLimiter rateLimiter)
+        {
+            RateLimiters.Add(rateLimiter);
+        }
+
+        /// <summary>
+        /// Removes all rate limiters for future clients.
+        /// </summary>
+        public static void RemoveDefaultRateLimiters()
+        {
+            RateLimiters.Clear();
         }
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bittrex.Net", "Bittrex.Net\Bittrex.Net.csproj", "{3762140C-7FF9-46E5-8EC3-BFB3FC7ADB9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bittrex.Net", "Bittrex.Net\Bittrex.Net.csproj", "{3762140C-7FF9-46E5-8EC3-BFB3FC7ADB9B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bittrex.Net.UnitTests", "Bittrex.Net.UnitTests\Bittrex.Net.UnitTests.csproj", "{C09FFB1A-7F64-44CE-AFEC-6A8B61FF9DCC}"
 EndProject

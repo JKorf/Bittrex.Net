@@ -11,6 +11,7 @@ using Bittrex.Net.Implementations;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
+using Bittrex.Net.RateLimiter;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net
@@ -43,6 +44,8 @@ namespace Bittrex.Net
         private const string OrderHistoryEndpoint = "account/getorderhistory";
         private const string WithdrawalHistoryEndpoint = "account/getwithdrawalhistory";
         private const string DepositHistoryEndpoint = "account/getdeposithistory";
+
+        private List<IRateLimiter> rateLimiters = new List<IRateLimiter>();
         #endregion
 
         #region properties
@@ -63,6 +66,9 @@ namespace Bittrex.Net
         {
             if (BittrexDefaults.MaxCallRetry != null)
                 MaxRetries = BittrexDefaults.MaxCallRetry.Value;
+
+            foreach(var rateLimiter in BittrexDefaults.RateLimiters)
+                rateLimiters.Add(rateLimiter);
         }
 
         /// <summary>
@@ -86,6 +92,24 @@ namespace Bittrex.Net
 
         #region methods
         #region public
+
+        /// <summary>
+        /// Adds a rate limiter to the client. There are 2 choices, the <see cref="RateLimiterTotal"/> and the <see cref="RateLimiterPerEndpoint"/>.
+        /// </summary>
+        /// <param name="limiter">The limiter to add</param>
+        public void AddRateLimiter(IRateLimiter limiter)
+        {
+            rateLimiters.Add(limiter);
+        }
+
+        /// <summary>
+        /// Removes all rate limiters from this client
+        /// </summary>
+        public void RemoveRateLimiters()
+        {
+            rateLimiters.Clear();
+        }
+
         /// <summary>
         /// Synchronized version of the <see cref="GetMarketsAsync"/> method
         /// </summary>
@@ -540,6 +564,13 @@ namespace Bittrex.Net
                     request.Headers.Add("apisign",
                         ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uriString))));
 
+                foreach (var limiter in rateLimiters)
+                {
+                    double limitedBy = limiter.LimitRequest(uri.AbsolutePath);
+                    if(limitedBy > 0)
+                        log.Write(LogVerbosity.Debug, $"Request {uri.AbsolutePath} was limited by {limitedBy}ms by {limiter.GetType().Name}");
+                }
+
                 log.Write(LogVerbosity.Debug, $"Sending request to {uriString}");
                 var response = request.GetResponse();
                 using (var reader = new StreamReader(response.GetResponseStream()))
@@ -601,6 +632,7 @@ namespace Bittrex.Net
 
         private void Dispose(bool disposing)
         {
+            base.Dispose();
         }
 
         public void Dispose()
