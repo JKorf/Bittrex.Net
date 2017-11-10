@@ -1,6 +1,15 @@
 # Bittrex.Net ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Resources/icon.png?raw=true)
 
-A .Net wrapper for the Bittrex API as described on [Bittrex](https://bittrex.com/Home/Api), including all features.
+Bittrex.Net is a .Net wrapper for the Bittrex API as described on [Bittrex](https://bittrex.com/Home/Api). It includes all features the API provides using clear and readable C# objects including but not limited to
+* Reading market info
+* Placing and managing orders
+* Reading balances and funds
+
+Next to that it adds some convenience features like:
+* Access to the (undocumented) SignalR websocket, allowing for realtime updates
+* Automatic (re)connection handling for the websocket
+* Configurable rate limiting
+* Autmatic logging
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Bittrex.Net/issues)**
 
