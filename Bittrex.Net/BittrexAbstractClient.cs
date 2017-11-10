@@ -89,5 +89,10 @@ namespace Bittrex.Net
                 result.Error.ErrorMessage += Environment.NewLine + extraInformation;
             return result;
         }
+
+        protected void Dispose()
+        {
+            encryptor?.Dispose();
+        }
     }
 }

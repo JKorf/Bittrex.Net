@@ -19,6 +19,7 @@ namespace Bittrex.Net.Logging
     {
         Debug,
         Warning,
-        Error
+        Error,
+        None
     }
 }

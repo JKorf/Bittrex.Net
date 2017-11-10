@@ -28,6 +28,8 @@ namespace Bittrex.Net
         private static readonly List<BittrexStreamRegistration> registrations = new List<BittrexStreamRegistration>();
         private static int lastStreamId;
 
+        private static bool reconnecting;
+
         private static readonly object streamIdLock = new object();
         private static readonly object connectionLock = new object();
         private static readonly object registrationLock = new object();
@@ -48,6 +50,9 @@ namespace Bittrex.Net
         #region properties
         public IConnectionFactory ConnectionFactory = new ConnectionFactory();
         #endregion
+
+        public static event Action ConnectionLost;
+        public static event Action ConnectionRestored;
 
         #region ctor
         public BittrexSocketClient()
@@ -188,7 +193,12 @@ namespace Bittrex.Net
                 connection.Closed += () =>
                 {
                     log.Write(LogVerbosity.Debug, "Socket closed");
-                    Task.Run(() => TryReconnect());
+                    if (!reconnecting && registrations.Any())
+                    {
+                        reconnecting = true;
+                        ConnectionLost?.Invoke();
+                        Task.Run(() => TryReconnect());
+                    }
                 };
                 connection.Error += exception => log.Write(LogVerbosity.Error, $"Socket error: {exception.Message}");
                 connection.ConnectionSlow += () => log.Write(LogVerbosity.Warning, "Socket connection slow");
@@ -218,13 +228,23 @@ namespace Bittrex.Net
         {
             if (registrations.Any())
             {
-                if(!WaitForConnection())
+                if (!WaitForConnection())
+                {
+                    Thread.Sleep(5000);
                     TryReconnect();
+                }
+                else
+                {
+                    reconnecting = false;
+                    ConnectionRestored?.Invoke();
+                }
             }
+            reconnecting = false;
         }
 
         private void Dispose(bool disposing)
         {
+            base.Dispose();
             UnsubscribeAllStreams();
         }
         #endregion
