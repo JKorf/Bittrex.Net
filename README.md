@@ -7,13 +7,13 @@ A .Net wrapper for the Bittrex API as described on [Bittrex](https://bittrex.com
 ## Installation
 ![Nuget version](https://img.shields.io/nuget/v/bittrex.net.svg) ![Nuget downloads](https://img.shields.io/nuget/dt/Bittrex.Net.svg)
 
-
 Available on [NuGet](https://www.nuget.org/packages/Bittrex.Net/):
 ```
 PM> Install-Package Bittrex.Net
 ```
 For more details on installing refer to the [Wiki](https://github.com/JKorf/Bittrex.Net/wiki/Installation)
 
+## Getting started
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
