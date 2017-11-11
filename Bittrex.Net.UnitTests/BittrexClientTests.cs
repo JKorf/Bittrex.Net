@@ -9,6 +9,8 @@ using Bittrex.Net.Objects;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using Bittrex.Net.RateLimiter;
+using System.Diagnostics;
 
 namespace Bittrex.Net.UnitTests
 {
@@ -697,6 +699,42 @@ namespace Bittrex.Net.UnitTests
             Assert.IsFalse(result.Success);
             Assert.IsNotNull(result.Error.ErrorMessage);
             Assert.IsTrue(result.Error.ErrorMessage.Contains("TestErrorNotValidJson"));
+        }
+
+        [TestCase()]
+        public void WhenUsingRateLimiterTotalRequests_Should_BeDelayed()
+        {
+            // arrange
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
+            client.AddRateLimiter(new RateLimiterTotal(1, TimeSpan.FromSeconds(5)));
+
+            // act
+            var sw = Stopwatch.StartNew();
+            var result = client.GetTicker("TestMarket");
+            result = client.GetTicker("TestMarket");
+            result = client.GetTicker("TestMarket");
+            sw.Stop();
+
+            // assert
+            Assert.IsTrue(sw.ElapsedMilliseconds > 10000);
+        }
+
+        [TestCase()]
+        public void WhenUsingRateLimiterPerEndpointRequests_Should_BeDelayed()
+        {
+            // arrange
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
+            client.AddRateLimiter(new RateLimiterPerEndpoint(1, TimeSpan.FromSeconds(5)));
+
+            // act
+            var sw = Stopwatch.StartNew();
+            var result = client.GetTicker("TestMarket");
+            result = client.GetTicker("TestMarket");
+            result = client.GetTicker("TestMarket");
+            sw.Stop();
+
+            // assert
+            Assert.IsTrue(sw.ElapsedMilliseconds > 10000);
         }
 
         [TestCase()]
