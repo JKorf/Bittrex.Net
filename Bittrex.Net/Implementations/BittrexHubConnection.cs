@@ -1,5 +1,6 @@
 ﻿using Bittrex.Net.Interfaces;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 
@@ -38,6 +39,18 @@ namespace Bittrex.Net.Implementations
         {
             add { connection.ConnectionSlow += value; }
             remove { connection.ConnectionSlow -= value; }
+        }
+
+        public CookieContainer Cookies
+        {
+            get => connection.CookieContainer;
+            set => connection.CookieContainer = value;
+        }
+
+        public string UserAgent
+        {
+            get => connection.Headers["User-Agent"];
+            set => connection.Headers["User-Agent"] = value;
         }
 
         public IHubProxy CreateHubProxy(string hubName)
