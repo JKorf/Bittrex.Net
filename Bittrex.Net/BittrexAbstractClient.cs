@@ -7,7 +7,7 @@ using Bittrex.Net.Objects;
 
 namespace Bittrex.Net
 {
-    public abstract class BittrexAbstractClient
+    public abstract class BittrexAbstractClient: IDisposable
     {
         protected string apiKey;
         protected HMACSHA512 encryptor;
@@ -90,7 +90,7 @@ namespace Bittrex.Net
             return result;
         }
 
-        protected void Dispose()
+        public virtual void Dispose()
         {
             encryptor?.Dispose();
         }

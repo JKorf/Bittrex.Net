@@ -26,6 +26,10 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.2.0 - 13 nov 2017
+	* **NETStandard2.0 supported now**
+	* Extended CloudFlare bypass for more platforms
+
 * Version 1.1.3 - 13 nov 2017
 	* Added CloudFlare bypass in socket client
 

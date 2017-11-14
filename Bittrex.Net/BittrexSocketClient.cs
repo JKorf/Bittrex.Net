@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Errors;
@@ -16,10 +15,11 @@ using Bittrex.Net.Implementations;
 using CloudFlareUtilities;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using System.Reflection;
 
 namespace Bittrex.Net
 {
-    public class BittrexSocketClient: BittrexAbstractClient, IDisposable
+    public class BittrexSocketClient: BittrexAbstractClient
     {
         #region fields
         private const string BaseAddress = "https://www.bittrex.com/";
@@ -65,11 +65,6 @@ namespace Bittrex.Net
         public BittrexSocketClient()
         {
             localRegistrations = new List<BittrexStreamRegistration>();
-        }
-
-        ~BittrexSocketClient()
-        {
-            Dispose(false);
         }
         #endregion
 
@@ -137,9 +132,10 @@ namespace Bittrex.Net
             CheckStop();
         }
         
-        public void Dispose()
+        public override void Dispose()
         {
-            Dispose(true);
+            base.Dispose();
+            UnsubscribeAllStreams();
         }
         #endregion
         #region private
@@ -273,7 +269,7 @@ namespace Bittrex.Net
                 var cookies = new CookieContainer();
                 HttpRequestMessage msg = new HttpRequestMessage()
                 {
-                    RequestUri = new Uri("https://www.bittrex.com/"),
+                    RequestUri = new Uri(BaseAddress),
                     Method = HttpMethod.Get
                 };
                 msg.Headers.TryAddWithoutValidation("User-Agent", GetUserAgentString());
@@ -302,18 +298,26 @@ namespace Bittrex.Net
 
         private string GetUserAgentString()
         {
-            string version = "2.2.2.0";
-            string client = "SignalR.Client.NET45";
-
-            return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, Environment.OSVersion);
+#if NET45 || NET46
+            return CreateUserAgentString("SignalR.Client.NET45");
+#elif NETSTANDARD
+            return CreateUserAgentString("SignalR.Client.NetStandard");
+#else
+            return CreateUserAgentString("SignalR.Client.NET4");
+#endif
         }
 
-        private void Dispose(bool disposing)
+        private static string CreateUserAgentString(string client)
         {
-            base.Dispose();
-            UnsubscribeAllStreams();
+#if NET45 || NET46
+            var version = new AssemblyName(typeof(Connection).Assembly.FullName).Version;
+            return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, Environment.OSVersion);
+#else
+            var version = new AssemblyName(typeof(Connection).GetTypeInfo().Assembly.FullName).Version;
+            return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, "Unknown OS");
+#endif
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
     }
 }
