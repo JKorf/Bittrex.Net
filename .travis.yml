@@ -4,5 +4,4 @@ solution: Bittrex.Net.sln
 dotnet: 2.0.0
 dist: trusty
 script:
- - dotnet restore
  - dotnet build Bittrex.Net/Bittrex.Net.csproj --framework "netstandard2.0"
