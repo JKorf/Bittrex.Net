@@ -5,4 +5,4 @@ dotnet: 2.0.0
 dist: trusty
 script:
  - dotnet restore
- - dotnet build -f netstandard2.0
+ - dotnet Bittrex.Net/Bittrex.Net.csproj build --framework "netstandard2.0"
