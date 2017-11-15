@@ -1,5 +1,7 @@
 # Bittrex.Net ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Resources/icon.png?raw=true)
 
+![Build status](https://travis-ci.org/JKorf/Bittrex.Net.svg?branch=master)
+
 Bittrex.Net is a .Net wrapper for the Bittrex API as described on [Bittrex](https://bittrex.com/Home/Api). It includes all features the API provides using clear and readable C# objects including but not limited to
 * Reading market info
 * Placing and managing orders
@@ -26,6 +28,9 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.2.1 - 15 nov 2017
+	* CloudFlare is now used as backup, it'll first try without. This should improve connection time when CloudFlare isn't enabled
+
 * Version 1.2.0 - 13 nov 2017
 	* **NETStandard2.0 supported now**
 	* Extended CloudFlare bypass for more platforms

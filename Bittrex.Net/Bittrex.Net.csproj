@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>1.2.0</PackageVersion>
+    <PackageVersion>1.2.1</PackageVersion>
 	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API. It includes all features the API provides using clear and readable C# objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -17,9 +17,8 @@
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageReleaseNotes>
-	1.2.0 - 
-	* Adjusted Cloudflare bypass to support more platforms
-	* Added .netstandard2.0 support</PackageReleaseNotes>
+	1.2.1 - 
+	* CloudFlare is now used as backup, it'll first try without. This should improve connection time when CloudFlare isn't enabled</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
