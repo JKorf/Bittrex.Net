@@ -81,6 +81,9 @@ namespace Bittrex.Net
             if (BittrexDefaults.MaxCallRetry != null)
                 MaxRetries = BittrexDefaults.MaxCallRetry.Value;
 
+            foreach (var rateLimiter in BittrexDefaults.RateLimiters)
+                rateLimiters.Add(rateLimiter);
+
             SetApiCredentials(apiKey, apiSecret);
         }
         #endregion

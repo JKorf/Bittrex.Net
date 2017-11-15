@@ -47,7 +47,7 @@ namespace Bittrex.Net.UnitTests.Core
                     MinTradeSize = 1
                 }
             };
-            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)), false);
 
             // act
             var result = client.GetMarkets();
@@ -684,6 +684,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsFalse(result.Success);
+            Assert.AreNotEqual(0, result.Error.ErrorCode);
             Assert.AreEqual(errorMessage, result.Error.ErrorMessage);
         }
 
@@ -739,6 +740,25 @@ namespace Bittrex.Net.UnitTests.Core
         }
 
         [TestCase()]
+        public void WhenRemovingRateLimiterRequest_Should_NoLongerBeDelayed()
+        {
+            // arrange
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
+            client.AddRateLimiter(new RateLimiterPerEndpoint(1, TimeSpan.FromSeconds(5)));
+            client.RemoveRateLimiters();
+
+            // act
+            var sw = Stopwatch.StartNew();
+            var result = client.GetTicker("TestMarket");
+            result = client.GetTicker("TestMarket");
+            result = client.GetTicker("TestMarket");
+            sw.Stop();
+
+            // assert
+            Assert.IsTrue(sw.ElapsedMilliseconds < 5000);
+        }
+
+        [TestCase()]
         public void ReceivingErrorStatusCode_Should_NotSuccess()
         {
             // arrange
@@ -751,6 +771,20 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.IsFalse(result.Success);
             Assert.IsNotNull(result.Error);
             Assert.IsTrue(result.Error.ErrorMessage.Contains("InvalidStatusCodeResponse"));
+        }
+
+        [TestCase()]
+        public void Dispose_Should_DisposeEncryptor()
+        {
+            // arrange
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
+            client.Dispose();
+
+            // act
+            var result = client.GetBalances();
+
+            // assert 
+            Assert.IsFalse(result.Success);
         }
 
         private BittrexApiResult<T> WrapInResult<T>(T data, bool success = true, string message = null)

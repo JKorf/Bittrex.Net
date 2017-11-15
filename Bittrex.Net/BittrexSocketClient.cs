@@ -54,7 +54,7 @@ namespace Bittrex.Net
 
         #region properties
         public IConnectionFactory ConnectionFactory = new ConnectionFactory();
-
+        public ICloudFlareAuthenticator CloudFlareAuthenticator = new CloudFlareAuthenticator();
         public int CloudFlareRetries { get; set; } = 2;
         #endregion
 
@@ -164,14 +164,7 @@ namespace Bittrex.Net
             {
                 if (connection == null)
                 {
-                    // To prevent being blocked by CloudFlare protection we need to get identification using a normal request
-                    var cookieContainer = TryGetCloudFlareAccess();
-                    if (cookieContainer == null)
-                        return false;
-
                     connection = ConnectionFactory.Create(BaseAddress);
-                    connection.Cookies = cookieContainer;
-
                     var proxy = connection.CreateHubProxy(HubName);
                     
                     connection.Closed += SocketClosed;
@@ -182,7 +175,7 @@ namespace Bittrex.Net
                     Subscription sub = proxy.Subscribe(UpdateEvent);
                     sub.Received += jsonData =>
                     {
-                        if (jsonData.Count == 0)
+                        if (jsonData.Count == 0 || jsonData[0] == null)
                             return;
 
                         try
@@ -199,22 +192,41 @@ namespace Bittrex.Net
                     };
                 }
 
-                var waitEvent = new ManualResetEvent(false);
-                var waitDelegate = new Action<StateChange>((state) =>
-                {
-                    if (state.NewState == ConnectionState.Connected ||
-                        (state.NewState == ConnectionState.Disconnected &&
-                         state.OldState == ConnectionState.Connecting))
-                        waitEvent.Set();
-                });
+                // Try to start
+                if (TryStart())
+                    return true;
 
-                connection.StateChanged += waitDelegate;
-                connection.Start();
+                // If failed, try to get CloudFlare bypass
+                log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
+                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, GetUserAgentString(), CloudFlareRetries);
+                if (cookieContainer == null)
+                    return false;
 
-                waitEvent.WaitOne();
-                connection.StateChanged -= waitDelegate;
-                return connection.State == ConnectionState.Connected;
+                connection.Cookies = cookieContainer;
+                log.Write(LogVerbosity.Debug, "CloudFlare cookies retrieved, retrying connection");
+
+                // Try again with cookies
+                return TryStart();
             }
+        }
+
+        private bool TryStart()
+        {
+            var waitEvent = new ManualResetEvent(false);
+            var waitDelegate = new Action<StateChange>((state) =>
+            {
+                if (state.NewState == ConnectionState.Connected ||
+                    (state.NewState == ConnectionState.Disconnected &&
+                     state.OldState == ConnectionState.Connecting))
+                    waitEvent.Set();
+            });
+
+            connection.StateChanged += waitDelegate;
+            connection.Start();
+
+            waitEvent.WaitOne();
+            connection.StateChanged -= waitDelegate;
+            return connection.State == ConnectionState.Connected;
         }
 
         private void SocketStateChange(StateChange state)
@@ -259,41 +271,6 @@ namespace Bittrex.Net
                 }
             }
             reconnecting = false;
-        }
-
-        private CookieContainer TryGetCloudFlareAccess(int currentTry = 0)
-        {
-            try
-            {
-                // Create a request and a shared cookie container
-                var cookies = new CookieContainer();
-                HttpRequestMessage msg = new HttpRequestMessage()
-                {
-                    RequestUri = new Uri(BaseAddress),
-                    Method = HttpMethod.Get
-                };
-                msg.Headers.TryAddWithoutValidation("User-Agent", GetUserAgentString());
-
-                var client1 = new HttpClient(new ClearanceHandler(new HttpClientHandler
-                {
-                    UseCookies = true,
-                    CookieContainer = cookies
-                }));
-
-                client1.SendAsync(msg).Wait();
-
-                // Return the cookie container which should now contain the cloudflare access data
-                return cookies;
-            }
-            catch (Exception e)
-            {
-                log.Write(LogVerbosity.Warning, $"Couldn't get cloudflare credentials: {e.Message}");
-                if(currentTry < CloudFlareRetries)
-                    return TryGetCloudFlareAccess(++currentTry);
-
-                log.Write(LogVerbosity.Error, $"Unable to get past cloudflare, aborting. Message: {e.Message}");
-                return null;
-            }
         }
 
         private string GetUserAgentString()

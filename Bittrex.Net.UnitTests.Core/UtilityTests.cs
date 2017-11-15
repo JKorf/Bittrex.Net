@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -9,9 +10,9 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Bittrex.Net.UnitTests
+namespace Bittrex.Net.UnitTests.Core
 {
-    public class OtherTests
+    public class UtilityTests
     {
         [TestCase(null, null)]
         [TestCase("", "")]
