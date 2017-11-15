@@ -712,9 +712,9 @@ namespace Bittrex.Net.UnitTests.Core
 
             // act
             var sw = Stopwatch.StartNew();
-            var result = client.GetTicker("TestMarket");
-            result = client.GetTicker("TestMarket");
-            result = client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
             sw.Stop();
 
             // assert
@@ -730,9 +730,9 @@ namespace Bittrex.Net.UnitTests.Core
 
             // act
             var sw = Stopwatch.StartNew();
-            var result = client.GetTicker("TestMarket");
-            result = client.GetTicker("TestMarket");
-            result = client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
             sw.Stop();
 
             // assert
@@ -749,9 +749,9 @@ namespace Bittrex.Net.UnitTests.Core
 
             // act
             var sw = Stopwatch.StartNew();
-            var result = client.GetTicker("TestMarket");
-            result = client.GetTicker("TestMarket");
-            result = client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
+            client.GetTicker("TestMarket");
             sw.Stop();
 
             // assert

@@ -19,7 +19,7 @@ namespace Bittrex.Net.RateLimiter
         /// <summary>
         /// Create a new RateLimiterPerEndpoint. This rate limiter limits the amount of requests per time period to a certain limit, counts the request per endpoint.
         /// </summary>
-        /// <param name="limit">The amount to limit to</param>
+        /// <param name="limitPerEndpoint">The amount to limit to</param>
         /// <param name="perTimePeriod">The time period over which the limit counts</param>
         public RateLimiterPerEndpoint(int limitPerEndpoint, TimeSpan perTimePeriod)
         {

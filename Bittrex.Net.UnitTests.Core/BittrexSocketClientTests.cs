@@ -3,7 +3,6 @@ using Bittrex.Net.Objects;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Moq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
@@ -12,7 +11,6 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Bittrex.Net.Logging;
 
 namespace Bittrex.Net.UnitTests.Core
 {
@@ -332,8 +330,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             cloud = new Mock<ICloudFlareAuthenticator>();
             cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new CookieContainer());
-
-            BittrexMarketSummary result = null;
+            
             var client = new BittrexSocketClient { ConnectionFactory = factory.Object, CloudFlareAuthenticator = cloud.Object };
             client.GetType().GetField("connection", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, null);
             client.GetType().GetField("registrations", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, new List<BittrexStreamRegistration>());

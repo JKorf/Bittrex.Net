@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Errors;
@@ -12,7 +10,6 @@ using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Implementations;
-using CloudFlareUtilities;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using System.Reflection;
