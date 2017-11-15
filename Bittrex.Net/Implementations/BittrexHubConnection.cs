@@ -19,26 +19,26 @@ namespace Bittrex.Net.Implementations
         
         public event Action<StateChange> StateChanged
         {
-            add { connection.StateChanged += value; }
-            remove { connection.StateChanged -= value; }
+            add => connection.StateChanged += value;
+            remove => connection.StateChanged -= value;
         }
 
         public event Action Closed
         {
-            add { connection.Closed += value; }
-            remove { connection.Closed -= value; }
+            add => connection.Closed += value;
+            remove => connection.Closed -= value;
         }
 
         public event Action<Exception> Error
         {
-            add { connection.Error += value; }
-            remove { connection.Error -= value;  }
+            add => connection.Error += value;
+            remove => connection.Error -= value;
         }
 
         public event Action ConnectionSlow
         {
-            add { connection.ConnectionSlow += value; }
-            remove { connection.ConnectionSlow -= value; }
+            add => connection.ConnectionSlow += value;
+            remove => connection.ConnectionSlow -= value;
         }
 
         public CookieContainer Cookies
