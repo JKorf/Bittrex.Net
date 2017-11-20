@@ -23,7 +23,7 @@ namespace Bittrex.Net.Objects
         /// The transaction fee for a currency
         /// </summary>
         [JsonProperty("txFee")]
-        public double TransactionFee { get; set; }
+        public decimal TransactionFee { get; set; }
         /// <summary>
         /// Whether the currency is currently active
         /// </summary>

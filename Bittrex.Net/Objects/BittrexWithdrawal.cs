@@ -19,7 +19,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Amount of the withdrawal
         /// </summary>
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         /// <summary>
         /// Address the withdrawal is to
         /// </summary>
@@ -40,7 +40,7 @@ namespace Bittrex.Net.Objects
         /// Cost of the transaction
         /// </summary>
         [JsonProperty("TxCost")]
-        public double TransactionCost { get; set; }
+        public decimal TransactionCost { get; set; }
         /// <summary>
         /// Id of the transaction
         /// </summary>

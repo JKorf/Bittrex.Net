@@ -290,7 +290,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="PlaceOrderAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexGuid> PlaceOrder(OrderType type, string market, double quantity, double rate) => PlaceOrderAsync(type, market, quantity, rate).Result;
+        public BittrexApiResult<BittrexGuid> PlaceOrder(OrderType type, string market, decimal quantity, decimal rate) => PlaceOrderAsync(type, market, quantity, rate).Result;
         
         /// <summary>
         /// Places an order
@@ -300,7 +300,7 @@ namespace Bittrex.Net
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
-        public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, double quantity, double rate)
+        public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, decimal quantity, decimal rate)
         {
             if (apiKey == null || encryptor == null)
                 return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
@@ -430,7 +430,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="WithdrawAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexGuid> Withdraw(string currency, double quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
+        public BittrexApiResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
 
         /// <summary>
         /// Places a withdraw request on Bittrex
@@ -440,7 +440,7 @@ namespace Bittrex.Net
         /// <param name="address">The address to withdraw to</param>
         /// <param name="paymentId">Optional string identifier to add to the withdraw</param>
         /// <returns>Guid of the withdrawal</returns>
-        public async Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, double quantity, string address, string paymentId = null)
+        public async Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null)
         {
             if (apiKey == null || encryptor == null)
                 return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));

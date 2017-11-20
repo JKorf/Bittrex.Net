@@ -33,7 +33,7 @@ namespace Bittrex.Net.UnitTests.Core
                     MarketCurrency = "MarketTest1",
                     MarketCurrencyLong = "MarketTestCurrency1",
                     MarketName = "Test1-Test1",
-                    MinTradeSize = 0.0001
+                    MinTradeSize = 0.0001m
                 },
                 new BittrexMarket()
                 {
@@ -72,7 +72,7 @@ namespace Bittrex.Net.UnitTests.Core
                     Currency = "TTN",
                     CurrencyLong = "TestToken",
                     MinConfirmation = 10,
-                    TransactionFee = 0.2
+                    TransactionFee = 0.2m
                 },
                 new BittrexCurrency()
                 {
@@ -100,7 +100,7 @@ namespace Bittrex.Net.UnitTests.Core
         public void GetTicker_Should_RespondWithPrice()
         {
             // arrange
-            var expected = new BittrexPrice() { Ask = 0.001, Bid = 0.002, Last = 0.003 };
+            var expected = new BittrexPrice() { Ask = 0.001m, Bid = 0.002m, Last = 0.003m };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
             // act
@@ -117,20 +117,20 @@ namespace Bittrex.Net.UnitTests.Core
             // arrange
             var expected = new BittrexMarketSummary()
             {
-                Ask = 0.001,
-                Bid = 0.002,
-                Last = 0.003,
+                Ask = 0.001m,
+                Bid = 0.002m,
+                Last = 0.003m,
                 Created = new DateTime(2017, 1, 1),
                 MarketName = "TestMarket",
-                BaseVolume = 1.1,
+                BaseVolume = 1.1m,
                 DisplayMarketName = null,
-                High = 2.2,
-                Low = 3.3,
+                High = 2.2m,
+                Low = 3.3m,
                 OpenBuyOrders = 10,
                 OpenSellOrders = 20,
-                PrevDay = 4.4,
+                PrevDay = 4.4m,
                 TimeStamp = new DateTime(2016, 1, 1),
-                Volume = 5.5
+                Volume = 5.5m
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new List<BittrexMarketSummary>() { expected })));
 
@@ -150,37 +150,37 @@ namespace Bittrex.Net.UnitTests.Core
             {
                 new BittrexMarketSummary()
                 {
-                    Ask = 0.001,
-                    Bid = 0.002,
-                    Last = 0.003,
+                    Ask = 0.001m,
+                    Bid = 0.002m,
+                    Last = 0.003m,
                     Created = new DateTime(2017, 1, 1),
                     MarketName = "TestMarket",
-                    BaseVolume = 1.1,
+                    BaseVolume = 1.1m,
                     DisplayMarketName = null,
-                    High = 2.2,
-                    Low = 3.3,
+                    High = 2.2m,
+                    Low = 3.3m,
                     OpenBuyOrders = 10,
                     OpenSellOrders = 20,
-                    PrevDay = 4.4,
+                    PrevDay = 4.4m,
                     TimeStamp = new DateTime(2016, 1, 1),
-                    Volume = 5.5
+                    Volume = 5.5m
                 },
                 new BittrexMarketSummary()
                 {
-                    Ask = 0.006,
-                    Bid = 0.007,
-                    Last = 0.008,
+                    Ask = 0.006m,
+                    Bid = 0.007m,
+                    Last = 0.008m,
                     Created = new DateTime(2017, 1, 1),
                     MarketName = "TestMarket",
-                    BaseVolume = 9.9,
+                    BaseVolume = 9.9m,
                     DisplayMarketName = null,
-                    High = 10.10,
-                    Low = 11.11,
+                    High = 10.10m,
+                    Low = 11.11m,
                     OpenBuyOrders = 30,
                     OpenSellOrders = 40,
-                    PrevDay = 12.12,
+                    PrevDay = 12.12m,
                     TimeStamp = new DateTime(2016, 1, 1),
-                    Volume = 13.13
+                    Volume = 13.13m
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -202,13 +202,13 @@ namespace Bittrex.Net.UnitTests.Core
             {
                 Buy = new List<BittrexOrderBookEntry>()
                 {
-                    new BittrexOrderBookEntry(){Quantity = 1.1, Rate = 2.2},
-                    new BittrexOrderBookEntry(){Quantity = 3.3, Rate = 3.3},
+                    new BittrexOrderBookEntry(){Quantity = 1.1m, Rate = 2.2m},
+                    new BittrexOrderBookEntry(){Quantity = 3.3m, Rate = 3.3m},
                 },
                 Sell = new List<BittrexOrderBookEntry>()
                 {
-                    new BittrexOrderBookEntry(){Quantity = 4.4, Rate = 5.5},
-                    new BittrexOrderBookEntry(){Quantity = 6.6, Rate = 7.7},
+                    new BittrexOrderBookEntry(){Quantity = 4.4m, Rate = 5.5m},
+                    new BittrexOrderBookEntry(){Quantity = 6.6m, Rate = 7.7m},
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -231,8 +231,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             var expected = new[]
             {
-                new BittrexOrderBookEntry() {Quantity = 1.1, Rate = 2.2},
-                new BittrexOrderBookEntry() {Quantity = 3.3, Rate = 3.3},
+                new BittrexOrderBookEntry() {Quantity = 1.1m, Rate = 2.2m},
+                new BittrexOrderBookEntry() {Quantity = 3.3m, Rate = 3.3m},
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
@@ -252,8 +252,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             var expected = new[]
             {
-                new BittrexOrderBookEntry() {Quantity = 1.1, Rate = 2.2},
-                new BittrexOrderBookEntry() {Quantity = 3.3, Rate = 3.3},
+                new BittrexOrderBookEntry() {Quantity = 1.1m, Rate = 2.2m},
+                new BittrexOrderBookEntry() {Quantity = 3.3m, Rate = 3.3m},
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
@@ -274,23 +274,23 @@ namespace Bittrex.Net.UnitTests.Core
             {
                 new BittrexMarketHistory()
                 {
-                    Quantity = 1.1,
+                    Quantity = 1.1m,
                     OrderType = OrderType.Buy,
                     FillType = FillType.Fill,
                     Id = 1000000000000,
-                    Price = 2.2,
+                    Price = 2.2m,
                     Timestamp = new DateTime(2017, 1, 1),
-                    Total = 3.3
+                    Total = 3.3m
                 },
                 new BittrexMarketHistory()
                 {
-                    Quantity = 4.4,
+                    Quantity = 4.4m,
                     OrderType = OrderType.Sell,
                     FillType = FillType.PartialFill,
                     Id = 2000000000000,
-                    Price = 5.5,
+                    Price = 5.5m,
                     Timestamp = new DateTime(2017, 1, 1),
-                    Total = 6.6
+                    Total = 6.6m
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -342,42 +342,42 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexOrder()
                 {
                     Uuid = null,
-                    Quantity = 1.1,
+                    Quantity = 1.1m,
                     OrderType = OrderTypeExtended.LimitBuy,
-                    Price = 2.2,
+                    Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
-                    CommissionPaid = 3.3,
+                    CommissionPaid = 3.3m,
                     Condition = null,
                     ConditionTarget = null,
                     Exchange = "TestMarket",
                     ImmediateOrCancel = false,
                     IsConditional = false,
-                    Limit = 4.4,
+                    Limit = 4.4m,
                     Opened = new DateTime(2017, 1,1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                     PricePerUnit = null,
-                    QuantityRemaining = 5.5
+                    QuantityRemaining = 5.5m
                 },
                 new BittrexOrder()
                 {
                     Uuid = null,
-                    Quantity = 6.6,
+                    Quantity = 6.6m,
                     OrderType = OrderTypeExtended.LimitSell,
-                    Price = 7.7,
+                    Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
-                    CommissionPaid = 8.8,
+                    CommissionPaid = 8.8m,
                     Condition = null,
                     ConditionTarget = null,
                     Exchange = "TestMarket",
                     ImmediateOrCancel = true,
                     IsConditional = false,
-                    Limit = 9.9,
+                    Limit = 9.9m,
                     Opened = new DateTime(2017, 1,1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
-                    PricePerUnit = 11.11,
-                    QuantityRemaining = 10.1
+                    PricePerUnit = 11.11m,
+                    QuantityRemaining = 10.1m
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -399,10 +399,10 @@ namespace Bittrex.Net.UnitTests.Core
             {
                 Uuid = null,
                 Currency = "TestCurrency",
-                Available = 1.1,
-                Balance = 2.2,
+                Available = 1.1m,
+                Balance = 2.2m,
                 CryptoAddress = "TestAddress",
-                Pending = 3.3,
+                Pending = 3.3m,
                 Requested = true
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -425,20 +425,20 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     Uuid = null,
                     Currency = "TestCurrency",
-                    Available = 1.1,
-                    Balance = 2.2,
+                    Available = 1.1m,
+                    Balance = 2.2m,
                     CryptoAddress = "TestAddress",
-                    Pending = 3.3,
+                    Pending = 3.3m,
                     Requested = true
                 },
                 new BittrexBalance()
                 {
                     Uuid = null,
                     Currency = "TestCurrency",
-                    Available = 4.4,
-                    Balance = 5.5,
+                    Available = 4.4m,
+                    Balance = 5.5m,
                     CryptoAddress = "TestAddress",
-                    Pending = 6.6,
+                    Pending = 6.6m,
                     Requested = false
                 }
             };
@@ -496,27 +496,27 @@ namespace Bittrex.Net.UnitTests.Core
             // arrange
             var expected = new BittrexAccountOrder()
             {
-                Quantity = 1.1,
-                Price = 2.2,
-                CommissionPaid = 3.3,
+                Quantity = 1.1m,
+                Price = 2.2m,
+                CommissionPaid = 3.3m,
                 OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                 Condition = null,
                 CancelInitiated = false,
                 Exchange = "MarketExchange",
                 PricePerUnit = null,
-                QuantityRemaining = 4.4,
+                QuantityRemaining = 4.4m,
                 Closed = null,
                 ImmediateOrCancel = false,
                 ConditionTarget = null,
                 IsConditional = false,
                 Opened = new DateTime(2017, 1, 1),
-                Limit = 5.5,
+                Limit = 5.5m,
                 AccountId = "TestId",
-                CommissionReserved = 6.6,
-                CommissionReservedRemaining = 7.7,
+                CommissionReserved = 6.6m,
+                CommissionReservedRemaining = 7.7m,
                 IsOpen = true,
-                Reserved = 8.8,
-                ReservedRemaining = 9.9,
+                Reserved = 8.8m,
+                ReservedRemaining = 9.9m,
                 Sentinel = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                 Type = OrderTypeExtended.LimitBuy
             };
@@ -539,42 +539,42 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexOrder()
                 {
                     Uuid = null,
-                    Quantity = 1.1,
+                    Quantity = 1.1m,
                     OrderType = OrderTypeExtended.LimitBuy,
-                    Price = 2.2,
+                    Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
-                    CommissionPaid = 3.3,
+                    CommissionPaid = 3.3m,
                     Condition = null,
                     ConditionTarget = null,
                     Exchange = "TestMarket",
                     ImmediateOrCancel = false,
                     IsConditional = false,
-                    Limit = 4.4,
+                    Limit = 4.4m,
                     Opened = new DateTime(2017, 1, 1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                     PricePerUnit = null,
-                    QuantityRemaining = 5.5
+                    QuantityRemaining = 5.5m
                 },
                 new BittrexOrder()
                 {
                     Uuid = null,
-                    Quantity = 6.6,
+                    Quantity = 6.6m,
                     OrderType = OrderTypeExtended.LimitSell,
-                    Price = 7.7,
+                    Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
-                    CommissionPaid = 8.8,
+                    CommissionPaid = 8.8m,
                     Condition = null,
                     ConditionTarget = null,
                     Exchange = "TestMarket",
                     ImmediateOrCancel = true,
                     IsConditional = false,
-                    Limit = 9.9,
+                    Limit = 9.9m,
                     Opened = new DateTime(2017, 1, 1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
-                    PricePerUnit = 11.11,
-                    QuantityRemaining = 10.1
+                    PricePerUnit = 11.11m,
+                    QuantityRemaining = 10.1m
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -599,13 +599,13 @@ namespace Bittrex.Net.UnitTests.Core
                     Opened = new DateTime(2017, 1, 1),
                     Currency = "TestCurrency",
                     Address = "TestAddress",
-                    Amount = 1.1,
+                    Amount = 1.1m,
                     Authorized = true,
                     Canceled = false,
                     InvalidAddress = false,
                     PaymentUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                     PendingPayment = false,
-                    TransactionCost = 2.2,
+                    TransactionCost = 2.2m,
                     TransactionId = "TestId"
                 },
                 new BittrexWithdrawal()
@@ -613,13 +613,13 @@ namespace Bittrex.Net.UnitTests.Core
                     Opened = new DateTime(2016, 1, 1),
                     Currency = "TestCurrency",
                     Address = "TestAddress",
-                    Amount = 3.3,
+                    Amount = 3.3m,
                     Authorized = false,
                     Canceled = true,
                     InvalidAddress = true,
                     PaymentUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                     PendingPayment = true,
-                    TransactionCost = 4.4,
+                    TransactionCost = 4.4m,
                     TransactionId = "TestId"
                 }
             };
@@ -643,7 +643,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexDeposit()
                 {
                     Currency = "TestCurrency",
-                    Amount = 1.1,
+                    Amount = 1.1m,
                     TransactionId = "TestId",
                     CryptoAddress = "TestAddress",
                     Id = 1000000000000,
@@ -653,7 +653,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexDeposit()
                 {
                     Currency = "TestCurrency",
-                    Amount = 2.2,
+                    Amount = 2.2m,
                     TransactionId = "TestId",
                     CryptoAddress = "TestAddress",
                     Id = 2000000000000,

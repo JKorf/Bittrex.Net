@@ -29,27 +29,27 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Quantity of the order
         /// </summary>
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The remaining quantity of the order
         /// </summary>
-        public double QuantityRemaining { get; set; }
+        public decimal QuantityRemaining { get; set; }
         /// <summary>
         /// The limit of the order
         /// </summary>
-        public double Limit { get; set; }
+        public decimal Limit { get; set; }
         /// <summary>
         /// The commission paid for the order
         /// </summary>
-        public double CommissionPaid { get; set; }
+        public decimal CommissionPaid { get; set; }
         /// <summary>
         /// The price of the order
         /// </summary>
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         /// <summary>
         /// The price paid per unit
         /// </summary>
-        public double? PricePerUnit { get; set; }
+        public decimal? PricePerUnit { get; set; }
         /// <summary>
         /// Timestamp when the order was opened
         /// </summary>
