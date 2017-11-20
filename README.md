@@ -28,6 +28,9 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.2.2 - 20 nov 2017
+	* Temporary fix for `BittrexSocketClient` connection after changes on the Bittrex socket API
+
 * Version 1.2.1 - 15 nov 2017
 	* CloudFlare is now used as backup, it'll first try without. This should improve connection time when CloudFlare isn't enabled
 
