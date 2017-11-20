@@ -20,6 +20,7 @@ namespace Bittrex.Net
     {
         #region fields
         private const string BaseAddress = "https://www.bittrex.com/";
+        private const string SocketAddress = "https://socket-stage.bittrex.com/";
 
         private const string HubName = "coreHub";
         private const string UpdateEvent = "updateSummaryState";
@@ -161,7 +162,7 @@ namespace Bittrex.Net
             {
                 if (connection == null)
                 {
-                    connection = ConnectionFactory.Create(BaseAddress);
+                    connection = ConnectionFactory.Create(SocketAddress);
                     var proxy = connection.CreateHubProxy(HubName);
                     
                     connection.Closed += SocketClosed;
