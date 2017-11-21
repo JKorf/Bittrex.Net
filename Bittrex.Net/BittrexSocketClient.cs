@@ -26,6 +26,7 @@ namespace Bittrex.Net
         private const string UpdateEvent = "updateSummaryState";
 
         private static Interfaces.IHubConnection connection;
+        private static IHubProxy proxy;
 
         private readonly List<BittrexStreamRegistration> localRegistrations;
         private static readonly List<BittrexStreamRegistration> registrations = new List<BittrexStreamRegistration>();
@@ -62,12 +63,20 @@ namespace Bittrex.Net
         #region ctor
         public BittrexSocketClient()
         {
+#if NETSTANDARD
+            if(System.Runtime.InteropServices.RuntimeInformation.OSDescription.Contains("Windows 7"))
+                return; // not supported
+#else
+            if (Environment.OSVersion.Version.Major < 6)
+                return; // not supported
+#endif
+
             localRegistrations = new List<BittrexStreamRegistration>();
         }
-        #endregion
+#endregion
 
-        #region methods
-        #region public
+#region methods
+#region public
         /// <summary>
         /// Subscribes to updates on a specific market
         /// </summary>
@@ -135,8 +144,8 @@ namespace Bittrex.Net
             base.Dispose();
             UnsubscribeAllStreams();
         }
-        #endregion
-        #region private
+#endregion
+#region private
         private void CheckStop()
         {
             bool shouldStop;
@@ -163,7 +172,7 @@ namespace Bittrex.Net
                 if (connection == null)
                 {
                     connection = ConnectionFactory.Create(SocketAddress);
-                    var proxy = connection.CreateHubProxy(HubName);
+                    proxy = connection.CreateHubProxy(HubName);                    
                     
                     connection.Closed += SocketClosed;
                     connection.Error += SocketError;
@@ -193,6 +202,7 @@ namespace Bittrex.Net
                 // Try to start
                 if (TryStart())
                     return true;
+
 
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
@@ -224,7 +234,10 @@ namespace Bittrex.Net
 
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
-            return connection.State == ConnectionState.Connected;
+            bool started = connection.State == ConnectionState.Connected;
+            if (started)
+                proxy.Invoke("SubscribeToSummaryDeltas");
+            return started;
         }
 
         private void SocketStateChange(StateChange state)
