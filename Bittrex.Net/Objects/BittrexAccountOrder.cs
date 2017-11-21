@@ -29,43 +29,43 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The quantity of the order
         /// </summary>
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// The remaining quantity of the order
         /// </summary>
-        public double QuantityRemaining { get; set; }
+        public decimal QuantityRemaining { get; set; }
         /// <summary>
         /// The order limit
         /// </summary>
-        public double Limit { get; set; }
+        public decimal Limit { get; set; }
         /// <summary>
         /// The reserved currency for this order
         /// </summary>
-        public double Reserved { get; set; }
+        public decimal Reserved { get; set; }
         /// <summary>
         /// The remaining reserved currency for this order
         /// </summary>
-        public double ReservedRemaining { get; set; }
+        public decimal ReservedRemaining { get; set; }
         /// <summary>
-        /// The commision reserverd for this order
+        /// The commission reserverd for this order
         /// </summary>
-        public double CommissionReserved { get; set; }
+        public decimal CommissionReserved { get; set; }
         /// <summary>
         /// The remaining commission reserved for this order
         /// </summary>
-        public double CommissionReservedRemaining { get; set; }
+        public decimal CommissionReservedRemaining { get; set; }
         /// <summary>
         /// The amount of commission paid for this order
         /// </summary>
-        public double CommissionPaid { get; set; }
+        public decimal CommissionPaid { get; set; }
         /// <summary>
         /// The price of the order
         /// </summary>
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         /// <summary>
         /// The price per unit
         /// </summary>
-        public double? PricePerUnit { get; set; }
+        public decimal? PricePerUnit { get; set; }
         /// <summary>
         /// Timestamp when order was opened
         /// </summary>
@@ -83,7 +83,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public Guid Sentinel { get; set; }
         /// <summary>
-        /// Whether a cancel has begon processing
+        /// Whether a cancel has begun processing
         /// </summary>
         public bool CancelInitiated { get; set; }
         /// <summary>

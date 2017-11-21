@@ -34,20 +34,20 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     new BittrexMarketSummary()
                     {
-                        Ask = 1.1,
-                        BaseVolume = 2.2,
-                        Bid = 3.3,
+                        Ask = 1.1m,
+                        BaseVolume = 2.2m,
+                        Bid = 3.3m,
                         Created = new DateTime(2017, 1, 1),
                         DisplayMarketName = null,
-                        High = 4.4,
-                        Last = 5.5,
-                        Low = 6.6,
+                        High = 4.4m,
+                        Last = 5.5m,
+                        Low = 6.6m,
                         MarketName = "TestMarket",
                         OpenBuyOrders = 10,
                         OpenSellOrders = 20,
-                        PrevDay = 7.7,
+                        PrevDay = 7.7m,
                         TimeStamp = new DateTime(2016, 1, 1),
-                        Volume = 8.8
+                        Volume = 8.8m
                     }
                 }
             };
@@ -78,20 +78,20 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     new BittrexMarketSummary()
                     {
-                        Ask = 1.1,
-                        BaseVolume = 2.2,
-                        Bid = 3.3,
+                        Ask = 1.1m,
+                        BaseVolume = 2.2m,
+                        Bid = 3.3m,
                         Created = new DateTime(2017, 1, 1),
                         DisplayMarketName = null,
-                        High = 4.4,
-                        Last = 5.5,
-                        Low = 6.6,
+                        High = 4.4m,
+                        Last = 5.5m,
+                        Low = 6.6m,
                         MarketName = "TestMarket2",
                         OpenBuyOrders = 10,
                         OpenSellOrders = 20,
-                        PrevDay = 7.7,
+                        PrevDay = 7.7m,
                         TimeStamp = new DateTime(2016, 1, 1),
-                        Volume = 8.8
+                        Volume = 8.8m
                     }
                 }
             };

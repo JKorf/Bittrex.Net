@@ -15,7 +15,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The amount of the deposit
         /// </summary>
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         /// <summary>
         /// The currency of the deposit
         /// </summary>
