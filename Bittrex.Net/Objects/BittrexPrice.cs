@@ -8,14 +8,14 @@
         /// <summary>
         /// The highest bid on this market
         /// </summary>
-        public double Bid { get; set; }
+        public decimal Bid { get; set; }
         /// <summary>
         /// The lowest ask on this market
         /// </summary>
-        public double Ask { get; set; }
+        public decimal Ask { get; set; }
         /// <summary>
         /// The last price an order was completen at
         /// </summary>
-        public double Last { get; set; }
+        public decimal Last { get; set; }
     }
 }

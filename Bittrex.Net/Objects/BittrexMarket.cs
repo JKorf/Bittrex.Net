@@ -26,7 +26,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The minimun size of an order
         /// </summary>
-        public double MinTradeSize { get; set; }
+        public decimal MinTradeSize { get; set; }
         /// <summary>
         /// The name of the market
         /// </summary>

@@ -22,10 +22,10 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Total quantity of order at this price
         /// </summary>
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// Price of the orders
         /// </summary>
-        public double Rate { get; set; }
+        public decimal Rate { get; set; }
     }
 }

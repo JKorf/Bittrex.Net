@@ -20,15 +20,15 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Quantity of the order
         /// </summary>
-        public double Quantity { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
         /// Price of the order
         /// </summary>
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         /// <summary>
         /// Total price of the order
         /// </summary>
-        public double Total { get; set; }
+        public decimal Total { get; set; }
         /// <summary>
         /// Whether the order was fully filled
         /// </summary>
