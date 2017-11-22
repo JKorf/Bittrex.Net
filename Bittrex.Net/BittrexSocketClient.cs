@@ -21,6 +21,8 @@ namespace Bittrex.Net
         #region fields
         private const string BaseAddress = "https://www.bittrex.com/";
         private const string SocketAddress = "https://socket-stage.bittrex.com/";
+        //  -- To be used when socket-stage no longer works --
+        // private const string SocketAddress = "https://socket.bittrex.com/";
 
         private const string HubName = "coreHub";
         private const string UpdateEvent = "updateSummaryState";
@@ -63,13 +65,9 @@ namespace Bittrex.Net
         #region ctor
         public BittrexSocketClient()
         {
-#if NETSTANDARD
-            if(System.Runtime.InteropServices.RuntimeInformation.OSDescription.Contains("Windows 7"))
-                return; // not supported
-#else
-            if (Environment.OSVersion.Version.Major < 6)
-                return; // not supported
-#endif
+            //  -- To be used when socket-stage no longer works --
+            //if (!WebsocketsSuportedOnOperatingSystem())
+            //    throw new NotSupportedException("Your operating system does not support the websockets protocol. Unable to connect to the Bittrex API. Websockets protocol supported from Windows 8 and up.");
 
             localRegistrations = new List<BittrexStreamRegistration>();
         }
@@ -144,8 +142,8 @@ namespace Bittrex.Net
             base.Dispose();
             UnsubscribeAllStreams();
         }
-#endregion
-#region private
+        #endregion
+        #region private
         private void CheckStop()
         {
             bool shouldStop;
@@ -234,10 +232,14 @@ namespace Bittrex.Net
 
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
-            bool started = connection.State == ConnectionState.Connected;
-            if (started)
-                proxy.Invoke("SubscribeToSummaryDeltas");
-            return started;
+
+            return connection.State == ConnectionState.Connected;
+
+            //  -- To be used when socket-stage no longer works --
+            //bool started = connection.State == ConnectionState.Connected;
+            //if (started)
+            //    proxy.Invoke("SubscribeToSummaryDeltas");
+            //return started;
         }
 
         private void SocketStateChange(StateChange state)
@@ -305,7 +307,41 @@ namespace Bittrex.Net
             return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, "Unknown OS");
 #endif
         }
-#endregion
-#endregion
+
+        private bool WebsocketsSuportedOnOperatingSystem()
+        {
+#if NETSTANDARD
+            var osDescription = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
+            if (osDescription.Contains("Windows "))
+            {
+                try
+                {
+                    var splitVersion = osDescription.Split(new[] { "Windows " }, StringSplitOptions.RemoveEmptyEntries);
+                    var version = Version.Parse(splitVersion[1].Split(' ').First());
+                    return WindowsVersionSupportsWebSockets(version);
+                }
+                catch (Exception)
+                {
+                    // Unknown windows version, let's just try
+                    return true;
+                }
+            }
+
+            // Not windows platfrom, let's just try
+            return true;
+#else
+            return WindowsVersionSupportsWebSockets(Environment.OSVersion.Version);
+#endif
+        }
+
+        private bool WindowsVersionSupportsWebSockets(Version version)
+        {
+            // Check if at least Windows 8
+            if (version.Major < 6 || (version.Major == 6 && version.Minor < 2))
+                return false;
+            return true;
+        }
+        #endregion
+        #endregion
     }
 }
