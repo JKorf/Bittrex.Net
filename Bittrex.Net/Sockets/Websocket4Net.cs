@@ -20,8 +20,6 @@ namespace Bittrex.Net.Sockets
 
         public Websocket4Net(string url, IDictionary<string, string> cookies, IDictionary<string, string> headers)
         {
-            Debug.WriteLine($"Creating socket. Url: {url}");
-
             socket = new WebSocket(url, cookies: cookies.ToList(), customHeaderItems: headers.ToList(), receiveBufferSize: 2048, sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
             socket.NoDelay = true;
 
@@ -33,28 +31,24 @@ namespace Bittrex.Net.Sockets
 
         private void HandleError(object sender, ErrorEventArgs e)
         {
-            Debug.WriteLine($"Error: {e.Exception}");
             foreach (var handler in errorhandlers)
                 handler(e.Exception);
         }
 
         private void HandleOpen(object sender, EventArgs e)
         {
-            Debug.WriteLine($"Open");
             foreach (var handler in openhandlers)
                 handler();
         }
 
         private void HandleClose(object sender, EventArgs e)
         {
-            Debug.WriteLine($"Close");
             foreach (var handler in closehandlers)
                 handler();
         }
 
         private void HandleMessage(object sender, MessageReceivedEventArgs e)
         {
-            Debug.WriteLine($"Message");
             foreach (var handler in messagehandlers)
                 handler(e.Message);
         }
@@ -82,31 +76,26 @@ namespace Bittrex.Net.Sockets
 
         public void Close()
         {
-            Debug.WriteLine($"Close call");
             socket.Close();
         }
 
         public bool IsClosed()
         {
-            Debug.WriteLine($"IsClosed = {socket.State == WebSocketState.Closed}");
             return socket.State == WebSocketState.Closed;
         }
 
         public bool IsOpen()
         {
-            Debug.WriteLine($"IsOpen = {socket.State == WebSocketState.Open}");
             return socket.State == WebSocketState.Open;
         }
 
         public void Open()
         {
-            Debug.WriteLine($"Opening");
             socket.Open();
         }
 
         public void Send(string data)
         {
-            Debug.WriteLine($"Sending {data}");
             socket.Send(data);
         }
     }

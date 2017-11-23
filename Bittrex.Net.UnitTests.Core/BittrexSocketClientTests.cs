@@ -16,14 +16,16 @@ namespace Bittrex.Net.UnitTests.Core
 {
     public class BittrexSocketClientTests
     {
+        Subscription sub;
+        Mock<Interfaces.IHubConnection> socket;
+        Mock<ICloudFlareAuthenticator> cloud;
+        Mock<IHubProxy> proxy;
+
         [TestCase()]
         public void SubscribingToMarketDeltaStream_Should_TriggerWhenDeltaMessageIsReceived()
         {
             // arrange
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
 
             BittrexMarketSummary result = null;
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket", (test) => result = test);
@@ -64,10 +66,7 @@ namespace Bittrex.Net.UnitTests.Core
         public void SubscribingToMarketDeltaStream_Should_NotTriggerWhenDeltaMessageForOtherMarketIsReceived()
         {
             // arrange
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
 
             BittrexMarketSummary result = null;
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", (test) => result = test);
@@ -105,13 +104,23 @@ namespace Bittrex.Net.UnitTests.Core
         }
 
         [TestCase()]
+        public void Subscribing_Should_InvokeSubscribeDeltas()
+        {
+            // arrange
+            var client = PrepareClient();
+
+            // act
+            var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", (test) => { });
+
+            // assert
+            proxy.Verify(p => p.Invoke("SubscribeToSummaryDeltas"), Times.Once);
+        }
+
+        [TestCase()]
         public void WhenTheSocketReturnsEmptyDataTheEvent_Should_NotTrigger()
         {
             // arrange
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
 
             BittrexMarketSummary result = null;
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", (test) => result = test);
@@ -131,10 +140,7 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             bool stopCalled = false;
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>())).Callback(() => stopCalled = true);
             
             BittrexMarketSummary result = null;
@@ -154,10 +160,7 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             bool stopCalled = false;
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>())).Callback(() => stopCalled = true);
             
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", null);
@@ -177,10 +180,7 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             bool stopCalled = false;
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>())).Callback(() => stopCalled = true);
             
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", null);
@@ -201,10 +201,7 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             bool cloudFlareCalled = false;
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
             socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
             socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Disconnected)); });
 
@@ -229,10 +226,7 @@ namespace Bittrex.Net.UnitTests.Core
         public void WhenCloudFlareFailsSubscription_Should_Fail()
         {
             // arrange
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
             socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
             cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns<CookieContainer>(null);
             socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Disconnected)); });
@@ -251,10 +245,7 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             bool stopCalled = false;
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            var client = PrepareClient();
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>())).Callback(() => stopCalled = true);
 
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", null);
@@ -276,11 +267,8 @@ namespace Bittrex.Net.UnitTests.Core
             // arrange
             bool reconnectDone = false;
             bool closeEventDone = false;
-
-            Subscription sub;
-            Mock<Interfaces.IHubConnection> socket;
-            Mock<ICloudFlareAuthenticator> cloud;
-            var client = PrepareClient(out sub, out socket, out cloud);
+            
+            var client = PrepareClient();
             socket.Setup(s => s.State).Returns(ConnectionState.Connected);
             socket.Setup(s => s.Start()).Callback(() =>
             {
@@ -311,19 +299,18 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.IsTrue(reconnectDone);
         }
 
-        private BittrexSocketClient PrepareClient(out Subscription sub, out Mock<Interfaces.IHubConnection> con, out Mock<ICloudFlareAuthenticator> cloud)
+        private BittrexSocketClient PrepareClient()
         {
             sub = new Subscription();
 
-            var proxy = new Mock<IHubProxy>();
+            proxy = new Mock<IHubProxy>();
             proxy.Setup(r => r.Subscribe(It.IsAny<string>())).Returns(sub);
 
-            var socket = new Mock<Interfaces.IHubConnection>();
+            socket = new Mock<Interfaces.IHubConnection>();
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>()));
             socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Connected)); });
             socket.Setup(s => s.State).Returns(ConnectionState.Connected);
             socket.Setup(s => s.CreateHubProxy(It.IsAny<string>())).Returns(proxy.Object);
-            con = socket;
 
             var factory = new Mock<IConnectionFactory>();
             factory.Setup(s => s.Create(It.IsAny<string>())).Returns(socket.Object);
