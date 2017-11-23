@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 
-namespace Bittrex.Net.Implementations
+namespace Bittrex.Net.Sockets
 {
     public class BittrexHubConnection: IHubConnection
     {
@@ -60,7 +60,7 @@ namespace Bittrex.Net.Implementations
 
         public Task Start()
         {
-            return connection.Start();
+            return connection.Start(WebSocketTransportFactory.Create());
         }
 
         public void Stop(TimeSpan timeout)

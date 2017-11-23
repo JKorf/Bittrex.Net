@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Bittrex.Net.Interfaces;
 
-namespace Bittrex.Net.Implementations
+namespace Bittrex.Net.Requests
 {
     public class RequestFactory : IRequestFactory
     {

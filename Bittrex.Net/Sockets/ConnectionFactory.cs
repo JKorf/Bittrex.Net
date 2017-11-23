@@ -1,7 +1,7 @@
 ﻿using Bittrex.Net.Interfaces;
 using Microsoft.AspNet.SignalR.Client;
 
-namespace Bittrex.Net.Implementations
+namespace Bittrex.Net.Sockets
 {
     public class ConnectionFactory : IConnectionFactory
     {
