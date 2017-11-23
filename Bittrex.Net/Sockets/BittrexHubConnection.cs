@@ -60,7 +60,7 @@ namespace Bittrex.Net.Sockets
 
         public Task Start()
         {
-            return connection.Start(WebSocketTransportFactory.Create());
+            return connection.Start(new WebsocketCustomTransport());
         }
 
         public void Stop(TimeSpan timeout)
