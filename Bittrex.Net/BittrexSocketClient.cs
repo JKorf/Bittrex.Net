@@ -13,6 +13,8 @@ using Bittrex.Net.Implementations;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
+
 
 namespace Bittrex.Net
 {
@@ -69,34 +71,43 @@ namespace Bittrex.Net
         #region methods
         #region public
         /// <summary>
+        /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate) => SubscribeToMarketDeltaStreamAsync(marketName, onUpdate).Result;
+        
+        /// <summary>
         /// Subscribes to updates on a specific market
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate)
+        public async Task<BittrexApiResult<int>> SubscribeToMarketDeltaStreamAsync(string marketName, Action<BittrexMarketSummary> onUpdate)
         {
-            log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
-            
-            lock (connectionLock)
+            return await Task.Run(() =>
             {
-                if (connection == null || connection.State == ConnectionState.Disconnected)
+                log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
+
+                lock (connectionLock)
                 {
-                    log.Write(LogVerbosity.Debug, "Starting connection to bittrex server");
-                    if (!WaitForConnection())
+                    if (connection == null || connection.State == ConnectionState.Disconnected)
                     {
-                        return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                        log.Write(LogVerbosity.Debug, "Starting connection to bittrex server");
+                        if (!WaitForConnection())
+                        {
+                            return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                        }
                     }
                 }
-            }
 
-            var registration = new BittrexStreamRegistration() {Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId};
-            lock (registrationLock)
-            {
-                registrations.Add(registration);    
-                localRegistrations.Add(registration);
-            }
-            return new BittrexApiResult<int>() {Result = registration.StreamId, Success = true};
+                var registration = new BittrexStreamRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+                lock (registrationLock)
+                {
+                    registrations.Add(registration);
+                    localRegistrations.Add(registration);
+                }
+                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+            });
         }
 
         /// <summary>
@@ -171,29 +182,13 @@ namespace Bittrex.Net
                     connection.StateChanged += SocketStateChange;
                     
                     Subscription sub = proxy.Subscribe(UpdateEvent);
-                    sub.Received += jsonData =>
-                    {
-                        if (jsonData.Count == 0 || jsonData[0] == null)
-                            return;
-
-                        try
-                        {
-                            var data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData[0].ToString());
-                            foreach (var delta in data.Deltas)
-                                foreach (var update in registrations.Where(r => r.MarketName == delta.MarketName))
-                                    update.Callback(delta);
-                        }
-                        catch (Exception e)
-                        {
-                            log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
-                        }
-                    };
+                    sub.Received += SocketMessage;
                 }
 
                 // Try to start
                 if (TryStart())
                     return true;
-
+                
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, GetUserAgentString(), CloudFlareRetries);
@@ -224,7 +219,26 @@ namespace Bittrex.Net
 
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
+
             return connection.State == ConnectionState.Connected;
+        }
+        
+        private void SocketMessage(IList<JToken> jsonData)
+        {
+            if (jsonData.Count == 0 || jsonData[0] == null)
+                return;
+
+            try
+            {
+                var data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData[0].ToString());
+                foreach (var delta in data.Deltas)
+                    foreach (var update in registrations.Where(r => r.MarketName == delta.MarketName))
+                        update.Callback(delta);
+            }
+            catch (Exception e)
+            {
+                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
+            }
         }
 
         private void SocketStateChange(StateChange state)
@@ -292,7 +306,7 @@ namespace Bittrex.Net
             return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, "Unknown OS");
 #endif
         }
-#endregion
-#endregion
+        #endregion
+        #endregion
     }
 }
