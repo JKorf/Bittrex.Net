@@ -8,13 +8,11 @@ using Bittrex.Net.Errors;
 using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Bittrex.Net.Interfaces;
-using Bittrex.Net.Implementations;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using System.Reflection;
-using Newtonsoft.Json.Linq;
-
 
 namespace Bittrex.Net
 {
@@ -22,12 +20,13 @@ namespace Bittrex.Net
     {
         #region fields
         private const string BaseAddress = "https://www.bittrex.com/";
-        private const string SocketAddress = "https://socket-stage.bittrex.com/";
+        private const string SocketAddress = "https://socket.bittrex.com/";
 
         private const string HubName = "coreHub";
         private const string UpdateEvent = "updateSummaryState";
 
         private static Interfaces.IHubConnection connection;
+        private static IHubProxy proxy;
 
         private readonly List<BittrexStreamRegistration> localRegistrations;
         private static readonly List<BittrexStreamRegistration> registrations = new List<BittrexStreamRegistration>();
@@ -66,10 +65,10 @@ namespace Bittrex.Net
         {
             localRegistrations = new List<BittrexStreamRegistration>();
         }
-        #endregion
+#endregion
 
-        #region methods
-        #region public
+#region methods
+#region public
         /// <summary>
         /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
         /// </summary>
@@ -174,7 +173,7 @@ namespace Bittrex.Net
                 if (connection == null)
                 {
                     connection = ConnectionFactory.Create(SocketAddress);
-                    var proxy = connection.CreateHubProxy(HubName);
+                    proxy = connection.CreateHubProxy(HubName);                    
                     
                     connection.Closed += SocketClosed;
                     connection.Error += SocketError;
@@ -188,7 +187,7 @@ namespace Bittrex.Net
                 // Try to start
                 if (TryStart())
                     return true;
-                
+
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, GetUserAgentString(), CloudFlareRetries);
@@ -219,8 +218,13 @@ namespace Bittrex.Net
 
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
-
-            return connection.State == ConnectionState.Connected;
+            
+            if (connection.State == ConnectionState.Connected)
+            {
+                proxy.Invoke("SubscribeToSummaryDeltas");
+                return true;
+            }
+            return false;
         }
         
         private void SocketMessage(IList<JToken> jsonData)

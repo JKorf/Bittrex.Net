@@ -4,7 +4,7 @@ using System.Net.Http;
 using Bittrex.Net.Interfaces;
 using CloudFlareUtilities;
 
-namespace Bittrex.Net.Implementations
+namespace Bittrex.Net
 {
     internal class CloudFlareAuthenticator: ICloudFlareAuthenticator
     {

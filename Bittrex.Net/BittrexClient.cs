@@ -7,12 +7,12 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Bittrex.Net.Errors;
-using Bittrex.Net.Implementations;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
 using Bittrex.Net.RateLimiter;
 using Newtonsoft.Json;
+using Bittrex.Net.Requests;
 
 namespace Bittrex.Net
 {
