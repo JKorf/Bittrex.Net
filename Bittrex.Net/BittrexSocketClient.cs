@@ -13,6 +13,7 @@ using Bittrex.Net.Interfaces;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using System.Reflection;
+using Bittrex.Net.Sockets;
 
 namespace Bittrex.Net
 {
