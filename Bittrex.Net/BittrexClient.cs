@@ -569,7 +569,7 @@ namespace Bittrex.Net
         }
         #endregion
         #region private
-        private async Task<BittrexApiResult<T>> ExecuteRequest<T>(Uri uri, bool signed = false, int currentTry = 0)
+        protected async Task<BittrexApiResult<T>> ExecuteRequest<T>(Uri uri, bool signed = false, int currentTry = 0)
         {
             string returnedData = "";
             try
@@ -632,7 +632,7 @@ namespace Bittrex.Net
             }
         }
 
-        private Uri GetUrl(string endpoint, string api, string version, Dictionary<string, string> parameters = null)
+        protected Uri GetUrl(string endpoint, string api, string version, Dictionary<string, string> parameters = null)
         {
             var result = $"{BaseAddress}/{api}/v{version}/{endpoint}?";
             if (parameters != null)
