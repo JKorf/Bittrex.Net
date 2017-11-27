@@ -29,8 +29,8 @@ namespace Bittrex.Net
         private static Interfaces.IHubConnection connection;
         private static IHubProxy proxy;
 
-        private readonly List<BittrexStreamRegistration> localRegistrations;
-        private static readonly List<BittrexStreamRegistration> registrations = new List<BittrexStreamRegistration>();
+        private readonly List<BittrexRegistration> localRegistrations;
+        private static readonly List<BittrexRegistration> registrations = new List<BittrexRegistration>();
         private static int lastStreamId;
 
         private static bool reconnecting;
@@ -64,7 +64,7 @@ namespace Bittrex.Net
         #region ctor
         public BittrexSocketClient()
         {
-            localRegistrations = new List<BittrexStreamRegistration>();
+            localRegistrations = new List<BittrexRegistration>();
         }
 #endregion
 
@@ -75,32 +75,52 @@ namespace Bittrex.Net
         /// </summary>
         /// <returns></returns>
         public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate) => SubscribeToMarketDeltaStreamAsync(marketName, onUpdate).Result;
-        
+
         /// <summary>
         /// Subscribes to updates on a specific market
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
-        /// <returns></returns>
+        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
         public async Task<BittrexApiResult<int>> SubscribeToMarketDeltaStreamAsync(string marketName, Action<BittrexMarketSummary> onUpdate)
         {
             return await Task.Run(() =>
             {
                 log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
+                if (!CheckConnection())
+                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
 
-                lock (connectionLock)
+                var registration = new BittrexMarketsRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+                lock (registrationLock)
                 {
-                    if (connection == null || connection.State == ConnectionState.Disconnected)
-                    {
-                        log.Write(LogVerbosity.Debug, "Starting connection to bittrex server");
-                        if (!WaitForConnection())
-                        {
-                            return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
-                        }
-                    }
+                    registrations.Add(registration);
+                    localRegistrations.Add(registration);
                 }
+                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+            });
+        }
 
-                var registration = new BittrexStreamRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+        /// <summary>
+        /// Synchronized version of the <see cref="SubscribeToAllMarketDeltaStreamAsync"/> method
+        /// </summary>
+        /// <param name="onUpdate"></param>
+        /// <returns></returns>
+        public BittrexApiResult<int> SubscribeToAllMarketDeltaStream(Action<List<BittrexMarketSummary>> onUpdate) => SubscribeToAllMarketDeltaStreamAsync(onUpdate).Result;
+
+        /// <summary>
+        /// Subscribes to updates of all markets
+        /// </summary>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        public async Task<BittrexApiResult<int>> SubscribeToAllMarketDeltaStreamAsync(Action<List<BittrexMarketSummary>> onUpdate)
+        {
+            return await Task.Run(() =>
+            {
+                log.Write(LogVerbosity.Debug, $"Going to subscribe to all markets");
+                if (!CheckConnection())
+                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+
+                var registration = new BittrexMarketsAllRegistration() { Callback = onUpdate, StreamId = NextStreamId };
                 lock (registrationLock)
                 {
                     registrations.Add(registration);
@@ -165,6 +185,19 @@ namespace Bittrex.Net
                     }
                 });
             }
+        }
+
+        private bool CheckConnection()
+        {
+            lock (connectionLock)
+            {
+                if (connection == null || connection.State == ConnectionState.Disconnected)
+                {
+                    log.Write(LogVerbosity.Debug, "Starting connection to bittrex server");
+                    return WaitForConnection();
+                }
+            }
+            return true;
         }
 
         private bool WaitForConnection()
@@ -236,8 +269,12 @@ namespace Bittrex.Net
             try
             {
                 var data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData[0].ToString());
+
+                foreach (var allRegistration in registrations.OfType<BittrexMarketsAllRegistration>())
+                    allRegistration.Callback(data.Deltas);
+
                 foreach (var delta in data.Deltas)
-                    foreach (var update in registrations.Where(r => r.MarketName == delta.MarketName))
+                    foreach (var update in registrations.OfType<BittrexMarketsRegistration>().Where(r => r.MarketName == delta.MarketName))
                         update.Callback(delta);
             }
             catch (Exception e)
