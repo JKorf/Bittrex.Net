@@ -39,4 +39,13 @@
         LimitBuy,
         LimitSell
     }
+
+    public enum TickInterval
+    {
+        OneMinute,
+        FiveMinutes,
+        HalfHour,
+        OneHour,
+        OneDay
+    }
 }

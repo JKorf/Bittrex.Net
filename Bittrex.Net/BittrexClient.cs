@@ -13,6 +13,7 @@ using Bittrex.Net.Objects;
 using Bittrex.Net.RateLimiter;
 using Newtonsoft.Json;
 using Bittrex.Net.Requests;
+using Bittrex.Net.Converters;
 
 namespace Bittrex.Net
 {
@@ -22,6 +23,7 @@ namespace Bittrex.Net
         private const string BaseAddress = "https://www.bittrex.com";
         private const string Api = "api";
         private const string ApiVersion = "1.1";
+        private const string ApiVersion2 = "2.0";
 
         private const string MarketsEndpoint = "public/getmarkets";
         private const string CurrenciesEndpoint = "public/getcurrencies";
@@ -30,6 +32,7 @@ namespace Bittrex.Net
         private const string MarketSummaryEndpoint = "public/getmarketsummary";
         private const string OrderBookEndpoint = "public/getorderbook";
         private const string MarketHistoryEndpoint = "public/getmarkethistory";
+        private const string CandleEndpoint = "pub/market/GetTicks";
 
         private const string BuyLimitEndpoint = "market/buylimit";
         private const string SellLimitEndpoint = "market/selllimit";
@@ -284,6 +287,29 @@ namespace Bittrex.Net
             };
 
             return await ExecuteRequest<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters));
+        }
+        
+        /// <summary>
+        /// Synchronized version of the <see cref="GetCandlesAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<BittrexCandle[]> GetCandles(string market, TickInterval interval) => GetCandlesAsync(market, interval).Result;
+
+        /// <summary>
+        /// Gets candle data for a market on a specific interval
+        /// </summary>
+        /// <param name="market">Market to get candles for</param>
+        /// <param name="market">The candle interval</param>
+        /// <returns>List of candles</returns>
+        public async Task<BittrexApiResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            {
+                { "marketName", market },
+                { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
+            };
+
+            return await ExecuteRequest<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters));
         }
 
         /// <summary>
