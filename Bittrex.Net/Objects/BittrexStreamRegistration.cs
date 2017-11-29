@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
-    internal abstract class BittrexRegistration
+    public abstract class BittrexRegistration
     {
         public int StreamId { get; set; }
     }

@@ -63,6 +63,72 @@ namespace Bittrex.Net.UnitTests.Core
         }
 
         [TestCase()]
+        public void SubscribingToAllMarketDeltaStream_Should_TriggerWhenAnyDeltaMessageIsReceived()
+        {
+            // arrange
+            var client = PrepareClient();
+
+            int calls = 0;
+            var subscription = client.SubscribeToAllMarketDeltaStream(data => calls++);
+
+            var expected = new BittrexStreamDeltas()
+            {
+                Deltas = new List<BittrexMarketSummary>()
+                {
+                    new BittrexMarketSummary()
+                    {
+                        Ask = 1.1m,
+                        BaseVolume = 2.2m,
+                        Bid = 3.3m,
+                        Created = new DateTime(2017, 1, 1),
+                        DisplayMarketName = null,
+                        High = 4.4m,
+                        Last = 5.5m,
+                        Low = 6.6m,
+                        MarketName = "TestMarket",
+                        OpenBuyOrders = 10,
+                        OpenSellOrders = 20,
+                        PrevDay = 7.7m,
+                        TimeStamp = new DateTime(2016, 1, 1),
+                        Volume = 8.8m
+                    }
+                }
+            };
+
+            var expected2 = new BittrexStreamDeltas()
+            {
+                Deltas = new List<BittrexMarketSummary>()
+                {
+                    new BittrexMarketSummary()
+                    {
+                        Ask = 1.1m,
+                        BaseVolume = 2.2m,
+                        Bid = 3.3m,
+                        Created = new DateTime(2017, 1, 1),
+                        DisplayMarketName = null,
+                        High = 4.4m,
+                        Last = 5.5m,
+                        Low = 6.6m,
+                        MarketName = "TestMarket2",
+                        OpenBuyOrders = 10,
+                        OpenSellOrders = 20,
+                        PrevDay = 7.7m,
+                        TimeStamp = new DateTime(2016, 1, 1),
+                        Volume = 8.8m
+                    }
+                }
+            };
+
+            // act
+            TriggerSub(sub, expected);
+            TriggerSub(sub, expected2);
+
+            // assert
+            Assert.IsTrue(subscription.Success);
+            Assert.IsTrue(calls == 2);
+        }
+
+        [TestCase()]
         public void SubscribingToMarketDeltaStream_Should_NotTriggerWhenDeltaMessageForOtherMarketIsReceived()
         {
             // arrange
@@ -320,7 +386,7 @@ namespace Bittrex.Net.UnitTests.Core
             
             var client = new BittrexSocketClient { ConnectionFactory = factory.Object, CloudFlareAuthenticator = cloud.Object };
             client.GetType().GetField("connection", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, null);
-            client.GetType().GetField("registrations", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, new List<BittrexStreamRegistration>());
+            client.GetType().GetField("registrations", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, new List<BittrexRegistration>());
             client.GetType().GetField("reconnecting", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, false);
 
             return client;
