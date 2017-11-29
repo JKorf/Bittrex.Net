@@ -28,6 +28,11 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.1 - 29 nov 2017
+	* Added candle endpoints
+	* Made ExecuteRequest and GetUrl protected so they can be overridden
+	* Fixed some small potential threading problems
+	
 * Version 1.3.0 - 24 nov 2017
 	* Changed websocket implementation to support new Bittrex socket implementation on all platforms
 	* Added SubscribeToMarketDeltaStreamAsync which returns a Task
