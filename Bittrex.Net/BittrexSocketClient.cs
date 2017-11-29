@@ -270,11 +270,19 @@ namespace Bittrex.Net
             {
                 var data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData[0].ToString());
 
-                foreach (var allRegistration in registrations.OfType<BittrexMarketsAllRegistration>())
+                IEnumerable<BittrexMarketsAllRegistration> allRegistrations;
+                IEnumerable<BittrexMarketsRegistration> marketRegistrations;
+                lock (registrationLock)
+                {
+                    allRegistrations = registrations.OfType<BittrexMarketsAllRegistration>();
+                    marketRegistrations = registrations.OfType<BittrexMarketsRegistration>();
+                }
+
+                foreach (var allRegistration in allRegistrations)
                     allRegistration.Callback(data.Deltas);
 
                 foreach (var delta in data.Deltas)
-                    foreach (var update in registrations.OfType<BittrexMarketsRegistration>().Where(r => r.MarketName == delta.MarketName))
+                    foreach (var update in marketRegistrations.Where(r => r.MarketName == delta.MarketName))
                         update.Callback(delta);
             }
             catch (Exception e)
@@ -301,7 +309,16 @@ namespace Bittrex.Net
         private void SocketClosed()
         {
             log.Write(LogVerbosity.Debug, "Socket closed");
-            if (!reconnecting && registrations.Any())
+            bool shouldReconnect = false;
+
+            if (!reconnecting)
+            {
+                lock (registrationLock)
+                    if (registrations.Any())
+                        shouldReconnect = true;
+            }
+
+            if (shouldReconnect)
             {
                 reconnecting = true;
                 ConnectionLost?.Invoke();
@@ -311,7 +328,11 @@ namespace Bittrex.Net
 
         private void TryReconnect()
         {
-            if (registrations.Any())
+            bool shouldTry = false;
+            lock (registrationLock)
+                shouldTry = registrations.Any();
+
+            if (shouldTry)
             {
                 if (!WaitForConnection())
                 {
