@@ -33,6 +33,7 @@ namespace Bittrex.Net
         private const string OrderBookEndpoint = "public/getorderbook";
         private const string MarketHistoryEndpoint = "public/getmarkethistory";
         private const string CandleEndpoint = "pub/market/GetTicks";
+        private const string LatestCandleEndpoint = "pub/market/GetLatestTick";
 
         private const string BuyLimitEndpoint = "market/buylimit";
         private const string SellLimitEndpoint = "market/selllimit";
@@ -310,6 +311,29 @@ namespace Bittrex.Net
             };
 
             return await ExecuteRequest<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters));
+        }
+
+        /// <summary>
+        /// Synchronized version of the <see cref="GetLatestCandleAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval) => GetLatestCandleAsync(market, interval).Result;
+
+        /// <summary>
+        /// Gets candle data for a market on a specific interval
+        /// </summary>
+        /// <param name="market">Market to get candles for</param>
+        /// <param name="market">The candle interval</param>
+        /// <returns>List of candles</returns>
+        public async Task<BittrexApiResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            {
+                { "marketName", market },
+                { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
+            };
+
+            return await ExecuteRequest<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2, parameters));
         }
 
         /// <summary>
