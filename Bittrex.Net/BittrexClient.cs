@@ -17,10 +17,10 @@ using Bittrex.Net.Converters;
 
 namespace Bittrex.Net
 {
-    public class BittrexClient: BittrexAbstractClient
+    public class BittrexClient: BittrexAbstractClient, IBittrexClient
     {
         #region fields
-        private const string BaseAddress = "https://www.bittrex.com";
+        private string BaseAddress = "https://www.bittrex.com";
         private const string Api = "api";
         private const string ApiVersion = "1.1";
         private const string ApiVersion2 = "2.0";
@@ -66,12 +66,23 @@ namespace Bittrex.Net
         /// <summary>
         /// Create a new instance of BittrexClient
         /// </summary>
-        public BittrexClient()
+        public BittrexClient(): this(null)
+        {   
+        }
+
+        /// <summary>
+        /// Create a new instance of the BittrexClient
+        /// </summary>
+        /// <param name="baseUrl">Can be used to make calls to a different endpoint, for instance to use a mock server</param>
+        public BittrexClient(string baseUrl)
         {
+            if (baseUrl != null)
+                BaseAddress = baseUrl;
+
             if (BittrexDefaults.MaxCallRetry != null)
                 MaxRetries = BittrexDefaults.MaxCallRetry.Value;
 
-            foreach(var rateLimiter in BittrexDefaults.RateLimiters)
+            foreach (var rateLimiter in BittrexDefaults.RateLimiters)
                 rateLimiters.Add(rateLimiter);
         }
 
@@ -80,8 +91,21 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="apiKey">The api key</param>
         /// <param name="apiSecret">The api secret associated with the key</param>
-        public BittrexClient(string apiKey, string apiSecret)
+        public BittrexClient(string apiKey, string apiSecret): this(apiKey, apiSecret, null)
         {
+        }
+
+        /// <summary>
+        /// Create a new instance of BittrexClient using provided credentials. Api keys can be managed at https://bittrex.com/Manage#sectionApi
+        /// </summary>
+        /// <param name="apiKey">The api key</param>
+        /// <param name="apiSecret">The api secret associated with the key</param>
+        /// <param name="baseUrl">Can be used to make calls to a different endpoint, for instance to use a mock server</param>
+        public BittrexClient(string apiKey, string apiSecret, string baseUrl)
+        {
+            if (baseUrl != null)
+                BaseAddress = baseUrl;
+
             if (BittrexDefaults.MaxCallRetry != null)
                 MaxRetries = BittrexDefaults.MaxCallRetry.Value;
 
