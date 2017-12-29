@@ -15,14 +15,15 @@ namespace Bittrex.Net.Sockets
         List<Action<string>> messagehandlers = new List<Action<string>>();
         WebSocket socket;
 
-        public WebsocketSharp(string url, IDictionary<string, string> cookies, IDictionary<string, string> headers)
+        public WebsocketSharp(string url, string cookieHeader, string userAgent)
         {
             socket = new WebSocket(url);
             socket.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
-            socket.CustomHeaders = headers;
-
-            foreach(var kvp in cookies)
-                socket.SetCookie(new WebSocketSharp.Net.Cookie(kvp.Key, kvp.Value));
+            socket.CustomHeaders = new Dictionary<string, string>()
+            {
+                { "Cookie", cookieHeader },
+                { "User-Agent", userAgent },
+            };
 
             socket.OnError += HandleError;
             socket.OnOpen += HandleOpen;

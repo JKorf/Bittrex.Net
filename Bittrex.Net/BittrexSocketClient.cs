@@ -69,7 +69,7 @@ namespace Bittrex.Net
 #endregion
 
 #region methods
-#region public
+        #region public
         /// <summary>
         /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
         /// </summary>
@@ -278,12 +278,16 @@ namespace Bittrex.Net
                     marketRegistrations = registrations.OfType<BittrexMarketsRegistration>();
                 }
 
-                foreach (var allRegistration in allRegistrations)
+                Parallel.ForEach(allRegistrations, allRegistration =>
+                {
                     allRegistration.Callback(data.Deltas);
+                });
 
-                foreach (var delta in data.Deltas)
+                Parallel.ForEach(data.Deltas, delta =>
+                {
                     foreach (var update in marketRegistrations.Where(r => r.MarketName == delta.MarketName))
                         update.Callback(delta);
+                });                    
             }
             catch (Exception e)
             {
@@ -348,7 +352,7 @@ namespace Bittrex.Net
             reconnecting = false;
         }
 
-        private string GetUserAgentString()
+        public static string GetUserAgentString()
         {
 #if NET45 || NET46
             return CreateUserAgentString("SignalR.Client.NET45");
