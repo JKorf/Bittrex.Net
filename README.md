@@ -28,6 +28,10 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.3 - 02 jan 2017
+	* Fix for stream connections on platforms with Websocket protocol supported
+	* Parallel foreach for stream event callbacks to improve performance
+
 * Version 1.3.2 - 11 dec 2017
 	* Added baseUrl parameter to constructor for mocking
 	* Added IBittrexClient interface for mocking
