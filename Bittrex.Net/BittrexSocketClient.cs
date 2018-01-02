@@ -235,16 +235,19 @@ namespace Bittrex.Net
                 foreach (Cookie cookie in CC)
                 {
                     Console.WriteLine(cookie.ToString());
-
+//#if NETSTANDARD
                     // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
                     // cookieContainer.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
                     CookieList.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
                 }
+
                 // add cookies to container (with socket domain)
+                cookieContainer = new CookieContainer();
                 foreach (Cookie cookie in CookieList)
                 {
                     // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
                     cookieContainer.Add(cookie);
+//#endif
                 }
 
                 connection.Cookies = cookieContainer;
@@ -392,7 +395,7 @@ namespace Bittrex.Net
             return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, "Unknown OS");
 #endif
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
     }
 }
