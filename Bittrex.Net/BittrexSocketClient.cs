@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Errors;
@@ -207,8 +208,8 @@ namespace Bittrex.Net
                 if (connection == null)
                 {
                     connection = ConnectionFactory.Create(SocketAddress);
-                    proxy = connection.CreateHubProxy(HubName);                    
-                    
+                    proxy = connection.CreateHubProxy(HubName);
+
                     connection.Closed += SocketClosed;
                     connection.Error += SocketError;
                     connection.ConnectionSlow += SocketSlow;
@@ -227,6 +228,24 @@ namespace Bittrex.Net
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, GetUserAgentString(), CloudFlareRetries);
                 if (cookieContainer == null)
                     return false;
+
+                //var CC = cookieContainer.GetCookies(new Uri(SocketAddress));
+                var CC = cookieContainer.GetCookies(new Uri(BaseAddress));
+                var CookieList = new List<Cookie>();
+                foreach (Cookie cookie in CC)
+                {
+                    Console.WriteLine(cookie.ToString());
+
+                    // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
+                    // cookieContainer.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
+                    CookieList.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
+                }
+                // add cookies to container (with socket domain)
+                foreach (Cookie cookie in CookieList)
+                {
+                    // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
+                    cookieContainer.Add(cookie);
+                }
 
                 connection.Cookies = cookieContainer;
                 log.Write(LogVerbosity.Debug, "CloudFlare cookies retrieved, retrying connection");
