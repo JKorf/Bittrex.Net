@@ -146,6 +146,8 @@ namespace Bittrex.Net.Sockets
 
             // SignalR uses https, websocket4net uses wss
             url = url.Replace("http://", "ws://").Replace("https://", "wss://");
+            //url = url.Replace("Name", "name");
+            url = url.Replace("clientProtocol=1.4", "clientProtocol=1.5");
 
             IDictionary<string, string> cookies = new Dictionary<string, string>();
             if (_connection.CookieContainer != null)

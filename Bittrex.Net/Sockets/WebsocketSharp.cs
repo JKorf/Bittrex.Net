@@ -17,7 +17,11 @@ namespace Bittrex.Net.Sockets
 
         public WebsocketSharp(string url, string cookieHeader, string userAgent)
         {
+            //url = "wss://echo.websocket.org";
             socket = new WebSocket(url);
+
+            socket.SetProxy("http://localhost:8888", null, null);
+
             socket.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
             socket.CustomHeaders = new Dictionary<string, string>()
             {

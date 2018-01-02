@@ -13,6 +13,9 @@ namespace Bittrex.Net.Sockets
         public BittrexHubConnection(HubConnection connection)
         {
             this.connection = connection;
+
+            var webProxy = new WebProxy(new Uri("localhost:8888"));
+            //this.connection.Proxy = webProxy;
         }
 
         public ConnectionState State => connection.State;
