@@ -35,9 +35,11 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public DateTime TimeStamp { get; set; }
 
+        public String MarketName { get; set; }
+
         public override string ToString()
         {
-            return "BittrexOrderBookFill: " + OrderType + " " + Quantity + "\t@\t" + Rate;
+            return "BittrexOrderBookFill: " + OrderType + " for " + MarketName + " " + Quantity + "\t@\t" + Rate;
         }
 
     }

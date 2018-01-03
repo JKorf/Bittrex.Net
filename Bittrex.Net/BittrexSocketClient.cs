@@ -141,7 +141,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="SubscribeToSubscribeToExchangeDeltasAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToSubscribeToExchangeDeltas(string marketName, Action<Object> onUpdate) => SubscribeToSubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
+        public BittrexApiResult<int> SubscribeToSubscribeToExchangeDeltas(string marketName, Action<BittrexOrderBookFill> onUpdate) => SubscribeToSubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to filled orders on a specific market
@@ -149,16 +149,16 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToSubscribeToExchangeDeltasAsync(string marketName, Action<Object> onUpdate)
+        public async Task<BittrexApiResult<int>> SubscribeToSubscribeToExchangeDeltasAsync(string marketName, Action<BittrexOrderBookFill> onUpdate)
         {
             return await Task.Run(() =>
             {
-                log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
+                //log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
                 if (!CheckConnection())
                     return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
 
                 // send subscripte to bittrex
-                proxy.Invoke("SubscribeToExchangeDeltas", marketName);
+                SubscribeTpExchangeDeltas(marketName);
 
                 var registration = new BittrexExchangeDeltasRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
                 lock (registrationLock)
@@ -168,6 +168,13 @@ namespace Bittrex.Net
                 }
                 return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
             });
+        }
+
+        private void SubscribeTpExchangeDeltas(string marketName)
+        {
+            logger.Debug($"Going to subscribe to ExchangeDeltas of {marketName}");
+
+            proxy.Invoke("SubscribeToExchangeDeltas", marketName);
         }
 
         /// <summary>
@@ -357,15 +364,13 @@ namespace Bittrex.Net
                 //proxy.Invoke("SubscribeToSummaryDeltas");
 
                 // TODO: add other subscriptions
-                /*
-                IEnumerable<BittrexExchangeStateRegistration> ExchangeStateRegistrations;
-                ExchangeStateRegistrations = registrations.OfType<BittrexExchangeStateRegistration>();
-
-                foreach (var registration in ExchangeStateRegistrations)
+                IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
+                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
+                foreach (var registration in marketRegistrations)
                 {
-                    logger.DebugFormat("subscripte to Exchange State for market {0}", registration.MarketName);
+                    SubscribeTpExchangeDeltas(registration.MarketName);
                 }
-                */
+
                 return true;
             }
             return false;
@@ -388,7 +393,9 @@ namespace Bittrex.Net
 
                 Parallel.ForEach(StreamData.Fills, data =>
                 {
-                    foreach (var update in marketRegistrations/*.Where(r => r.MarketName == StreamData.MarketName)*/)
+                    data.MarketName = StreamData.MarketName;
+
+                    foreach (var update in marketRegistrations.Where(r => r.MarketName == StreamData.MarketName))
                     {
                         update.Callback(data);
                     }
