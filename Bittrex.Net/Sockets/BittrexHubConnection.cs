@@ -66,7 +66,7 @@ namespace Bittrex.Net.Sockets
         {
             var client = new HttpClientWithUserAgent();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new LongPollingTransport(client),
+                //new LongPollingTransport(client),
                 new WebsocketCustomTransport(client),
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
