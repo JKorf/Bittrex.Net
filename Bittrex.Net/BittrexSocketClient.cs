@@ -251,6 +251,7 @@ namespace Bittrex.Net
                 }
 
                 connection.Cookies = cookieContainer;
+                connection.UserAgent = GetUserAgentString();
                 log.Write(LogVerbosity.Debug, "CloudFlare cookies retrieved, retrying connection");
 
                 // Try again with cookies
@@ -270,8 +271,11 @@ namespace Bittrex.Net
             });
 
             connection.StateChanged += waitDelegate;
-            connection.Start();
-
+            try
+            {
+                connection.Start().Wait();
+            }
+            catch (Exception) { }
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
             
@@ -376,24 +380,7 @@ namespace Bittrex.Net
 
         public static string GetUserAgentString()
         {
-#if NET45 || NET46
-            return CreateUserAgentString("SignalR.Client.NET45");
-#elif NETSTANDARD
-            return CreateUserAgentString("SignalR.Client.NetStandard");
-#else
-            return CreateUserAgentString("SignalR.Client.NET4");
-#endif
-        }
-
-        private static string CreateUserAgentString(string client)
-        {
-#if NET45 || NET46
-            var version = new AssemblyName(typeof(Connection).Assembly.FullName).Version;
-            return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, Environment.OSVersion);
-#else
-            var version = new AssemblyName(typeof(Connection).GetTypeInfo().Assembly.FullName).Version;
-            return String.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2})", client, version, "Unknown OS");
-#endif
+            return "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.52";
         }
 #endregion
 #endregion
