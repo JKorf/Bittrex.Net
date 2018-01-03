@@ -286,6 +286,9 @@ namespace Bittrex.Net
                     
                     Subscription sub = proxy.Subscribe(UpdateEvent);
                     sub.Received += SocketMessage;
+
+                    Subscription subExchangeDelta = proxy.Subscribe("updateExchangeState"); // M=updateExchangeState
+                    subExchangeDelta.Received += SocketMessageExchangeDelta;
                 }
 
                 // Try to start
@@ -367,7 +370,36 @@ namespace Bittrex.Net
             }
             return false;
         }
-        
+
+        private void SocketMessageExchangeDelta(IList<JToken> jsonData)
+        {
+            if (jsonData.Count == 0 || jsonData[0] == null)
+                return;
+
+            try
+            {
+                var StreamData = JsonConvert.DeserializeObject<BittrexStreamExchangeState>(jsonData[0].ToString());
+                
+                IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
+                lock (registrationLock)
+                {
+                    marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
+                }
+
+                Parallel.ForEach(StreamData.Fills, data =>
+                {
+                    foreach (var update in marketRegistrations/*.Where(r => r.MarketName == StreamData.MarketName)*/)
+                    {
+                        update.Callback(data);
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
+            }
+        }
+
         private void SocketMessage(IList<JToken> jsonData)
         {
             if (jsonData.Count == 0 || jsonData[0] == null)
@@ -394,7 +426,7 @@ namespace Bittrex.Net
                 {
                     foreach (var update in marketRegistrations.Where(r => r.MarketName == delta.MarketName))
                         update.Callback(delta);
-                });                    
+                });
             }
             catch (Exception e)
             {
