@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Transports;
 
 namespace Bittrex.Net.Sockets
 {
@@ -63,7 +64,13 @@ namespace Bittrex.Net.Sockets
 
         public Task Start()
         {
-            return connection.Start(new WebsocketCustomTransport());
+            var client = new HttpClientWithUserAgent();
+            var autoTransport = new AutoTransport(client, new IClientTransport[] {
+                new LongPollingTransport(client),
+                new WebsocketCustomTransport(client),
+            });
+            connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
+            return connection.Start(autoTransport);
         }
 
         public void Stop(TimeSpan timeout)
