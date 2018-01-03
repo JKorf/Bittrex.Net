@@ -27,13 +27,11 @@ namespace Bittrex.Net.Objects
 
         /// <summary>
         /// Sell/buy
-        /// TODO: use ENUM
         /// </summary>
-        public String OrderType { get; set; }
+        public OrderType OrderType { get; set; }
 
         /// <summary>
-        /// TimeStamp=2018-01-03T02:38:19.927
-        /// TODO: use DateTime object
+        /// TimeStamp
         /// </summary>
         public DateTime TimeStamp { get; set; }
 
