@@ -12,15 +12,15 @@
         /// <summary>
         /// The total balance
         /// </summary>
-        public decimal Balance { get; set; }
+        public decimal? Balance { get; set; }
         /// <summary>
         /// The available balance
         /// </summary>
-        public decimal Available { get; set; }
+        public decimal? Available { get; set; }
         /// <summary>
         /// The pending balance
         /// </summary>
-        public decimal Pending { get; set; }
+        public decimal? Pending { get; set; }
         /// <summary>
         /// The crypto address this balance is on
         /// </summary>

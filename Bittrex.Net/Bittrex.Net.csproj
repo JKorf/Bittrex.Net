@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>1.3.3</PackageVersion>
+    <PackageVersion>1.3.4</PackageVersion>
 	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API. It includes all features the API provides using clear and readable C# objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -17,17 +17,17 @@
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageReleaseNotes>
-	1.3.3 - 
-	* Parallel foreach for subscribtions
-	* Fix for streams
+	1.3.4 - 
+	* Fix for requesting balance of a currency that has no address assigned yet
+	* Fix for streaming, should work on all platforms again
 	</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />	
-	<PackageReference Include="CloudFlareUtilities" Version="0.5.0-alpha" />	
-	<PackageReference Include="System.Net.Http" Version="4.3.3" />	
+	<PackageReference Include="System.Net.Http" Version="4.3.3" />		
+	<PackageReference Include="CloudFlareUtilities" Version="0.5.0-alpha" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard2.0'">
