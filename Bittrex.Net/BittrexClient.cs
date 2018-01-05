@@ -660,11 +660,12 @@ namespace Bittrex.Net
             }
             catch (WebException we)
             {
-                var response = (HttpWebResponse) we.Response;
                 if (currentTry < MaxRetries)
                     return await ExecuteRequest<T>(uri, signed, ++currentTry);
 
-                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ErrorWeb), $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}");
+                var response = (HttpWebResponse)we.Response;
+                string infoMessage = response == null ? "No response from server" : $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}";
+                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ErrorWeb), infoMessage);
             }
             catch (JsonReaderException jre)
             {

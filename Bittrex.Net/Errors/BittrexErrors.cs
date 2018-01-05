@@ -11,7 +11,7 @@ namespace Bittrex.Net.Errors
             {
                 { BittrexErrorKey.NoApiCredentialsProvided, new BittrexError(5000, "No api credentials provided, can't request private endpoints")},
 
-                { BittrexErrorKey.ErrorWeb, new BittrexError(6001, "Server returned a not successful status")},
+                { BittrexErrorKey.ErrorWeb, new BittrexError(6001, "Request returned a not successful status")},
                 { BittrexErrorKey.CantConnectToServer, new BittrexError(6002, "Could not connect to Bittrex server")},
 
                 { BittrexErrorKey.ParseErrorReader, new BittrexError(7000, "Error reading the returned data. Data was not valid Json")},
