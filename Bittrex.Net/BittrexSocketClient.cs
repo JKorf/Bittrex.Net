@@ -361,7 +361,7 @@ namespace Bittrex.Net
             
             if (connection.State == ConnectionState.Connected)
             {
-                //proxy.Invoke("SubscribeToSummaryDeltas");
+                proxy.Invoke("SubscribeToSummaryDeltas");
 
                 // TODO: add other subscriptions
                 IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
