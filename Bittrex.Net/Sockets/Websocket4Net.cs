@@ -22,17 +22,14 @@ namespace Bittrex.Net.Sockets
 
         public Websocket4Net(string url, IDictionary<string, string> cookies, IDictionary<string, string> headers)
         {
-            //url = "wss://echo.websocket.org";
-
             socket = new WebSocket(url, cookies: cookies.ToList(), customHeaderItems: headers.ToList(), receiveBufferSize: 2048, sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
             socket.NoDelay = true;
-            socket.Security.AllowNameMismatchCertificate = true;
-            socket.Security.AllowUnstrustedCertificate = true;
 
-            // User-Agent: SignalR.Client.NetStandard/2.2.2.0 (Unknown OS)
-
-            var proxy = new HttpConnectProxy(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888));
-            socket.Proxy = (SuperSocket.ClientEngine.IProxyConnector)proxy;
+            // proxy websocket stuff through fiddler
+            // socket.Security.AllowNameMismatchCertificate = true;
+            // socket.Security.AllowUnstrustedCertificate = true;
+            // var proxy = new HttpConnectProxy(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888));
+            // socket.Proxy = (SuperSocket.ClientEngine.IProxyConnector)proxy;
 
             socket.Error += HandleError;
             socket.Opened += HandleOpen;
