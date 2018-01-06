@@ -27,5 +27,10 @@ namespace Bittrex.Net.Objects
         /// Price of the orders
         /// </summary>
         public decimal Rate { get; set; }
+
+        /// <summary>
+        /// unkown (used by stream)
+        /// </summary>
+        public int Type { get; set; }
     }
 }

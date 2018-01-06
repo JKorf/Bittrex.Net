@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Errors;
@@ -14,6 +15,7 @@ using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using System.Reflection;
 using Bittrex.Net.Sockets;
+using log4net;
 
 namespace Bittrex.Net
 {
@@ -25,6 +27,8 @@ namespace Bittrex.Net
 
         private const string HubName = "coreHub";
         private const string UpdateEvent = "updateSummaryState";
+
+        private ILog logger = LogManager.GetLogger(typeof(BittrexSocketClient));
 
         private static Interfaces.IHubConnection connection;
         private static IHubProxy proxy;
@@ -66,9 +70,9 @@ namespace Bittrex.Net
         {
             localRegistrations = new List<BittrexRegistration>();
         }
-#endregion
+        #endregion
 
-#region methods
+        #region methods
         #region public
         /// <summary>
         /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
@@ -98,6 +102,79 @@ namespace Bittrex.Net
                 }
                 return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
             });
+        }
+
+        /// <summary>
+        /// Synchronized version of the <see cref="SubscribeToQueryExchangeStateAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<int> SubscribeToQueryExchangeState(string marketName, Action<Object> onUpdate) => SubscribeToQueryExchangeStateAsync(marketName, onUpdate).Result;
+
+        /// <summary>
+        /// Subscribes to ??basic/initial info ?? on a specific market
+        /// </summary>
+        /// <param name="marketName">The name of the market to subscribe on</param>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        public async Task<BittrexApiResult<int>> SubscribeToQueryExchangeStateAsync(string marketName, Action<Object> onUpdate)
+        {
+            return await Task.Run(() =>
+            {
+                log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeState of {marketName}");
+                if (!CheckConnection())
+                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+
+                // send subscripte to bittrex
+                proxy.Invoke("QueryExchangeState", marketName);
+
+                var registration = new BittrexExchangeStateRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+                lock (registrationLock)
+                {
+                    registrations.Add(registration);
+                    localRegistrations.Add(registration);
+                }
+                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+            });
+        }
+
+        /// <summary>
+        /// Synchronized version of the <see cref="SubscribeToSubscribeToExchangeDeltasAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<int> SubscribeToSubscribeToExchangeDeltas(string marketName, Action<BittrexOrderBookFill> onUpdate) => SubscribeToSubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
+
+        /// <summary>
+        /// Subscribes to filled orders on a specific market
+        /// </summary>
+        /// <param name="marketName">The name of the market to subscribe on</param>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        public async Task<BittrexApiResult<int>> SubscribeToSubscribeToExchangeDeltasAsync(string marketName, Action<BittrexOrderBookFill> onUpdate)
+        {
+            return await Task.Run(() =>
+            {
+                //log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
+                if (!CheckConnection())
+                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+
+                // send subscripte to bittrex
+                SubscribeTpExchangeDeltas(marketName);
+
+                var registration = new BittrexExchangeDeltasRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+                lock (registrationLock)
+                {
+                    registrations.Add(registration);
+                    localRegistrations.Add(registration);
+                }
+                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+            });
+        }
+
+        private void SubscribeTpExchangeDeltas(string marketName)
+        {
+            logger.Debug($"Going to subscribe to ExchangeDeltas of {marketName}");
+
+            proxy.Invoke("SubscribeToExchangeDeltas", marketName);
         }
 
         /// <summary>
@@ -207,8 +284,8 @@ namespace Bittrex.Net
                 if (connection == null)
                 {
                     connection = ConnectionFactory.Create(SocketAddress);
-                    proxy = connection.CreateHubProxy(HubName);                    
-                    
+                    proxy = connection.CreateHubProxy(HubName);
+
                     connection.Closed += SocketClosed;
                     connection.Error += SocketError;
                     connection.ConnectionSlow += SocketSlow;
@@ -216,6 +293,9 @@ namespace Bittrex.Net
                     
                     Subscription sub = proxy.Subscribe(UpdateEvent);
                     sub.Received += SocketMessage;
+
+                    Subscription subExchangeDelta = proxy.Subscribe("updateExchangeState"); // M=updateExchangeState
+                    subExchangeDelta.Received += SocketMessageExchangeDelta;
                 }
 
                 // Try to start
@@ -227,6 +307,28 @@ namespace Bittrex.Net
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, GetUserAgentString(), CloudFlareRetries);
                 if (cookieContainer == null)
                     return false;
+
+                // this fixes missing cookies and prints them
+                //var CC = cookieContainer.GetCookies(new Uri(SocketAddress));
+                var CC = cookieContainer.GetCookies(new Uri(BaseAddress));
+                var CookieList = new List<Cookie>();
+                foreach (Cookie cookie in CC)
+                {
+                    logger.Debug(cookie.ToString());
+//#if NETSTANDARD
+                    // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
+                    // cookieContainer.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
+                    CookieList.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
+                }
+
+                // add cookies to container (with socket domain)
+                cookieContainer = new CookieContainer();
+                foreach (Cookie cookie in CookieList)
+                {
+                    // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
+                    cookieContainer.Add(cookie);
+//#endif
+                }
 
                 connection.Cookies = cookieContainer;
                 connection.UserAgent = GetUserAgentString();
@@ -259,12 +361,55 @@ namespace Bittrex.Net
             
             if (connection.State == ConnectionState.Connected)
             {
-                proxy.Invoke("SubscribeToSummaryDeltas");
+                //proxy.Invoke("SubscribeToSummaryDeltas");
+
+                // TODO: add other subscriptions
+                IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
+                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
+                foreach (var registration in marketRegistrations)
+                {
+                    SubscribeTpExchangeDeltas(registration.MarketName);
+                }
+
                 return true;
             }
             return false;
         }
-        
+
+        private void SocketMessageExchangeDelta(IList<JToken> jsonData)
+        {
+            if (jsonData.Count == 0 || jsonData[0] == null)
+                return;
+
+            try
+            {
+                var StreamData = JsonConvert.DeserializeObject<BittrexStreamExchangeState>(jsonData[0].ToString());
+                
+                IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
+                lock (registrationLock)
+                {
+                    marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
+                }
+
+                foreach (var update in marketRegistrations.Where(r => r.MarketName == StreamData.MarketName))
+                {
+                    // don't use parallel to keep right timing order
+                    //Parallel.ForEach(StreamData.Fills, data =>
+                    foreach (BittrexOrderBookFill data in StreamData.Fills)
+                    {
+                        data.MarketName = StreamData.MarketName;
+
+                        update.Callback(data);
+                    }
+                    //});
+                }
+            }
+            catch (Exception e)
+            {
+                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
+            }
+        }
+
         private void SocketMessage(IList<JToken> jsonData)
         {
             if (jsonData.Count == 0 || jsonData[0] == null)
@@ -291,7 +436,7 @@ namespace Bittrex.Net
                 {
                     foreach (var update in marketRegistrations.Where(r => r.MarketName == delta.MarketName))
                         update.Callback(delta);
-                });                    
+                });
             }
             catch (Exception e)
             {
@@ -360,7 +505,7 @@ namespace Bittrex.Net
         {
             return "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.52";
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
     }
 }

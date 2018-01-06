@@ -7,7 +7,13 @@ namespace Bittrex.Net.Sockets
     {
         public IHubConnection Create(string url)
         {
-            return new BittrexHubConnection(new HubConnection(url));
+            HubConnection hubConnection = new HubConnection(
+                "https://socket.bittrex.com/signalr/", // https://socket.bittrex.com/signalr/connect
+                useDefaultUrl: false,
+                queryString: "tid=1"
+                // ,queryString: "transport=webSockets&clientProtocol=1.5"
+                );
+            return new BittrexHubConnection(hubConnection);
         }
     }
 }

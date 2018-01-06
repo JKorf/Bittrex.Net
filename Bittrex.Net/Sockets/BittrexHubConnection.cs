@@ -14,6 +14,9 @@ namespace Bittrex.Net.Sockets
         public BittrexHubConnection(HubConnection connection)
         {
             this.connection = connection;
+
+            var webProxy = new WebProxy(new Uri("localhost:8888"));
+            //this.connection.Proxy = webProxy;
         }
 
         public ConnectionState State => connection.State;
@@ -63,7 +66,7 @@ namespace Bittrex.Net.Sockets
         {
             var client = new HttpClientWithUserAgent();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new LongPollingTransport(client),
+                //new LongPollingTransport(client),
                 new WebsocketCustomTransport(client),
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
