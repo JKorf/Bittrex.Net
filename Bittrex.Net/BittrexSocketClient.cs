@@ -391,15 +391,18 @@ namespace Bittrex.Net
                     marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
                 }
 
-                Parallel.ForEach(StreamData.Fills, data =>
+                foreach (var update in marketRegistrations.Where(r => r.MarketName == StreamData.MarketName))
                 {
-                    data.MarketName = StreamData.MarketName;
-
-                    foreach (var update in marketRegistrations.Where(r => r.MarketName == StreamData.MarketName))
+                    // don't use parallel to keep right timing order
+                    //Parallel.ForEach(StreamData.Fills, data =>
+                    foreach (BittrexOrderBookFill data in StreamData.Fills)
                     {
+                        data.MarketName = StreamData.MarketName;
+
                         update.Callback(data);
                     }
-                });
+                    //});
+                }
             }
             catch (Exception e)
             {
