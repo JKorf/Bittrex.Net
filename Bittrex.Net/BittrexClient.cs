@@ -148,7 +148,7 @@ namespace Bittrex.Net
         /// <returns>List of markets</returns>
         public async Task<BittrexApiResult<BittrexMarket[]>> GetMarketsAsync()
         {
-            return await ExecuteRequest<BittrexMarket[]>(GetUrl(MarketsEndpoint, Api, ApiVersion));
+            return await ExecuteRequest<BittrexMarket[]>(GetUrl(MarketsEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Bittrex.Net
         /// <returns>List of currencies</returns>
         public async Task<BittrexApiResult<BittrexCurrency[]>> GetCurrenciesAsync()
         {
-            return await ExecuteRequest<BittrexCurrency[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion));
+            return await ExecuteRequest<BittrexCurrency[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Bittrex.Net
                 { "market", market }
             };
 
-            return await ExecuteRequest<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion, parameters));
+            return await ExecuteRequest<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace Bittrex.Net
                 { "market", market }
             };
 
-            var result = await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters));
+            var result = await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
             if (!result.Success || result.Result.Length == 0)
                 return ThrowErrorMessage<BittrexMarketSummary>(result.Error);
 
@@ -224,7 +224,7 @@ namespace Bittrex.Net
         /// <returns>List of summaries for all markets</returns>
         public async Task<BittrexApiResult<BittrexMarketSummary[]>> GetMarketSummariesAsync()
         {
-            return await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummariesEndpoint, Api, ApiVersion));
+            return await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummariesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace Bittrex.Net
                 { "type", "buy" }
             };
 
-            return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters));
+            return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Bittrex.Net
                 { "type", "sell" }
             };
 
-            return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters));
+            return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -311,7 +311,7 @@ namespace Bittrex.Net
                 { "market", market }
             };
 
-            return await ExecuteRequest<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters));
+            return await ExecuteRequest<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
         
         /// <summary>
@@ -334,7 +334,7 @@ namespace Bittrex.Net
                 { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
             };
 
-            return await ExecuteRequest<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters));
+            return await ExecuteRequest<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -357,7 +357,7 @@ namespace Bittrex.Net
                 { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
             };
 
-            return await ExecuteRequest<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2, parameters));
+            return await ExecuteRequest<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace Bittrex.Net
             };
 
             var uri = GetUrl(type == OrderType.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion, parameters);
-            return await ExecuteRequest<BittrexGuid>(uri, true);
+            return await ExecuteRequest<BittrexGuid>(uri, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace Bittrex.Net
                 {"uuid", guid.ToString()}
             };
 
-            return await ExecuteRequest<object>(GetUrl(CancelEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<object>(GetUrl(CancelEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -433,7 +433,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
 
-            return await ExecuteRequest<BittrexOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -456,7 +456,7 @@ namespace Bittrex.Net
             {
                 {"currency", currency}
             };
-            return await ExecuteRequest<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace Bittrex.Net
             if (apiKey == null || encryptor == null)
                 return ThrowErrorMessage<BittrexBalance[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
-            return await ExecuteRequest<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true);
+            return await ExecuteRequest<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace Bittrex.Net
             {
                 {"currency", currency}
             };
-            return await ExecuteRequest<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -527,7 +527,7 @@ namespace Bittrex.Net
             };
             AddOptionalParameter(parameters, "paymentid", paymentId);
 
-            return await ExecuteRequest<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -550,7 +550,7 @@ namespace Bittrex.Net
             {
                 {"uuid", guid.ToString()}
             };
-            return await ExecuteRequest<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -571,7 +571,7 @@ namespace Bittrex.Net
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
-            return await ExecuteRequest<BittrexOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -592,7 +592,7 @@ namespace Bittrex.Net
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "currency", currency);
-            return await ExecuteRequest<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -613,7 +613,7 @@ namespace Bittrex.Net
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "currency", currency);
-            return await ExecuteRequest<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion, parameters), true);
+            return await ExecuteRequest<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
         #endregion
         #region private
@@ -647,7 +647,7 @@ namespace Bittrex.Net
                 var response = request.GetResponse();
                 using (var reader = new StreamReader(response.GetResponseStream()))
                 {
-                    returnedData = await reader.ReadToEndAsync();
+                    returnedData = await reader.ReadToEndAsync().ConfigureAwait(false);
                     var result = JsonConvert.DeserializeObject<BittrexApiResult<T>>(returnedData);
                     if (!result.Success)
                     {
@@ -661,7 +661,7 @@ namespace Bittrex.Net
             catch (WebException we)
             {
                 if (currentTry < MaxRetries)
-                    return await ExecuteRequest<T>(uri, signed, ++currentTry);
+                    return await ExecuteRequest<T>(uri, signed, ++currentTry).ConfigureAwait(false);
 
                 var response = (HttpWebResponse)we.Response;
                 string infoMessage = response == null ? "No response from server" : $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}";
