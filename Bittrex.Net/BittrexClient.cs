@@ -246,7 +246,7 @@ namespace Bittrex.Net
                 { "type", "both" }
             };
 
-            return await ExecuteRequest<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters));
+            return await ExecuteRequest<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
