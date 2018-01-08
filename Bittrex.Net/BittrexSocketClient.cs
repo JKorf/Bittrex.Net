@@ -153,12 +153,11 @@ namespace Bittrex.Net
         {
             return await Task.Run(() =>
             {
-                //log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
                 if (!CheckConnection())
                     return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
 
                 // send subscripte to bittrex
-                SubscribeTpExchangeDeltas(marketName);
+                SubscribeToExchangeDeltas(marketName);
 
                 var registration = new BittrexExchangeDeltasRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
                 lock (registrationLock)
@@ -170,7 +169,7 @@ namespace Bittrex.Net
             });
         }
 
-        private void SubscribeTpExchangeDeltas(string marketName)
+        private void SubscribeToExchangeDeltas(string marketName)
         {
             logger.Debug($"Going to subscribe to ExchangeDeltas of {marketName}");
 
@@ -294,7 +293,7 @@ namespace Bittrex.Net
                     Subscription sub = proxy.Subscribe(UpdateEvent);
                     sub.Received += SocketMessage;
 
-                    Subscription subExchangeDelta = proxy.Subscribe("updateExchangeState"); // M=updateExchangeState
+                    Subscription subExchangeDelta = proxy.Subscribe("updateExchangeState");
                     subExchangeDelta.Received += SocketMessageExchangeDelta;
                 }
 
@@ -368,7 +367,7 @@ namespace Bittrex.Net
                 marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
                 foreach (var registration in marketRegistrations)
                 {
-                    SubscribeTpExchangeDeltas(registration.MarketName);
+                    SubscribeToExchangeDeltas(registration.MarketName);
                 }
 
                 return true;
@@ -394,14 +393,12 @@ namespace Bittrex.Net
                 foreach (var update in marketRegistrations.Where(r => r.MarketName == StreamData.MarketName))
                 {
                     // don't use parallel to keep right timing order
-                    //Parallel.ForEach(StreamData.Fills, data =>
                     foreach (BittrexOrderBookFill data in StreamData.Fills)
                     {
                         data.MarketName = StreamData.MarketName;
 
                         update.Callback(data);
                     }
-                    //});
                 }
             }
             catch (Exception e)

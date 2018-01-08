@@ -49,11 +49,8 @@ namespace Bittrex.Net.Sockets
 
         private void HandleClose(object sender, CloseEventArgs e)
         {
-            // workaround so that collection does not get modified on foreach
-            List<Action> handlers = new List<Action>();
-            handlers.AddRange(closehandlers);
-
-            foreach (Action handler in handlers)
+            // List recreation as workaround so that collection does not get modified on foreach
+            foreach (Action handler in new List<Action>(closehandlers))
                 handler();
         }
 
