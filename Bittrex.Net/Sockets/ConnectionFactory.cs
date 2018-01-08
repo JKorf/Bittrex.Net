@@ -8,7 +8,7 @@ namespace Bittrex.Net.Sockets
         public IHubConnection Create(string url)
         {
             HubConnection hubConnection = new HubConnection(
-                url,
+                url + "signalr",
                 useDefaultUrl: false,
                 queryString: "tid=1"
                 );
