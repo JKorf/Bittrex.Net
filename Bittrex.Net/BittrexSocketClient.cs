@@ -141,7 +141,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="SubscribeToSubscribeToExchangeDeltasAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToSubscribeToExchangeDeltas(string marketName, Action<BittrexOrderBookFill> onUpdate) => SubscribeToSubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
+        public BittrexApiResult<int> SubscribeToSubscribeToExchangeDeltas(string marketName, Action<BittrexStreamExchangeState> onUpdate) => SubscribeToSubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to filled orders on a specific market
@@ -149,7 +149,7 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToSubscribeToExchangeDeltasAsync(string marketName, Action<BittrexOrderBookFill> onUpdate)
+        public async Task<BittrexApiResult<int>> SubscribeToSubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamExchangeState> onUpdate)
         {
             return await Task.Run(() =>
             {
@@ -382,7 +382,7 @@ namespace Bittrex.Net
 
             try
             {
-                var StreamData = JsonConvert.DeserializeObject<BittrexStreamExchangeState>(jsonData[0].ToString());
+                BittrexStreamExchangeState StreamData = JsonConvert.DeserializeObject<BittrexStreamExchangeState>(jsonData[0].ToString());
                 
                 IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
                 lock (registrationLock)
@@ -392,13 +392,7 @@ namespace Bittrex.Net
 
                 foreach (var update in marketRegistrations.Where(r => r.MarketName == StreamData.MarketName))
                 {
-                    // don't use parallel to keep right timing order
-                    foreach (BittrexOrderBookFill data in StreamData.Fills)
-                    {
-                        data.MarketName = StreamData.MarketName;
-
-                        update.Callback(data);
-                    }
+                    update.Callback(StreamData);
                 }
             }
             catch (Exception e)

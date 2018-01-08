@@ -28,7 +28,7 @@ namespace Bittrex.Net.Objects
 
     internal class BittrexExchangeDeltasRegistration : BittrexRegistration
     {
-        public Action<BittrexOrderBookFill> Callback { get; set; }
+        public Action<BittrexStreamExchangeState> Callback { get; set; }
         public string MarketName { get; set; }
     }
 }
