@@ -29,8 +29,21 @@ namespace Bittrex.Net.Objects
         public decimal Rate { get; set; }
 
         /// <summary>
-        /// unkown (used by stream)
+        /// how to handle data (used by stream)
         /// </summary>
-        public int Type { get; set; }
+        public OrderBookEntryType Type { get; set; }
+    }
+
+    /// <summary>
+    /// https://github.com/JKorf/Bittrex.Net/pull/42#discussion_r160122966
+    /// Type 0 – you need to add this entry into your orderbook. There were no orders at matching price before.
+    /// Type 1 – you need to delete this entry from your orderbook.This entry no longer exists (no orders at matching price)
+    /// Type 2 – you need to edit this entry.There are different number of orders at this price.
+    /// </summary>
+    public enum OrderBookEntryType
+    {
+        NewEntry = 0,
+        RemoveEntry = 1,
+        UpdateEntry = 2
     }
 }
