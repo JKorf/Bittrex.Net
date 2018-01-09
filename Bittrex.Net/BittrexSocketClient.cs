@@ -327,28 +327,6 @@ namespace Bittrex.Net
                 if (cookieContainer == null)
                     return false;
 
-                // this fixes missing cookies and prints them
-                //var CC = cookieContainer.GetCookies(new Uri(SocketAddress));
-                var CC = cookieContainer.GetCookies(new Uri(BaseAddress));
-                var CookieList = new List<Cookie>();
-                foreach (Cookie cookie in CC)
-                {
-                    log.Write(LogVerbosity.Debug, cookie.ToString());
-//#if NETSTANDARD
-                    // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
-                    // cookieContainer.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
-                    CookieList.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
-                }
-
-                // add cookies to container (with socket domain)
-                cookieContainer = new CookieContainer();
-                foreach (Cookie cookie in CookieList)
-                {
-                    // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
-                    cookieContainer.Add(cookie);
-//#endif
-                }
-
                 connection.Cookies = cookieContainer;
                 connection.UserAgent = GetUserAgentString();
                 log.Write(LogVerbosity.Debug, "CloudFlare cookies retrieved, retrying connection");
