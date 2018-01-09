@@ -93,6 +93,9 @@ namespace Bittrex.Net
 
         /// <summary>
         /// get basic/initial info of a specific market
+        /// 500 Buys
+        /// 100 Fills
+        /// 500 Sells
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
