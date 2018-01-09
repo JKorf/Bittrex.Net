@@ -374,7 +374,10 @@ namespace Bittrex.Net
             {
                 connection.Start().Wait();
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                log.Write(LogVerbosity.Debug, ex.ToString());
+            }
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
             
