@@ -86,13 +86,64 @@ namespace Bittrex.Net
         }
 
         /// <summary>
+        /// Synchronized version of the <see cref="SubscribeToQueryExchangeStateAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<int> QueryExchangeState(string marketName, Action<BittrexExchangeState> onUpdate) => QueryExchangeStateAsync(marketName, onUpdate).Result;
+
+        /// <summary>
+        /// get basic/initial info of a specific market
+        /// </summary>
+        /// <param name="marketName">The name of the market to subscribe on</param>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        public async Task<BittrexApiResult<int>> QueryExchangeStateAsync(string marketName, Action<BittrexExchangeState> onUpdate)
+        {
+            return await Task.Run(() =>
+            {
+                log.Write(LogVerbosity.Debug, $"Going to call QueryExchangeState for market: {marketName}");
+                if (!CheckConnection())
+                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+
+
+                // gives direkt return -> no subscription
+                // https://stackoverflow.com/questions/11140164/signalr-console-app-example
+                proxy.Invoke<JObject>("QueryExchangeState", marketName).ContinueWith(task => {
+                    if (task.IsFaulted)
+                    {
+                        log.Write(LogVerbosity.Error, String.Format("There was an error calling send: {0}", task.Exception.GetBaseException()));
+                    }
+                    else
+                    {
+                        string json = "";
+
+                        try
+                        {
+                            json = task.Result.ToString();
+
+                            BittrexExchangeState StreamData = JsonConvert.DeserializeObject<BittrexExchangeState>(json);
+
+                            onUpdate(StreamData);
+                        }
+                        catch (Exception e)
+                        {
+                            log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {json}");
+                        }
+                    }
+                });
+
+                return new BittrexApiResult<int>() { Success = true };
+            });
+        }
+
+        /// <summary>
         /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
         /// </summary>
         /// <returns></returns>
         public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate) => SubscribeToMarketDeltaStreamAsync(marketName, onUpdate).Result;
 
         /// <summary>
-        /// Subscribes to updates on a specific market
+        /// Subscribes to filled orders on a specific market
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
@@ -116,58 +167,25 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Synchronized version of the <see cref="SubscribeToQueryExchangeStateAsync"/> method
+        /// Synchronized version of the <see cref="SubscribeToExchangeDeltasAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToQueryExchangeState(string marketName, Action<Object> onUpdate) => SubscribeToQueryExchangeStateAsync(marketName, onUpdate).Result;
+        public BittrexApiResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexStreamExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
 
         /// <summary>
-        /// Subscribes to ??basic/initial info ?? on a specific market
+        /// Subscribes to updates on a specific market
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToQueryExchangeStateAsync(string marketName, Action<Object> onUpdate)
-        {
-            return await Task.Run(() =>
-            {
-                log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeState of {marketName}");
-                if (!CheckConnection())
-                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
-
-                // send subscripte to bittrex
-                proxy.Invoke("QueryExchangeState", marketName);
-
-                var registration = new BittrexExchangeStateRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
-                lock (registrationLock)
-                {
-                    registrations.Add(registration);
-                    localRegistrations.Add(registration);
-                }
-                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
-            });
-        }
-
-        /// <summary>
-        /// Synchronized version of the <see cref="SubscribeToSubscribeToExchangeDeltasAsync"/> method
-        /// </summary>
-        /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToSubscribeToExchangeDeltas(string marketName, Action<BittrexStreamExchangeState> onUpdate) => SubscribeToSubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
-
-        /// <summary>
-        /// Subscribes to filled orders on a specific market
-        /// </summary>
-        /// <param name="marketName">The name of the market to subscribe on</param>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToSubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamExchangeState> onUpdate)
+        public async Task<BittrexApiResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamExchangeState> onUpdate)
         {
             return await Task.Run(() =>
             {
                 if (!CheckConnection())
                     return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
 
-                // send subscripte to bittrex
+                // send subscribe to bittrex
                 SubscribeToExchangeDeltas(marketName);
 
                 var registration = new BittrexExchangeDeltasRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
@@ -184,6 +202,7 @@ namespace Bittrex.Net
         {
             log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
 
+            // when subscribing this we get Exchange State method calls regularly
             proxy.Invoke("SubscribeToExchangeDeltas", marketName);
         }
 
@@ -313,8 +332,9 @@ namespace Bittrex.Net
                     Subscription sub = proxy.Subscribe(UpdateEvent);
                     sub.Received += SocketMessage;
 
-                    Subscription subExchangeDelta = proxy.Subscribe("updateExchangeState");
-                    subExchangeDelta.Received += SocketMessageExchangeDelta;
+                    // regular updates
+                    Subscription subExchangeState = proxy.Subscribe("updateExchangeState");
+                    subExchangeState.Received += SocketMessageExchangeState;
                 }
 
                 // Try to start
@@ -325,7 +345,10 @@ namespace Bittrex.Net
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, GetUserAgentString(), CloudFlareRetries);
                 if (cookieContainer == null)
+                {
+                    log.Write(LogVerbosity.Error, $"CloudFlareAuthenticator didn't gave us the cookies");
                     return false;
+                }
 
                 connection.Cookies = cookieContainer;
                 connection.UserAgent = GetUserAgentString();
@@ -361,9 +384,10 @@ namespace Bittrex.Net
             
             if (connection.State == ConnectionState.Connected)
             {
+                // subscribe to all market deltas
                 proxy.Invoke("SubscribeToSummaryDeltas");
 
-                // TODO: add other subscriptions
+                // TODO: re-add all other subscriptions (if there are any)
                 IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
                 marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
                 foreach (var registration in marketRegistrations)
@@ -376,7 +400,8 @@ namespace Bittrex.Net
             return false;
         }
 
-        private void SocketMessageExchangeDelta(IList<JToken> jsonData)
+        // got updated orderbook
+        private void SocketMessageExchangeState(IList<JToken> jsonData)
         {
             if (jsonData.Count == 0 || jsonData[0] == null)
                 return;

@@ -19,13 +19,6 @@ namespace Bittrex.Net.Objects
         public string MarketName { get; set; }
     }
 
-    internal class BittrexExchangeStateRegistration : BittrexRegistration
-    {
-        // TODO: work out the data model given by the websocket
-        public Action<Object> Callback { get; set; }
-        public string MarketName { get; set; }
-    }
-
     internal class BittrexExchangeDeltasRegistration : BittrexRegistration
     {
         public Action<BittrexStreamExchangeState> Callback { get; set; }
