@@ -2,6 +2,8 @@
 using Bittrex.Net.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using System.Security.Authentication;
 using WebSocketSharp;
 
@@ -18,9 +20,6 @@ namespace Bittrex.Net.Sockets
         public WebsocketSharp(string url, string cookieHeader, string userAgent)
         {
             socket = new WebSocket(url);
-
-            // proxy websocket stuff through fiddler
-            // socket.SetProxy("http://localhost:8888", null, null);
 
             socket.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls;
             socket.CustomHeaders = new Dictionary<string, string>()
@@ -84,6 +83,28 @@ namespace Bittrex.Net.Sockets
         public void Close()
         {
             socket.Close();
+        }
+
+        public void setProxy(IWebProxy connectionProxy)
+        {
+            Uri proxy;
+            try
+            {
+                proxy = connectionProxy.GetProxy(socket.Url);
+            }
+            catch (NullReferenceException)
+            {
+                // no proxy is set, we can skip this
+                return;
+            }
+
+            string host = proxy.Host;
+            int proxyPort = proxy.Port;
+            // proxy websocket stuff through fiddler
+            if (host != "" && proxyPort != 0)
+            {
+                socket.SetProxy(String.Format("http://{0}:{1}", host, proxyPort) , null, null);
+            }
         }
 
         public bool IsClosed()

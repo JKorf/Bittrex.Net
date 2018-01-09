@@ -60,6 +60,10 @@ namespace Bittrex.Net
         public static event Action ConnectionLost;
         public static event Action ConnectionRestored;
 
+        public string ProxyHost { get; set; }
+        public int ProxyPort { get; set; }
+
+
         #region ctor
         public BittrexSocketClient()
         {
@@ -69,6 +73,18 @@ namespace Bittrex.Net
 
         #region methods
         #region public
+
+        /// <summary>
+        /// set Proxy for Websocket Communication
+        /// </summary>
+        /// <param name="Host"></param>
+        /// <param name="port"></param>
+        public void setProxy(String Host, int Port)
+        {
+            this.ProxyHost = Host;
+            this.ProxyPort = Port;
+        }
+
         /// <summary>
         /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
         /// </summary>
@@ -277,7 +293,16 @@ namespace Bittrex.Net
             {
                 if (connection == null)
                 {
-                    connection = ConnectionFactory.Create(SocketAddress);
+                    if (this.ProxyHost != "" && this.ProxyPort != 0)
+                    {
+                        connection = ConnectionFactory.Create(SocketAddress, this.ProxyHost, this.ProxyPort);
+                    }
+                    else
+                    {
+                        connection = ConnectionFactory.Create(SocketAddress);
+                    }
+
+
                     proxy = connection.CreateHubProxy(HubName);
 
                     connection.Closed += SocketClosed;

@@ -101,6 +101,11 @@ namespace Bittrex.Net.Sockets
             HandleClose();
         }
 
+        public void setProxy(IWebProxy connectionProxy)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsClosed()
         {
             return socket.State == WebSocketState.Closed;

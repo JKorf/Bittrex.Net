@@ -171,6 +171,8 @@ namespace Bittrex.Net.Sockets
             _websocket.OnClose += WebSocketOnClosed;
             _websocket.OnMessage += WebSocketOnMessageReceived;
 
+            _websocket.setProxy(_connection.Proxy);
+
             _websocket.Open();
         }
 
