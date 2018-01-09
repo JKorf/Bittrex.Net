@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -13,9 +12,7 @@ using Newtonsoft.Json.Linq;
 using Bittrex.Net.Interfaces;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using System.Reflection;
 using Bittrex.Net.Sockets;
-using log4net;
 
 namespace Bittrex.Net
 {
@@ -27,8 +24,6 @@ namespace Bittrex.Net
 
         private const string HubName = "coreHub";
         private const string UpdateEvent = "updateSummaryState";
-
-        private ILog logger = LogManager.GetLogger(typeof(BittrexSocketClient));
 
         private static Interfaces.IHubConnection connection;
         private static IHubProxy proxy;
@@ -171,7 +166,7 @@ namespace Bittrex.Net
 
         private void SubscribeToExchangeDeltas(string marketName)
         {
-            logger.Debug($"Going to subscribe to ExchangeDeltas of {marketName}");
+            log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
 
             proxy.Invoke("SubscribeToExchangeDeltas", marketName);
         }
@@ -313,7 +308,7 @@ namespace Bittrex.Net
                 var CookieList = new List<Cookie>();
                 foreach (Cookie cookie in CC)
                 {
-                    logger.Debug(cookie.ToString());
+                    log.Write(LogVerbosity.Debug, cookie.ToString());
 //#if NETSTANDARD
                     // https://stackoverflow.com/questions/18667931/httpwebrequest-add-cookie-to-cookiecontainer-argumentexception-parameternam
                     // cookieContainer.Add(new Cookie(cookie.Name, cookie.Value) { Domain = new Uri(SocketAddress).Host });
