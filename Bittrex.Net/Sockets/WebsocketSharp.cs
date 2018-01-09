@@ -100,7 +100,7 @@ namespace Bittrex.Net.Sockets
 
             string host = proxy.Host;
             int proxyPort = proxy.Port;
-            // proxy websocket stuff through fiddler
+
             if (host != "" && proxyPort != 0)
             {
                 socket.SetProxy(String.Format("http://{0}:{1}", host, proxyPort) , null, null);

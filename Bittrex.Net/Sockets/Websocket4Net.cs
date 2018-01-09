@@ -97,9 +97,9 @@ namespace Bittrex.Net.Sockets
                 return;
             }
 
-            string host = connectionProxy.GetProxy(null).Host;
-            int proxyPort = connectionProxy.GetProxy(null).Port;
-            // proxy websocket stuff through fiddler
+            string host = proxy.Host;
+            int proxyPort = proxy.Port;
+
             if (host != "" && proxyPort != 0)
             {
                 socket.Security.AllowNameMismatchCertificate = true;
