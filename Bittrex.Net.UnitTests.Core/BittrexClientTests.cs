@@ -337,9 +337,9 @@ namespace Bittrex.Net.UnitTests.Core
         public void GetOpenOrders_Should_ReturnOpenOrdersList()
         {
             // arrange
-            var expected = new List<BittrexOrder>()
+            var expected = new List<BittrexOpenOrdersOrder>()
             {
-                new BittrexOrder()
+                new BittrexOpenOrdersOrder
                 {
                     Uuid = null,
                     Quantity = 1.1m,
@@ -356,10 +356,10 @@ namespace Bittrex.Net.UnitTests.Core
                     Limit = 4.4m,
                     Opened = new DateTime(2017, 1,1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
-                    PricePerUnit = null,
+                    PricePerUnit = 1.9m,
                     QuantityRemaining = 5.5m
                 },
-                new BittrexOrder()
+                new BittrexOpenOrdersOrder
                 {
                     Uuid = null,
                     Quantity = 6.6m,
@@ -513,10 +513,10 @@ namespace Bittrex.Net.UnitTests.Core
                 Limit = 5.5m,
                 AccountId = "TestId",
                 CommissionReserved = 6.6m,
-                CommissionReservedRemaining = 7.7m,
+                CommissionReserveRemaining = 7.7m,
                 IsOpen = true,
                 Reserved = 8.8m,
-                ReservedRemaining = 9.9m,
+                ReserveRemaining = 9.9m,
                 Sentinel = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                 Type = OrderTypeExtended.LimitBuy
             };
@@ -534,44 +534,42 @@ namespace Bittrex.Net.UnitTests.Core
         public void GetOrderHistory_Should_ReturnOrderHistoryList()
         {
             // arrange
-            var expected = new List<BittrexOrder>()
+            var expected = new List<BittrexOrderHistoryOrder>
             {
-                new BittrexOrder()
+                new BittrexOrderHistoryOrder
                 {
-                    Uuid = null,
                     Quantity = 1.1m,
                     OrderType = OrderTypeExtended.LimitBuy,
                     Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
-                    CommissionPaid = 3.3m,
+                    Commission = 3.3m,
                     Condition = null,
                     ConditionTarget = null,
                     Exchange = "TestMarket",
                     ImmediateOrCancel = false,
                     IsConditional = false,
                     Limit = 4.4m,
-                    Opened = new DateTime(2017, 1, 1),
+                    TimeStamp = new DateTime(2017, 1, 1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
-                    PricePerUnit = null,
+                    PricePerUnit = 1.9m,
                     QuantityRemaining = 5.5m
                 },
-                new BittrexOrder()
+                new BittrexOrderHistoryOrder
                 {
-                    Uuid = null,
                     Quantity = 6.6m,
                     OrderType = OrderTypeExtended.LimitSell,
                     Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
-                    CommissionPaid = 8.8m,
+                    Commission = 8.8m,
                     Condition = null,
                     ConditionTarget = null,
                     Exchange = "TestMarket",
                     ImmediateOrCancel = true,
                     IsConditional = false,
                     Limit = 9.9m,
-                    Opened = new DateTime(2017, 1, 1),
+                    TimeStamp = new DateTime(2017, 1, 1),
                     OrderUuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                     PricePerUnit = 11.11m,
                     QuantityRemaining = 10.1m

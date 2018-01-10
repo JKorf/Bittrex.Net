@@ -324,7 +324,7 @@ namespace Bittrex.Net
         /// Gets candle data for a market on a specific interval
         /// </summary>
         /// <param name="market">Market to get candles for</param>
-        /// <param name="market">The candle interval</param>
+        /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
         public async Task<BittrexApiResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
         {
@@ -347,7 +347,7 @@ namespace Bittrex.Net
         /// Gets candle data for a market on a specific interval
         /// </summary>
         /// <param name="market">Market to get candles for</param>
-        /// <param name="market">The candle interval</param>
+        /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
         public async Task<BittrexApiResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
         {
@@ -418,22 +418,22 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="GetOpenOrdersAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
+        public BittrexApiResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
         /// <param name="market">Filter list by market</param>
         /// <returns>List of open orders</returns>
-        public async Task<BittrexApiResult<BittrexOrder[]>> GetOpenOrdersAsync(string market = null)
+        public async Task<BittrexApiResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
+                return ThrowErrorMessage<BittrexOpenOrdersOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
 
-            return await ExecuteRequest<BittrexOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await ExecuteRequest<BittrexOpenOrdersOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -557,21 +557,21 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="GetOrderHistoryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
+        public BittrexApiResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
 
         /// <summary>
         /// Gets the order history for the current account
         /// </summary>
         /// <param name="market">Filter on market</param>
         /// <returns>List of orders</returns>
-        public async Task<BittrexApiResult<BittrexOrder[]>> GetOrderHistoryAsync(string market = null)
+        public async Task<BittrexApiResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null)
         {
             if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
+                return ThrowErrorMessage<BittrexOrderHistoryOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
 
             var parameters = new Dictionary<string, string>();
             AddOptionalParameter(parameters, "market", market);
-            return await ExecuteRequest<BittrexOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await ExecuteRequest<BittrexOrderHistoryOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
