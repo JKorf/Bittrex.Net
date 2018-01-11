@@ -75,18 +75,18 @@ namespace Bittrex.Net
         #region public
 
         /// <summary>
-        /// set Proxy for Websocket Communication
+        /// set Proxy for Websocket Communication (only use DNS)
         /// </summary>
-        /// <param name="Host"></param>
+        /// <param name="Host">only use DNS not IP</param>
         /// <param name="port"></param>
-        public void setProxy(String Host, int Port)
+        public void SetProxy(String Host, int Port)
         {
             this.ProxyHost = Host;
             this.ProxyPort = Port;
         }
 
         /// <summary>
-        /// Synchronized version of the <see cref="SubscribeToQueryExchangeStateAsync"/> method
+        /// Synchronized version of the <see cref="QueryExchangeStateAsync"/> method
         /// </summary>
         /// <returns></returns>
         public BittrexApiResult<int> QueryExchangeState(string marketName, Action<BittrexExchangeState> onUpdate) => QueryExchangeStateAsync(marketName, onUpdate).Result;

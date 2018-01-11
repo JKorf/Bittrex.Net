@@ -104,7 +104,6 @@ namespace Bittrex.Net.Sockets
             {
                 socket.Security.AllowNameMismatchCertificate = true;
                 socket.Security.AllowUnstrustedCertificate = true;
-                //socket.Proxy = new HttpConnectProxy(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8888));
                 socket.Proxy = new HttpConnectProxy(new DnsEndPoint(host, proxyPort));
             }
         }
