@@ -22,9 +22,7 @@ namespace Bittrex.Net.Sockets
         private static HubConnection createHubConnection(string url)
         {
             HubConnection hubConnection = new HubConnection(
-                url + "signalr",
-                useDefaultUrl: false,
-                queryString: "tid=1"
+                url + "signalr"
             );
             return hubConnection;
         }
