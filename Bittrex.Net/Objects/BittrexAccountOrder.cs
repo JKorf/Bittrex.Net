@@ -43,17 +43,17 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal Reserved { get; set; }
         /// <summary>
-        /// The remaining reserved currency for this order
+        /// The remaining reserve currency for this order
         /// </summary>
-        public decimal ReservedRemaining { get; set; }
+        public decimal ReserveRemaining { get; set; }
         /// <summary>
         /// The commission reserverd for this order
         /// </summary>
         public decimal CommissionReserved { get; set; }
         /// <summary>
-        /// The remaining commission reserved for this order
+        /// The remaining commission reserve for this order
         /// </summary>
-        public decimal CommissionReservedRemaining { get; set; }
+        public decimal CommissionReserveRemaining { get; set; }
         /// <summary>
         /// The amount of commission paid for this order
         /// </summary>
