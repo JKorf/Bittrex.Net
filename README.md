@@ -28,6 +28,15 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.5 - 12 jan 2017
+	* Added orderbook websocket endpoints
+	* Added basic proxy functionality
+	* Small fixed in order json parsing
+	* Fix for nullreference when theres no connection
+
+* Version 1.3.4 - 04 jan 2017
+	* Fix for websockets for all platforms
+
 * Version 1.3.3 - 02 jan 2017
 	* Fix for stream connections on platforms with Websocket protocol supported
 	* Parallel foreach for stream event callbacks to improve performance
