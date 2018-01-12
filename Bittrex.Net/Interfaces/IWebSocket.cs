@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 
 namespace Bittrex.Net.Interfaces
 {
@@ -16,5 +17,6 @@ namespace Bittrex.Net.Interfaces
 
         void Open();
         void Close();
+        void setProxy(IWebProxy connectionProxy);
     }
 }

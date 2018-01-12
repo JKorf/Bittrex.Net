@@ -13,9 +13,15 @@ namespace Bittrex.Net.Objects
         public Action<List<BittrexMarketSummary>> Callback { get; set; }
     }
 
-    internal class BittrexMarketsRegistration: BittrexRegistration
+    internal class BittrexMarketsRegistration : BittrexRegistration
     {
         public Action<BittrexMarketSummary> Callback { get; set; }
+        public string MarketName { get; set; }
+    }
+
+    internal class BittrexExchangeDeltasRegistration : BittrexRegistration
+    {
+        public Action<BittrexStreamExchangeState> Callback { get; set; }
         public string MarketName { get; set; }
     }
 }

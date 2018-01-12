@@ -1,4 +1,5 @@
-﻿using Bittrex.Net.Interfaces;
+﻿using System.Net;
+using Bittrex.Net.Interfaces;
 using Microsoft.AspNet.SignalR.Client;
 
 namespace Bittrex.Net.Sockets
@@ -7,7 +8,23 @@ namespace Bittrex.Net.Sockets
     {
         public IHubConnection Create(string url)
         {
-            return new BittrexHubConnection(new HubConnection(url));
+            HubConnection hubConnection = createHubConnection(url);
+            return new BittrexHubConnection(hubConnection);
+        }
+
+        public IHubConnection Create(string url, string proxyDns, int proxyPort)
+        {
+            HubConnection hubConnection = createHubConnection(url);
+            hubConnection.Proxy = new WebProxy(proxyDns, proxyPort);
+            return new BittrexHubConnection(hubConnection);
+        }
+
+        private static HubConnection createHubConnection(string url)
+        {
+            HubConnection hubConnection = new HubConnection(
+                url + "signalr"
+            );
+            return hubConnection;
         }
     }
 }

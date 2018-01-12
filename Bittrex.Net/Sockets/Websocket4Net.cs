@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Security.Authentication;
+using SuperSocket.ClientEngine.Proxy;
 using WebSocket4Net;
 
 namespace Bittrex.Net.Sockets
@@ -17,9 +19,12 @@ namespace Bittrex.Net.Sockets
         List<Action> closehandlers = new List<Action>();
         List<Action<string>> messagehandlers = new List<Action<string>>();
         WebSocket socket;
+        private Uri url;
 
         public Websocket4Net(string url, IDictionary<string, string> cookies, IDictionary<string, string> headers)
         {
+            this.url = new Uri(url);
+
             socket = new WebSocket(url, cookies: cookies.ToList(), customHeaderItems: headers.ToList(), receiveBufferSize: 2048, sslProtocols: SslProtocols.Tls12 | SslProtocols.Tls11 | SslProtocols.Tls);
             socket.NoDelay = true;
 
@@ -43,7 +48,8 @@ namespace Bittrex.Net.Sockets
 
         private void HandleClose(object sender, EventArgs e)
         {
-            foreach (var handler in closehandlers)
+            // List recreation as workaround so that collection does not get modified on foreach
+            foreach (Action handler in new List<Action>(closehandlers))
                 handler();
         }
 
@@ -77,6 +83,30 @@ namespace Bittrex.Net.Sockets
         public void Close()
         {
             socket.Close();
+        }
+
+        public void setProxy(IWebProxy connectionProxy)
+        {
+            Uri proxy;
+            try
+            {
+                proxy = connectionProxy.GetProxy(this.url);
+            }
+            catch (NullReferenceException)
+            {
+                // no proxy is set, we can skip this
+                return;
+            }
+
+            string host = proxy.Host;
+            int proxyPort = proxy.Port;
+
+            if (host != "" && proxyPort != 0)
+            {
+                socket.Security.AllowNameMismatchCertificate = true;
+                socket.Security.AllowUnstrustedCertificate = true;
+                socket.Proxy = new HttpConnectProxy(new DnsEndPoint(host, proxyPort));
+            }
         }
 
         public bool IsClosed()
