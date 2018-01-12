@@ -55,8 +55,8 @@ namespace Bittrex.Net.Interfaces
         BittrexApiResult<object> CancelOrder(Guid guid);
         Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid);
 
-        BittrexApiResult<BittrexOrder[]> GetOpenOrders(string market = null);
-        Task<BittrexApiResult<BittrexOrder[]>> GetOpenOrdersAsync(string market = null);
+        BittrexApiResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null);
+        Task<BittrexApiResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null);
 
         BittrexApiResult<BittrexBalance> GetBalance(string currency);
         Task<BittrexApiResult<BittrexBalance>> GetBalanceAsync(string currency);
@@ -73,8 +73,8 @@ namespace Bittrex.Net.Interfaces
         BittrexApiResult<BittrexAccountOrder> GetOrder(Guid guid);
         Task<BittrexApiResult<BittrexAccountOrder>> GetOrderAsync(Guid guid);
 
-        BittrexApiResult<BittrexOrder[]> GetOrderHistory(string market = null);
-        Task<BittrexApiResult<BittrexOrder[]>> GetOrderHistoryAsync(string market = null);
+        BittrexApiResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null);
+        Task<BittrexApiResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null);
 
         BittrexApiResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null);
         Task<BittrexApiResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null);

@@ -7,27 +7,27 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Information about an order
     /// </summary>
-    public class BittrexOrder
+    public class BittrexOpenOrdersOrder
     {
         /// <summary>
-        /// Guid
+        /// 
         /// </summary>
         public Guid? Uuid { get; set; }
         /// <summary>
-        /// Guid of the order
+        /// The order Guid
         /// </summary>
         public Guid OrderUuid { get; set; }
         /// <summary>
-        /// Market the order is on
+        /// The market the order is on
         /// </summary>
         public string Exchange { get; set; }
         /// <summary>
-        /// The type of the order
+        /// The order type
         /// </summary>
         [JsonConverter(typeof(OrderTypeExtendedConverter))]
         public OrderTypeExtended OrderType { get; set; }
         /// <summary>
-        /// Quantity of the order
+        /// The quantity of the order
         /// </summary>
         public decimal Quantity { get; set; }
         /// <summary>
@@ -35,11 +35,11 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal QuantityRemaining { get; set; }
         /// <summary>
-        /// The limit of the order
+        /// The order limit
         /// </summary>
         public decimal Limit { get; set; }
         /// <summary>
-        /// The commission paid for the order
+        /// The amount of commission paid for this order
         /// </summary>
         public decimal CommissionPaid { get; set; }
         /// <summary>
@@ -47,23 +47,23 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal Price { get; set; }
         /// <summary>
-        /// The price paid per unit
+        /// The price per unit
         /// </summary>
         public decimal? PricePerUnit { get; set; }
         /// <summary>
-        /// Timestamp when the order was opened
+        /// Timestamp when order was opened
         /// </summary>
         public DateTime Opened { get; set; }
         /// <summary>
-        /// Timestamp when the order was closed
+        /// Timestamp when order was closed
         /// </summary>
         public DateTime? Closed { get; set; }
         /// <summary>
-        /// Whether the order is being canceled
+        /// Whether a cancel has begun processing
         /// </summary>
         public bool CancelInitiated { get; set; }
         /// <summary>
-        /// Whether the order was an ImmediateOrCancel order
+        /// Whether it is a ImmediateOrCancel order
         /// </summary>
         public bool ImmediateOrCancel { get; set; }
         /// <summary>
@@ -71,11 +71,11 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public bool IsConditional { get; set; }
         /// <summary>
-        /// The order condition
+        /// The condition of the order
         /// </summary>
         public string Condition { get; set; }
         /// <summary>
-        /// The order condition target
+        /// The condition target of the order
         /// </summary>
         public string ConditionTarget { get; set; }
     }
