@@ -39,5 +39,13 @@ namespace Bittrex.Net.Objects
         /// Timestamp when the market was created
         /// </summary>
         public DateTime Created { get; set; }
+        /// <summary>
+        /// Notice of market state (offline, delisting, etc...)
+        /// </summary>
+        public string Notice { get; set; }
+        /// <summary>
+        /// The url of the logo
+        /// </summary>
+        public string LogoUrl { get; set; }
     }
 }
