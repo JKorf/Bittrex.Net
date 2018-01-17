@@ -28,6 +28,12 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.7 - 17 jan 2017
+	* Updated CloudFlareUtilities package to fix socket connection
+
+* Version 1.3.6 - 12 jan 2017
+	* Added missing merge
+
 * Version 1.3.5 - 12 jan 2017
 	* Added orderbook websocket endpoints
 	* Added basic proxy functionality
