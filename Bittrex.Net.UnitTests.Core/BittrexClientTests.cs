@@ -33,7 +33,9 @@ namespace Bittrex.Net.UnitTests.Core
                     MarketCurrency = "MarketTest1",
                     MarketCurrencyLong = "MarketTestCurrency1",
                     MarketName = "Test1-Test1",
-                    MinTradeSize = 0.0001m
+                    MinTradeSize = 0.0001m,
+                    Notice = null,
+                    LogoUrl = "http://www.test.com/test1.png"
                 },
                 new BittrexMarket()
                 {
@@ -44,7 +46,9 @@ namespace Bittrex.Net.UnitTests.Core
                     MarketCurrency = "MarketTest2",
                     MarketCurrencyLong = "MarketTestCurrency2",
                     MarketName = "Test2-Test2",
-                    MinTradeSize = 1
+                    MinTradeSize = 1,
+                    Notice = null,
+                    LogoUrl = "http://www.test.com/test1.png"
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)), false);
