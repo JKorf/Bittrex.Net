@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Bittrex.Net.Objects
 {
@@ -47,5 +48,20 @@ namespace Bittrex.Net.Objects
         /// The url of the logo
         /// </summary>
         public string LogoUrl { get; set; }
+
+        /// <summary>
+        /// Internally handle the null value for IsSponsored to false
+        /// </summary>
+        [JsonProperty("IsSponsored")]
+        internal bool? Sponsored {
+            get { return IsSponsored; }
+            set { IsSponsored = value ?? false; }
+        }
+
+        /// <summary>
+        /// Whether the market currency is sponsored
+        /// </summary>
+        [JsonIgnore]
+        public bool IsSponsored { get; set; }
     }
 }
