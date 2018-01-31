@@ -39,5 +39,17 @@ namespace Bittrex.Net.Objects
         /// Timestamp when the market was created
         /// </summary>
         public DateTime Created { get; set; }
+        /// <summary>
+        /// Additional information about the state of this market
+        /// </summary>
+        public string Notice { get; set; }
+        /// <summary>
+        /// Whether the market is sponsored by Bittrex
+        /// </summary>
+        public bool? IsSponsored { get; set; }
+        /// <summary>
+        /// Url of the logo
+        /// </summary>
+        public string LogoUrl { get; set; }
     }
 }

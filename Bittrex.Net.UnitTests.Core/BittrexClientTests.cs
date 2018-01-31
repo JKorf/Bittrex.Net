@@ -33,7 +33,10 @@ namespace Bittrex.Net.UnitTests.Core
                     MarketCurrency = "MarketTest1",
                     MarketCurrencyLong = "MarketTestCurrency1",
                     MarketName = "Test1-Test1",
-                    MinTradeSize = 0.0001m
+                    MinTradeSize = 0.0001m,
+                    IsSponsored = null,
+                    LogoUrl = null,
+                    Notice = null
                 },
                 new BittrexMarket()
                 {
@@ -44,7 +47,10 @@ namespace Bittrex.Net.UnitTests.Core
                     MarketCurrency = "MarketTest2",
                     MarketCurrencyLong = "MarketTestCurrency2",
                     MarketName = "Test2-Test2",
-                    MinTradeSize = 1
+                    MinTradeSize = 1,
+                    IsSponsored = true,
+                    LogoUrl = "https://testurl",
+                    Notice = "Test notice"
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)), false);
@@ -72,7 +78,8 @@ namespace Bittrex.Net.UnitTests.Core
                     Currency = "TTN",
                     CurrencyLong = "TestToken",
                     MinConfirmation = 10,
-                    TransactionFee = 0.2m
+                    TransactionFee = 0.2m,
+                    Notice = "Test notice"
                 },
                 new BittrexCurrency()
                 {
@@ -82,7 +89,8 @@ namespace Bittrex.Net.UnitTests.Core
                     Currency = "TTN2",
                     CurrencyLong = "TestToken2",
                     MinConfirmation = 2,
-                    TransactionFee = 3
+                    TransactionFee = 3,
+                    Notice = null
                 },
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -123,7 +131,6 @@ namespace Bittrex.Net.UnitTests.Core
                 Created = new DateTime(2017, 1, 1),
                 MarketName = "TestMarket",
                 BaseVolume = 1.1m,
-                DisplayMarketName = null,
                 High = 2.2m,
                 Low = 3.3m,
                 OpenBuyOrders = 10,
@@ -156,7 +163,6 @@ namespace Bittrex.Net.UnitTests.Core
                     Created = new DateTime(2017, 1, 1),
                     MarketName = "TestMarket",
                     BaseVolume = 1.1m,
-                    DisplayMarketName = null,
                     High = 2.2m,
                     Low = 3.3m,
                     OpenBuyOrders = 10,
@@ -173,7 +179,6 @@ namespace Bittrex.Net.UnitTests.Core
                     Created = new DateTime(2017, 1, 1),
                     MarketName = "TestMarket",
                     BaseVolume = 9.9m,
-                    DisplayMarketName = null,
                     High = 10.10m,
                     Low = 11.11m,
                     OpenBuyOrders = 30,
@@ -181,6 +186,22 @@ namespace Bittrex.Net.UnitTests.Core
                     PrevDay = 12.12m,
                     TimeStamp = new DateTime(2016, 1, 1),
                     Volume = 13.13m
+                },
+                new BittrexMarketSummary()
+                {
+                    Ask = 0.006m,
+                    Bid = 0.007m,
+                    Last = null,
+                    Created = new DateTime(2017, 1, 1),
+                    MarketName = "TestMarket",
+                    BaseVolume = null,
+                    High = null,
+                    Low = null,
+                    OpenBuyOrders = null,
+                    OpenSellOrders = null,
+                    PrevDay = null,
+                    TimeStamp = new DateTime(2016, 1, 1),
+                    Volume = null
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -192,6 +213,7 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.IsTrue(result.Success);
             Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
             Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[2], expected[2]));
         }
 
         [TestCase()]

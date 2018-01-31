@@ -28,6 +28,11 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.8 - 31 jan 2017
+	* Added Notice field to BittrexCurrency response
+	* Added Notice, LogoUrl and IsSponsored fields to BittrexMarketSummary response, removed DisplayMarketName which is no longer returned (was always null)
+	* Changed BittrexMarketSummary fields to nullable decimals since they can be null for new markets
+
 * Version 1.3.7 - 17 jan 2017
 	* Updated CloudFlareUtilities package to fix socket connection
 

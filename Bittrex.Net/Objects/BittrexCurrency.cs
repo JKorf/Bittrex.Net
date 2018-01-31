@@ -36,5 +36,9 @@ namespace Bittrex.Net.Objects
         /// The base address
         /// </summary>
         public string BaseAddress { get; set; }
+        /// <summary>
+        /// Additional information about the state of this currency
+        /// </summary>
+        public string Notice { get; set; }
     }
 }

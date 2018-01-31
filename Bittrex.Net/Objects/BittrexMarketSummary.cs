@@ -14,23 +14,23 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The highest price in the last 24 hour
         /// </summary>
-        public decimal High { get; set; }
+        public decimal? High { get; set; }
         /// <summary>
         /// The lowest price in the last 24 hour
         /// </summary>
-        public decimal Low { get; set; }
+        public decimal? Low { get; set; }
         /// <summary>
         /// The volume in the last 24 hour in the market currency 
         /// </summary>
-        public decimal Volume { get; set; }
+        public decimal? Volume { get; set; }
         /// <summary>
         /// The latest price
         /// </summary>
-        public decimal Last { get; set; }
+        public decimal? Last { get; set; }
         /// <summary>
         /// The base volume in the last 24 hour in the base currency
         /// </summary>
-        public decimal BaseVolume { get; set; }
+        public decimal? BaseVolume { get; set; }
         /// <summary>
         /// Timestamp of the summary
         /// </summary>
@@ -46,22 +46,18 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Current open buy orders
         /// </summary>
-        public int OpenBuyOrders { get; set; }
+        public int? OpenBuyOrders { get; set; }
         /// <summary>
         /// Current open sell orders
         /// </summary>
-        public int OpenSellOrders { get; set; }
+        public int? OpenSellOrders { get; set; }
         /// <summary>
         /// Price 24 hours ago
         /// </summary>
-        public decimal PrevDay { get; set; }
+        public decimal? PrevDay { get; set; }
         /// <summary>
         /// Timestamp when created
         /// </summary>
         public DateTime Created { get; set; }
-        /// <summary>
-        /// Alternative display market name
-        /// </summary>
-        public string DisplayMarketName { get; set; }
     }
 }
