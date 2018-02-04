@@ -136,7 +136,7 @@ namespace Bittrex.Net
                 });
 
                 return new BittrexApiResult<int>() { Success = true };
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace Bittrex.Net
                     localRegistrations.Add(registration);
                 }
                 return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace Bittrex.Net
                     localRegistrations.Add(registration);
                 }
                 return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
-            });
+            }).ConfigureAwait(false);
         }
 
         private void SubscribeToExchangeDeltas(string marketName)
@@ -236,7 +236,7 @@ namespace Bittrex.Net
                     localRegistrations.Add(registration);
                 }
                 return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>

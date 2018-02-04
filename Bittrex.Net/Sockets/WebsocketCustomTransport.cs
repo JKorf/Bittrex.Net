@@ -197,7 +197,7 @@ namespace Bittrex.Net.Sockets
                     {
                         _connection.OnError(ex);
                     }
-                    await Task.Delay(ReconnectDelay, CancellationToken.None);
+                    await Task.Delay(ReconnectDelay, CancellationToken.None).ConfigureAwait(false);
                 }
                 else
                 {
@@ -226,7 +226,7 @@ namespace Bittrex.Net.Sockets
                 return;
             }
 
-            await DoReconnect();
+            await DoReconnect().ConfigureAwait(false);
         }
 
         private void WebSocketOnError(Exception e)
