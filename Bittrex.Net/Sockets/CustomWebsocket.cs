@@ -216,7 +216,7 @@ public sealed class CustomWebsocket : WebSocket
             HttpWebRequest httpWebRequest = this.CreateAndConfigureRequest(uri);
 
             cancellationTokenRegistration = cancellationToken.Register(new Action<object>(this.AbortRequest), httpWebRequest, false);
-            httpWebResponse = ((await httpWebRequest.GetResponseAsync()) as HttpWebResponse);
+            httpWebResponse = ((await httpWebRequest.GetResponseAsync().ConfigureAwait(false)) as HttpWebResponse);
 
             string subProtocol = this.ValidateResponse(httpWebRequest, httpWebResponse);
             this.innerWebSocket = WebSocket.CreateClientWebSocket(httpWebResponse.GetResponseStream(), subProtocol, this.options.ReceiveBufferSize, this.options.SendBufferSize, this.options.KeepAliveInterval, false, this.options.GetOrCreateBuffer());
