@@ -28,7 +28,7 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
-* Version 1.3.8 - 07 feb 2018
+* Version 1.3.9 - 07 feb 2018
 	* Fix for deadlock if certain methods were called from the UI thread
 
 * Version 1.3.8 - 31 jan 2018
