@@ -30,6 +30,7 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 ## Release notes
 * Version 1.3.10 - 15 feb 2018
 	* Fix for MarketName being Null in QueryExchangeState
+	* Cleaned BittrexSocketClient and ExchangeState objects
 	* Fix for error messages being duplicated
 
 * Version 1.3.9 - 07 feb 2018
