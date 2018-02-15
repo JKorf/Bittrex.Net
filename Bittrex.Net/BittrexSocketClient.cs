@@ -125,6 +125,7 @@ namespace Bittrex.Net
                             json = task.Result.ToString();
 
                             BittrexExchangeState StreamData = JsonConvert.DeserializeObject<BittrexExchangeState>(json);
+                            StreamData.MarketName = marketName;
 
                             onUpdate(StreamData);
                         }
@@ -133,7 +134,7 @@ namespace Bittrex.Net
                             log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {json}");
                         }
                     }
-                });
+                }).ConfigureAwait(false);
 
                 return new BittrexApiResult<int>() { Success = true };
             }).ConfigureAwait(false);
