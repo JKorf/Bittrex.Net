@@ -28,6 +28,10 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.10 - 15 feb 2018
+	* Fix for MarketName being Null in QueryExchangeState
+	* Fix for error messages being duplicated
+
 * Version 1.3.9 - 07 feb 2018
 	* Fix for deadlock if certain methods were called from the UI thread
 
