@@ -22,7 +22,8 @@ namespace Bittrex.Net.Errors
 
         internal static BittrexError GetError(BittrexErrorKey key)
         {
-            return ErrorRegistrations.Single(e => e.Key == key).Value;
+            var error = ErrorRegistrations.Single(e => e.Key == key).Value;
+            return new BittrexError(error.ErrorCode, error.ErrorMessage);
         }
     }
 }
