@@ -154,14 +154,9 @@ namespace Bittrex.Net.Sockets
                 foreach (Cookie cookie in container)
                     cookies.Add(cookie.Name, cookie.Value);
             }
-
-            // Add the header from the connection to the socket connection
-            var headers = _connection.Headers.ToList();
-
-//            _websocket = new WebsocketNative(url, _connection.CookieContainer.GetCookieHeader(new Uri(url)), BittrexSocketClient.GetUserAgentString());
-
+            
 #if !NETSTANDARD
-            _websocket = new WebsocketSharp(url, _connection.CookieContainer.GetCookieHeader(new Uri(url)), BittrexSocketClient.GetUserAgentString());
+            _websocket = new WebsocketSharp(url, _connection.CookieContainer.GetCookieHeader(new Uri(url)), BittrexSocketClient.UserAgent);
 #else
             _websocket = new Websocket4Net(url, cookies, _connection.Headers);
 #endif           

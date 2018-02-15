@@ -8,18 +8,18 @@ namespace Bittrex.Net.Sockets
     {
         public IHubConnection Create(string url)
         {
-            HubConnection hubConnection = createHubConnection(url);
+            HubConnection hubConnection = CreateHubConnection(url);
             return new BittrexHubConnection(hubConnection);
         }
 
         public IHubConnection Create(string url, string proxyDns, int proxyPort)
         {
-            HubConnection hubConnection = createHubConnection(url);
+            HubConnection hubConnection = CreateHubConnection(url);
             hubConnection.Proxy = new WebProxy(proxyDns, proxyPort);
             return new BittrexHubConnection(hubConnection);
         }
 
-        private static HubConnection createHubConnection(string url)
+        private static HubConnection CreateHubConnection(string url)
         {
             HubConnection hubConnection = new HubConnection(
                 url + "signalr"
