@@ -107,7 +107,7 @@ namespace Bittrex.Net
             if (!CheckConnection())
                 return ThrowErrorMessage<BittrexExchangeState>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
             
-            var result = await proxy.Invoke<JObject>("QueryExchangeState", marketName);
+            var result = await proxy.Invoke<JObject>("QueryExchangeState", marketName).ConfigureAwait(false);
 
             string json = null;
             try
@@ -173,7 +173,7 @@ namespace Bittrex.Net
                 return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
 
             // send subscribe to bittrex
-            await SubscribeToExchangeDeltas(marketName);
+            await SubscribeToExchangeDeltas(marketName).ConfigureAwait(false);
 
             var registration = new BittrexExchangeDeltasRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
             lock (registrationLock)
@@ -319,7 +319,7 @@ namespace Bittrex.Net
                 }
 
                 // Try to start
-                if (TryStart().Result)
+                if(TryStart().ConfigureAwait(false).GetAwaiter().GetResult())
                     return true;
 
                 // If failed, try to get CloudFlare bypass
@@ -336,7 +336,7 @@ namespace Bittrex.Net
                 log.Write(LogVerbosity.Debug, "CloudFlare cookies retrieved, retrying connection");
 
                 // Try again with cookies
-                return TryStart().Result;
+                return TryStart().ConfigureAwait(false).GetAwaiter().GetResult();
             }
         }
 
@@ -354,7 +354,7 @@ namespace Bittrex.Net
             connection.StateChanged += waitDelegate;
             try
             {
-                connection.Start().Wait();
+                connection.Start().ConfigureAwait(false).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -366,14 +366,14 @@ namespace Bittrex.Net
             if (connection.State == ConnectionState.Connected)
             {
                 // subscribe to all market deltas
-                await proxy.Invoke(MarketDeltaSub);
+                await proxy.Invoke(MarketDeltaSub).ConfigureAwait(false);
                 
                 IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
                 lock (registrationLock)
                     marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
 
                 foreach (var registration in marketRegistrations)
-                    await SubscribeToExchangeDeltas(registration.MarketName);
+                    await SubscribeToExchangeDeltas(registration.MarketName).ConfigureAwait(false);
 
                 return true;
             }

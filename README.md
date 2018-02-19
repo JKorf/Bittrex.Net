@@ -28,6 +28,9 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.11 - 15 feb 2018
+	* Fix for freezes when making calls from UI thread
+
 * Version 1.3.10 - 15 feb 2018
 	* Fix for MarketName being Null in QueryExchangeState
 	* Cleaned BittrexSocketClient and ExchangeState objects
