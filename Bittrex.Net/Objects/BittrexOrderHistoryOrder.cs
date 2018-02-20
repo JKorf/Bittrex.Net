@@ -22,10 +22,10 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public DateTime TimeStamp { get; set; }
         /// <summary>
-        /// The type of the order
+        /// The side of the order
         /// </summary>
-        [JsonConverter(typeof(OrderTypeExtendedConverter))]
-        public OrderTypeExtended OrderType { get; set; }
+        [JsonConverter(typeof(OrderSideExtendedConverter))]
+        public OrderSideExtended OrderSide { get; set; }
         /// <summary>
         /// The limit of the order
         /// </summary>

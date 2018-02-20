@@ -35,9 +35,9 @@ namespace Bittrex.Net.Objects
         [JsonConverter(typeof(FillTypeConverter))]
         public FillType FillType { get; set; }
         /// <summary>
-        /// The type of the order
+        /// The side of the order
         /// </summary>
-        [JsonConverter(typeof(OrderTypeConverter))]
-        public OrderType OrderType { get; set; }
+        [JsonConverter(typeof(OrderSideConverter))]
+        public OrderSide OrderSide { get; set; }
     }
 }

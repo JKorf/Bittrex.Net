@@ -49,8 +49,11 @@ namespace Bittrex.Net.Interfaces
         BittrexApiResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval);
         Task<BittrexApiResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval);
 
-        BittrexApiResult<BittrexGuid> PlaceOrder(OrderType type, string market, decimal quantity, decimal rate);
-        Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, decimal quantity, decimal rate);
+        BittrexApiResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate);
+        Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate);
+
+        BittrexApiResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
+        Task<BittrexApiResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
 
         BittrexApiResult<object> CancelOrder(Guid guid);
         Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid);

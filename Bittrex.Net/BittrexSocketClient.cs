@@ -159,7 +159,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="SubscribeToExchangeDeltasAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexStreamExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
+        public BittrexApiResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to updates on a specific market
@@ -167,7 +167,7 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamExchangeState> onUpdate)
+        public async Task<BittrexApiResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexExchangeState> onUpdate)
         {
             if (!CheckConnection())
                 return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
@@ -385,10 +385,10 @@ namespace Bittrex.Net
             if (jsonData.Count == 0 || jsonData[0] == null)
                 return;
 
-            BittrexStreamExchangeState data;
+            BittrexExchangeState data;
             try
             {
-                data = JsonConvert.DeserializeObject<BittrexStreamExchangeState>(jsonData[0].ToString());
+                data = JsonConvert.DeserializeObject<BittrexExchangeState>(jsonData[0].ToString());
                 if (data == null)
                     return;
             }

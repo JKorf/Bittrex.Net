@@ -39,6 +39,8 @@ namespace Bittrex.Net
         private const string SellLimitEndpoint = "market/selllimit";
         private const string CancelEndpoint = "market/cancel";
         private const string OpenOrdersEndpoint = "market/getopenorders";
+        private const string SellV2Endpoint = "key/market/tradesell";
+        private const string BuyV2Endpoint = "key/market/tradebuy";
 
         private const string BalanceEndpoint = "account/getbalance";
         private const string BalancesEndpoint = "account/getbalances";
@@ -364,17 +366,17 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="PlaceOrderAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexGuid> PlaceOrder(OrderType type, string market, decimal quantity, decimal rate) => PlaceOrderAsync(type, market, quantity, rate).Result;
+        public BittrexApiResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate) => PlaceOrderAsync(side, market, quantity, rate).Result;
         
         /// <summary>
         /// Places an order
         /// </summary>
-        /// <param name="type">Type of the order</param>
+        /// <param name="side">Side of the order</param>
         /// <param name="market">Market to place the order on</param>
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
-        public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderType type, string market, decimal quantity, decimal rate)
+        public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate)
         {
             if (apiKey == null || encryptor == null)
                 return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
@@ -386,8 +388,45 @@ namespace Bittrex.Net
                 { "rate", rate.ToString(CultureInfo.InvariantCulture) }
             };
 
-            var uri = GetUrl(type == OrderType.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion, parameters);
+            var uri = GetUrl(side == OrderSide.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion, parameters);
             return await ExecuteRequest<BittrexGuid>(uri, true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Synchronized version of the <see cref="PlaceConditionalOrderAsync"/> method
+        /// </summary>
+        /// <returns></returns>
+        public BittrexApiResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target) => PlaceConditionalOrderAsync(side, timeInEffect, market, quantity, rate, conditionType, target).Result;
+
+        /// <summary>
+        /// Places a conditional order. The order will be executed when the condition that is set becomes true.
+        /// </summary>
+        /// <param name="side">Buy or sell</param>
+        /// <param name="timeInEffect">The time the order stays active</param>
+        /// <param name="market">Market the order is for</param>
+        /// <param name="quantity">The quantity of the order</param>
+        /// <param name="rate">The rate of the order</param>
+        /// <param name="conditionType">The type of condition</param>
+        /// <param name="target">The target of the condition type</param>
+        /// <returns></returns>
+        public async Task<BittrexApiResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
+        {
+            if (apiKey == null || encryptor == null)
+                return ThrowErrorMessage<BittrexOrderResult>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
+
+            var parameters = new Dictionary<string, string>()
+            {
+                { "ordertype", OrderType.Limit.ToString() },
+                { "timeineffect", JsonConvert.SerializeObject(timeInEffect, new TimeInEffectConverter(false)) },
+                { "marketname", market },
+                { "quantity", quantity.ToString(CultureInfo.InvariantCulture) },
+                { "rate", rate.ToString(CultureInfo.InvariantCulture) },
+                { "conditiontype", JsonConvert.SerializeObject(conditionType, new ConditionTypeConverter(false)) },
+                { "target", target.ToString(CultureInfo.InvariantCulture) },
+            };
+
+            var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2, parameters);
+            return await ExecuteRequest<BittrexOrderResult>(uri, true).ConfigureAwait(false);
         }
 
         /// <summary>

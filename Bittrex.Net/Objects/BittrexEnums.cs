@@ -28,13 +28,19 @@
         PartialFill
     }
 
-    public enum OrderType
+    public enum OrderSide
     {
         Buy,
         Sell
     }
 
-    public enum OrderTypeExtended
+    public enum OrderType
+    {
+        Limit,
+        Market
+    }
+
+    public enum OrderSideExtended
     {
         LimitBuy,
         LimitSell
@@ -47,5 +53,20 @@
         HalfHour,
         OneHour,
         OneDay
+    }
+
+    public enum TimeInEffect
+    {
+        GoodTillCancelled,
+        ImmediateOrCancel,
+    }
+
+    public enum ConditionType
+    {
+        None,
+        GreaterThan,
+        LessThan,
+        StopLossFixed,
+        StopLossPercentage
     }
 }

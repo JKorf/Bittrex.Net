@@ -6,42 +6,42 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Converters
 {
-    public class OrderTypeExtendedConverter : JsonConverter
+    public class TimeInEffectConverter: JsonConverter
     {
         private readonly bool quotes;
 
-        public OrderTypeExtendedConverter()
+        public TimeInEffectConverter()
         {
             quotes = true;
         }
 
-        public OrderTypeExtendedConverter(bool useQuotes = true)
+        public TimeInEffectConverter(bool useQuotes = true)
         {
             quotes = useQuotes;
         }
 
-        private readonly Dictionary<OrderTypeExtended, string> values = new Dictionary<OrderTypeExtended, string>()
+        private readonly Dictionary<TimeInEffect, string> values = new Dictionary<TimeInEffect, string>()
         {
-            { OrderTypeExtended.LimitBuy, "LIMIT_BUY" },
-            { OrderTypeExtended.LimitSell, "LIMIT_SELL" }
+            { TimeInEffect.GoodTillCancelled, "GOOD_TIL_CANCELLED" },
+            { TimeInEffect.ImmediateOrCancel, "IMMEDIATE_OR_CANCEL" },
         };
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (quotes)
-                writer.WriteValue(values[(OrderTypeExtended)value]);
+                writer.WriteValue(values[(TimeInEffect)value]);
             else
-                writer.WriteRawValue(values[(OrderTypeExtended)value]);
+                writer.WriteRawValue(values[(TimeInEffect)value]);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return values.Single(v => v.Value == reader.Value.ToString()).Key;
+            return values.Single(v => v.Value.ToLower() == reader.Value.ToString().ToLower()).Key;
         }
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(OrderTypeExtended);
+            return objectType == typeof(TimeInEffect);
         }
     }
 }

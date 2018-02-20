@@ -22,10 +22,10 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public string Exchange { get; set; }
         /// <summary>
-        /// The order type
+        /// The order side
         /// </summary>
-        [JsonConverter(typeof(OrderTypeExtendedConverter))]
-        public OrderTypeExtended Type { get; set; }
+        [JsonConverter(typeof(OrderSideExtendedConverter))]
+        public OrderSideExtended Side { get; set; }
         /// <summary>
         /// The quantity of the order
         /// </summary>

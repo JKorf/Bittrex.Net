@@ -297,7 +297,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexMarketHistory()
                 {
                     Quantity = 1.1m,
-                    OrderType = OrderType.Buy,
+                    OrderSide = OrderSide.Buy,
                     FillType = FillType.Fill,
                     Id = 1000000000000,
                     Price = 2.2m,
@@ -307,7 +307,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexMarketHistory()
                 {
                     Quantity = 4.4m,
-                    OrderType = OrderType.Sell,
+                    OrderSide = OrderSide.Sell,
                     FillType = FillType.PartialFill,
                     Id = 2000000000000,
                     Price = 5.5m,
@@ -334,7 +334,7 @@ namespace Bittrex.Net.UnitTests.Core
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
             // act
-            var result = client.PlaceOrder(OrderType.Buy, "TestMarket", 1, 1);
+            var result = client.PlaceOrder(OrderSide.Buy, "TestMarket", 1, 1);
 
             // assert
             Assert.IsTrue(result.Success);
@@ -365,7 +365,7 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     Uuid = null,
                     Quantity = 1.1m,
-                    OrderType = OrderTypeExtended.LimitBuy,
+                    OrderSide = OrderSideExtended.LimitBuy,
                     Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
@@ -385,7 +385,7 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     Uuid = null,
                     Quantity = 6.6m,
-                    OrderType = OrderTypeExtended.LimitSell,
+                    OrderSide = OrderSideExtended.LimitSell,
                     Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
@@ -540,7 +540,7 @@ namespace Bittrex.Net.UnitTests.Core
                 Reserved = 8.8m,
                 ReserveRemaining = 9.9m,
                 Sentinel = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
-                Type = OrderTypeExtended.LimitBuy
+                Side = OrderSideExtended.LimitBuy
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
@@ -561,7 +561,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexOrderHistoryOrder
                 {
                     Quantity = 1.1m,
-                    OrderType = OrderTypeExtended.LimitBuy,
+                    OrderSide = OrderSideExtended.LimitBuy,
                     Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
@@ -580,7 +580,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexOrderHistoryOrder
                 {
                     Quantity = 6.6m,
-                    OrderType = OrderTypeExtended.LimitSell,
+                    OrderSide = OrderSideExtended.LimitSell,
                     Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
