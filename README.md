@@ -28,6 +28,9 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.3.13 - 20 feb 2018 
+	* Fix for ExchangeDeltas update for a market being called for all subscriptions
+
 * Version 1.3.12 - 20 feb 2018 
 	* Added V2 order endpoint to support conditional orders
 	* Combined BittrexExchangeState and BittrexStreamExchangeState

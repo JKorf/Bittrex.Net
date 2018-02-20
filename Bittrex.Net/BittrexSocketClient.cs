@@ -400,7 +400,7 @@ namespace Bittrex.Net
 
             IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
             lock (registrationLock)
-                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
+                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>().Where(x => x.MarketName == data.MarketName);
 
             Parallel.ForEach(marketRegistrations, registration =>
             {
