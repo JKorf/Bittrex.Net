@@ -92,7 +92,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="QueryExchangeStateAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexExchangeState> QueryExchangeState(string marketName) => QueryExchangeStateAsync(marketName).Result;
+        public BittrexApiResult<BittrexStreamQueryExchangeState> QueryExchangeState(string marketName) => QueryExchangeStateAsync(marketName).Result;
 
         /// <summary>
         /// Gets basic/initial info of a specific market
@@ -102,10 +102,10 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <returns>The current exchange state</returns>
-        public async Task<BittrexApiResult<BittrexExchangeState>> QueryExchangeStateAsync(string marketName)
+        public async Task<BittrexApiResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
         {
             if (!CheckConnection())
-                return ThrowErrorMessage<BittrexExchangeState>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                return ThrowErrorMessage<BittrexStreamQueryExchangeState>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
             
             var result = await proxy.Invoke<JObject>("QueryExchangeState", marketName).ConfigureAwait(false);
 
@@ -113,15 +113,15 @@ namespace Bittrex.Net
             try
             {
                 json = result.ToString();
-                BittrexExchangeState streamData = JsonConvert.DeserializeObject<BittrexExchangeState>(json);
+                BittrexStreamQueryExchangeState streamData = JsonConvert.DeserializeObject<BittrexStreamQueryExchangeState>(json);
                 streamData.MarketName = marketName;
-                return new BittrexApiResult<BittrexExchangeState>() {Success = true, Result = streamData};
+                return new BittrexApiResult<BittrexStreamQueryExchangeState>() {Success = true, Result = streamData};
             }
             catch (Exception e)
             {
                 var data = $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {json}";
                 log.Write(LogVerbosity.Warning, data);
-                return ThrowErrorMessage<BittrexExchangeState>(BittrexErrors.GetError(BittrexErrorKey.UnknownError), data);
+                return ThrowErrorMessage<BittrexStreamQueryExchangeState>(BittrexErrors.GetError(BittrexErrorKey.UnknownError), data);
             }
         }
 
@@ -159,7 +159,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="SubscribeToExchangeDeltasAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
+        public BittrexApiResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to updates on a specific market
@@ -167,7 +167,7 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexExchangeState> onUpdate)
+        public async Task<BittrexApiResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
             if (!CheckConnection())
                 return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
@@ -385,10 +385,10 @@ namespace Bittrex.Net
             if (jsonData.Count == 0 || jsonData[0] == null)
                 return;
 
-            BittrexExchangeState data;
+            BittrexStreamUpdateExchangeState data;
             try
             {
-                data = JsonConvert.DeserializeObject<BittrexExchangeState>(jsonData[0].ToString());
+                data = JsonConvert.DeserializeObject<BittrexStreamUpdateExchangeState>(jsonData[0].ToString());
                 if (data == null)
                     return;
             }
