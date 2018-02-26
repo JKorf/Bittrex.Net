@@ -28,6 +28,9 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.4.1 - 26 feb 2018
+	* Small fixes
+	
 * Version 1.4.0 - 26 feb 2018
 	* Changed how to set (default) options
 	* Added SetProxy to REST client
