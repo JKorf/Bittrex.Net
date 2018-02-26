@@ -28,6 +28,11 @@ For more details on installing refer to the [Wiki](https://github.com/JKorf/Bitt
 [Getting started](https://github.com/JKorf/Bittrex.Net/wiki/Getting-started)
 
 ## Release notes
+* Version 1.4.0 - 26 feb 2018
+	* Changed how to set (default) options
+	* Added SetProxy to REST client
+	* Fix for OrderSide being default in some returns
+	
 * Version 1.3.15 - 21 feb 2018
 	* Fix for wrong orderside in socket exchange delta event 
 	
