@@ -13,18 +13,22 @@ namespace Bittrex.Net
         protected HMACSHA512 encryptor;
         internal Log log;
 
+        protected string proxyHost;
+        protected int proxyPort;
+
         protected BittrexAbstractClient()
         {
             log = new Log();
+        }
+        
+        protected void Configure(BittrexOptions options)
+        {
+            if (options.LogWriter != null)
+                log.TextWriter = options.LogWriter;
 
-            if (BittrexDefaults.LogWriter != null)
-                SetLogOutput(BittrexDefaults.LogWriter);
-
-            if (BittrexDefaults.LogVerbosity != null)
-                SetLogVerbosity(BittrexDefaults.LogVerbosity.Value);
-
-            if (BittrexDefaults.ApiKey != null && BittrexDefaults.ApiSecret != null)
-                SetApiCredentials(BittrexDefaults.ApiKey, BittrexDefaults.ApiSecret);
+            log.Level = options.LogVerbosity;
+            proxyHost = options.ProxyHost;
+            proxyPort = options.ProxyPort;
         }
 
         public void SetApiCredentials(string apiKey, string apiSecret)

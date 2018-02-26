@@ -18,11 +18,13 @@ namespace Bittrex.Net
     public class BittrexSocketClient: BittrexAbstractClient
     {
         #region fields
-        private const string BaseAddress = "https://www.bittrex.com/";
-        private const string SocketAddress = "https://socket.bittrex.com/";
+        private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
+
+        private string cloudFlareAuthenticationAddress;
+        private string socketAddress;
 
         private const string HubName = "coreHub";
-        public const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.52";
+        internal const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.52";
 
         private const string MarketDeltaEvent = "updateSummaryState";
         private const string ExchangeStateEvent = "updateExchangeState";
@@ -36,8 +38,6 @@ namespace Bittrex.Net
         private static int lastStreamId;
 
         private static bool reconnecting;
-        private string proxyHost;
-        private int proxyPort;
 
         private static readonly object streamIdLock = new object();
         private static readonly object connectionLock = new object();
@@ -64,28 +64,44 @@ namespace Bittrex.Net
 
         public static event Action ConnectionLost;
         public static event Action ConnectionRestored;
-
-
-
+        
         #region ctor
-        public BittrexSocketClient()
+        /// <summary>
+        /// Creates a new socket client using the default options
+        /// </summary>
+        public BittrexSocketClient(): this(defaultOptions)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new socket client using the provided options
+        /// </summary>
+        /// <param name="options">Options to use for this client</param>
+        public BittrexSocketClient(BittrexSocketClientOptions options)
         {
             localRegistrations = new List<BittrexRegistration>();
+
+            Configure(options);
         }
         #endregion
 
         #region methods
         #region public
-
         /// <summary>
-        /// Set Proxy for Websocket Communication (only use DNS)
+        /// Set the default options for new clients
         /// </summary>
-        /// <param name="hostName">The proxy host name</param>
-        /// <param name="port">The proxy port</param>
-        public void SetProxy(String hostName, int port)
+        /// <param name="options">Options to use for new clients</param>
+        public static void SetDefaultOptions(BittrexSocketClientOptions options)
         {
-            proxyHost = hostName;
-            proxyPort = port;
+            defaultOptions = options;
+        }
+
+        private void Configure(BittrexSocketClientOptions options)
+        {
+            base.Configure(options);
+
+            cloudFlareAuthenticationAddress = options.CloudFlareAuthenticationAddress;
+            socketAddress = options.SocketAddress;
         }
 
         /// <summary>
@@ -298,10 +314,9 @@ namespace Bittrex.Net
             {
                 if (connection == null)
                 {
+                    connection = ConnectionFactory.Create(socketAddress);
                     if (proxyHost != null && proxyPort != 0)
-                        connection = ConnectionFactory.Create(SocketAddress, proxyHost, proxyPort);
-                    else
-                        connection = ConnectionFactory.Create(SocketAddress);
+                        connection.SetProxy(proxyHost, proxyPort);
                     
                     proxy = connection.CreateHubProxy(HubName);
 
@@ -324,7 +339,7 @@ namespace Bittrex.Net
 
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
-                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(BaseAddress, UserAgent, CloudFlareRetries);
+                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, CloudFlareRetries);
                 if (cookieContainer == null)
                 {
                     log.Write(LogVerbosity.Error, $"CloudFlareAuthenticator didn't give us the cookies");

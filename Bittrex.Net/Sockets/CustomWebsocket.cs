@@ -30,16 +30,15 @@ public class ClientWebSocketOptions2
         KeepAliveInterval = WebSocket.DefaultKeepAliveInterval;
         RequestedSubProtocols = new List<string>();
         RequestHeaders = new Dictionary<string, string>();
-        this.Proxy = WebRequest.DefaultWebProxy;
+        Proxy = WebRequest.DefaultWebProxy;
     }
 
     public ArraySegment<byte> GetOrCreateBuffer()
     {
-        if (!this.buffer.HasValue)
-        {
-            this.buffer = new ArraySegment<byte>?(WebSocket.CreateClientBuffer(this.ReceiveBufferSize, this.SendBufferSize));
-        }
-        return this.buffer.Value;
+        if (!buffer.HasValue)
+            buffer = WebSocket.CreateClientBuffer(ReceiveBufferSize, SendBufferSize);
+        
+        return buffer.Value;
     }
 
     internal static string GetSecWebSocketAcceptString(string secWebSocketKey)
@@ -70,51 +69,39 @@ public sealed class CustomWebsocket : WebSocket
     {
         get
         {
-            return this.options;
+            return options;
         }
     }
     public override WebSocketCloseStatus? CloseStatus
     {
         get
         {
-            if (this.innerWebSocket != null)
-            {
-                return this.innerWebSocket.CloseStatus;
-            }
-            return null;
+            return innerWebSocket != null ? innerWebSocket.CloseStatus : null;
         }
     }
     public override string CloseStatusDescription
     {
         get
         {
-            if (this.innerWebSocket != null)
-            {
-                return this.innerWebSocket.CloseStatusDescription;
-            }
-            return null;
+            return innerWebSocket != null ? innerWebSocket.CloseStatusDescription : null;
         }
     }
     public override string SubProtocol
     {
         get
         {
-            if (this.innerWebSocket != null)
-            {
-                return this.innerWebSocket.SubProtocol;
-            }
-            return null;
+            return innerWebSocket != null ? innerWebSocket.SubProtocol : null;
         }
     }
     public override WebSocketState State
     {
         get
         {
-            if (this.innerWebSocket != null)
+            if (innerWebSocket != null)
             {
-                return this.innerWebSocket.State;
+                return innerWebSocket.State;
             }
-            switch (this.state)
+            switch (state)
             {
                 case 0:
                     return WebSocketState.None;
@@ -128,9 +115,9 @@ public sealed class CustomWebsocket : WebSocket
     }
     public CustomWebsocket()
     {
-        this.state = 0;
-        this.options = new ClientWebSocketOptions2();
-        this.cts = new CancellationTokenSource();
+        state = 0;
+        options = new ClientWebSocketOptions2();
+        cts = new CancellationTokenSource();
     }
     public Task ConnectAsync(Uri uri, CancellationToken cancellationToken)
     {
@@ -146,62 +133,56 @@ public sealed class CustomWebsocket : WebSocket
         {
             throw new ArgumentException("net_WebSockets_Scheme");
         }
-        int num = Interlocked.CompareExchange(ref this.state, 1, 0);
+        int num = Interlocked.CompareExchange(ref state, 1, 0);
         if (num == 3)
         {
-            throw new ObjectDisposedException(base.GetType().FullName);
+            throw new ObjectDisposedException(GetType().FullName);
         }
         if (num != 0)
         {
             throw new InvalidOperationException("net_WebSockets_AlreadyStarted");
         }
-        return this.ConnectAsyncCore(uri, cancellationToken);
+        return ConnectAsyncCore(uri, cancellationToken);
     }
     public override Task SendAsync(ArraySegment<byte> buffer, WebSocketMessageType messageType, bool endOfMessage, CancellationToken cancellationToken)
     {
-        this.ThrowIfNotConnected();
-        return this.innerWebSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
+        ThrowIfNotConnected();
+        return innerWebSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
     }
     public override Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
     {
-        this.ThrowIfNotConnected();
-        return this.innerWebSocket.ReceiveAsync(buffer, cancellationToken);
+        ThrowIfNotConnected();
+        return innerWebSocket.ReceiveAsync(buffer, cancellationToken);
     }
     public override Task CloseAsync(WebSocketCloseStatus closeStatus, string statusDescription, CancellationToken cancellationToken)
     {
-        this.ThrowIfNotConnected();
-        return this.innerWebSocket.CloseAsync(closeStatus, statusDescription, cancellationToken);
+        ThrowIfNotConnected();
+        return innerWebSocket.CloseAsync(closeStatus, statusDescription, cancellationToken);
     }
     public override Task CloseOutputAsync(WebSocketCloseStatus closeStatus, string statusDescription, CancellationToken cancellationToken)
     {
-        this.ThrowIfNotConnected();
-        return this.innerWebSocket.CloseOutputAsync(closeStatus, statusDescription, cancellationToken);
+        ThrowIfNotConnected();
+        return innerWebSocket.CloseOutputAsync(closeStatus, statusDescription, cancellationToken);
     }
     public override void Abort()
     {
-        if (this.state == 3)
+        if (state == 3)
         {
             return;
         }
-        if (this.innerWebSocket != null)
-        {
-            this.innerWebSocket.Abort();
-        }
-        this.Dispose();
+        innerWebSocket?.Abort();
+        Dispose();
     }
     public override void Dispose()
     {
-        int num = Interlocked.Exchange(ref this.state, 3);
+        int num = Interlocked.Exchange(ref state, 3);
         if (num == 3)
         {
             return;
         }
-        this.cts.Cancel(false);
-        this.cts.Dispose();
-        if (this.innerWebSocket != null)
-        {
-            this.innerWebSocket.Dispose();
-        }
+        cts.Cancel(false);
+        cts.Dispose();
+        innerWebSocket?.Dispose();
     }
     static CustomWebsocket()
     {
@@ -213,28 +194,28 @@ public sealed class CustomWebsocket : WebSocket
         CancellationTokenRegistration cancellationTokenRegistration = default(CancellationTokenRegistration);
         try
         {
-            HttpWebRequest httpWebRequest = this.CreateAndConfigureRequest(uri);
+            HttpWebRequest httpWebRequest = CreateAndConfigureRequest(uri);
 
-            cancellationTokenRegistration = cancellationToken.Register(new Action<object>(this.AbortRequest), httpWebRequest, false);
-            httpWebResponse = ((await httpWebRequest.GetResponseAsync().ConfigureAwait(false)) as HttpWebResponse);
+            cancellationTokenRegistration = cancellationToken.Register(AbortRequest, httpWebRequest, false);
+            httpWebResponse = await httpWebRequest.GetResponseAsync().ConfigureAwait(false) as HttpWebResponse;
 
-            string subProtocol = this.ValidateResponse(httpWebRequest, httpWebResponse);
-            this.innerWebSocket = WebSocket.CreateClientWebSocket(httpWebResponse.GetResponseStream(), subProtocol, this.options.ReceiveBufferSize, this.options.SendBufferSize, this.options.KeepAliveInterval, false, this.options.GetOrCreateBuffer());
+            string subProtocol = ValidateResponse(httpWebRequest, httpWebResponse);
+            innerWebSocket = CreateClientWebSocket(httpWebResponse.GetResponseStream(), subProtocol, options.ReceiveBufferSize, options.SendBufferSize, options.KeepAliveInterval, false, options.GetOrCreateBuffer());
 
-            if (Interlocked.CompareExchange(ref this.state, 2, 1) != 1)
+            if (Interlocked.CompareExchange(ref state, 2, 1) != 1)
             {
-                throw new ObjectDisposedException(base.GetType().FullName);
+                throw new ObjectDisposedException(GetType().FullName);
             }
         }
         catch (WebException innerException)
         {
-            this.ConnectExceptionCleanup(httpWebResponse);
+            ConnectExceptionCleanup(httpWebResponse);
             WebSocketException ex = new WebSocketException("net_webstatus_ConnectFailure", innerException);
             throw ex;
         }
         catch (Exception)
         {
-            this.ConnectExceptionCleanup(httpWebResponse);
+            ConnectExceptionCleanup(httpWebResponse);
             throw;
         }
         finally
@@ -244,11 +225,8 @@ public sealed class CustomWebsocket : WebSocket
     }
     private void ConnectExceptionCleanup(HttpWebResponse response)
     {
-        this.Dispose();
-        if (response != null)
-        {
-            response.Dispose();
-        }
+        Dispose();
+        response?.Dispose();
     }
     private HttpWebRequest CreateAndConfigureRequest(Uri uri)
     {
@@ -257,37 +235,37 @@ public sealed class CustomWebsocket : WebSocket
         {
             throw new InvalidOperationException("net_WebSockets_InvalidRegistration");
         }
-        foreach (string name in this.options.RequestHeaders.Keys)
+        foreach (string name in options.RequestHeaders.Keys)
         {
             if (name.Equals("user-agent", StringComparison.OrdinalIgnoreCase))
             {
-                httpWebRequest.UserAgent = this.options.RequestHeaders[name];
+                httpWebRequest.UserAgent = options.RequestHeaders[name];
             }
             else
-                httpWebRequest.Headers.Add(name, this.options.RequestHeaders[name]);
+                httpWebRequest.Headers.Add(name, options.RequestHeaders[name]);
         }
-        if (this.options.RequestedSubProtocols.Count > 0)
+        if (options.RequestedSubProtocols.Count > 0)
         {
-            httpWebRequest.Headers.Add("Sec-WebSocket-Protocol", string.Join(", ", this.options.RequestedSubProtocols));
+            httpWebRequest.Headers.Add("Sec-WebSocket-Protocol", string.Join(", ", options.RequestedSubProtocols));
         }
-        if (this.options.UseDefaultCredentials)
+        if (options.UseDefaultCredentials)
         {
             httpWebRequest.UseDefaultCredentials = true;
         }
         else
         {
-            if (this.options.Credentials != null)
+            if (options.Credentials != null)
             {
-                httpWebRequest.Credentials = this.options.Credentials;
+                httpWebRequest.Credentials = options.Credentials;
             }
         }
-        if (this.options.InternalClientCertificates != null)
+        if (options.InternalClientCertificates != null)
         {
-            httpWebRequest.ClientCertificates = this.options.InternalClientCertificates;
+            httpWebRequest.ClientCertificates = options.InternalClientCertificates;
         }
-        httpWebRequest.Proxy = this.options.Proxy;
-        httpWebRequest.CookieContainer = this.options.Cookies;
-        this.cts.Token.Register(new Action<object>(this.AbortRequest), httpWebRequest, false);
+        httpWebRequest.Proxy = options.Proxy;
+        httpWebRequest.CookieContainer = options.Cookies;
+        cts.Token.Register(AbortRequest, httpWebRequest, false);
         return httpWebRequest;
     }
     private string ValidateResponse(HttpWebRequest request, HttpWebResponse response)
@@ -313,10 +291,10 @@ public sealed class CustomWebsocket : WebSocket
             throw new WebSocketException("net_WebSockets_InvalidResponseHeader");
         }
         string text4 = response.Headers["Sec-WebSocket-Protocol"];
-        if (!string.IsNullOrWhiteSpace(text4) && this.options.RequestedSubProtocols.Count > 0)
+        if (!string.IsNullOrWhiteSpace(text4) && options.RequestedSubProtocols.Count > 0)
         {
             bool flag = false;
-            foreach (string current in this.options.RequestedSubProtocols)
+            foreach (string current in options.RequestedSubProtocols)
             {
                 if (string.Equals(current, text4, StringComparison.OrdinalIgnoreCase))
                 {
@@ -342,11 +320,11 @@ public sealed class CustomWebsocket : WebSocket
     }
     private void ThrowIfNotConnected()
     {
-        if (this.state == 3)
+        if (state == 3)
         {
-            throw new ObjectDisposedException(base.GetType().FullName);
+            throw new ObjectDisposedException(GetType().FullName);
         }
-        if (this.state != 2)
+        if (state != 2)
         {
             throw new InvalidOperationException("net_WebSockets_NotConnected");
         }

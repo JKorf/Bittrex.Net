@@ -23,6 +23,11 @@ namespace Bittrex.Net.Requests
             set => request.Method = value;
         }
 
+        public void SetProxy(string host, int port)
+        {
+            request.Proxy = new WebProxy(host, port); ;
+        }
+
         public IResponse GetResponse()
         {
             return new Response(request.GetResponse());

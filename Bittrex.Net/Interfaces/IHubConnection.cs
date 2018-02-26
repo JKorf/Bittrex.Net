@@ -7,6 +7,7 @@ namespace Bittrex.Net.Interfaces
 {
     public interface IHubConnection
     {
+        void SetProxy(string host, int port);
         CookieContainer Cookies { get; set; }
         string UserAgent { get; set; }
 

@@ -10,7 +10,6 @@ namespace Bittrex.Net.Interfaces
 {
     public interface IBittrexClient
     {
-        int MaxRetries { get; set; }
         IRequestFactory RequestFactory { get; set; }
 
         void AddRateLimiter(IRateLimiter limiter);

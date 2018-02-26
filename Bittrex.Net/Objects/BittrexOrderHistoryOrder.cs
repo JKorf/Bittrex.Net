@@ -25,7 +25,7 @@ namespace Bittrex.Net.Objects
         /// The side of the order
         /// </summary>
         [JsonConverter(typeof(OrderSideExtendedConverter))]
-        public OrderSideExtended OrderSide { get; set; }
+        public OrderSideExtended OrderType { get; set; }
         /// <summary>
         /// The limit of the order
         /// </summary>

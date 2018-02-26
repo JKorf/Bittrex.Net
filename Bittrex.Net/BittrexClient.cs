@@ -20,7 +20,11 @@ namespace Bittrex.Net
     public class BittrexClient: BittrexAbstractClient, IBittrexClient
     {
         #region fields
-        private string BaseAddress = "https://www.bittrex.com";
+
+        private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
+
+        private string baseAddress;
+
         private const string Api = "api";
         private const string ApiVersion = "1.1";
         private const string ApiVersion2 = "2.0";
@@ -51,75 +55,58 @@ namespace Bittrex.Net
         private const string WithdrawalHistoryEndpoint = "account/getwithdrawalhistory";
         private const string DepositHistoryEndpoint = "account/getdeposithistory";
 
+        private int maxRetries;
         private List<IRateLimiter> rateLimiters = new List<IRateLimiter>();
         #endregion
 
         #region properties
         private long nonce => DateTime.UtcNow.Ticks;
         public IRequestFactory RequestFactory { get; set; } = new RequestFactory();
-
-        /// <summary>
-        /// The max amount of retries to do if the Bittrex service is temporarily unavailable
-        /// </summary>
-        public int MaxRetries { get; set; } = 2;
         #endregion
 
         #region constructor/destructor
         /// <summary>
-        /// Create a new instance of BittrexClient
+        /// Create a new instance of BittrexClient using the default options
         /// </summary>
-        public BittrexClient(): this(null)
-        {   
-        }
-
-        /// <summary>
-        /// Create a new instance of the BittrexClient
-        /// </summary>
-        /// <param name="baseUrl">Can be used to make calls to a different endpoint, for instance to use a mock server</param>
-        public BittrexClient(string baseUrl)
-        {
-            if (baseUrl != null)
-                BaseAddress = baseUrl;
-
-            if (BittrexDefaults.MaxCallRetry != null)
-                MaxRetries = BittrexDefaults.MaxCallRetry.Value;
-
-            foreach (var rateLimiter in BittrexDefaults.RateLimiters)
-                rateLimiters.Add(rateLimiter);
-        }
-
-        /// <summary>
-        /// Create a new instance of BittrexClient using provided credentials. Api keys can be managed at https://bittrex.com/Manage#sectionApi
-        /// </summary>
-        /// <param name="apiKey">The api key</param>
-        /// <param name="apiSecret">The api secret associated with the key</param>
-        public BittrexClient(string apiKey, string apiSecret): this(apiKey, apiSecret, null)
+        public BittrexClient(): this(defaultOptions)
         {
         }
 
         /// <summary>
-        /// Create a new instance of BittrexClient using provided credentials. Api keys can be managed at https://bittrex.com/Manage#sectionApi
+        /// Create a new instance of the BittrexClient with the provided options
         /// </summary>
-        /// <param name="apiKey">The api key</param>
-        /// <param name="apiSecret">The api secret associated with the key</param>
-        /// <param name="baseUrl">Can be used to make calls to a different endpoint, for instance to use a mock server</param>
-        public BittrexClient(string apiKey, string apiSecret, string baseUrl)
+        public BittrexClient(BittrexClientOptions options)
         {
-            if (baseUrl != null)
-                BaseAddress = baseUrl;
-
-            if (BittrexDefaults.MaxCallRetry != null)
-                MaxRetries = BittrexDefaults.MaxCallRetry.Value;
-
-            foreach (var rateLimiter in BittrexDefaults.RateLimiters)
-                rateLimiters.Add(rateLimiter);
-
-            SetApiCredentials(apiKey, apiSecret);
+            Configure(options);
         }
         #endregion
 
         #region methods
         #region public
+        /// <summary>
+        /// Sets the default options to use for new clients
+        /// </summary>
+        /// <param name="options">The options to use for new clients</param>
+        public static void SetDefaultOptions(BittrexClientOptions options)
+        {
+            defaultOptions = options;
+        }
+
+        private void Configure(BittrexClientOptions options)
+        {
+            base.Configure(options);
+
+            if(options.ApiKey != null)
+                SetApiKey(options.ApiKey);
+            if (options.ApiSecret != null)
+                SetApiKey(options.ApiSecret);
+
+            maxRetries = options.MaxCallRetry;
+            baseAddress = options.BaseAddress;
+
+            foreach (var rateLimiter in options.RateLimiters)
+                rateLimiters.Add(rateLimiter);
+        }
 
         /// <summary>
         /// Adds a rate limiter to the client. There are 2 choices, the <see cref="RateLimiterTotal"/> and the <see cref="RateLimiterPerEndpoint"/>.
@@ -671,6 +658,9 @@ namespace Bittrex.Net
                 }
 
                 var request = RequestFactory.Create(uriString);
+                if (proxyHost != null && proxyPort != -1)
+                    request.SetProxy(proxyHost, proxyPort);
+
                 if (signed)
                     request.Headers.Add("apisign",
                         ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uriString))));
@@ -699,7 +689,7 @@ namespace Bittrex.Net
             }
             catch (WebException we)
             {
-                if (currentTry < MaxRetries)
+                if (currentTry < maxRetries)
                     return await ExecuteRequest<T>(uri, signed, ++currentTry).ConfigureAwait(false);
 
                 var response = (HttpWebResponse)we.Response;
@@ -722,7 +712,7 @@ namespace Bittrex.Net
 
         protected Uri GetUrl(string endpoint, string api, string version, Dictionary<string, string> parameters = null)
         {
-            var result = $"{BaseAddress}/{api}/v{version}/{endpoint}?";
+            var result = $"{baseAddress}/{api}/v{version}/{endpoint}?";
             if (parameters != null)
                 result += $"{string.Join("&", parameters.Select(s => $"{s.Key}={s.Value}"))}";
             return new Uri(result);

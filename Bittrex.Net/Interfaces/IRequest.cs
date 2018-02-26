@@ -7,6 +7,7 @@ namespace Bittrex.Net.Interfaces
         WebHeaderCollection Headers { get; set; }
         string Method { get; set; }
 
+        void SetProxy(string host, int port);
         IResponse GetResponse();
     }
 }

@@ -25,7 +25,7 @@ namespace Bittrex.Net.Sockets
 
         public void Initialize(IConnection connection)
         {
-            this._connection = connection;
+            _connection = connection;
 
             _httpClient.Initialize(connection);
         }

@@ -16,6 +16,11 @@ namespace Bittrex.Net.Sockets
             this.connection = connection;
         }
 
+        public void SetProxy(string proxyHost, int proxyPort)
+        {
+            connection.Proxy = new WebProxy(proxyHost, proxyPort);
+        }
+
         public ConnectionState State => connection.State;
         
         public event Action<StateChange> StateChanged
