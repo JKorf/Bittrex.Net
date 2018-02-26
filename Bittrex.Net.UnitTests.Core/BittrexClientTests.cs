@@ -297,7 +297,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexMarketHistory()
                 {
                     Quantity = 1.1m,
-                    OrderSide = OrderSide.Buy,
+                    OrderType = OrderSide.Buy,
                     FillType = FillType.Fill,
                     Id = 1000000000000,
                     Price = 2.2m,
@@ -307,7 +307,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexMarketHistory()
                 {
                     Quantity = 4.4m,
-                    OrderSide = OrderSide.Sell,
+                    OrderType = OrderSide.Sell,
                     FillType = FillType.PartialFill,
                     Id = 2000000000000,
                     Price = 5.5m,
@@ -365,7 +365,7 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     Uuid = null,
                     Quantity = 1.1m,
-                    OrderSide = OrderSideExtended.LimitBuy,
+                    OrderType = OrderSideExtended.LimitBuy,
                     Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
@@ -385,7 +385,7 @@ namespace Bittrex.Net.UnitTests.Core
                 {
                     Uuid = null,
                     Quantity = 6.6m,
-                    OrderSide = OrderSideExtended.LimitSell,
+                    OrderType = OrderSideExtended.LimitSell,
                     Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
@@ -540,7 +540,7 @@ namespace Bittrex.Net.UnitTests.Core
                 Reserved = 8.8m,
                 ReserveRemaining = 9.9m,
                 Sentinel = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
-                Side = OrderSideExtended.LimitBuy
+                Type = OrderSideExtended.LimitBuy
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
@@ -561,7 +561,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexOrderHistoryOrder
                 {
                     Quantity = 1.1m,
-                    OrderSide = OrderSideExtended.LimitBuy,
+                    OrderType = OrderSideExtended.LimitBuy,
                     Price = 2.2m,
                     Closed = null,
                     CancelInitiated = false,
@@ -580,7 +580,7 @@ namespace Bittrex.Net.UnitTests.Core
                 new BittrexOrderHistoryOrder
                 {
                     Quantity = 6.6m,
-                    OrderSide = OrderSideExtended.LimitSell,
+                    OrderType = OrderSideExtended.LimitSell,
                     Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
                     CancelInitiated = true,
@@ -834,7 +834,7 @@ namespace Bittrex.Net.UnitTests.Core
             factory.Setup(c => c.Create(It.IsAny<string>()))
                 .Returns(request.Object);
 
-            BittrexClient client = credentials ? new BittrexClient("Test", "Test") : new BittrexClient();
+            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiKey = "Test", ApiSecret = "Test2"}) : new BittrexClient();
             client.RequestFactory = factory.Object;
             return client;
         }
@@ -866,7 +866,7 @@ namespace Bittrex.Net.UnitTests.Core
             factory.Setup(c => c.Create(It.IsAny<string>()))
                 .Returns(request.Object);
 
-            BittrexClient client = credentials ? new BittrexClient("Test", "Test") : new BittrexClient();
+            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiKey = "Test", ApiSecret = "Test2" }) : new BittrexClient();
             client.RequestFactory = factory.Object;
             return client;
         }

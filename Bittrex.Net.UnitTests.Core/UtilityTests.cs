@@ -29,20 +29,6 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.Throws(typeof(ArgumentException), () => client.SetApiCredentials(key, secret));
         }
 
-        [TestCase(null, null)]
-        [TestCase("", "")]
-        [TestCase("test", null)]
-        [TestCase("test", "")]
-        [TestCase(null, "test")]
-        [TestCase("", "test")]
-        public void SettingEmptyValuesForDefaultAPICredentials_Should_ThrowException(string key, string secret)
-        {
-            // arrange
-            // act
-            // assert
-            Assert.Throws(typeof(ArgumentException), () => BittrexDefaults.SetDefaultApiCredentials(key, secret));
-        }
-
         [TestCase()]
         public void SettingLogOutput_Should_RedirectLogOutput()
         {
@@ -64,11 +50,15 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             var stringBuilder = new StringBuilder();
-            BittrexDefaults.SetDefaultApiCredentials("test", "test");
-            BittrexDefaults.SetDefaultLogOutput(new StringWriter(stringBuilder));
-            BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
+            BittrexClient.SetDefaultOptions(new BittrexClientOptions()
+            {
+                ApiSecret = "test",
+                ApiKey = "test",
+                LogVerbosity = LogVerbosity.Debug,
+                LogWriter = new StringWriter(stringBuilder)
+            });
 
-            var client = PrepareClient(JsonConvert.SerializeObject(new BittrexPrice()));
+            var client = PrepareClient(JsonConvert.SerializeObject(new BittrexPrice()), false);
 
             // act
             Assert.DoesNotThrow(() => client.GetBalances());
@@ -95,7 +85,7 @@ namespace Bittrex.Net.UnitTests.Core
             factory.Setup(c => c.Create(It.IsAny<string>()))
                 .Returns(request.Object);
 
-            BittrexClient client = credentials ? new BittrexClient("Test", "Test") : new BittrexClient();
+            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiKey = "Test", ApiSecret = "Test2" }) : new BittrexClient();
             client.RequestFactory = factory.Object;
             return client;
         }

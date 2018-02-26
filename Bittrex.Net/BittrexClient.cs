@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Bittrex.Net.Errors;
@@ -22,6 +23,9 @@ namespace Bittrex.Net
         #region fields
 
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
+
+        protected string apiKey;
+        protected HMACSHA512 encryptor;
 
         private string baseAddress;
 
@@ -99,13 +103,49 @@ namespace Bittrex.Net
             if(options.ApiKey != null)
                 SetApiKey(options.ApiKey);
             if (options.ApiSecret != null)
-                SetApiKey(options.ApiSecret);
+                SetApiSecret(options.ApiSecret);
 
             maxRetries = options.MaxCallRetry;
             baseAddress = options.BaseAddress;
 
             foreach (var rateLimiter in options.RateLimiters)
                 rateLimiters.Add(rateLimiter);
+        }
+
+
+        /// <summary>
+        /// Set the API key and secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
+        /// </summary>
+        /// <param name="apiKey">The api key</param>
+        /// <param name="apiSecret">The api secret</param>
+        public void SetApiCredentials(string apiKey, string apiSecret)
+        {
+            SetApiKey(apiKey);
+            SetApiSecret(apiSecret);
+        }
+
+        /// <summary>
+        /// Sets the API Key. Api keys can be managed at https://bittrex.com/Manage#sectionApi
+        /// </summary>
+        /// <param name="apiKey">The api key</param>
+        public void SetApiKey(string apiKey)
+        {
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("Api key empty");
+
+            this.apiKey = apiKey;
+        }
+
+        /// <summary>
+        /// Sets the API Secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
+        /// </summary>
+        /// <param name="apiSecret">The api secret</param>
+        public void SetApiSecret(string apiSecret)
+        {
+            if (string.IsNullOrEmpty(apiSecret))
+                throw new ArgumentException("Api secret empty");
+
+            encryptor = new HMACSHA512(Encoding.UTF8.GetBytes(apiSecret));
         }
 
         /// <summary>
@@ -731,6 +771,13 @@ namespace Bittrex.Net
                 sbinary += t.ToString("X2"); /* hex format */
             return sbinary;
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            encryptor?.Dispose();
+        }
+
         #endregion
         #endregion
     }
