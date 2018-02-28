@@ -25,13 +25,5 @@
         /// The crypto address this balance is on
         /// </summary>
         public string CryptoAddress { get; set; }
-        /// <summary>
-        /// Requested
-        /// </summary>
-        public bool Requested { get; set; }
-        /// <summary>
-        /// Guid
-        /// </summary>
-        public string Uuid { get; set; }
     }
 }
