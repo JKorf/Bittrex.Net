@@ -209,7 +209,7 @@ namespace Bittrex.Net.UnitTests.Core
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", (test) => result = test);
             
             // act
-            client.UnsubscribeFromStream(subscription.Result);
+            client.UnsubscribeFromStream(subscription.Data);
             Thread.Sleep(10);
             
             // assert
@@ -229,7 +229,7 @@ namespace Bittrex.Net.UnitTests.Core
             var subscription2 = client.SubscribeToMarketDeltaStream("TestMarket2", null);
 
             // act
-            client.UnsubscribeFromStream(subscription.Result);
+            client.UnsubscribeFromStream(subscription.Data);
 
             // assert
             Assert.IsTrue(subscription.Success);

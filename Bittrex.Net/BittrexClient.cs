@@ -9,6 +9,7 @@ using Bittrex.Net.Converters;
 using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Logging;
 
 namespace Bittrex.Net
 {
@@ -134,12 +135,12 @@ namespace Bittrex.Net
         /// <returns>The current ask, bid and last prices for the market</returns>
         public async Task<CallResult<BittrexPrice>> GetTickerAsync(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market }
             };
 
-            return await Execute<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -155,12 +156,12 @@ namespace Bittrex.Net
         /// <returns>List with single entry containing info for the market</returns>
         public async Task<CallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market }
             };
 
-            var result = await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            var result = await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
             return new CallResult<BittrexMarketSummary>(result.Data.Any() ? result.Data[0]: null, result.Error);
         }
 
@@ -192,13 +193,13 @@ namespace Bittrex.Net
         /// <returns>Orderbook for the market</returns>
         public async Task<CallResult<BittrexOrderBook>> GetOrderBookAsync(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market },
                 { "type", "both" }
             };
 
-            return await Execute<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -214,13 +215,13 @@ namespace Bittrex.Net
         /// <returns>Orderbook for the market</returns>
         public async Task<CallResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market },
                 { "type", "buy" }
             };
 
-            return await Execute<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -236,13 +237,13 @@ namespace Bittrex.Net
         /// <returns>Orderbook for the market</returns>
         public async Task<CallResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market },
                 { "type", "sell" }
             };
 
-            return await Execute<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -258,12 +259,12 @@ namespace Bittrex.Net
         /// <returns>List of trade aggregations</returns>
         public async Task<CallResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market }
             };
 
-            return await Execute<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
         }
         
         /// <summary>
@@ -280,13 +281,13 @@ namespace Bittrex.Net
         /// <returns>List of candles</returns>
         public async Task<CallResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "marketName", market },
                 { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
             };
 
-            return await Execute<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2), false, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -303,13 +304,13 @@ namespace Bittrex.Net
         /// <returns>List of candles</returns>
         public async Task<CallResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "marketName", market },
                 { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
             };
 
-            return await Execute<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2), false, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -328,15 +329,15 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<CallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "market", market },
                 { "quantity", quantity.ToString(CultureInfo.InvariantCulture) },
                 { "rate", rate.ToString(CultureInfo.InvariantCulture) }
             };
 
-            var uri = GetUrl(side == OrderSide.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion, parameters);
-            return await Execute<BittrexGuid>(uri, true).ConfigureAwait(false);
+            var uri = GetUrl(side == OrderSide.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion);
+            return await Execute<BittrexGuid>(uri, true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -358,7 +359,7 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<CallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 { "ordertype", OrderType.Limit.ToString() },
                 { "timeineffect", JsonConvert.SerializeObject(timeInEffect, new TimeInEffectConverter(false)) },
@@ -369,8 +370,8 @@ namespace Bittrex.Net
                 { "target", target.ToString(CultureInfo.InvariantCulture) },
             };
 
-            var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2, parameters);
-            return await Execute<BittrexOrderResult>(uri, true).ConfigureAwait(false);
+            var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2);
+            return await Execute<BittrexOrderResult>(uri, true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -386,12 +387,12 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<CallResult<object>> CancelOrderAsync(Guid guid)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 {"uuid", guid.ToString()}
             };
 
-            return await Execute<object>(GetUrl(CancelEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<object>(GetUrl(CancelEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -407,10 +408,10 @@ namespace Bittrex.Net
         /// <returns>List of open orders</returns>
         public async Task<CallResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null)
         {
-            var parameters = new Dictionary<string, string>();
+            var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("market", market);
 
-            return await Execute<BittrexOpenOrdersOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexOpenOrdersOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -426,11 +427,11 @@ namespace Bittrex.Net
         /// <returns>The balance of the currency</returns>
         public async Task<CallResult<BittrexBalance>> GetBalanceAsync(string currency)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 {"currency", currency}
             };
-            return await Execute<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -445,6 +446,7 @@ namespace Bittrex.Net
         /// <returns>List of balances</returns>
         public async Task<CallResult<BittrexBalance[]>> GetBalancesAsync()
         {
+            log.Write(LogVerbosity.Debug, "test");
             return await Execute<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true).ConfigureAwait(false);
         }
 
@@ -461,11 +463,11 @@ namespace Bittrex.Net
         /// <returns>The deposit address of the currency</returns>
         public async Task<CallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 {"currency", currency}
             };
-            return await Execute<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -484,7 +486,7 @@ namespace Bittrex.Net
         /// <returns>Guid of the withdrawal</returns>
         public async Task<CallResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 {"currency", currency},
                 {"quantity", quantity.ToString(CultureInfo.InvariantCulture)},
@@ -492,7 +494,7 @@ namespace Bittrex.Net
             };
             parameters.AddOptionalParameter("paymentid", paymentId);
 
-            return await Execute<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -508,11 +510,11 @@ namespace Bittrex.Net
         /// <returns>The requested order</returns>
         public async Task<CallResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
         {
-            var parameters = new Dictionary<string, string>()
+            var parameters = new Dictionary<string, object>()
             {
                 {"uuid", guid.ToString()}
             };
-            return await Execute<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -528,9 +530,9 @@ namespace Bittrex.Net
         /// <returns>List of orders</returns>
         public async Task<CallResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null)
         {
-            var parameters = new Dictionary<string, string>();
+            var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("market", market);
-            return await Execute<BittrexOrderHistoryOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexOrderHistoryOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -546,9 +548,9 @@ namespace Bittrex.Net
         /// <returns>List of withdrawals</returns>
         public async Task<CallResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
         {
-            var parameters = new Dictionary<string, string>();
+            var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currency", currency);
-            return await Execute<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -564,32 +566,30 @@ namespace Bittrex.Net
         /// <returns>List of deposits</returns>
         public async Task<CallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
         {
-            var parameters = new Dictionary<string, string>();
+            var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currency", currency);
-            return await Execute<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion), true, parameters).ConfigureAwait(false);
         }
         #endregion
         #region private
 
-        protected Uri GetUrl(string endpoint, string api, string version, Dictionary<string, string> parameters = null)
+        protected Uri GetUrl(string endpoint, string api, string version)
         {
-            var result = $"{baseAddress}/{api}/v{version}/{endpoint}?";
-            if (parameters != null)
-                result += $"{string.Join("&", parameters.Select(s => $"{s.Key}={s.Value}"))}";
+            var result = $"{baseAddress}/{api}/v{version}/{endpoint}";
             return new Uri(result);
         }
 
-        private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false) where T: class
+        private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false, Dictionary<string, object> parameters = null) where T: class
         {
-            return GetResult(await ExecuteRequest<BittrexApiResult<T>>(uri, "GET", null, signed).ConfigureAwait(false));
+            return GetResult(await ExecuteRequest<BittrexApiResult<T>>(uri, "GET", parameters, signed).ConfigureAwait(false));
         }
 
         private CallResult<T> GetResult<T>(CallResult<BittrexApiResult<T>> result) where T : class
         {
             if (result.Error != null || result.Data == null)
                 return new CallResult<T>(null, result.Error);
-            if (result.Data.Error != null)
-                return new CallResult<T>(null, new ServerError(result.Data.Error.ToString()));
+            if (result.Data.Message != null)
+                return new CallResult<T>(null, new ServerError(result.Data.Message));
 
             return new CallResult<T>(result.Data.Result, null);
         }

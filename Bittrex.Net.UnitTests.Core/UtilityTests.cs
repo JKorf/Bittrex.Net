@@ -2,9 +2,10 @@
 using System.IO;
 using System.Net;
 using System.Text;
-using Bittrex.Net.Interfaces;
-using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
+using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -33,12 +34,10 @@ namespace Bittrex.Net.UnitTests.Core
         public void SettingLogOutput_Should_RedirectLogOutput()
         {
             // arrange
-            var client = PrepareClient(JsonConvert.SerializeObject(new BittrexPrice()));
             var stringBuilder = new StringBuilder();
+            var client = PrepareClient(JsonConvert.SerializeObject(new BittrexPrice()), true, LogVerbosity.Debug, new StringWriter(stringBuilder));
 
             // act
-            client.SetLogVerbosity(LogVerbosity.Debug);
-            client.SetLogOutput(new StringWriter(stringBuilder));
             client.GetTicker("TestMarket");
 
             // assert
@@ -52,8 +51,7 @@ namespace Bittrex.Net.UnitTests.Core
             var stringBuilder = new StringBuilder();
             BittrexClient.SetDefaultOptions(new BittrexClientOptions()
             {
-                ApiSecret = "test",
-                ApiKey = "test",
+                ApiCredentials = new ApiCredentials("Test","Test2"),
                 LogVerbosity = LogVerbosity.Debug,
                 LogWriter = new StringWriter(stringBuilder)
             });
@@ -67,7 +65,7 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.IsFalse(string.IsNullOrEmpty(stringBuilder.ToString()));
         }
 
-        private BittrexClient PrepareClient(string responseData, bool credentials = true)
+        private BittrexClient PrepareClient(string responseData, bool withOptions = true, LogVerbosity verbosity = LogVerbosity.Warning, TextWriter tw = null)
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();
@@ -79,13 +77,26 @@ namespace Bittrex.Net.UnitTests.Core
 
             var request = new Mock<IRequest>();
             request.Setup(c => c.Headers).Returns(new WebHeaderCollection());
+            request.Setup(c => c.Uri).Returns(new Uri("http://www.test.com"));
             request.Setup(c => c.GetResponse()).Returns(response.Object);
 
             var factory = new Mock<IRequestFactory>();
             factory.Setup(c => c.Create(It.IsAny<string>()))
                 .Returns(request.Object);
-
-            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiKey = "Test", ApiSecret = "Test2" }) : new BittrexClient();
+            BittrexClient client;
+            if (withOptions)
+            {
+                client = new BittrexClient(new BittrexClientOptions()
+                {
+                    ApiCredentials = new ApiCredentials("Test", "Test2"),
+                    LogVerbosity = verbosity,
+                    LogWriter = tw
+                });
+            }
+            else
+            {
+                client = new BittrexClient();
+            }
             client.RequestFactory = factory.Object;
             return client;
         }

@@ -6,9 +6,10 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
-using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
-using Bittrex.Net.RateLimiter;
+using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.RateLimiter;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -60,8 +61,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -100,8 +101,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -116,7 +117,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -146,7 +147,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -211,9 +212,9 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[2], expected[2]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[2], expected[2]));
         }
 
         [TestCase()]
@@ -240,10 +241,10 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result.Buy[0], expected.Buy[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result.Buy[1], expected.Buy[1]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result.Sell[0], expected.Sell[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result.Sell[1], expected.Sell[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data.Buy[0], expected.Buy[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data.Buy[1], expected.Buy[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data.Sell[0], expected.Sell[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data.Sell[1], expected.Sell[1]));
         }
 
         [TestCase()]
@@ -263,8 +264,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -284,8 +285,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -322,8 +323,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -338,7 +339,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -409,8 +410,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -419,13 +420,11 @@ namespace Bittrex.Net.UnitTests.Core
             // arrange
             var expected = new BittrexBalance()
             {
-                Uuid = null,
                 Currency = "TestCurrency",
                 Available = 1.1m,
                 Balance = 2.2m,
                 CryptoAddress = "TestAddress",
                 Pending = 3.3m,
-                Requested = true
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
 
@@ -434,7 +433,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -445,23 +444,19 @@ namespace Bittrex.Net.UnitTests.Core
             {
                 new BittrexBalance()
                 {
-                    Uuid = null,
                     Currency = "TestCurrency",
                     Available = 1.1m,
                     Balance = 2.2m,
                     CryptoAddress = "TestAddress",
-                    Pending = 3.3m,
-                    Requested = true
+                    Pending = 3.3m
                 },
                 new BittrexBalance()
                 {
-                    Uuid = null,
                     Currency = "TestCurrency",
                     Available = 4.4m,
                     Balance = 5.5m,
                     CryptoAddress = "TestAddress",
-                    Pending = 6.6m,
-                    Requested = false
+                    Pending = 6.6m
                 }
             };
             var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(expected)));
@@ -471,8 +466,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -491,7 +486,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -509,7 +504,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -549,7 +544,7 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result, expected));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -564,7 +559,6 @@ namespace Bittrex.Net.UnitTests.Core
                     OrderType = OrderSideExtended.LimitBuy,
                     Price = 2.2m,
                     Closed = null,
-                    CancelInitiated = false,
                     Commission = 3.3m,
                     Condition = null,
                     ConditionTarget = null,
@@ -583,7 +577,6 @@ namespace Bittrex.Net.UnitTests.Core
                     OrderType = OrderSideExtended.LimitSell,
                     Price = 7.7m,
                     Closed = new DateTime(2017, 1, 1),
-                    CancelInitiated = true,
                     Commission = 8.8m,
                     Condition = null,
                     ConditionTarget = null,
@@ -604,8 +597,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -650,8 +643,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -688,8 +681,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[0], expected[0]));
-            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Result[1], expected[1]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(ObjectComparer.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -697,15 +690,15 @@ namespace Bittrex.Net.UnitTests.Core
         {
             // arrange
             var errorMessage = "TestErrorMessage";
-            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice(), false, errorMessage)));
+            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult<BittrexPrice>(null, false, errorMessage)));
 
             // act
             var result = client.GetTicker("TestMarket");
 
             // assert
             Assert.IsFalse(result.Success);
-            Assert.AreNotEqual(0, result.Error.ErrorCode);
-            Assert.AreEqual(errorMessage, result.Error.ErrorMessage);
+            Assert.AreNotEqual(0, result.Error.Code);
+            Assert.IsTrue(result.Error.Message.Contains(errorMessage));
         }
 
         [TestCase()]
@@ -719,8 +712,8 @@ namespace Bittrex.Net.UnitTests.Core
 
             // assert
             Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Error.ErrorMessage);
-            Assert.IsTrue(result.Error.ErrorMessage.Contains("TestErrorNotValidJson"));
+            Assert.IsNotNull(result.Error.Message);
+            Assert.IsTrue(result.Error.Message.Contains("TestErrorNotValidJson"));
         }
 
         [TestCase()]
@@ -790,7 +783,7 @@ namespace Bittrex.Net.UnitTests.Core
             // assert
             Assert.IsFalse(result.Success);
             Assert.IsNotNull(result.Error);
-            Assert.IsTrue(result.Error.ErrorMessage.Contains("InvalidStatusCodeResponse"));
+            Assert.IsTrue(result.Error.Message.Contains("InvalidStatusCodeResponse"));
         }
 
         [TestCase()]
@@ -807,7 +800,7 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.IsFalse(result.Success);
         }
 
-        private BittrexApiResult<T> WrapInResult<T>(T data, bool success = true, string message = null)
+        private BittrexApiResult<T> WrapInResult<T>(T data, bool success = true, string message = null) where T: class
         {
             var result = new BittrexApiResult<T>();
             result.GetType().GetProperty("Result").SetValue(result, data);
@@ -828,13 +821,14 @@ namespace Bittrex.Net.UnitTests.Core
 
             var request = new Mock<IRequest>();
             request.Setup(c => c.Headers).Returns(new WebHeaderCollection());
+            request.Setup(c => c.Uri).Returns(new Uri("http://www.test.com"));
             request.Setup(c => c.GetResponse()).Returns(response.Object);
 
             var factory = new Mock<IRequestFactory>();
             factory.Setup(c => c.Create(It.IsAny<string>()))
                 .Returns(request.Object);
 
-            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiKey = "Test", ApiSecret = "Test2"}) : new BittrexClient();
+            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiCredentials = new ApiCredentials("Test","Test2") }) : new BittrexClient();
             client.RequestFactory = factory.Object;
             return client;
         }
@@ -866,7 +860,7 @@ namespace Bittrex.Net.UnitTests.Core
             factory.Setup(c => c.Create(It.IsAny<string>()))
                 .Returns(request.Object);
 
-            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiKey = "Test", ApiSecret = "Test2" }) : new BittrexClient();
+            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiCredentials = new ApiCredentials("Test", "Test2") }) : new BittrexClient();
             client.RequestFactory = factory.Object;
             return client;
         }

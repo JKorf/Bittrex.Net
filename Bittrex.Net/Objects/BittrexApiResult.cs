@@ -20,7 +20,7 @@ namespace Bittrex.Net.Objects
         public T Result { get; internal set; }
 
         [JsonProperty("message")]
-        public string Message { get; set; }
+        public string Message { get; internal set; }
 
         /// <summary>
         /// The error if the call wasn't successful
