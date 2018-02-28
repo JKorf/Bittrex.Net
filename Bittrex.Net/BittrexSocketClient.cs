@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Bittrex.Net.Errors;
-using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,10 +10,12 @@ using Bittrex.Net.Interfaces;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Bittrex.Net.Sockets;
+using CryptoExchange.Net;
+using CryptoExchange.Net.Logging;
 
 namespace Bittrex.Net
 {
-    public class BittrexSocketClient: BittrexAbstractClient
+    public class BittrexSocketClient: ExchangeClient
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
@@ -77,7 +77,7 @@ namespace Bittrex.Net
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClient(BittrexSocketClientOptions options)
+        public BittrexSocketClient(BittrexSocketClientOptions options): base(options, null)
         {
             localRegistrations = new List<BittrexRegistration>();
 
@@ -108,7 +108,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="QueryExchangeStateAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexStreamQueryExchangeState> QueryExchangeState(string marketName) => QueryExchangeStateAsync(marketName).Result;
+        public CallResult<BittrexStreamQueryExchangeState> QueryExchangeState(string marketName) => QueryExchangeStateAsync(marketName).Result;
 
         /// <summary>
         /// Gets basic/initial info of a specific market
@@ -118,10 +118,10 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <returns>The current exchange state</returns>
-        public async Task<BittrexApiResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
+        public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
         {
             if (!CheckConnection())
-                return ThrowErrorMessage<BittrexStreamQueryExchangeState>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                return new CallResult<BittrexStreamQueryExchangeState>(null, new CantConnectError());
             
             var result = await proxy.Invoke<JObject>("QueryExchangeState", marketName).ConfigureAwait(false);
 
@@ -131,13 +131,13 @@ namespace Bittrex.Net
                 json = result.ToString();
                 BittrexStreamQueryExchangeState streamData = JsonConvert.DeserializeObject<BittrexStreamQueryExchangeState>(json);
                 streamData.MarketName = marketName;
-                return new BittrexApiResult<BittrexStreamQueryExchangeState>() {Success = true, Result = streamData};
+                return new CallResult<BittrexStreamQueryExchangeState>(streamData, null);
             }
             catch (Exception e)
             {
                 var data = $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {json}";
                 log.Write(LogVerbosity.Warning, data);
-                return ThrowErrorMessage<BittrexStreamQueryExchangeState>(BittrexErrors.GetError(BittrexErrorKey.UnknownError), data);
+                return new CallResult<BittrexStreamQueryExchangeState>(null, new UnknownError(data));
             }
         }
 
@@ -145,7 +145,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="SubscribeToMarketDeltaStreamAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate) => SubscribeToMarketDeltaStreamAsync(marketName, onUpdate).Result;
+        public CallResult<int> SubscribeToMarketDeltaStream(string marketName, Action<BittrexMarketSummary> onUpdate) => SubscribeToMarketDeltaStreamAsync(marketName, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to filled orders on a specific market
@@ -153,13 +153,13 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToMarketDeltaStreamAsync(string marketName, Action<BittrexMarketSummary> onUpdate)
+        public async Task<CallResult<int>> SubscribeToMarketDeltaStreamAsync(string marketName, Action<BittrexMarketSummary> onUpdate)
         {
             return await Task.Run(() =>
             {
                 log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
                 if (!CheckConnection())
-                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                    return new CallResult<int>(0, new CantConnectError());
 
                 var registration = new BittrexMarketsRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
                 lock (registrationLock)
@@ -167,7 +167,7 @@ namespace Bittrex.Net
                     registrations.Add(registration);
                     localRegistrations.Add(registration);
                 }
-                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+                return new CallResult<int>(registration.StreamId, null);
             }).ConfigureAwait(false);
         }
 
@@ -175,7 +175,7 @@ namespace Bittrex.Net
         /// Synchronized version of the <see cref="SubscribeToExchangeDeltasAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
+        public CallResult<int> SubscribeToExchangeDeltas(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeDeltasAsync(marketName, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to updates on a specific market
@@ -183,10 +183,10 @@ namespace Bittrex.Net
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
+        public async Task<CallResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
             if (!CheckConnection())
-                return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                return new CallResult<int>(0, new CantConnectError());
 
             // send subscribe to bittrex
             await SubscribeToExchangeDeltas(marketName).ConfigureAwait(false);
@@ -197,7 +197,7 @@ namespace Bittrex.Net
                 registrations.Add(registration);
                 localRegistrations.Add(registration);
             }
-            return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+            return new CallResult<int>(registration.StreamId, null);
         }
 
         private async Task SubscribeToExchangeDeltas(string marketName)
@@ -213,20 +213,20 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate"></param>
         /// <returns></returns>
-        public BittrexApiResult<int> SubscribeToAllMarketDeltaStream(Action<List<BittrexMarketSummary>> onUpdate) => SubscribeToAllMarketDeltaStreamAsync(onUpdate).Result;
+        public CallResult<int> SubscribeToAllMarketDeltaStream(Action<List<BittrexMarketSummary>> onUpdate) => SubscribeToAllMarketDeltaStreamAsync(onUpdate).Result;
 
         /// <summary>
         /// Subscribes to updates of all markets
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
-        public async Task<BittrexApiResult<int>> SubscribeToAllMarketDeltaStreamAsync(Action<List<BittrexMarketSummary>> onUpdate)
+        public async Task<CallResult<int>> SubscribeToAllMarketDeltaStreamAsync(Action<List<BittrexMarketSummary>> onUpdate)
         {
             return await Task.Run(() =>
             {
                 log.Write(LogVerbosity.Debug, $"Going to subscribe to all markets");
                 if (!CheckConnection())
-                    return ThrowErrorMessage<int>(BittrexErrors.GetError(BittrexErrorKey.CantConnectToServer));
+                    return new CallResult<int>(0, new CantConnectError());
 
                 var registration = new BittrexMarketsAllRegistration() { Callback = onUpdate, StreamId = NextStreamId };
                 lock (registrationLock)
@@ -234,7 +234,7 @@ namespace Bittrex.Net
                     registrations.Add(registration);
                     localRegistrations.Add(registration);
                 }
-                return new BittrexApiResult<int>() { Result = registration.StreamId, Success = true };
+                return new CallResult<int>(registration.StreamId, null);
             }).ConfigureAwait(false);
         }
 
@@ -315,8 +315,8 @@ namespace Bittrex.Net
                 if (connection == null)
                 {
                     connection = ConnectionFactory.Create(socketAddress);
-                    if (proxyHost != null && proxyPort != 0)
-                        connection.SetProxy(proxyHost, proxyPort);
+                    if (apiProxy != null)
+                        connection.SetProxy(apiProxy.Host, apiProxy.Port);
                     
                     proxy = connection.CreateHubProxy(HubName);
 

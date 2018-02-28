@@ -70,9 +70,5 @@ namespace Bittrex.Net.Objects
         /// Timestamp when the order was closed
         /// </summary>
         public DateTime? Closed { get; set; }
-        /// <summary>
-        /// Whether the order is being canceled
-        /// </summary>
-        public bool CancelInitiated { get; set; }
     }
 }

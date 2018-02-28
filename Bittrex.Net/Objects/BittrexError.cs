@@ -10,5 +10,10 @@
             ErrorCode = errorCode;
             ErrorMessage = errorMessage;
         }
+
+        public override string ToString()
+        {
+            return $"{ErrorCode}: {ErrorMessage}";
+        }
     }
 }

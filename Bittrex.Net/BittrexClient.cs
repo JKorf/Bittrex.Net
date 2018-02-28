@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
-using Bittrex.Net.Errors;
-using Bittrex.Net.Interfaces;
-using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
-using Bittrex.Net.RateLimiter;
 using Newtonsoft.Json;
-using Bittrex.Net.Requests;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Interfaces;
+using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 
 namespace Bittrex.Net
 {
-    public class BittrexClient: BittrexAbstractClient, IBittrexClient
+    public class BittrexClient: ExchangeClient, IBittrexClient
     {
         #region fields
-
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
-
-        protected string apiKey;
-        protected HMACSHA512 encryptor;
-
+        
         private string baseAddress;
 
         private const string Api = "api";
@@ -58,14 +48,9 @@ namespace Bittrex.Net
         private const string OrderHistoryEndpoint = "account/getorderhistory";
         private const string WithdrawalHistoryEndpoint = "account/getwithdrawalhistory";
         private const string DepositHistoryEndpoint = "account/getdeposithistory";
-
-        private int maxRetries;
-        private List<IRateLimiter> rateLimiters = new List<IRateLimiter>();
         #endregion
 
         #region properties
-        private long nonce => DateTime.UtcNow.Ticks;
-        public IRequestFactory RequestFactory { get; set; } = new RequestFactory();
         #endregion
 
         #region constructor/destructor
@@ -79,7 +64,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Create a new instance of the BittrexClient with the provided options
         /// </summary>
-        public BittrexClient(BittrexClientOptions options)
+        public BittrexClient(BittrexClientOptions options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             Configure(options);
         }
@@ -96,23 +81,6 @@ namespace Bittrex.Net
             defaultOptions = options;
         }
 
-        private void Configure(BittrexClientOptions options)
-        {
-            base.Configure(options);
-
-            if(options.ApiKey != null)
-                SetApiKey(options.ApiKey);
-            if (options.ApiSecret != null)
-                SetApiSecret(options.ApiSecret);
-
-            maxRetries = options.MaxCallRetry;
-            baseAddress = options.BaseAddress;
-
-            foreach (var rateLimiter in options.RateLimiters)
-                rateLimiters.Add(rateLimiter);
-        }
-
-
         /// <summary>
         /// Set the API key and secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
         /// </summary>
@@ -120,154 +88,109 @@ namespace Bittrex.Net
         /// <param name="apiSecret">The api secret</param>
         public void SetApiCredentials(string apiKey, string apiSecret)
         {
-            SetApiKey(apiKey);
-            SetApiSecret(apiSecret);
-        }
-
-        /// <summary>
-        /// Sets the API Key. Api keys can be managed at https://bittrex.com/Manage#sectionApi
-        /// </summary>
-        /// <param name="apiKey">The api key</param>
-        public void SetApiKey(string apiKey)
-        {
-            if (string.IsNullOrEmpty(apiKey))
-                throw new ArgumentException("Api key empty");
-
-            this.apiKey = apiKey;
-        }
-
-        /// <summary>
-        /// Sets the API Secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
-        /// </summary>
-        /// <param name="apiSecret">The api secret</param>
-        public void SetApiSecret(string apiSecret)
-        {
-            if (string.IsNullOrEmpty(apiSecret))
-                throw new ArgumentException("Api secret empty");
-
-            encryptor = new HMACSHA512(Encoding.UTF8.GetBytes(apiSecret));
-        }
-
-        /// <summary>
-        /// Adds a rate limiter to the client. There are 2 choices, the <see cref="RateLimiterTotal"/> and the <see cref="RateLimiterPerEndpoint"/>.
-        /// </summary>
-        /// <param name="limiter">The limiter to add</param>
-        public void AddRateLimiter(IRateLimiter limiter)
-        {
-            rateLimiters.Add(limiter);
-        }
-
-        /// <summary>
-        /// Removes all rate limiters from this client
-        /// </summary>
-        public void RemoveRateLimiters()
-        {
-            rateLimiters.Clear();
+            SetAuthenticationProvider(new BittrexAuthenticationProvider(new ApiCredentials(apiKey, apiSecret)));
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetMarketsAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexMarket[]> GetMarkets() => GetMarketsAsync().Result;
+        public CallResult<BittrexMarket[]> GetMarkets() => GetMarketsAsync().Result;
 
         /// <summary>
         /// Gets information about all available markets
         /// </summary>
         /// <returns>List of markets</returns>
-        public async Task<BittrexApiResult<BittrexMarket[]>> GetMarketsAsync()
+        public async Task<CallResult<BittrexMarket[]>> GetMarketsAsync()
         {
-            return await ExecuteRequest<BittrexMarket[]>(GetUrl(MarketsEndpoint, Api, ApiVersion)).ConfigureAwait(false);
+            return await Execute<BittrexMarket[]>(GetUrl(MarketsEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetCurrenciesAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexCurrency[]> GetCurrencies() => GetCurrenciesAsync().Result;
+        public CallResult<BittrexCurrency[]> GetCurrencies() => GetCurrenciesAsync().Result;
 
         /// <summary>
         /// Gets information about all available currencies
         /// </summary>
         /// <returns>List of currencies</returns>
-        public async Task<BittrexApiResult<BittrexCurrency[]>> GetCurrenciesAsync()
+        public async Task<CallResult<BittrexCurrency[]>> GetCurrenciesAsync()
         {
-            return await ExecuteRequest<BittrexCurrency[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
+            return await Execute<BittrexCurrency[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetTickerAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexPrice> GetTicker(string market) => GetTickerAsync(market).Result;
+        public CallResult<BittrexPrice> GetTicker(string market) => GetTickerAsync(market).Result;
 
         /// <summary>
         /// Gets the price of a market
         /// </summary>
         /// <param name="market">Market to get price for</param>
         /// <returns>The current ask, bid and last prices for the market</returns>
-        public async Task<BittrexApiResult<BittrexPrice>> GetTickerAsync(string market)
+        public async Task<CallResult<BittrexPrice>> GetTickerAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "market", market }
             };
 
-            return await ExecuteRequest<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexPrice>(GetUrl(TickerEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetMarketSummaryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexMarketSummary> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
+        public CallResult<BittrexMarketSummary> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
 
         /// <summary>
         /// Gets a summary of the market
         /// </summary>
         /// <param name="market">The market to get info for</param>
         /// <returns>List with single entry containing info for the market</returns>
-        public async Task<BittrexApiResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market)
+        public async Task<CallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "market", market }
             };
 
-            var result = await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
-            if (!result.Success || result.Result.Length == 0)
-                return ThrowErrorMessage<BittrexMarketSummary>(result.Error);
-
-            return new BittrexApiResult<BittrexMarketSummary>() { Result = result.Result[0], Success = true, Error = result.Error};
+            var result = await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return new CallResult<BittrexMarketSummary>(result.Data.Any() ? result.Data[0]: null, result.Error);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetMarketSummariesAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexMarketSummary[]> GetMarketSummaries() => GetMarketSummariesAsync().Result;
+        public CallResult<BittrexMarketSummary[]> GetMarketSummaries() => GetMarketSummariesAsync().Result;
 
         /// <summary>
         /// Gets a summary for all markets
         /// </summary>
         /// <returns>List of summaries for all markets</returns>
-        public async Task<BittrexApiResult<BittrexMarketSummary[]>> GetMarketSummariesAsync()
+        public async Task<CallResult<BittrexMarketSummary[]>> GetMarketSummariesAsync()
         {
-            return await ExecuteRequest<BittrexMarketSummary[]>(GetUrl(MarketSummariesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
+            return await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummariesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetOrderBookAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrderBook> GetOrderBook(string market) => GetOrderBookAsync(market).Result;
+        public CallResult<BittrexOrderBook> GetOrderBook(string market) => GetOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book with bids and asks for a market
         /// </summary>
         /// <param name="market">The market to get the order book for</param>
         /// <returns>Orderbook for the market</returns>
-        public async Task<BittrexApiResult<BittrexOrderBook>> GetOrderBookAsync(string market)
+        public async Task<CallResult<BittrexOrderBook>> GetOrderBookAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
@@ -275,21 +198,21 @@ namespace Bittrex.Net
                 { "type", "both" }
             };
 
-            return await ExecuteRequest<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexOrderBook>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetBuyOrderBookAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market) => GetBuyOrderBookAsync(market).Result;
+        public CallResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market) => GetBuyOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book with asks for a market
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
         /// <returns>Orderbook for the market</returns>
-        public async Task<BittrexApiResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market)
+        public async Task<CallResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
@@ -297,21 +220,21 @@ namespace Bittrex.Net
                 { "type", "buy" }
             };
 
-            return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetSellOrderBookAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market) => GetSellOrderBookAsync(market).Result;
+        public CallResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market) => GetSellOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book with bids for a market
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
         /// <returns>Orderbook for the market</returns>
-        public async Task<BittrexApiResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market)
+        public async Task<CallResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
@@ -319,35 +242,35 @@ namespace Bittrex.Net
                 { "type", "sell" }
             };
 
-            return await ExecuteRequest<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexOrderBookEntry[]>(GetUrl(OrderBookEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetMarketHistoryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexMarketHistory[]> GetMarketHistory(string market) => GetMarketHistoryAsync(market).Result;
+        public CallResult<BittrexMarketHistory[]> GetMarketHistory(string market) => GetMarketHistoryAsync(market).Result;
 
         /// <summary>
         /// Gets the last trades on a market
         /// </summary>
         /// <param name="market">Market to get history for</param>
         /// <returns>List of trade aggregations</returns>
-        public async Task<BittrexApiResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market)
+        public async Task<CallResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
                 { "market", market }
             };
 
-            return await ExecuteRequest<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexMarketHistory[]>(GetUrl(MarketHistoryEndpoint, Api, ApiVersion, parameters)).ConfigureAwait(false);
         }
         
         /// <summary>
         /// Synchronized version of the <see cref="GetCandlesAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexCandle[]> GetCandles(string market, TickInterval interval) => GetCandlesAsync(market, interval).Result;
+        public CallResult<BittrexCandle[]> GetCandles(string market, TickInterval interval) => GetCandlesAsync(market, interval).Result;
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
@@ -355,7 +278,7 @@ namespace Bittrex.Net
         /// <param name="market">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
-        public async Task<BittrexApiResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
+        public async Task<CallResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
@@ -363,14 +286,14 @@ namespace Bittrex.Net
                 { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
             };
 
-            return await ExecuteRequest<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexCandle[]>(GetUrl(CandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetLatestCandleAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval) => GetLatestCandleAsync(market, interval).Result;
+        public CallResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval) => GetLatestCandleAsync(market, interval).Result;
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
@@ -378,7 +301,7 @@ namespace Bittrex.Net
         /// <param name="market">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
-        public async Task<BittrexApiResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
+        public async Task<CallResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>()
             {
@@ -386,14 +309,14 @@ namespace Bittrex.Net
                 { "tickInterval", JsonConvert.SerializeObject(interval, new TickIntervalConverter(false)) }
             };
 
-            return await ExecuteRequest<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
+            return await Execute<BittrexCandle[]>(GetUrl(LatestCandleEndpoint, Api, ApiVersion2, parameters)).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="PlaceOrderAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate) => PlaceOrderAsync(side, market, quantity, rate).Result;
+        public CallResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate) => PlaceOrderAsync(side, market, quantity, rate).Result;
         
         /// <summary>
         /// Places an order
@@ -403,11 +326,8 @@ namespace Bittrex.Net
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
-        public async Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate)
+        public async Task<CallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-            
             var parameters = new Dictionary<string, string>()
             {
                 { "market", market },
@@ -416,14 +336,14 @@ namespace Bittrex.Net
             };
 
             var uri = GetUrl(side == OrderSide.Buy ? BuyLimitEndpoint : SellLimitEndpoint, Api, ApiVersion, parameters);
-            return await ExecuteRequest<BittrexGuid>(uri, true).ConfigureAwait(false);
+            return await Execute<BittrexGuid>(uri, true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="PlaceConditionalOrderAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target) => PlaceConditionalOrderAsync(side, timeInEffect, market, quantity, rate, conditionType, target).Result;
+        public CallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target) => PlaceConditionalOrderAsync(side, timeInEffect, market, quantity, rate, conditionType, target).Result;
 
         /// <summary>
         /// Places a conditional order. The order will be executed when the condition that is set becomes true.
@@ -436,11 +356,8 @@ namespace Bittrex.Net
         /// <param name="conditionType">The type of condition</param>
         /// <param name="target">The target of the condition type</param>
         /// <returns></returns>
-        public async Task<BittrexApiResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
+        public async Task<CallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOrderResult>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>()
             {
                 { "ordertype", OrderType.Limit.ToString() },
@@ -453,124 +370,109 @@ namespace Bittrex.Net
             };
 
             var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2, parameters);
-            return await ExecuteRequest<BittrexOrderResult>(uri, true).ConfigureAwait(false);
+            return await Execute<BittrexOrderResult>(uri, true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="CancelOrderAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<object> CancelOrder(Guid guid) => CancelOrderAsync(guid).Result;
+        public CallResult<object> CancelOrder(Guid guid) => CancelOrderAsync(guid).Result;
         
         /// <summary>
         /// Cancels an open order
         /// </summary>
         /// <param name="guid">The Guid of the order to cancel</param>
         /// <returns></returns>
-        public async Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid)
+        public async Task<CallResult<object>> CancelOrderAsync(Guid guid)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<object>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>()
             {
                 {"uuid", guid.ToString()}
             };
 
-            return await ExecuteRequest<object>(GetUrl(CancelEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<object>(GetUrl(CancelEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetOpenOrdersAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
+        public CallResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
         /// <param name="market">Filter list by market</param>
         /// <returns>List of open orders</returns>
-        public async Task<BittrexApiResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null)
+        public async Task<CallResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOpenOrdersOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>();
-            AddOptionalParameter(parameters, "market", market);
+            parameters.AddOptionalParameter("market", market);
 
-            return await ExecuteRequest<BittrexOpenOrdersOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexOpenOrdersOrder[]>(GetUrl(OpenOrdersEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetBalanceAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexBalance> GetBalance(string currency) => GetBalanceAsync(currency).Result;
+        public CallResult<BittrexBalance> GetBalance(string currency) => GetBalanceAsync(currency).Result;
 
         /// <summary>
         /// Gets the balance of a single currency
         /// </summary>
         /// <param name="currency">Currency to get the balance for</param>
         /// <returns>The balance of the currency</returns>
-        public async Task<BittrexApiResult<BittrexBalance>> GetBalanceAsync(string currency)
+        public async Task<CallResult<BittrexBalance>> GetBalanceAsync(string currency)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexBalance>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>()
             {
                 {"currency", currency}
             };
-            return await ExecuteRequest<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexBalance>(GetUrl(BalanceEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetBalancesAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexBalance[]> GetBalances() => GetBalancesAsync().Result;
+        public CallResult<BittrexBalance[]> GetBalances() => GetBalancesAsync().Result;
 
         /// <summary>
         /// Gets a list of all balances for the current account
         /// </summary>
         /// <returns>List of balances</returns>
-        public async Task<BittrexApiResult<BittrexBalance[]>> GetBalancesAsync()
+        public async Task<CallResult<BittrexBalance[]>> GetBalancesAsync()
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexBalance[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
-            return await ExecuteRequest<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true).ConfigureAwait(false);
+            return await Execute<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetDepositAddressAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexDepositAddress> GetDepositAddress(string currency) => GetDepositAddressAsync(currency).Result;
+        public CallResult<BittrexDepositAddress> GetDepositAddress(string currency) => GetDepositAddressAsync(currency).Result;
 
         /// <summary>
         /// Gets the desposit address for a specific currency
         /// </summary>
         /// <param name="currency">Currency to get deposit address for</param>
         /// <returns>The deposit address of the currency</returns>
-        public async Task<BittrexApiResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
+        public async Task<CallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexDepositAddress>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>()
             {
                 {"currency", currency}
             };
-            return await ExecuteRequest<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexDepositAddress>(GetUrl(DepositAddressEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="WithdrawAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
+        public CallResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
 
         /// <summary>
         /// Places a withdraw request on Bittrex
@@ -580,175 +482,94 @@ namespace Bittrex.Net
         /// <param name="address">The address to withdraw to</param>
         /// <param name="paymentId">Optional string identifier to add to the withdraw</param>
         /// <returns>Guid of the withdrawal</returns>
-        public async Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null)
+        public async Task<CallResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexGuid>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>()
             {
                 {"currency", currency},
                 {"quantity", quantity.ToString(CultureInfo.InvariantCulture)},
                 {"address", address},
             };
-            AddOptionalParameter(parameters, "paymentid", paymentId);
+            parameters.AddOptionalParameter("paymentid", paymentId);
 
-            return await ExecuteRequest<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexGuid>(GetUrl(WithdrawEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetOrderAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexAccountOrder> GetOrder(Guid guid) => GetOrderAsync(guid).Result;
+        public CallResult<BittrexAccountOrder> GetOrder(Guid guid) => GetOrderAsync(guid).Result;
 
         /// <summary>
         /// Gets an order by it's guid
         /// </summary>
         /// <param name="guid">The guid of the order</param>
         /// <returns>The requested order</returns>
-        public async Task<BittrexApiResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
+        public async Task<CallResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexAccountOrder>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>()
             {
                 {"uuid", guid.ToString()}
             };
-            return await ExecuteRequest<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            return await Execute<BittrexAccountOrder>(GetUrl(OrderEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetOrderHistoryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
+        public CallResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
 
         /// <summary>
         /// Gets the order history for the current account
         /// </summary>
         /// <param name="market">Filter on market</param>
         /// <returns>List of orders</returns>
-        public async Task<BittrexApiResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null)
+        public async Task<CallResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexOrderHistoryOrder[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>();
-            AddOptionalParameter(parameters, "market", market);
-            return await ExecuteRequest<BittrexOrderHistoryOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            parameters.AddOptionalParameter("market", market);
+            return await Execute<BittrexOrderHistoryOrder[]>(GetUrl(OrderHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetWithdrawalHistoryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null) => GetWithdrawalHistoryAsync(currency).Result;
+        public CallResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null) => GetWithdrawalHistoryAsync(currency).Result;
 
         /// <summary>
         /// Gets the withdrawal history of the current account
         /// </summary>
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of withdrawals</returns>
-        public async Task<BittrexApiResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
+        public async Task<CallResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexWithdrawal[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>();
-            AddOptionalParameter(parameters, "currency", currency);
-            return await ExecuteRequest<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            parameters.AddOptionalParameter("currency", currency);
+            return await Execute<BittrexWithdrawal[]>(GetUrl(WithdrawalHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Synchronized version of the <see cref="GetDepositHistoryAsync"/> method
         /// </summary>
         /// <returns></returns>
-        public BittrexApiResult<BittrexDeposit[]> GetDepositHistory(string currency = null) => GetDepositHistoryAsync(currency).Result;
+        public CallResult<BittrexDeposit[]> GetDepositHistory(string currency = null) => GetDepositHistoryAsync(currency).Result;
 
         /// <summary>
         /// Gets the deposit history of the current account
         /// </summary>
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of deposits</returns>
-        public async Task<BittrexApiResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
+        public async Task<CallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
         {
-            if (apiKey == null || encryptor == null)
-                return ThrowErrorMessage<BittrexDeposit[]>(BittrexErrors.GetError(BittrexErrorKey.NoApiCredentialsProvided));
-
             var parameters = new Dictionary<string, string>();
-            AddOptionalParameter(parameters, "currency", currency);
-            return await ExecuteRequest<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
+            parameters.AddOptionalParameter("currency", currency);
+            return await Execute<BittrexDeposit[]>(GetUrl(DepositHistoryEndpoint, Api, ApiVersion, parameters), true).ConfigureAwait(false);
         }
         #endregion
         #region private
-        protected async Task<BittrexApiResult<T>> ExecuteRequest<T>(Uri uri, bool signed = false, int currentTry = 0)
-        {
-            string returnedData = "";
-            try
-            {
-                var uriString = uri.ToString();
-                if (signed)
-                {
-                    if (!uriString.EndsWith("?"))
-                        uriString += "&";
-
-                    uriString += $"apiKey={apiKey}&nonce={nonce}";
-                }
-
-                var request = RequestFactory.Create(uriString);
-                if (proxyHost != null && proxyPort != -1)
-                    request.SetProxy(proxyHost, proxyPort);
-
-                if (signed)
-                    request.Headers.Add("apisign",
-                        ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uriString))));
-
-                foreach (var limiter in rateLimiters)
-                {
-                    double limitedBy = limiter.LimitRequest(uri.AbsolutePath);
-                    if(limitedBy > 0)
-                        log.Write(LogVerbosity.Debug, $"Request {uri.AbsolutePath} was limited by {limitedBy}ms by {limiter.GetType().Name}");
-                }
-
-                log.Write(LogVerbosity.Debug, $"Sending request to {uriString}");
-                var response = request.GetResponse();
-                using (var reader = new StreamReader(response.GetResponseStream()))
-                {
-                    returnedData = await reader.ReadToEndAsync().ConfigureAwait(false);
-                    var result = JsonConvert.DeserializeObject<BittrexApiResult<T>>(returnedData);
-                    if (!result.Success)
-                    {
-                        log.Write(LogVerbosity.Debug, $"Call failed to {uri}, Error message: {result.Message}");
-                        result.Error = new BittrexError(6000, result.Message);
-                        result.Message = null;
-                    }
-                    return result;
-                }
-            }
-            catch (WebException we)
-            {
-                if (currentTry < maxRetries)
-                    return await ExecuteRequest<T>(uri, signed, ++currentTry).ConfigureAwait(false);
-
-                var response = (HttpWebResponse)we.Response;
-                string infoMessage = response == null ? "No response from server" : $"Status: {response.StatusCode}-{response.StatusDescription}, Message: {we.Message}";
-                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ErrorWeb), infoMessage);
-            }
-            catch (JsonReaderException jre)
-            {
-                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ParseErrorReader), $"Error occured at Path: {jre.Path}, LineNumber: {jre.LineNumber}, LinePosition: {jre.LinePosition}. Received data: {returnedData}");
-            }
-            catch (JsonSerializationException jse)
-            {
-                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.ParseErrorSerialization), $"Message: {jse.Message}. Received data: {returnedData}");
-            }
-            catch (Exception e)
-            {
-                return ThrowErrorMessage<T>(BittrexErrors.GetError(BittrexErrorKey.UnknownError), $"Message: {e.Message}");
-            }
-        }
 
         protected Uri GetUrl(string endpoint, string api, string version, Dictionary<string, string> parameters = null)
         {
@@ -758,24 +579,28 @@ namespace Bittrex.Net
             return new Uri(result);
         }
 
-        private void AddOptionalParameter(Dictionary<string, string> dictionary, string key, string value)
+        private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false) where T: class
         {
-            if (value != null)
-                dictionary.Add(key, value);
+            return GetResult(await ExecuteRequest<BittrexApiResult<T>>(uri, "GET", null, signed).ConfigureAwait(false));
         }
 
-        private string ByteToString(byte[] buff)
+        private CallResult<T> GetResult<T>(CallResult<BittrexApiResult<T>> result) where T : class
         {
-            var sbinary = "";
-            foreach (byte t in buff)
-                sbinary += t.ToString("X2"); /* hex format */
-            return sbinary;
-        }
+            if (result.Error != null || result.Data == null)
+                return new CallResult<T>(null, result.Error);
+            if (result.Data.Error != null)
+                return new CallResult<T>(null, new ServerError(result.Data.Error.ToString()));
 
-        public override void Dispose()
+            return new CallResult<T>(result.Data.Result, null);
+        }
+        
+        private void Configure(BittrexClientOptions options)
         {
-            base.Dispose();
-            encryptor?.Dispose();
+            base.Configure(options);
+            if (options.ApiCredentials != null)
+                SetAuthenticationProvider(new BittrexAuthenticationProvider(options.ApiCredentials));
+
+            baseAddress = options.BaseAddress;
         }
 
         #endregion

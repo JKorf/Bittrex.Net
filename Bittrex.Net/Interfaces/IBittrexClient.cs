@@ -1,87 +1,80 @@
 ﻿using Bittrex.Net.Objects;
-using Bittrex.Net.RateLimiter;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using CryptoExchange.Net;
+using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net.Interfaces
 {
-    public interface IBittrexClient
+    public interface IBittrexClient: IExchangeClient
     {
-        IRequestFactory RequestFactory { get; set; }
+        CallResult<BittrexMarket[]> GetMarkets();
+        Task<CallResult<BittrexMarket[]>> GetMarketsAsync();
 
-        void AddRateLimiter(IRateLimiter limiter);
-        void RemoveRateLimiters();
+        CallResult<BittrexCurrency[]> GetCurrencies();
+        Task<CallResult<BittrexCurrency[]>> GetCurrenciesAsync();
 
-        BittrexApiResult<BittrexMarket[]> GetMarkets();
-        Task<BittrexApiResult<BittrexMarket[]>> GetMarketsAsync();
+        CallResult<BittrexPrice> GetTicker(string market);
+        Task<CallResult<BittrexPrice>> GetTickerAsync(string market);
 
-        BittrexApiResult<BittrexCurrency[]> GetCurrencies();
-        Task<BittrexApiResult<BittrexCurrency[]>> GetCurrenciesAsync();
+        CallResult<BittrexMarketSummary> GetMarketSummary(string market);
+        Task<CallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market);
 
-        BittrexApiResult<BittrexPrice> GetTicker(string market);
-        Task<BittrexApiResult<BittrexPrice>> GetTickerAsync(string market);
+        CallResult<BittrexMarketSummary[]> GetMarketSummaries();
+        Task<CallResult<BittrexMarketSummary[]>> GetMarketSummariesAsync();
 
-        BittrexApiResult<BittrexMarketSummary> GetMarketSummary(string market);
-        Task<BittrexApiResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market);
+        CallResult<BittrexOrderBook> GetOrderBook(string market);
+        Task<CallResult<BittrexOrderBook>> GetOrderBookAsync(string market);
 
-        BittrexApiResult<BittrexMarketSummary[]> GetMarketSummaries();
-        Task<BittrexApiResult<BittrexMarketSummary[]>> GetMarketSummariesAsync();
+        CallResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market);
+        Task<CallResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market);
 
-        BittrexApiResult<BittrexOrderBook> GetOrderBook(string market);
-        Task<BittrexApiResult<BittrexOrderBook>> GetOrderBookAsync(string market);
+        CallResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market);
+        Task<CallResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market);
 
-        BittrexApiResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market);
-        Task<BittrexApiResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market);
+        CallResult<BittrexMarketHistory[]> GetMarketHistory(string market);
+        Task<CallResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market);
 
-        BittrexApiResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market);
-        Task<BittrexApiResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market);
+        CallResult<BittrexCandle[]> GetCandles(string market, TickInterval interval);
+        Task<CallResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval);
 
-        BittrexApiResult<BittrexMarketHistory[]> GetMarketHistory(string market);
-        Task<BittrexApiResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market);
+        CallResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval);
+        Task<CallResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval);
 
-        BittrexApiResult<BittrexCandle[]> GetCandles(string market, TickInterval interval);
-        Task<BittrexApiResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval);
+        CallResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate);
+        Task<CallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate);
 
-        BittrexApiResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval);
-        Task<BittrexApiResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval);
+        CallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
+        Task<CallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
 
-        BittrexApiResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate);
-        Task<BittrexApiResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate);
+        CallResult<object> CancelOrder(Guid guid);
+        Task<CallResult<object>> CancelOrderAsync(Guid guid);
 
-        BittrexApiResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
-        Task<BittrexApiResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
+        CallResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null);
+        Task<CallResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null);
 
-        BittrexApiResult<object> CancelOrder(Guid guid);
-        Task<BittrexApiResult<object>> CancelOrderAsync(Guid guid);
+        CallResult<BittrexBalance> GetBalance(string currency);
+        Task<CallResult<BittrexBalance>> GetBalanceAsync(string currency);
 
-        BittrexApiResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null);
-        Task<BittrexApiResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null);
+        CallResult<BittrexBalance[]> GetBalances();
+        Task<CallResult<BittrexBalance[]>> GetBalancesAsync();
 
-        BittrexApiResult<BittrexBalance> GetBalance(string currency);
-        Task<BittrexApiResult<BittrexBalance>> GetBalanceAsync(string currency);
+        CallResult<BittrexDepositAddress> GetDepositAddress(string currency);
+        Task<CallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency);
 
-        BittrexApiResult<BittrexBalance[]> GetBalances();
-        Task<BittrexApiResult<BittrexBalance[]>> GetBalancesAsync();
+        CallResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null);
+        Task<CallResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null);
 
-        BittrexApiResult<BittrexDepositAddress> GetDepositAddress(string currency);
-        Task<BittrexApiResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency);
+        CallResult<BittrexAccountOrder> GetOrder(Guid guid);
+        Task<CallResult<BittrexAccountOrder>> GetOrderAsync(Guid guid);
 
-        BittrexApiResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null);
-        Task<BittrexApiResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null);
+        CallResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null);
+        Task<CallResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null);
 
-        BittrexApiResult<BittrexAccountOrder> GetOrder(Guid guid);
-        Task<BittrexApiResult<BittrexAccountOrder>> GetOrderAsync(Guid guid);
+        CallResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null);
+        Task<CallResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null);
 
-        BittrexApiResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null);
-        Task<BittrexApiResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null);
-
-        BittrexApiResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null);
-        Task<BittrexApiResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null);
-        
-        BittrexApiResult<BittrexDeposit[]> GetDepositHistory(string currency = null);
-        Task<BittrexApiResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null);
+        CallResult<BittrexDeposit[]> GetDepositHistory(string currency = null);
+        Task<CallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null);
     }
 }

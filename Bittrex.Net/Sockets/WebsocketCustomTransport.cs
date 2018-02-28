@@ -154,13 +154,8 @@ namespace Bittrex.Net.Sockets
                 foreach (Cookie cookie in container)
                     cookies.Add(cookie.Name, cookie.Value);
             }
-            
-#if !NETSTANDARD
-            _websocket = new WebsocketSharp(url, _connection.CookieContainer.GetCookieHeader(new Uri(url)), BittrexSocketClient.UserAgent);
-#else
+    
             _websocket = new Websocket4Net(url, cookies, _connection.Headers);
-#endif           
-
             _websocket.OnError += WebSocketOnError;
             _websocket.OnOpen += WebSocketOnOpened;
             _websocket.OnClose += WebSocketOnClosed;

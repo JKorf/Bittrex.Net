@@ -17,28 +17,17 @@ namespace Bittrex.Net.Sockets
         List<Action> openhandlers = new List<Action>();
         List<Action> closehandlers = new List<Action>();
         List<Action<string>> messagehandlers = new List<Action<string>>();
-#if NETSTANDARD
         ClientWebSocket socket;
-#else
-        CustomWebsocket socket;
-#endif
         string url;
         CancellationTokenSource tokenSource;
 
         public WebsocketNative(string url, string cookieHeader, string userAgent)
         {
             tokenSource = new CancellationTokenSource();
-
-#if NETSTANDARD
+            
             socket = new ClientWebSocket();
             socket.Options.SetRequestHeader("Cookie", cookieHeader);
-            socket.Options.SetRequestHeader("User-Agent", userAgent);           
-#else
-            socket = new CustomWebsocket();
-            socket.Options.RequestHeaders.Add("Cookie", cookieHeader);
-            socket.Options.RequestHeaders.Add("User-Agent", userAgent);
-#endif
-
+            socket.Options.SetRequestHeader("User-Agent", userAgent); 
 
             this.url = url;
         }
