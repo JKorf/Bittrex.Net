@@ -21,6 +21,9 @@ namespace Bittrex.Net
             if (!signed)
                 return uri;
 
+            if (!uri.Contains("?"))
+                uri += "?";
+
             if (!uri.EndsWith("?"))
                 uri += "&";
 
