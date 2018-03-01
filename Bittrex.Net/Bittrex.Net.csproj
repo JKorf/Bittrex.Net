@@ -7,8 +7,8 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>1.4.1</PackageVersion>
-	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable C# objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
+    <PackageVersion>2.0.0</PackageVersion>
+	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
     <PackageProjectUrl>https://github.com/JKorf/Bittrex.Net</PackageProjectUrl>
@@ -16,9 +16,7 @@
 	<PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageReleaseNotes>
-	1.4.1 - 
-	* Fixes
+	<PackageReleaseNotes>2.0.0 - Updated to use a base package, which introduces some changes in syntax, but keeps functionality unchanged
 	</PackageReleaseNotes>
   </PropertyGroup>
 
@@ -28,14 +26,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />	
 	<PackageReference Include="System.Net.Http" Version="4.3.3" />		
 	<PackageReference Include="CloudFlareUtilities" Version="1.0.0" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">	
 	<PackageReference Include="WebSocket4Net" Version="0.15.2" />
   </ItemGroup>
-  
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-	<DefineConstants>NETSTANDARD</DefineConstants>
-  </PropertyGroup>
   
 </Project>

@@ -1,5 +1,4 @@
-﻿#if NETSTANDARD
-using Bittrex.Net.Interfaces;
+﻿using Bittrex.Net.Interfaces;
 using SuperSocket.ClientEngine;
 using System;
 using System.Collections.Generic;
@@ -128,4 +127,3 @@ namespace Bittrex.Net.Sockets
         }
     }
 }
-#endif
