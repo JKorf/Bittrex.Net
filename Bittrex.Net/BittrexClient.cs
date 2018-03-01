@@ -588,7 +588,7 @@ namespace Bittrex.Net
         {
             if (result.Error != null || result.Data == null)
                 return new CallResult<T>(null, result.Error);
-            if (result.Data.Message != null)
+            if (!string.IsNullOrEmpty(result.Data.Message))
                 return new CallResult<T>(null, new ServerError(result.Data.Message));
 
             return new CallResult<T>(result.Data.Result, null);
