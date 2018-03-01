@@ -9,7 +9,7 @@ namespace Bittrex.Net
     public class BittrexAuthenticationProvider: AuthenticationProvider
     {
         private long nonce => DateTime.UtcNow.Ticks;
-        private HMACSHA512 encryptor;
+        private readonly HMACSHA512 encryptor;
 
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {

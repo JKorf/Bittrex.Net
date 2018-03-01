@@ -57,8 +57,8 @@ namespace Bittrex.Net
         #endregion
 
         #region properties
-        public IConnectionFactory ConnectionFactory = new ConnectionFactory();
-        public ICloudFlareAuthenticator CloudFlareAuthenticator = new CloudFlareAuthenticator();
+        public IConnectionFactory ConnectionFactory { get; set; } = new ConnectionFactory();
+        public ICloudFlareAuthenticator CloudFlareAuthenticator { get; set; } = new CloudFlareAuthenticator();
         public int CloudFlareRetries { get; set; } = 2;
         #endregion
 
@@ -224,7 +224,7 @@ namespace Bittrex.Net
         {
             return await Task.Run(() =>
             {
-                log.Write(LogVerbosity.Debug, $"Going to subscribe to all markets");
+                log.Write(LogVerbosity.Debug, "Going to subscribe to all markets");
                 if (!CheckConnection())
                     return new CallResult<int>(0, new CantConnectError());
 
@@ -342,7 +342,7 @@ namespace Bittrex.Net
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, CloudFlareRetries);
                 if (cookieContainer == null)
                 {
-                    log.Write(LogVerbosity.Error, $"CloudFlareAuthenticator didn't give us the cookies");
+                    log.Write(LogVerbosity.Error, "CloudFlareAuthenticator didn't give us the cookies");
                     return false;
                 }
 
@@ -498,7 +498,7 @@ namespace Bittrex.Net
 
         private void TryReconnect()
         {
-            bool shouldTry = false;
+            bool shouldTry;
             lock (registrationLock)
                 shouldTry = registrations.Any();
 
