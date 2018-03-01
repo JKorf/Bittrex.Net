@@ -16,8 +16,11 @@ namespace Bittrex.Net
             encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret));
         }
 
-        public override string AddAuthenticationToUriString(string uri)
+        public override string AddAuthenticationToUriString(string uri, bool signed)
         {
+            if (!signed)
+                return uri;
+
             if (!uri.EndsWith("?"))
                 uri += "&";
 
@@ -25,8 +28,11 @@ namespace Bittrex.Net
             return uri;
         }
 
-        public override IRequest AddAuthenticationToRequest(IRequest request)
+        public override IRequest AddAuthenticationToRequest(IRequest request, bool signed)
         {
+            if (!signed)
+                return request;
+
             request.Headers.Add("apisign",
                 ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(request.Uri.ToString()))));
             return request;
