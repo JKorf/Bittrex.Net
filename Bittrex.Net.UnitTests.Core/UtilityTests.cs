@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
@@ -78,7 +79,7 @@ namespace Bittrex.Net.UnitTests.Core
             var request = new Mock<IRequest>();
             request.Setup(c => c.Headers).Returns(new WebHeaderCollection());
             request.Setup(c => c.Uri).Returns(new Uri("http://www.test.com"));
-            request.Setup(c => c.GetResponse()).Returns(response.Object);
+            request.Setup(c => c.GetResponse()).Returns(Task.FromResult(response.Object));
 
             var factory = new Mock<IRequestFactory>();
             factory.Setup(c => c.Create(It.IsAny<string>()))
