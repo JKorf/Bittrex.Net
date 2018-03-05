@@ -13,6 +13,10 @@ namespace Bittrex.Net.Objects
     public class BittrexSocketClientOptions : ExchangeOptions
     {
         /// <summary>
+        /// The max amount of retries to bypass the CloudFlare protection
+        /// </summary>
+        public int CloudFlareBypassRetries { get; set; } = 2;
+        /// <summary>
         /// The address used to get CloudFlare clearance
         /// </summary>
         public string CloudFlareAuthenticationAddress { get; set; } = "https://www.bittrex.com/";

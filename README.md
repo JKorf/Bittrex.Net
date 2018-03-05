@@ -63,7 +63,7 @@ using(var client = new BittrexClient())
 {
 	var priceResult = client.GetTicker("BTC-ETH");
 	if (priceResult.Success)
-		Console.WriteLine($"BTC-ETH price: {priceResult.Result.Last}");
+		Console.WriteLine($"BTC-ETH price: {priceResult.Data.Last}");
 	else
 		Console.WriteLine($"Error: {priceResult.Error.Message}");
 }
@@ -118,8 +118,8 @@ using(var socketClient = new BittrexSocketClient())
 		// Handle data
 	});
 	
-	socketClient.UnsubscribeFromStream(subcribtionSuccess.Result); // Unsubscribes a single sub
-        socketClient.UnsubscribeAllStreams(); // Unsubscribes all subs on this client 
+	socketClient.UnsubscribeFromStream(subcribtionSuccess.Data); // Unsubscribes a single sub
+    socketClient.UnsubscribeAllStreams(); // Unsubscribes all subs on this client 
 }
 ```
 
@@ -138,6 +138,12 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.0.2 - 05 mar 2018
+	* Fix for freezes when calling from UI thread
+
+* Version 2.0.1 - 03 mar 2018
+	* Fix for bug in URL building
+
 * Version 2.0.0 - 01 mar 2018
 	* Updated to use a base package, which introduces some changes in syntax, but keeps functionality unchanged
 	

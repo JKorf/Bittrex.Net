@@ -446,7 +446,6 @@ namespace Bittrex.Net
         /// <returns>List of balances</returns>
         public async Task<CallResult<BittrexBalance[]>> GetBalancesAsync()
         {
-            log.Write(LogVerbosity.Debug, "test");
             return await Execute<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true).ConfigureAwait(false);
         }
 

@@ -22,6 +22,7 @@ namespace Bittrex.Net
 
         private string cloudFlareAuthenticationAddress;
         private string socketAddress;
+        private int cloudFlareRetries;
 
         private const string HubName = "coreHub";
         internal const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.52";
@@ -59,10 +60,15 @@ namespace Bittrex.Net
         #region properties
         public IConnectionFactory ConnectionFactory { get; set; } = new ConnectionFactory();
         public ICloudFlareAuthenticator CloudFlareAuthenticator { get; set; } = new CloudFlareAuthenticator();
-        public int CloudFlareRetries { get; set; } = 2;
         #endregion
 
+        /// <summary>
+        /// Event that gets called when the socket connection was lost
+        /// </summary>
         public static event Action ConnectionLost;
+        /// <summary>
+        /// Event that gets called when the socket connection was restored
+        /// </summary>
         public static event Action ConnectionRestored;
         
         #region ctor
@@ -100,6 +106,7 @@ namespace Bittrex.Net
         {
             base.Configure(options);
 
+            cloudFlareRetries = options.CloudFlareBypassRetries;
             cloudFlareAuthenticationAddress = options.CloudFlareAuthenticationAddress;
             socketAddress = options.SocketAddress;
         }
@@ -135,7 +142,7 @@ namespace Bittrex.Net
             }
             catch (Exception e)
             {
-                var data = $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {json}";
+                var data = $"Received an event but an unknown error occured in BittrexStreamQueryExchangeState. Message: {e.Message}, Received data: {json}";
                 log.Write(LogVerbosity.Warning, data);
                 return new CallResult<BittrexStreamQueryExchangeState>(null, new UnknownError(data));
             }
@@ -157,7 +164,7 @@ namespace Bittrex.Net
         {
             return await Task.Run(() =>
             {
-                log.Write(LogVerbosity.Debug, $"Going to subscribe to {marketName}");
+                log.Write(LogVerbosity.Info, $"Subscribing to market deltas for {marketName}");
                 if (!CheckConnection())
                     return new CallResult<int>(0, new CantConnectError());
 
@@ -185,6 +192,7 @@ namespace Bittrex.Net
         /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
         public async Task<CallResult<int>> SubscribeToExchangeDeltasAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
+            log.Write(LogVerbosity.Info, $"Subscribing to exchange deltas for {marketName}");
             if (!CheckConnection())
                 return new CallResult<int>(0, new CantConnectError());
 
@@ -202,10 +210,8 @@ namespace Bittrex.Net
 
         private async Task SubscribeToExchangeDeltas(string marketName)
         {
-            log.Write(LogVerbosity.Debug, $"Going to subscribe to ExchangeDeltas of {marketName}");
-
             // when subscribing this we get Exchange State method calls regularly
-            await proxy.Invoke("SubscribeToExchangeDeltas", marketName);
+            await proxy.Invoke("SubscribeToExchangeDeltas", marketName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -224,7 +230,7 @@ namespace Bittrex.Net
         {
             return await Task.Run(() =>
             {
-                log.Write(LogVerbosity.Debug, "Going to subscribe to all markets");
+                log.Write(LogVerbosity.Info, "Subscribing to market deltas for all markets");
                 if (!CheckConnection())
                     return new CallResult<int>(0, new CantConnectError());
 
@@ -259,7 +265,7 @@ namespace Bittrex.Net
         /// </summary>
         public void UnsubscribeAllStreams()
         {
-            log.Write(LogVerbosity.Debug, "Unsubscribing all streams on this client");
+            log.Write(LogVerbosity.Info, "Unsubscribing all streams on this client");
             lock (registrationLock)
             {
                 registrations.RemoveAll(r => localRegistrations.Contains(r));
@@ -271,6 +277,8 @@ namespace Bittrex.Net
         
         public override void Dispose()
         {
+            log.Write(LogVerbosity.Debug, "Disposing socket client, unsubscribing all streams");
+
             base.Dispose();
             UnsubscribeAllStreams();
         }
@@ -288,7 +296,7 @@ namespace Bittrex.Net
                 {
                     lock (connectionLock)
                     {
-                        log.Write(LogVerbosity.Debug, "No more subscriptions, stopping the socket");
+                        log.Write(LogVerbosity.Info, "No more subscriptions, stopping the socket");
                         connection.Stop(TimeSpan.FromSeconds(1));
                     }
                 });
@@ -301,7 +309,7 @@ namespace Bittrex.Net
             {
                 if (connection == null || connection.State == ConnectionState.Disconnected)
                 {
-                    log.Write(LogVerbosity.Debug, "Starting connection to bittrex server");
+                    log.Write(LogVerbosity.Info, "Starting connection to bittrex server");
                     return WaitForConnection();
                 }
             }
@@ -339,7 +347,7 @@ namespace Bittrex.Net
 
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
-                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, CloudFlareRetries);
+                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, cloudFlareRetries);
                 if (cookieContainer == null)
                 {
                     log.Write(LogVerbosity.Error, "CloudFlareAuthenticator didn't give us the cookies");
@@ -348,7 +356,7 @@ namespace Bittrex.Net
 
                 connection.Cookies = cookieContainer;
                 connection.UserAgent = UserAgent;
-                log.Write(LogVerbosity.Debug, "CloudFlare cookies retrieved, retrying connection");
+                log.Write(LogVerbosity.Info, "CloudFlare cookies retrieved, retrying connection");
 
                 // Try again with cookies
                 return TryStart().ConfigureAwait(false).GetAwaiter().GetResult();
@@ -373,13 +381,15 @@ namespace Bittrex.Net
             }
             catch (Exception ex)
             {
-                log.Write(LogVerbosity.Debug, ex.ToString());
+                log.Write(LogVerbosity.Warning, ex.ToString());
             }
             waitEvent.WaitOne();
             connection.StateChanged -= waitDelegate;
             
             if (connection.State == ConnectionState.Connected)
             {
+                log.Write(LogVerbosity.Info, "Socket connection established");
+
                 // subscribe to all market deltas
                 await proxy.Invoke(MarketDeltaSub).ConfigureAwait(false);
                 
@@ -409,7 +419,7 @@ namespace Bittrex.Net
             }
             catch (Exception e)
             {
-                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
+                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. {e.GetType()} Message: {e.Message}, Received data: {jsonData[0]}");
                 return;
             }
 
@@ -437,7 +447,7 @@ namespace Bittrex.Net
             }
             catch (Exception e)
             {
-                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. Message: {e.Message}, Received data: {jsonData[0]}");
+                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. {e.GetType()} Message: {e.Message}, Received data: {jsonData[0]}");
                 return;
             }
 
@@ -478,7 +488,7 @@ namespace Bittrex.Net
 
         private void SocketClosed()
         {
-            log.Write(LogVerbosity.Debug, "Socket closed");
+            log.Write(LogVerbosity.Info, "Socket closed");
             bool shouldReconnect = false;
 
             if (!reconnecting)
