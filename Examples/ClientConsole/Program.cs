@@ -1,7 +1,8 @@
 ﻿using System;
 using Bittrex.Net;
-using Bittrex.Net.Logging;
 using Bittrex.Net.Objects;
+using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Logging;
 
 namespace Examples
 {
@@ -9,9 +10,12 @@ namespace Examples
     {
         static void Main(string[] args)
         {
-            BittrexDefaults.SetDefaultApiCredentials("APIKEY", "APISECRET");
-            BittrexDefaults.SetDefaultLogOutput(Console.Out);
-            BittrexDefaults.SetDefaultLogVerbosity(LogVerbosity.Debug);
+            BittrexClient.SetDefaultOptions(new BittrexClientOptions()
+            {
+                ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
+                LogVerbosity = LogVerbosity.Info,
+                LogWriter = Console.Out
+            });
 
             using (var client = new BittrexClient())
             {
@@ -25,10 +29,10 @@ namespace Examples
                 var marketHistory = client.GetMarketHistory("BTC-ETH");
 
                 // private
-                var placedOrder = client.PlaceOrder(OrderType.Sell, "BTC-NEO", 1, 1);
+                var placedOrder = client.PlaceOrder(OrderSide.Sell, "BTC-NEO", 1, 1);
                 var openOrders = client.GetOpenOrders("BTC-NEO");
-                var orderInfo = client.GetOrder(placedOrder.Result.Uuid);
-                var canceledOrder = client.CancelOrder(placedOrder.Result.Uuid);
+                var orderInfo = client.GetOrder(placedOrder.Data.Uuid);
+                var canceledOrder = client.CancelOrder(placedOrder.Data.Uuid);
                 var orderHistory = client.GetOrderHistory("BTC-NEO");
 
                 var balance = client.GetBalance("NEO");
@@ -47,7 +51,7 @@ namespace Examples
             });
 
             Console.ReadLine();
-            socketClient.UnsubscribeFromStream(subcribtion.Result);
+            socketClient.UnsubscribeFromStream(subcribtion.Data);
 
         }
     }

@@ -33,13 +33,13 @@ namespace WinformsClient
                 using(var client = new BittrexClient())
                 {
                     var result = client.GetMarketSummary("BTC-ETH");
-                    UpdateLastPrice(result.Result.Last);
-                    label2.Invoke(new Action(() => { label2.Text = "BTC-ETH Volume: " + result.Result.Volume; }));
+                    UpdateLastPrice(result.Data.Last);
+                    label2.Invoke(new Action(() => { label2.Text = "BTC-ETH Volume: " + result.Data.Volume; }));
                 }
             });
         }
 
-        private void UpdateLastPrice(decimal price)
+        private void UpdateLastPrice(decimal? price)
         {
             label1.Invoke(new Action(() => { label1.Text = "BTC-ETH Last price: " + price; }));
         }
