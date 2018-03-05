@@ -24,7 +24,7 @@ namespace Bittrex.Net
             if (!uri.EndsWith("?"))
                 uri += "&";
 
-            uri += $"apiKey={credentials.Key}&nonce={nonce}";
+            uri += $"apiKey={Credentials.Key}&nonce={nonce}";
             return uri;
         }
 
@@ -36,6 +36,11 @@ namespace Bittrex.Net
             request.Headers.Add("apisign",
                 ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(request.Uri.ToString()))));
             return request;
+        }
+
+        public override string Sign(string toSign)
+        {
+            throw new NotImplementedException();
         }
     }
 }
