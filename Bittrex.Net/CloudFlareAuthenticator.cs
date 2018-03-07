@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
 using CloudFlareUtilities;
 
@@ -8,7 +9,7 @@ namespace Bittrex.Net
 {
     internal class CloudFlareAuthenticator: ICloudFlareAuthenticator
     {
-        public CookieContainer GetCloudFlareCookies(string address, string userAgent, int maxRetries)
+        public async Task<CookieContainer> GetCloudFlareCookies(string address, string userAgent, int maxRetries)
         {
             int currentTry = 0;
             while (currentTry < maxRetries)
@@ -30,7 +31,7 @@ namespace Bittrex.Net
                         CookieContainer = cookies
                     }));
 
-                    client1.SendAsync(msg).Wait();
+                    await client1.SendAsync(msg).ConfigureAwait(false);
 
                     // Return the cookie container which should now contain the cloudflare access data
                     return cookies;

@@ -339,7 +339,7 @@ namespace Bittrex.Net
 
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
-                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, cloudFlareRetries);
+                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, cloudFlareRetries).Result;
                 if (cookieContainer == null)
                 {
                     log.Write(LogVerbosity.Error, "CloudFlareAuthenticator didn't give us the cookies");

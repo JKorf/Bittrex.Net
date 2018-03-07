@@ -267,7 +267,7 @@ namespace Bittrex.Net.UnitTests
             socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
             socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Disconnected)); });
 
-            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new CookieContainer()).Callback(() =>
+            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(new CookieContainer())).Callback(() =>
             {
                 cloudFlareCalled = true;
                 socket.Setup(s => s.State).Returns(ConnectionState.Connected);
@@ -290,7 +290,7 @@ namespace Bittrex.Net.UnitTests
             // arrange
             var client = PrepareClient();
             socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
-            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns<CookieContainer>(null);
+            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult<CookieContainer>(null));
             socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Disconnected)); });
 
             BittrexMarketSummary result = null;
@@ -378,7 +378,7 @@ namespace Bittrex.Net.UnitTests
             factory.Setup(s => s.Create(It.IsAny<string>())).Returns(socket.Object);
 
             cloud = new Mock<ICloudFlareAuthenticator>();
-            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(new CookieContainer());
+            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(new CookieContainer()));
             
             var client = new BittrexSocketClient { ConnectionFactory = factory.Object, CloudFlareAuthenticator = cloud.Object };
             client.GetType().GetField("connection", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, null);
