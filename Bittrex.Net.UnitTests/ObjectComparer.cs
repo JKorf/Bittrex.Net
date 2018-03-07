@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace Bittrex.Net.UnitTests.Core
+namespace Bittrex.Net.UnitTests
 {
     public class ObjectComparer
     {

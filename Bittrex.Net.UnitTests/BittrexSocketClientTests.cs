@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bittrex.Net.UnitTests.Core
+namespace Bittrex.Net.UnitTests
 {
     public class BittrexSocketClientTests
     {

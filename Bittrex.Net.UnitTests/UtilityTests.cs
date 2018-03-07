@@ -11,7 +11,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Bittrex.Net.UnitTests.Core
+namespace Bittrex.Net.UnitTests
 {
     public class UtilityTests
     {

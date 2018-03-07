@@ -15,7 +15,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Bittrex.Net.UnitTests.Core
+namespace Bittrex.Net.UnitTests
 {
     [TestFixture()]
     public class BittrexClientTests
@@ -701,106 +701,7 @@ namespace Bittrex.Net.UnitTests.Core
             Assert.AreNotEqual(0, result.Error.Code);
             Assert.IsTrue(result.Error.Message.Contains(errorMessage));
         }
-
-        [TestCase()]
-        public void ReceivingInvalidData_Should_ReturnError()
-        {
-            // arrange
-            var client = PrepareClient("TestErrorNotValidJson");
-
-            // act
-            var result = client.GetTicker("TestMarket");
-
-            // assert
-            Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Error.Message);
-            Assert.IsTrue(result.Error.Message.Contains("TestErrorNotValidJson"));
-        }
-
-        [TestCase()]
-        public void WhenUsingRateLimiterTotalRequests_Should_BeDelayed()
-        {
-            // arrange
-            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
-            client.AddRateLimiter(new RateLimiterTotal(1, TimeSpan.FromSeconds(5)));
-
-            // act
-            var sw = Stopwatch.StartNew();
-            client.GetTicker("TestMarket");
-            client.GetTicker("TestMarket");
-            client.GetTicker("TestMarket");
-            sw.Stop();
-
-            // assert
-            Assert.IsTrue(sw.ElapsedMilliseconds > 10000);
-        }
-
-        [TestCase()]
-        public void WhenUsingRateLimiterPerEndpointRequests_Should_BeDelayed()
-        {
-            // arrange
-            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
-            client.AddRateLimiter(new RateLimiterPerEndpoint(1, TimeSpan.FromSeconds(5)));
-
-            // act
-            var sw = Stopwatch.StartNew();
-            client.GetTicker("TestMarket");
-            client.GetTicker("TestMarket");
-            client.GetTicker("TestMarket");
-            sw.Stop();
-
-            // assert
-            Assert.IsTrue(sw.ElapsedMilliseconds > 10000);
-        }
-
-        [TestCase()]
-        public void WhenRemovingRateLimiterRequest_Should_NoLongerBeDelayed()
-        {
-            // arrange
-            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
-            client.AddRateLimiter(new RateLimiterPerEndpoint(1, TimeSpan.FromSeconds(5)));
-            client.RemoveRateLimiters();
-
-            // act
-            var sw = Stopwatch.StartNew();
-            client.GetTicker("TestMarket");
-            client.GetTicker("TestMarket");
-            client.GetTicker("TestMarket");
-            sw.Stop();
-
-            // assert
-            Assert.IsTrue(sw.ElapsedMilliseconds < 5000);
-        }
-
-        [TestCase()]
-        public void ReceivingErrorStatusCode_Should_NotSuccess()
-        {
-            // arrange
-            var client = PrepareExceptionClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())), "InvalidStatusCodeResponse", 203);
-
-            // act
-            var result = client.GetTicker("TestMarket");
-
-            // assert
-            Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Error);
-            Assert.IsTrue(result.Error.Message.Contains("InvalidStatusCodeResponse"));
-        }
-
-        [TestCase()]
-        public void Dispose_Should_DisposeEncryptor()
-        {
-            // arrange
-            var client = PrepareClient(JsonConvert.SerializeObject(WrapInResult(new BittrexPrice())));
-            client.Dispose();
-
-            // act
-            var result = client.GetBalances();
-
-            // assert 
-            Assert.IsFalse(result.Success);
-        }
-
+        
         private BittrexApiResult<T> WrapInResult<T>(T data, bool success = true, string message = null) where T: class
         {
             var result = new BittrexApiResult<T>();
@@ -830,38 +731,6 @@ namespace Bittrex.Net.UnitTests.Core
                 .Returns(request.Object);
 
             BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiCredentials = new ApiCredentials("Test","Test2") }) : new BittrexClient();
-            client.RequestFactory = factory.Object;
-            return client;
-        }
-
-        private BittrexClient PrepareExceptionClient(string responseData, string exceptionMessage, int statusCode, bool credentials = true)
-        {
-            var expectedBytes = Encoding.UTF8.GetBytes(responseData);
-            var responseStream = new MemoryStream();
-            responseStream.Write(expectedBytes, 0, expectedBytes.Length);
-            responseStream.Seek(0, SeekOrigin.Begin);
-            
-            var we = new WebException();
-            var r = new HttpWebResponse();
-            var re = new HttpResponseMessage();
-
-            typeof(HttpResponseMessage).GetField("_statusCode", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(re, (HttpStatusCode)statusCode);
-            typeof(HttpWebResponse).GetField("_httpResponseMessage", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(r, re);
-            typeof(WebException).GetField("_message", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(we, exceptionMessage);
-            typeof(WebException).GetField("_response", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).SetValue(we, r);
-
-            var response = new Mock<IResponse>();
-            response.Setup(c => c.GetResponseStream()).Throws(we);
-
-            var request = new Mock<IRequest>();
-            request.Setup(c => c.Headers).Returns(new WebHeaderCollection());
-            request.Setup(c => c.GetResponse()).Returns(Task.FromResult(response.Object));
-
-            var factory = new Mock<IRequestFactory>();
-            factory.Setup(c => c.Create(It.IsAny<string>()))
-                .Returns(request.Object);
-
-            BittrexClient client = credentials ? new BittrexClient(new BittrexClientOptions() { ApiCredentials = new ApiCredentials("Test", "Test2") }) : new BittrexClient();
             client.RequestFactory = factory.Object;
             return client;
         }

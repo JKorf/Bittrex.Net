@@ -131,21 +131,13 @@ namespace Bittrex.Net
                 return new CallResult<BittrexStreamQueryExchangeState>(null, new CantConnectError());
             
             var result = await proxy.Invoke<JObject>("QueryExchangeState", marketName).ConfigureAwait(false);
+            
+            var dataResult = Deserialize<BittrexStreamQueryExchangeState>(result.ToString());
+            if (!dataResult.Success)
+                return dataResult;
 
-            string json = null;
-            try
-            {
-                json = result.ToString();
-                BittrexStreamQueryExchangeState streamData = JsonConvert.DeserializeObject<BittrexStreamQueryExchangeState>(json);
-                streamData.MarketName = marketName;
-                return new CallResult<BittrexStreamQueryExchangeState>(streamData, null);
-            }
-            catch (Exception e)
-            {
-                var data = $"Received an event but an unknown error occured in BittrexStreamQueryExchangeState. Message: {e.Message}, Received data: {json}";
-                log.Write(LogVerbosity.Warning, data);
-                return new CallResult<BittrexStreamQueryExchangeState>(null, new UnknownError(data));
-            }
+            dataResult.Data.MarketName = marketName;
+            return dataResult;
         }
 
         /// <summary>
@@ -377,7 +369,7 @@ namespace Bittrex.Net
             connection.StateChanged += waitDelegate;
             try
             {
-                connection.Start().ConfigureAwait(false).GetAwaiter().GetResult();
+                await connection.Start().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -410,27 +402,18 @@ namespace Bittrex.Net
             if (jsonData.Count == 0 || jsonData[0] == null)
                 return;
 
-            BittrexStreamUpdateExchangeState data;
-            try
+            var dataResult = Deserialize<BittrexStreamUpdateExchangeState>(jsonData[0].ToString(), false);
+            if (!dataResult.Success)
             {
-                data = JsonConvert.DeserializeObject<BittrexStreamUpdateExchangeState>(jsonData[0].ToString());
-                if (data == null)
-                    return;
-            }
-            catch (Exception e)
-            {
-                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. {e.GetType()} Message: {e.Message}, Received data: {jsonData[0]}");
+                log.Write(LogVerbosity.Warning, "Error deserializing ExchangeState data: " + dataResult.Error);
                 return;
             }
 
             IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
             lock (registrationLock)
-                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>().Where(x => x.MarketName == data.MarketName);
+                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>().Where(x => x.MarketName == dataResult.Data.MarketName);
 
-            Parallel.ForEach(marketRegistrations, registration =>
-            {
-                registration.Callback(data);
-            });
+            Parallel.ForEach(marketRegistrations, registration => registration.Callback(dataResult.Data));
         }
 
         private void SocketMessageMarketDeltas(IList<JToken> jsonData)
@@ -438,16 +421,10 @@ namespace Bittrex.Net
             if (jsonData.Count == 0 || jsonData[0] == null)
                 return;
 
-            BittrexStreamDeltas data;
-            try
+            var dataResult = Deserialize<BittrexStreamDeltas>(jsonData[0].ToString(), false);
+            if (!dataResult.Success)
             {
-                data = JsonConvert.DeserializeObject<BittrexStreamDeltas>(jsonData[0].ToString());
-                if (data == null)
-                    return;
-            }
-            catch (Exception e)
-            {
-                log.Write(LogVerbosity.Warning, $"Received an event but an unknown error occured. {e.GetType()} Message: {e.Message}, Received data: {jsonData[0]}");
+                log.Write(LogVerbosity.Warning, "Error deserializing MarketDelta data: " + dataResult.Error);
                 return;
             }
 
@@ -459,12 +436,8 @@ namespace Bittrex.Net
                 marketRegistrations = registrations.OfType<BittrexMarketsRegistration>();
             }
 
-            Parallel.ForEach(allRegistrations, allRegistration =>
-            {
-                allRegistration.Callback(data.Deltas);
-            });
-
-            Parallel.ForEach(data.Deltas, delta =>
+            Parallel.ForEach(allRegistrations, allRegistration => allRegistration.Callback(dataResult.Data.Deltas));
+            Parallel.ForEach(dataResult.Data.Deltas, delta =>
             {
                 foreach (var update in marketRegistrations.Where(r => r.MarketName == delta.MarketName))
                     update.Callback(delta);
