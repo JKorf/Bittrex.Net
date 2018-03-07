@@ -9,7 +9,6 @@ using Bittrex.Net.Converters;
 using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Logging;
 
 namespace Bittrex.Net
 {
