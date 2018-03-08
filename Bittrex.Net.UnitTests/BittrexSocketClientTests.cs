@@ -259,19 +259,14 @@ namespace Bittrex.Net.UnitTests
         }
 
         [TestCase()]
-        public void WhenConnectionFailsCloudFlareBypass_Should_BeTried()
+        public void WhenConnectingCloudFlareBypass_Should_BeUsed()
         {
             // arrange
             bool cloudFlareCalled = false;
             var client = PrepareClient();
-            socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
-            socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Disconnected)); });
-
             cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult(new CookieContainer())).Callback(() =>
             {
                 cloudFlareCalled = true;
-                socket.Setup(s => s.State).Returns(ConnectionState.Connected);
-                socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Connected)); });
             });
 
             BittrexMarketSummary result = null;
@@ -285,29 +280,12 @@ namespace Bittrex.Net.UnitTests
         }
 
         [TestCase()]
-        public void WhenCloudFlareFailsSubscription_Should_Fail()
-        {
-            // arrange
-            var client = PrepareClient();
-            socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
-            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult<CookieContainer>(null));
-            socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Disconnected)); });
-
-            BittrexMarketSummary result = null;
-
-            // act
-            var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", (test) => result = test);
-
-            // assert
-            Assert.IsFalse(subscription.Success);
-        }
-
-        [TestCase()]
         public void Dispose_Should_ClearSubscriptions()
         {
             // arrange
             bool stopCalled = false;
             var client = PrepareClient();
+            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult<CookieContainer>(null));
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>())).Callback(() => stopCalled = true);
 
             var subscription = client.SubscribeToMarketDeltaStream("TestMarket1", null);
@@ -327,25 +305,20 @@ namespace Bittrex.Net.UnitTests
         public void WhenSocketDisconnectsWithSubscriptions_Should_Reconnect()
         {
             // arrange
-            bool reconnectDone = false;
-            bool closeEventDone = false;
+            int startDone = 0;
             
             var client = PrepareClient();
-            socket.Setup(s => s.State).Returns(ConnectionState.Connected);
-            socket.Setup(s => s.Start()).Callback(() =>
+            cloud.Setup(c => c.GetCloudFlareCookies(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(Task.FromResult<CookieContainer>(null));
+            
+            socket.Setup(s => s.Start()).Returns(Task.Run(() => Thread.Sleep(1))).Callback(() =>
             {
-                socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Connected));
-                if (!closeEventDone)
+                startDone++;
+                if (startDone == 1)
                 {
-                    closeEventDone = true;
                     Task.Run(() =>
                     {
-                        Thread.Sleep(2000);
-                        socket.Setup(s => s.Start()).Callback(() =>
-                        {
-                            socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Connected));
-                            reconnectDone = true;
-                        });
+                        Thread.Sleep(1000);
+                        socket.Setup(s => s.State).Returns(ConnectionState.Disconnected);
                         socket.Raise(s => s.Closed += null);
                     });
                 }
@@ -358,7 +331,7 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(subscription.Success);
-            Assert.IsTrue(reconnectDone);
+            Assert.IsTrue(startDone == 2);
         }
 
         private BittrexSocketClient PrepareClient()
@@ -370,7 +343,7 @@ namespace Bittrex.Net.UnitTests
 
             socket = new Mock<Interfaces.IHubConnection>();
             socket.Setup(s => s.Stop(It.IsAny<TimeSpan>()));
-            socket.Setup(s => s.Start()).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Connected)); });
+            socket.Setup(s => s.Start()).Returns(Task.Run(() => Thread.Sleep(1))).Callback(() => { socket.Raise(s => s.StateChanged += null, new StateChange(ConnectionState.Connecting, ConnectionState.Connected)); });
             socket.Setup(s => s.State).Returns(ConnectionState.Connected);
             socket.Setup(s => s.CreateHubProxy(It.IsAny<string>())).Returns(proxy.Object);
 
