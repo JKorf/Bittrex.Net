@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Bittrex.Net.Interfaces;
 using Microsoft.AspNet.SignalR.Client;
-using Microsoft.AspNet.SignalR.Client.Hubs;
 using Bittrex.Net.Sockets;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Logging;
@@ -30,8 +29,10 @@ namespace Bittrex.Net
         private const string MarketDeltaEvent = "updateSummaryState";
         private const string ExchangeStateEvent = "updateExchangeState";
         private const string MarketDeltaSub = "SubscribeToSummaryDeltas";
+        private const string ExchangeStateSub = "SubscribeToExchangeDeltas";
+        private const string QueryExchangeStateRequest = "QueryExchangeState";
 
-        private static Interfaces.IHubConnection connection;
+        private static IHubConnection connection;
         private static IHubProxy proxy;
 
         private readonly List<BittrexRegistration> localRegistrations;
@@ -130,7 +131,7 @@ namespace Bittrex.Net
             if (!CheckConnection())
                 return new CallResult<BittrexStreamQueryExchangeState>(null, new CantConnectError());
             
-            var result = await proxy.Invoke<JObject>("QueryExchangeState", marketName).ConfigureAwait(false);
+            var result = await proxy.Invoke<JObject>(QueryExchangeStateRequest, marketName).ConfigureAwait(false);
             
             var dataResult = Deserialize<BittrexStreamQueryExchangeState>(result.ToString());
             if (!dataResult.Success)
@@ -160,7 +161,7 @@ namespace Bittrex.Net
                 if (!CheckConnection())
                     return new CallResult<int>(0, new CantConnectError());
 
-                var registration = new BittrexMarketsRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+                var registration = new BittrexMarketsRegistration { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
                 lock (registrationLock)
                 {
                     registrations.Add(registration);
@@ -191,19 +192,13 @@ namespace Bittrex.Net
             // send subscribe to bittrex
             await SubscribeToExchangeDeltas(marketName).ConfigureAwait(false);
 
-            var registration = new BittrexExchangeDeltasRegistration() { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
+            var registration = new BittrexExchangeDeltasRegistration { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
             lock (registrationLock)
             {
                 registrations.Add(registration);
                 localRegistrations.Add(registration);
             }
             return new CallResult<int>(registration.StreamId, null);
-        }
-
-        private async Task SubscribeToExchangeDeltas(string marketName)
-        {
-            // when subscribing this we get Exchange State method calls regularly
-            await proxy.Invoke("SubscribeToExchangeDeltas", marketName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -226,7 +221,7 @@ namespace Bittrex.Net
                 if (!CheckConnection())
                     return new CallResult<int>(0, new CantConnectError());
 
-                var registration = new BittrexMarketsAllRegistration() { Callback = onUpdate, StreamId = NextStreamId };
+                var registration = new BittrexMarketsAllRegistration { Callback = onUpdate, StreamId = NextStreamId };
                 lock (registrationLock)
                 {
                     registrations.Add(registration);
@@ -276,6 +271,11 @@ namespace Bittrex.Net
         }
         #endregion
         #region private
+        private static async Task SubscribeToExchangeDeltas(string marketName)
+        {
+            await proxy.Invoke(ExchangeStateSub, marketName).ConfigureAwait(false);
+        }
+
         private void CheckStop()
         {
             bool shouldStop;
@@ -299,13 +299,12 @@ namespace Bittrex.Net
         {
             lock (connectionLock)
             {
-                if (connection == null || connection.State == ConnectionState.Disconnected)
-                {
-                    log.Write(LogVerbosity.Info, "Starting connection to bittrex server");
-                    return WaitForConnection();
-                }
+                if (connection != null && connection.State != ConnectionState.Disconnected)
+                    return true;
+
+                log.Write(LogVerbosity.Info, "Starting connection to bittrex server");
+                return WaitForConnection();
             }
-            return true;
         }
 
         private bool WaitForConnection()
@@ -324,77 +323,55 @@ namespace Bittrex.Net
                     connection.Error += SocketError;
                     connection.ConnectionSlow += SocketSlow;
                     connection.StateChanged += SocketStateChange;
-                    
-                    Subscription sub = proxy.Subscribe(MarketDeltaEvent);
-                    sub.Received += SocketMessageMarketDeltas;
+                    connection.UserAgent = UserAgent;
 
-                    // regular updates
-                    Subscription subExchangeState = proxy.Subscribe(ExchangeStateEvent);
-                    subExchangeState.Received += SocketMessageExchangeState;
+                    proxy.Subscribe(MarketDeltaEvent).Received += SocketMessageMarketDeltas;
+                    proxy.Subscribe(ExchangeStateEvent).Received += SocketMessageExchangeState;
                 }
-
-                // Try to start
-                if(TryStart().ConfigureAwait(false).GetAwaiter().GetResult())
-                    return true;
 
                 // If failed, try to get CloudFlare bypass
-                log.Write(LogVerbosity.Warning, "Couldn't connect to Bittrex server, going to try CloudFlare bypass");
+                log.Write(LogVerbosity.Warning, "Getting CloudFlare cookies");
+                var sw = Stopwatch.StartNew();
                 var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, cloudFlareRetries).Result;
+                sw.Stop();
+
+                log.Write(LogVerbosity.Debug, $"CloudFlare cookie retrieving done in {sw.ElapsedMilliseconds}ms");
                 if (cookieContainer == null)
-                {
-                    log.Write(LogVerbosity.Error, "CloudFlareAuthenticator didn't give us the cookies");
-                    return false;
-                }
+                    log.Write(LogVerbosity.Error, "CloudFlareAuthenticator didn't give us the cookies, trying to start without");
+                else
+                    connection.Cookies = cookieContainer;
 
-                connection.Cookies = cookieContainer;
-                connection.UserAgent = UserAgent;
-                log.Write(LogVerbosity.Info, "CloudFlare cookies retrieved, retrying connection");
-
-                // Try again with cookies
+                // Try connecting
                 return TryStart().ConfigureAwait(false).GetAwaiter().GetResult();
             }
         }
 
         private async Task<bool> TryStart()
         {
-            var waitEvent = new ManualResetEvent(false);
-            var waitDelegate = new Action<StateChange>((state) =>
-            {
-                if (state.NewState == ConnectionState.Connected ||
-                    (state.NewState == ConnectionState.Disconnected &&
-                     state.OldState == ConnectionState.Connecting))
-                    waitEvent.Set();
-            });
-
-            connection.StateChanged += waitDelegate;
             try
             {
                 await connection.Start().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                log.Write(LogVerbosity.Warning, ex.ToString());
+                log.Write(LogVerbosity.Warning, $"Couldn't connect. {ex.GetType()}");
+                log.Write(LogVerbosity.Debug, $" {ex.Message}");
+                return false;
             }
-            waitEvent.WaitOne();
-            connection.StateChanged -= waitDelegate;
             
-            if (connection.State == ConnectionState.Connected)
-            {
-                log.Write(LogVerbosity.Info, "Socket connection established");
+            log.Write(LogVerbosity.Info, "Socket connection established");
 
-                // subscribe to all market deltas
-                await proxy.Invoke(MarketDeltaSub).ConfigureAwait(false);
+            // subscribe to all market deltas
+            await proxy.Invoke(MarketDeltaSub).ConfigureAwait(false);
                 
-                IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
-                lock (registrationLock)
-                    marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
+            IEnumerable<BittrexExchangeDeltasRegistration> marketRegistrations;
+            lock (registrationLock)
+                marketRegistrations = registrations.OfType<BittrexExchangeDeltasRegistration>();
 
-                foreach (var registration in marketRegistrations)
-                    await SubscribeToExchangeDeltas(registration.MarketName).ConfigureAwait(false);
+            foreach (var registration in marketRegistrations)
+                await SubscribeToExchangeDeltas(registration.MarketName).ConfigureAwait(false);
 
-                return true;
-            }
-            return false;
+            return true;
         }
         
         private void SocketMessageExchangeState(IList<JToken> jsonData)
@@ -462,7 +439,7 @@ namespace Bittrex.Net
         private void SocketClosed()
         {
             log.Write(LogVerbosity.Info, "Socket closed");
-            bool shouldReconnect = false;
+            var shouldReconnect = false;
 
             if (!reconnecting)
             {
@@ -471,12 +448,12 @@ namespace Bittrex.Net
                         shouldReconnect = true;
             }
 
-            if (shouldReconnect)
-            {
-                reconnecting = true;
-                ConnectionLost?.Invoke();
-                Task.Run(() => TryReconnect());
-            }
+            if (!shouldReconnect)
+                return;
+
+            reconnecting = true;
+            ConnectionLost?.Invoke();
+            Task.Run(() => TryReconnect());
         }
 
         private void TryReconnect()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Authentication;
+using System.Threading.Tasks;
 using SuperSocket.ClientEngine.Proxy;
 using WebSocket4Net;
 
@@ -12,11 +13,11 @@ namespace Bittrex.Net.Sockets
 {
     public class Websocket4Net : IWebsocket
     {
-        readonly List<Action<Exception>> errorhandlers = new List<Action<Exception>>();
-        readonly List<Action> openhandlers = new List<Action>();
-        readonly List<Action> closehandlers = new List<Action>();
-        readonly List<Action<string>> messagehandlers = new List<Action<string>>();
-        readonly WebSocket socket;
+        private readonly List<Action<Exception>> errorhandlers = new List<Action<Exception>>();
+        private readonly List<Action> openhandlers = new List<Action>();
+        private readonly List<Action> closehandlers = new List<Action>();
+        private readonly List<Action<string>> messagehandlers = new List<Action<string>>();
+        private readonly WebSocket socket;
         private readonly Uri url;
 
         public Websocket4Net(string url, IDictionary<string, string> cookies, IDictionary<string, string> headers)
@@ -33,26 +34,25 @@ namespace Bittrex.Net.Sockets
 
         private void HandleError(object sender, ErrorEventArgs e)
         {
-            foreach (var handler in errorhandlers)
+            foreach (var handler in new List<Action<Exception>>(errorhandlers))
                 handler(e.Exception);
         }
 
         private void HandleOpen(object sender, EventArgs e)
         {
-            foreach (var handler in openhandlers)
+            foreach (var handler in new List<Action>(openhandlers))
                 handler();
         }
 
         private void HandleClose(object sender, EventArgs e)
         {
-            // List recreation as workaround so that collection does not get modified on foreach
             foreach (var handler in new List<Action>(closehandlers))
                 handler();
         }
 
         private void HandleMessage(object sender, MessageReceivedEventArgs e)
         {
-            foreach (var handler in messagehandlers)
+            foreach (var handler in new List<Action<string>>(messagehandlers))
                 handler(e.Message);
         }
 
@@ -82,28 +82,16 @@ namespace Bittrex.Net.Sockets
             socket.Close();
         }
 
-        public void setProxy(IWebProxy connectionProxy)
+        public void SetProxy(IWebProxy connectionProxy)
         {
-            Uri proxy;
-            try
-            {
-                proxy = connectionProxy.GetProxy(this.url);
-            }
-            catch (NullReferenceException)
-            {
-                // no proxy is set, we can skip this
-                return;
-            }
+            var proxy = connectionProxy.GetProxy(url);
+            socket.Security.AllowNameMismatchCertificate = true;
+            socket.Security.AllowUnstrustedCertificate = true;
 
-            string host = proxy.Host;
-            int proxyPort = proxy.Port;
-
-            if (host != "" && proxyPort != 0)
-            {
-                socket.Security.AllowNameMismatchCertificate = true;
-                socket.Security.AllowUnstrustedCertificate = true;
-                socket.Proxy = new HttpConnectProxy(new DnsEndPoint(host, proxyPort));
-            }
+            IPAddress address;
+            socket.Proxy = IPAddress.TryParse(proxy.Host, out address) 
+                ? new HttpConnectProxy(new IPEndPoint(address, proxy.Port)) 
+                : new HttpConnectProxy(new DnsEndPoint(proxy.Host, proxy.Port));
         }
 
         public bool IsClosed()
@@ -116,9 +104,9 @@ namespace Bittrex.Net.Sockets
             return socket.State == WebSocketState.Open;
         }
 
-        public void Open()
+        public async Task Open()
         {
-            socket.Open();
+            await socket.OpenAsync();
         }
 
         public void Send(string data)

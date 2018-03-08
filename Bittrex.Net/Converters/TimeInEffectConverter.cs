@@ -9,10 +9,10 @@ namespace Bittrex.Net.Converters
         public TimeInEffectConverter(): this(true) { }
         public TimeInEffectConverter(bool quotes) : base(quotes){ }
 
-        protected override Dictionary<TimeInEffect, string> Mapping => new Dictionary<TimeInEffect, string>()
+        protected override Dictionary<TimeInEffect, string> Mapping => new Dictionary<TimeInEffect, string>
         {
             { TimeInEffect.GoodTillCancelled, "GOOD_TIL_CANCELLED" },
-            { TimeInEffect.ImmediateOrCancel, "IMMEDIATE_OR_CANCEL" },
+            { TimeInEffect.ImmediateOrCancel, "IMMEDIATE_OR_CANCEL" }
         };
     }
 }

@@ -11,27 +11,27 @@ namespace Bittrex.Net
     {
         public async Task<CookieContainer> GetCloudFlareCookies(string address, string userAgent, int maxRetries)
         {
-            int currentTry = 0;
+            var currentTry = 0;
             while (currentTry < maxRetries)
             {
                 try
                 {
                     // Create a request and a shared cookie container
                     var cookies = new CookieContainer();
-                    HttpRequestMessage msg = new HttpRequestMessage()
+                    var msg = new HttpRequestMessage
                     {
                         RequestUri = new Uri(address),
                         Method = HttpMethod.Get
                     };
                     msg.Headers.TryAddWithoutValidation("User-Agent", userAgent);
 
-                    var client1 = new HttpClient(new ClearanceHandler(new HttpClientHandler
+                    var client = new HttpClient(new ClearanceHandler(new HttpClientHandler
                     {
                         UseCookies = true,
                         CookieContainer = cookies
                     }));
 
-                    await client1.SendAsync(msg).ConfigureAwait(false);
+                    await client.SendAsync(msg).ConfigureAwait(false);
 
                     // Return the cookie container which should now contain the cloudflare access data
                     return cookies;

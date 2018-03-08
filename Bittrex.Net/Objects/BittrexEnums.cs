@@ -58,7 +58,7 @@
     public enum TimeInEffect
     {
         GoodTillCancelled,
-        ImmediateOrCancel,
+        ImmediateOrCancel
     }
 
     public enum ConditionType

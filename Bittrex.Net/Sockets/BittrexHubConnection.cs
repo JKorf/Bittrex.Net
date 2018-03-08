@@ -9,7 +9,7 @@ namespace Bittrex.Net.Sockets
 {
     public class BittrexHubConnection: IHubConnection
     {
-        HubConnection connection;
+        private readonly HubConnection connection;
 
         public BittrexHubConnection(HubConnection connection)
         {
@@ -68,7 +68,7 @@ namespace Bittrex.Net.Sockets
         {
             var client = new HttpClientWithUserAgent();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(client),
+                new WebsocketCustomTransport(client) // Bittrex only supports Websocket protocol
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             return connection.Start(autoTransport);

@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
     public abstract class BittrexExchangeState
     {
         public long Nounce { get; set; }
+
+        /// <summary>
+        /// Name of the market
+        /// </summary>
+        public string MarketName { get; set; }
 
         /// <summary>
         /// Buys in the order book
@@ -16,11 +20,6 @@ namespace Bittrex.Net.Objects
         /// Sells in the order book
         /// </summary>
         public List<BittrexOrderBookEntry> Sells { get; set; }
-
-        /// <summary>
-        /// Name of the market
-        /// </summary>
-        public String MarketName { get; set; }
     }
 
     public class BittrexStreamUpdateExchangeState: BittrexExchangeState

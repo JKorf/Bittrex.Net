@@ -1,44 +1,41 @@
-﻿using Microsoft.AspNet.SignalR.Client.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client.Http;
 
 namespace Bittrex.Net.Sockets
 {
     public class HttpClientWithUserAgent : IHttpClient
     {
-        private readonly IHttpClient _httpClient;
-        private IConnection _connection;
+        private readonly IHttpClient httpClient;
+        private IConnection connection;
 
         public HttpClientWithUserAgent()
         {
-            _httpClient = new DefaultHttpClient();
+            httpClient = new DefaultHttpClient();
         }
 
         public Task<IResponse> Get(string url, Action<IRequest> prepareRequest, bool isLongRunning)
         {
-            return _httpClient.Get(url, r => PrepareRequest(prepareRequest, r), isLongRunning);
+            return httpClient.Get(url, PrepareRequest, isLongRunning);
         }
 
-        public void Initialize(IConnection connection)
+        public void Initialize(IConnection con)
         {
-            _connection = connection;
-
-            _httpClient.Initialize(connection);
+            connection = con;
+            httpClient.Initialize(con);
         }
 
         public Task<IResponse> Post(string url, Action<IRequest> prepareRequest, IDictionary<string, string> postData, bool isLongRunning)
         {
-            return _httpClient.Post(url, r => PrepareRequest(prepareRequest, r), isLongRunning);
+            return httpClient.Post(url, PrepareRequest, isLongRunning);
         }
 
-        private void PrepareRequest(Action<IRequest> prepareRequest, IRequest request)
+        private void PrepareRequest(IRequest request)
         {
-            if(_connection.Headers.ContainsKey("User-Agent"))
-                request.UserAgent = _connection.Headers["User-Agent"];
+            if(connection.Headers.ContainsKey("User-Agent"))
+                request.UserAgent = connection.Headers["User-Agent"];
             request.SetRequestHeaders(new Dictionary<string, string>());            
         }
     }

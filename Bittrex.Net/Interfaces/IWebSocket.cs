@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Bittrex.Net.Interfaces
 {
@@ -15,8 +16,8 @@ namespace Bittrex.Net.Interfaces
 
         void Send(string data);
 
-        void Open();
+        Task Open();
         void Close();
-        void setProxy(IWebProxy connectionProxy);
+        void SetProxy(IWebProxy connectionProxy);
     }
 }

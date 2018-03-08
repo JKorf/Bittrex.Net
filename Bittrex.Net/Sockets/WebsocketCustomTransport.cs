@@ -5,7 +5,6 @@ using Microsoft.AspNet.SignalR.Client.Infrastructure;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,24 +13,22 @@ namespace Bittrex.Net.Sockets
 {
     public class WebsocketCustomTransport : ClientTransportBase
     {
-        private IConnection _connection;
-        private string _connectionData;
-        private CancellationToken _disconnectToken;
-        private CancellationTokenSource _webSocketTokenSource;
-        private IWebsocket _websocket;
-        private int _disposed;
+        private IConnection connection;
+        private string connectionData;
+        private CancellationToken disconnectToken;
+        private CancellationTokenSource webSocketTokenSource;
+        private IWebsocket websocket;
+        private int disposed;
         
         public TimeSpan ReconnectDelay { get; set; }
 
-        public WebsocketCustomTransport()
-      : this(new DefaultHttpClient())
+        public WebsocketCustomTransport(): this(new DefaultHttpClient())
         {
         }
 
-        public WebsocketCustomTransport(IHttpClient client)
-        : base(client, "webSockets")
+        public WebsocketCustomTransport(IHttpClient client): base(client, "webSockets")
         {
-            _disconnectToken = CancellationToken.None;
+            disconnectToken = CancellationToken.None;
             ReconnectDelay = TimeSpan.FromSeconds(2.0);
         }
 
@@ -40,11 +37,11 @@ namespace Bittrex.Net.Sockets
             Dispose(false);
         }
 
-        protected override void OnStart(IConnection connection, string connectionData, CancellationToken disconnectToken)
+        protected override void OnStart(IConnection con, string conData, CancellationToken disconToken)
         {
-            _connection = connection;
-            _connectionData = connectionData;
-            _disconnectToken = disconnectToken;
+            connection = con;
+            connectionData = conData;
+            disconnectToken = disconToken;
 
             var connectUrl = UrlBuilder.BuildConnect(connection, Name, connectionData);
 
@@ -63,11 +60,11 @@ namespace Bittrex.Net.Sockets
             Dispose();
         }
 
-        public override Task Send(IConnection connection, string data, string connectionData)
+        public override Task Send(IConnection con, string data, string conData)
         {
-            if (_websocket.IsOpen())
+            if (websocket.IsOpen())
             {
-                _websocket.Send(data);
+                websocket.Send(data);
                 return Task.FromResult(0);
             }
 
@@ -77,47 +74,33 @@ namespace Bittrex.Net.Sockets
             throw ex;
         }
 
-        public override void LostConnection(IConnection connection)
+        public override void LostConnection(IConnection con)
         {
-            _connection.Trace(TraceLevels.Events, "WS: LostConnection");
+            connection.Trace(TraceLevels.Events, "WS: LostConnection");
 
-            if (_webSocketTokenSource == null)
-            {
-                return;
-            }
-
-            _webSocketTokenSource.Cancel();
+            webSocketTokenSource?.Cancel();
         }
 
-        public override bool SupportsKeepAlive
-        {
-            get { return true; }
-        }
+        public override bool SupportsKeepAlive => true;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (Interlocked.Exchange(ref _disposed, 1) == 1)
+                if (Interlocked.Exchange(ref disposed, 1) == 1)
                 {
                     base.Dispose(true);
                     return;
                 }
 
-                if (_webSocketTokenSource != null)
-                {
-                    _webSocketTokenSource.Cancel();
-                }
+                webSocketTokenSource?.Cancel();
 
-                if (_websocket != null)
+                if (websocket != null)
                 {
                     DisposeWebSocket();
                 }
 
-                if (_webSocketTokenSource != null)
-                {
-                    _webSocketTokenSource.Dispose();
-                }
+                webSocketTokenSource?.Dispose();
             }
 
             base.Dispose(disposing);
@@ -125,54 +108,53 @@ namespace Bittrex.Net.Sockets
 
         private void DisposeWebSocket()
         {
-            _websocket.OnError -= WebSocketOnError;
-            _websocket.OnOpen -= WebSocketOnOpened;
-            _websocket.OnClose -= WebSocketOnClosed;
-            _websocket.OnMessage -= WebSocketOnMessageReceived;
+            websocket.OnError -= WebSocketOnError;
+            websocket.OnOpen -= WebSocketOnOpened;
+            websocket.OnClose -= WebSocketOnClosed;
+            websocket.OnMessage -= WebSocketOnMessageReceived;
 
-            _websocket = null;
+            websocket = null;
         }
 
         private void PerformConnect(string url)
         {
-            if (_websocket != null)
-            {
+            if (websocket != null)
                 DisposeWebSocket();
-            }
 
-            _webSocketTokenSource = new CancellationTokenSource();
-            _webSocketTokenSource.Token.Register(WebSocketTokenSourceCanceled);
-            CancellationTokenSource.CreateLinkedTokenSource(_webSocketTokenSource.Token, _disconnectToken);
+            webSocketTokenSource = new CancellationTokenSource();
+            webSocketTokenSource.Token.Register(WebSocketTokenSourceCanceled);
+            CancellationTokenSource.CreateLinkedTokenSource(webSocketTokenSource.Token, disconnectToken);
 
             // SignalR uses https, websocket4net uses wss
             url = url.Replace("http://", "ws://").Replace("https://", "wss://");
 
             IDictionary<string, string> cookies = new Dictionary<string, string>();
-            if (_connection.CookieContainer != null)
+            if (connection.CookieContainer != null)
             {
-                var container = _connection.CookieContainer.GetCookies(new Uri(_connection.Url));
+                var container = connection.CookieContainer.GetCookies(new Uri(connection.Url));
                 foreach (Cookie cookie in container)
                     cookies.Add(cookie.Name, cookie.Value);
             }
     
-            _websocket = new Websocket4Net(url, cookies, _connection.Headers);
-            _websocket.OnError += WebSocketOnError;
-            _websocket.OnOpen += WebSocketOnOpened;
-            _websocket.OnClose += WebSocketOnClosed;
-            _websocket.OnMessage += WebSocketOnMessageReceived;
+            websocket = new Websocket4Net(url, cookies, connection.Headers);
+            websocket.OnError += WebSocketOnError;
+            websocket.OnOpen += WebSocketOnOpened;
+            websocket.OnClose += WebSocketOnClosed;
+            websocket.OnMessage += WebSocketOnMessageReceived;
+            
+            if(connection.Proxy != null)
+                websocket.SetProxy(connection.Proxy);
 
-            _websocket.setProxy(_connection.Proxy);
-
-            _websocket.Open();
+            websocket.Open();
         }
 
         private async Task DoReconnect()
         {
-            string reconnectUrl = UrlBuilder.BuildReconnect(_connection, Name, _connectionData);
+            var reconnectUrl = UrlBuilder.BuildReconnect(connection, Name, connectionData);
 
-            while (TransportHelper.VerifyLastActive(_connection))
+            while (TransportHelper.VerifyLastActive(connection))
             {
-                if (_connection.EnsureReconnecting())
+                if (connection.EnsureReconnecting())
                 {
                     try
                     {
@@ -185,7 +167,7 @@ namespace Bittrex.Net.Sockets
                     }
                     catch (Exception ex)
                     {
-                        _connection.OnError(ex);
+                        connection.OnError(ex);
                     }
                     await Task.Delay(ReconnectDelay, CancellationToken.None).ConfigureAwait(false);
                 }
@@ -198,20 +180,20 @@ namespace Bittrex.Net.Sockets
 
         private void WebSocketOnOpened()
         {
-            _connection.Trace(TraceLevels.Events, "WS: OnOpen()");
+            connection.Trace(TraceLevels.Events, "WS: OnOpen()");
 
-            if (!_connection.ChangeState(ConnectionState.Reconnecting, ConnectionState.Connected))
+            if (!connection.ChangeState(ConnectionState.Reconnecting, ConnectionState.Connected))
             {
                 return;
             }
-            _connection.OnReconnected();
+            connection.OnReconnected();
         }
 
         private async void WebSocketOnClosed()
         {
-            _connection.Trace(TraceLevels.Events, "WS: OnClose()");
+            connection.Trace(TraceLevels.Events, "WS: OnClose()");
 
-            if (_disconnectToken.IsCancellationRequested || AbortHandler.TryCompleteAbort())
+            if (disconnectToken.IsCancellationRequested || AbortHandler.TryCompleteAbort())
             {
                 return;
             }
@@ -221,24 +203,22 @@ namespace Bittrex.Net.Sockets
 
         private void WebSocketOnError(Exception e)
         {
-            _connection.OnError(e);
+            connection.OnError(e);
         }
 
         private void WebSocketOnMessageReceived(string data)
         {
-            _connection.Trace(TraceLevels.Messages, "WS: OnMessage({0})", (object)data);
-            ProcessResponse(_connection, data);
+            connection.Trace(TraceLevels.Messages, "WS: OnMessage({0})", (object)data);
+            ProcessResponse(connection, data);
         }
 
         private void WebSocketTokenSourceCanceled()
         {
-            if (_webSocketTokenSource.IsCancellationRequested)
-            {
-                if (_websocket != null && !_websocket.IsClosed())
-                {
-                    _websocket.Close();
-                }
-            }
+            if (!webSocketTokenSource.IsCancellationRequested)
+                return;
+
+            if (websocket != null && !websocket.IsClosed())
+                websocket.Close();
         }
     }
 }

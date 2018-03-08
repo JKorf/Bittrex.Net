@@ -9,7 +9,7 @@ namespace Bittrex.Net.Converters
         public FillTypeConverter(): this(true) { }
         public FillTypeConverter(bool quotes) : base(quotes){ }
 
-        protected override Dictionary<FillType, string> Mapping => new Dictionary<FillType, string>()
+        protected override Dictionary<FillType, string> Mapping => new Dictionary<FillType, string>
         {
             { FillType.Fill, "FILL" },
             { FillType.PartialFill, "PARTIAL_FILL" }
