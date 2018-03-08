@@ -14,6 +14,13 @@ Next to that it adds some convenience features like:
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Bittrex.Net/issues)**
 
+---
+Also check out my other exchange API wrappers:
+|||
+|-|-|
+|![Icon](https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true) <br />[Binance](https://github.com/JKorf/Binance.Net) | ![Icon](https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true)<br /> [Bitfinex](https://github.com/JKorf/Bitfinex.Net) | 
+
+
 ## Installation
 ![Nuget version](https://img.shields.io/nuget/v/bittrex.net.svg) ![Nuget downloads](https://img.shields.io/nuget/dt/Bittrex.Net.svg)
 
@@ -138,7 +145,11 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
-* Version 2.0.2 - 05 mar 2018
+* Version 2.0.4 - 08 mar 2018
+	* Removed initial try without CloudFlare cookies in socket client
+	* Cleanup, removed unused files
+
+* Version 2.0.2/2.0.3 - 05 mar 2018
 	* Fix for freezes when calling from UI thread
 
 * Version 2.0.1 - 03 mar 2018
