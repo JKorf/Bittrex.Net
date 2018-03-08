@@ -16,9 +16,16 @@ Next to that it adds some convenience features like:
 
 ---
 Also check out my other exchange API wrappers:
-|||
-|-|-|
-|![Icon](https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true) <br />[Binance](https://github.com/JKorf/Binance.Net) | ![Icon](https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true)<br /> [Bitfinex](https://github.com/JKorf/Bitfinex.Net) | 
+<table>
+<tr>
+<td><img src="https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true">
+<br />
+<a href="https://github.com/JKorf/Binance.Net">Binance</a>
+</td>
+<td><img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true">
+<br />
+<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a></td>
+</table>
 
 
 ## Installation
