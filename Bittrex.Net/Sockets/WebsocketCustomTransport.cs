@@ -1,5 +1,4 @@
-﻿using Bittrex.Net.Interfaces;
-using Microsoft.AspNet.SignalR.Client;
+﻿using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.AspNet.SignalR.Client.Infrastructure;
 using Microsoft.AspNet.SignalR.Client.Transports;
@@ -8,6 +7,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using CryptoExchange.Net;
+using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net.Sockets
 {
@@ -62,7 +63,7 @@ namespace Bittrex.Net.Sockets
 
         public override Task Send(IConnection con, string data, string conData)
         {
-            if (websocket.IsOpen())
+            if (websocket.IsOpen)
             {
                 websocket.Send(data);
                 return Task.FromResult(0);
@@ -136,16 +137,19 @@ namespace Bittrex.Net.Sockets
                     cookies.Add(cookie.Name, cookie.Value);
             }
     
-            websocket = new Websocket4Net(url, cookies, connection.Headers);
+            websocket = new BaseSocket(url, cookies, connection.Headers);
             websocket.OnError += WebSocketOnError;
             websocket.OnOpen += WebSocketOnOpened;
             websocket.OnClose += WebSocketOnClosed;
             websocket.OnMessage += WebSocketOnMessageReceived;
-            
-            if(connection.Proxy != null)
-                websocket.SetProxy(connection.Proxy);
 
-            websocket.Open();
+            if (connection.Proxy != null)
+            {
+                var proxy = connection.Proxy.GetProxy(new Uri(url));
+                websocket.SetProxy(proxy.Host, proxy.Port);
+            }
+
+            websocket.Connect().Wait(webSocketTokenSource.Token);
         }
 
         private async Task DoReconnect()
@@ -217,7 +221,7 @@ namespace Bittrex.Net.Sockets
             if (!webSocketTokenSource.IsCancellationRequested)
                 return;
 
-            if (websocket != null && !websocket.IsClosed())
+            if (websocket != null && !websocket.IsClosed)
                 websocket.Close();
         }
     }
