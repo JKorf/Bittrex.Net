@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using CryptoExchange.Net;
+using CryptoExchange.Net.Implementation;
 using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net.Sockets

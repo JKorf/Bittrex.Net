@@ -152,6 +152,9 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.0.7 - 09 mar 2018
+	* Updated base
+
 * Version 2.0.6 - 09 mar 2018
 	* Fix for exception when parsing PlaceConditionalOrder result
 	* Fix for UI thread freezing
