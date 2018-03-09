@@ -332,7 +332,7 @@ namespace Bittrex.Net
                 // If failed, try to get CloudFlare bypass
                 log.Write(LogVerbosity.Warning, "Getting CloudFlare cookies");
                 var sw = Stopwatch.StartNew();
-                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, cloudFlareRetries).Result;
+                var cookieContainer = CloudFlareAuthenticator.GetCloudFlareCookies(cloudFlareAuthenticationAddress, UserAgent, cloudFlareRetries).ConfigureAwait(false).GetAwaiter().GetResult();
                 sw.Stop();
 
                 log.Write(LogVerbosity.Debug, $"CloudFlare cookie retrieving done in {sw.ElapsedMilliseconds}ms");
