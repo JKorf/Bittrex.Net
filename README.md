@@ -152,6 +152,12 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.0.9 - 21 mar 2018
+	* Allow multiple log writers
+
+* Version 2.0.8 - 12 mar 2018
+	* Updated packages to fix freezing when called from UI thread
+
 * Version 2.0.7 - 09 mar 2018
 	* Updated base
 
