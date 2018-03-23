@@ -114,6 +114,7 @@ namespace Bittrex.Net.Sockets
             websocket.OnClose -= WebSocketOnClosed;
             websocket.OnMessage -= WebSocketOnMessageReceived;
 
+            websocket.Dispose();
             websocket = null;
         }
 
@@ -222,7 +223,7 @@ namespace Bittrex.Net.Sockets
                 return;
 
             if (websocket != null && !websocket.IsClosed)
-                websocket.Close();
+                websocket.Close().Wait();
         }
     }
 }

@@ -29,7 +29,10 @@ namespace Bittrex.Net
                     {
                         UseCookies = true,
                         CookieContainer = cookies
-                    }));
+                    })
+                    {
+                        ClearanceDelay = 7000
+                    });
 
                     await client.SendAsync(msg).ConfigureAwait(false);
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bittrex.Net.Objects;
-using CryptoExchange.Net;
+using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
 {
