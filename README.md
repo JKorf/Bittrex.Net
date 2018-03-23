@@ -152,6 +152,11 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.0.10 - 23 mar 2018
+	* Fix for CloudFlare bypass
+	* Updated socket dispose
+	* Updated base
+
 * Version 2.0.9 - 21 mar 2018
 	* Allow multiple log writers
 
