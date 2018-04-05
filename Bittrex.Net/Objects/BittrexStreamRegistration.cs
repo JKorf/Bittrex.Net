@@ -8,20 +8,29 @@ namespace Bittrex.Net.Objects
         public int StreamId { get; set; }
     }
 
-    internal class BittrexMarketsAllRegistration: BittrexRegistration
+    internal class BittrexMarketSummariesRegistration: BittrexRegistration
     {
-        public Action<List<BittrexMarketSummary>> Callback { get; set; }
+        public Action<List<BittrexStreamMarketSummary>> Callback { get; set; }
     }
 
-    internal class BittrexMarketsRegistration : BittrexRegistration
+    internal class BittrexMarketSummariesLiteRegistration : BittrexRegistration
     {
-        public Action<BittrexMarketSummary> Callback { get; set; }
-        public string MarketName { get; set; }
+        public Action<List<BittrexStreamMarketSummaryLite>> Callback { get; set; }
     }
 
-    internal class BittrexExchangeDeltasRegistration : BittrexRegistration
+    internal class BittrexExchangeStateRegistration : BittrexRegistration
     {
         public Action<BittrexStreamUpdateExchangeState> Callback { get; set; }
         public string MarketName { get; set; }
+    }
+
+    internal class BittrexBalanceUpdateRegistration : BittrexRegistration
+    {
+        public Action<BittrexStreamBalance> Callback { get; set; }
+    }
+
+    internal class BittrexOrderUpdateRegistration : BittrexRegistration
+    {
+        public Action<BittrexStreamOrderData> Callback { get; set; }
     }
 }

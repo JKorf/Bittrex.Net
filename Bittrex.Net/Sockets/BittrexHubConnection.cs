@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
+using Microsoft.AspNet.SignalR.Client.Http;
 
 namespace Bittrex.Net.Sockets
 {
@@ -66,9 +67,9 @@ namespace Bittrex.Net.Sockets
 
         public Task Start()
         {
-            var client = new HttpClientWithUserAgent();
+            var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(client) // Bittrex only supports Websocket protocol
+                new WebsocketCustomTransport(client)
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             return connection.Start(autoTransport);

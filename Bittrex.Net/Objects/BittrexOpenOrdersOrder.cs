@@ -73,10 +73,11 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The condition of the order
         /// </summary>
-        public string Condition { get; set; }
+        [JsonConverter(typeof(ConditionTypeConverter))]
+        public ConditionType Condition { get; set; }
         /// <summary>
         /// The condition target of the order
         /// </summary>
-        public string ConditionTarget { get; set; }
+        public decimal? ConditionTarget { get; set; }
     }
 }

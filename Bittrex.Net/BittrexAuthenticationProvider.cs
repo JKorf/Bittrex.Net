@@ -43,7 +43,7 @@ namespace Bittrex.Net
 
         public override string Sign(string toSign)
         {
-            throw new NotImplementedException();
+            return BitConverter.ToString(encryptor.ComputeHash(Encoding.ASCII.GetBytes(toSign))).Replace("-", string.Empty);
         }
     }
 }

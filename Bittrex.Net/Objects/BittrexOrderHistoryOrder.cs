@@ -57,11 +57,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The order condition
         /// </summary>
-        public string Condition { get; set; }
+        [JsonConverter(typeof(ConditionTypeConverter))]
+        public ConditionType Condition { get; set; }
         /// <summary>
         /// The order condition target
         /// </summary>
-        public string ConditionTarget { get; set; }
+        public decimal? ConditionTarget { get; set; }
         /// <summary>
         /// Whether the order was an ImmediateOrCancel order
         /// </summary>

@@ -69,4 +69,12 @@
         StopLossFixed,
         StopLossPercentage
     }
+
+    public enum OrderUpdateType
+    {
+        Open,
+        PartialFill,
+        Fill,
+        Cancel
+    }
 }
