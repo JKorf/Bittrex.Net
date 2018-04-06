@@ -152,11 +152,16 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.1.1 - 06 apr 2018
+	* Fixed reconnect when connection is closed without error
+	* More error checking in socket client
+
 * Version 2.1.0 - 05 apr 2018
 	* Updated to new Bittrex beta socket implementation
 	* Cleaned reconnection logic
-
+	
 * Version 2.0.10 - 23 mar 2018
+
 	* Fix for CloudFlare bypass
 	* Updated socket dispose
 	* Updated base

@@ -87,6 +87,7 @@ namespace Bittrex.Net.Sockets
         public override void LostConnection(IConnection con)
         {
             connection.Trace(TraceLevels.Events, "WS: LostConnection");
+            connection.Stop();
         }
 
 

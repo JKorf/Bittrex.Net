@@ -121,8 +121,11 @@ namespace Bittrex.Net
                 return new CallResult<List<BittrexStreamMarketSummary>>(null, new CantConnectError());
 
             log.Write(LogVerbosity.Debug, "Querying summary states");
-            var data = await proxy.Invoke<string>(QuerySummaryStateRequest).ConfigureAwait(false);
-            var result = await DecodeAndDeserializeData<BittrexStreamMarketSummariesQuery>(data).ConfigureAwait(false);
+            var data = await InvokeProxy<string>(QuerySummaryStateRequest).ConfigureAwait(false);
+            if (!data.Success)
+                return new CallResult<List<BittrexStreamMarketSummary>>(null, data.Error);
+
+            var result = await DecodeAndDeserializeData<BittrexStreamMarketSummariesQuery>(data.Data).ConfigureAwait(false);
             if (result.Success)
                 return new CallResult<List<BittrexStreamMarketSummary>>(result.Data.Deltas, null);
             else
@@ -148,8 +151,11 @@ namespace Bittrex.Net
                 return new CallResult<BittrexStreamQueryExchangeState>(null, new CantConnectError());
             
             log.Write(LogVerbosity.Debug, "Querying exchange state for " + marketName);
-            var data = await proxy.Invoke<string>(QueryExchangeStateRequest, marketName).ConfigureAwait(false);
-            var result = await DecodeAndDeserializeData<BittrexStreamQueryExchangeState>(data).ConfigureAwait(false);
+            var data = await InvokeProxy<string>(QueryExchangeStateRequest, marketName).ConfigureAwait(false);
+            if (!data.Success)
+                return new CallResult<BittrexStreamQueryExchangeState>(null, data.Error);
+
+            var result = await DecodeAndDeserializeData<BittrexStreamQueryExchangeState>(data.Data).ConfigureAwait(false);
             if(result.Success)
                 result.Data.MarketName = marketName;
             return result;
@@ -172,9 +178,9 @@ namespace Bittrex.Net
                 return new CallResult<int>(0, new CantConnectError());
 
             log.Write(LogVerbosity.Info, $"Subscribing to exchange state updates for {marketName}");
-            var sub = await proxy.Invoke<bool>(ExchangeDeltaSub, marketName).ConfigureAwait(false);
-            if (!sub)
-                return new CallResult<int>(0, new ServerError("Subscribe to exchange state failed"));
+            var subResult = await InvokeProxy<bool>(ExchangeDeltaSub, marketName).ConfigureAwait(false);
+            if (!subResult.Success || !subResult.Data)
+                return new CallResult<int>(0, subResult.Error ?? new ServerError("Subscribe returned false"));
 
             var registration = new BittrexExchangeStateRegistration { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
             lock (registrationLock)
@@ -201,9 +207,9 @@ namespace Bittrex.Net
                 return new CallResult<int>(0, new CantConnectError());
 
             log.Write(LogVerbosity.Info, $"Subscribing to market summaries updates");
-            var sub = await proxy.Invoke<bool>(SummaryDeltaSub).ConfigureAwait(false);
-            if (!sub)
-                return new CallResult<int>(0, new ServerError("Subscribe to market summaries failed"));
+            var subResult = await InvokeProxy<bool>(SummaryDeltaSub).ConfigureAwait(false);
+            if (!subResult.Success || !subResult.Data)
+                return new CallResult<int>(0, subResult.Error ?? new ServerError("Subscribe returned false"));
 
             var registration = new BittrexMarketSummariesRegistration { Callback = onUpdate, StreamId = NextStreamId };
             lock (registrationLock)
@@ -230,9 +236,9 @@ namespace Bittrex.Net
                 return new CallResult<int>(0, new CantConnectError());
 
             log.Write(LogVerbosity.Info, $"Subscribing to market summaries lite updates");
-            var sub = await proxy.Invoke<bool>(SummaryLiteDeltaSub).ConfigureAwait(false);
-            if (!sub)
-                return new CallResult<int>(0, new ServerError("Subscribe to market summaries lite failed"));
+            var subResult = await InvokeProxy<bool>(SummaryLiteDeltaSub).ConfigureAwait(false);
+            if (!subResult.Success || !subResult.Data)
+                return new CallResult<int>(0, subResult.Error ?? new ServerError("Subscribe returned false"));
 
             var registration = new BittrexMarketSummariesLiteRegistration { Callback = onUpdate, StreamId = NextStreamId };
             lock (registrationLock)
@@ -354,6 +360,20 @@ namespace Bittrex.Net
             socketAddress = options.SocketAddress;
         }
 
+        private async Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
+        {
+            try
+            {
+                var sub = await proxy.Invoke<T>(call, pars).ConfigureAwait(false);
+                return new CallResult<T>(sub, null);
+            }
+            catch (Exception e)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to invoke proxy: " + e.Message);
+                return new CallResult<T>(default(T), new UnknownError("Failed to invoke proxy: " + e.Message));
+            }
+        }
+
         private async Task<CallResult<bool>> Authenticate()
         {
             if (authProvider == null)
@@ -363,14 +383,17 @@ namespace Bittrex.Net
                 return new CallResult<bool>(false, new CantConnectError());
 
             log.Write(LogVerbosity.Debug, "Starting authentication");
-            var result = await proxy.Invoke<string>("GetAuthContext", authProvider.Credentials.Key).ConfigureAwait(false);
+            var result = await InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key).ConfigureAwait(false);
+            if (!result.Success)
+                return new CallResult<bool>(false, result.Error);
+
             log.Write(LogVerbosity.Debug, "Auth context retrieved");
-            var signed = authProvider.Sign(result);
-            var authResult = await proxy.Invoke<bool>("Authenticate", authProvider.Credentials.Key, signed).ConfigureAwait(false);
-            if (!authResult)
+            var signed = authProvider.Sign(result.Data);
+            var authResult = await InvokeProxy<bool>("Authenticate", authProvider.Credentials.Key, signed).ConfigureAwait(false);
+            if (!authResult.Success || !authResult.Data)
             {
                 log.Write(LogVerbosity.Warning, "Authentication failed");
-                return new CallResult<bool>(false, new ServerError("Authentication failed"));
+                return new CallResult<bool>(false, authResult.Error ?? new ServerError("Authentication failed"));
             }
 
             authenticated = true;
@@ -473,15 +496,31 @@ namespace Bittrex.Net
                     foreach (var registration in registrationsCopy)
                     {
                         if (registration is BittrexMarketSummariesRegistration)
-                            proxy.Invoke<bool>(SummaryDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
+                        {
+                            var resubSuccess = InvokeProxy<bool>(SummaryDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
+                            if (!resubSuccess.Success)
+                                log.Write(LogVerbosity.Warning, "Failed to resubscribe summary delta: " + resubSuccess.Error);
+                        }
                         else if (registration is BittrexExchangeStateRegistration)
-                            proxy.Invoke<bool>(ExchangeDeltaSub, ((BittrexExchangeStateRegistration)registration).MarketName).ConfigureAwait(false).GetAwaiter().GetResult();
+                        {
+                            var resubSuccess = InvokeProxy<bool>(ExchangeDeltaSub, ((BittrexExchangeStateRegistration)registration).MarketName).ConfigureAwait(false).GetAwaiter().GetResult();
+                            if (!resubSuccess.Success)
+                                log.Write(LogVerbosity.Warning, "Failed to resubscribe exchange delta: " + resubSuccess.Error);
+                        }
                         else if (registration is BittrexMarketSummariesLiteRegistration)
-                            proxy.Invoke<bool>(SummaryLiteDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
+                        {
+                            var resubSuccess = InvokeProxy<bool>(SummaryLiteDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
+                            if (!resubSuccess.Success)
+                                log.Write(LogVerbosity.Warning, "Failed to resubscribe summary lite delta: " + resubSuccess.Error);
+                        }
                         else if (registration is BittrexBalanceUpdateRegistration || registration is BittrexOrderUpdateRegistration)
                         {
                             if (!authenticated)
-                                Authenticate().ConfigureAwait(false).GetAwaiter().GetResult();
+                            {
+                                var authResult = Authenticate().ConfigureAwait(false).GetAwaiter().GetResult();
+                                if(!authResult.Success)
+                                    log.Write(LogVerbosity.Warning, "Failed to re-authenticate: " + authResult.Error);
+                            }
                         }
                     }                    
                 }
