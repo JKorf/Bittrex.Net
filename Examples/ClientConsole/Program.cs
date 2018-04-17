@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Bittrex.Net;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Authentication;
@@ -14,7 +17,7 @@ namespace Examples
             {
                 ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
                 LogVerbosity = LogVerbosity.Info,
-                LogWriter = Console.Out
+                LogWriters = new List<TextWriter>() { Console.Out }
             });
 
             using (var client = new BittrexClient())
@@ -29,10 +32,11 @@ namespace Examples
                 var marketHistory = client.GetMarketHistory("BTC-ETH");
 
                 // private
-                var placedOrder = client.PlaceOrder(OrderSide.Sell, "BTC-NEO", 1, 1);
+                // Commented to prevent accidental order placement
+                //var placedOrder = client.PlaceOrder(OrderSide.Sell, "BTC-NEO", 1, 1);
+                //var orderInfo = client.GetOrder(placedOrder.Data.Uuid);
+                //var canceledOrder = client.CancelOrder(placedOrder.Data.Uuid);
                 var openOrders = client.GetOpenOrders("BTC-NEO");
-                var orderInfo = client.GetOrder(placedOrder.Data.Uuid);
-                var canceledOrder = client.CancelOrder(placedOrder.Data.Uuid);
                 var orderHistory = client.GetOrderHistory("BTC-NEO");
 
                 var balance = client.GetBalance("NEO");
@@ -45,13 +49,21 @@ namespace Examples
 
             // Websocket
             var socketClient = new BittrexSocketClient();
-            var subcribtion = socketClient.SubscribeToMarketDeltaStream("BTC-ETH", summary =>
+            var subscription = socketClient.SubscribeToMarketSummariesUpdate(summaries =>
             {
-                Console.WriteLine($"BTC-ETH: {summary.Last}");
+                Console.WriteLine($"BTC-ETH: {summaries.SingleOrDefault(s => s.MarketName == "BTC-ETH")?.Last}");
+            });
+
+            var subscription2 = socketClient.SubscribeToExchangeStateUpdates("BTC-ETH", state =>
+            {
+            });
+
+            var subscription3 = socketClient.SubscribeToOrderUpdates(order =>
+            {
             });
 
             Console.ReadLine();
-            socketClient.UnsubscribeFromStream(subcribtion.Data);
+            socketClient.UnsubscribeAllStreams();
 
         }
     }

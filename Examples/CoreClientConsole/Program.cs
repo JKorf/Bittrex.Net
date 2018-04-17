@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Bittrex.Net;
 using Bittrex.Net.Objects;
@@ -16,7 +19,7 @@ namespace CoreClientConsole
             {
                 ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
                 LogVerbosity = LogVerbosity.Info,
-                LogWriter = Console.Out
+                LogWriters = new List<TextWriter>() { Console.Out }
             });
 
             using (var client = new BittrexClient())
@@ -31,10 +34,11 @@ namespace CoreClientConsole
                 var marketHistory = await client.GetMarketHistoryAsync("BTC-ETH");
 
                 // private
-                var placedOrder = await client.PlaceOrderAsync(OrderSide.Sell, "BTC-NEO", 1, 1);
+                // Commented to prevent accidental order placement
+                //var placedOrder = await client.PlaceOrderAsync(OrderSide.Sell, "BTC-NEO", 1, 1);
+                //var orderInfo = await client.GetOrderAsync(placedOrder.Data.Uuid);
+                //var canceledOrder = await client.CancelOrderAsync(placedOrder.Data.Uuid);
                 var openOrders = await client.GetOpenOrdersAsync("BTC-NEO");
-                var orderInfo = await client.GetOrderAsync(placedOrder.Data.Uuid);
-                var canceledOrder = await client.CancelOrderAsync(placedOrder.Data.Uuid);
                 var orderHistory = await client.GetOrderHistoryAsync("BTC-NEO");
 
                 var balance = await client.GetBalanceAsync("NEO");
@@ -47,17 +51,17 @@ namespace CoreClientConsole
 
             // Websocket
             var socketClient = new BittrexSocketClient();
-            var subcription = socketClient.SubscribeToMarketDeltaStream("BTC-ETH", summary =>
+            var subscription = await socketClient.SubscribeToMarketSummariesUpdateAsync(summaries =>
             {
-                // Handle data
+                Console.WriteLine($"BTC-ETH: {summaries.SingleOrDefault(s => s.MarketName == "BTC-ETH")?.Last}");
             });
-            socketClient.SubscribeToAllMarketDeltaStream(data =>
+
+            var subscription2 = await socketClient.SubscribeToExchangeStateUpdatesAsync("BTC-ETH", state =>
             {
-                // Handle data
             });
-            socketClient.SubscribeToExchangeDeltas("BTC-ETH", data =>
+
+            var subscription3 = await socketClient.SubscribeToOrderUpdatesAsync(order =>
             {
-                // Handle data
             });
 
             Console.ReadLine();

@@ -19,24 +19,20 @@ namespace WinformsClient
 
         private void LoadDone(object sender, EventArgs e)
         {
-            Task.Run(() =>
+            socketClient = new BittrexSocketClient();
+            socketClient.SubscribeToMarketSummariesUpdate(data =>
             {
-                socketClient = new BittrexSocketClient();
-                socketClient.SubscribeToMarketDeltaStream("BTC-ETH", data =>
-                {
-                    UpdateLastPrice(data.Last);
-                });
+                var eth = data.SingleOrDefault(d => d.MarketName == "BTC-ETH");
+                if (eth != null)
+                    UpdateLastPrice(eth.Last);
             });
-
-            Task.Run(() =>
+            
+            using(var client = new BittrexClient())
             {
-                using(var client = new BittrexClient())
-                {
-                    var result = client.GetMarketSummary("BTC-ETH");
-                    UpdateLastPrice(result.Data.Last);
-                    label2.Invoke(new Action(() => { label2.Text = "BTC-ETH Volume: " + result.Data.Volume; }));
-                }
-            });
+                var result = client.GetMarketSummary("BTC-ETH");
+                UpdateLastPrice(result.Data.Last);
+                label2.Invoke(new Action(() => { label2.Text = "BTC-ETH Volume: " + result.Data.Volume; }));
+            }
         }
 
         private void UpdateLastPrice(decimal? price)
