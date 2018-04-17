@@ -378,10 +378,7 @@ namespace Bittrex.Net
         {
             if (authProvider == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
-
-            if (!CheckConnection())
-                return new CallResult<bool>(false, new CantConnectError());
-
+            
             log.Write(LogVerbosity.Debug, "Starting authentication");
             var result = await InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key).ConfigureAwait(false);
             if (!result.Success)
@@ -493,36 +490,60 @@ namespace Bittrex.Net
                         registrationsCopy = registrations.ToList();
 
                     log.Write(LogVerbosity.Info, $"(re)subscribing {registrations.Count} subscriptions");
+                    bool failedResubscribe = false;
                     foreach (var registration in registrationsCopy)
                     {
                         if (registration is BittrexMarketSummariesRegistration)
                         {
                             var resubSuccess = InvokeProxy<bool>(SummaryDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
                             if (!resubSuccess.Success)
+                            {
                                 log.Write(LogVerbosity.Warning, "Failed to resubscribe summary delta: " + resubSuccess.Error);
+                                failedResubscribe = true;
+                                break;
+                            }
                         }
                         else if (registration is BittrexExchangeStateRegistration)
                         {
                             var resubSuccess = InvokeProxy<bool>(ExchangeDeltaSub, ((BittrexExchangeStateRegistration)registration).MarketName).ConfigureAwait(false).GetAwaiter().GetResult();
                             if (!resubSuccess.Success)
+                            {
                                 log.Write(LogVerbosity.Warning, "Failed to resubscribe exchange delta: " + resubSuccess.Error);
+                                failedResubscribe = true;
+                                break;
+                            }
                         }
                         else if (registration is BittrexMarketSummariesLiteRegistration)
                         {
                             var resubSuccess = InvokeProxy<bool>(SummaryLiteDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
                             if (!resubSuccess.Success)
+                            {
                                 log.Write(LogVerbosity.Warning, "Failed to resubscribe summary lite delta: " + resubSuccess.Error);
+                                failedResubscribe = true;
+                                break;
+                            }
                         }
                         else if (registration is BittrexBalanceUpdateRegistration || registration is BittrexOrderUpdateRegistration)
                         {
                             if (!authenticated)
                             {
                                 var authResult = Authenticate().ConfigureAwait(false).GetAwaiter().GetResult();
-                                if(!authResult.Success)
+                                if (!authResult.Success)
+                                {
                                     log.Write(LogVerbosity.Warning, "Failed to re-authenticate: " + authResult.Error);
+                                    failedResubscribe = true;
+                                    break;
+                                }
                             }
                         }
-                    }                    
+                    }
+
+                    if (failedResubscribe)
+                    {
+                        log.Write(LogVerbosity.Warning, "Failed to resubscribe all running subscriptions -> Reconnect and try again");
+                        connection.Stop(TimeSpan.FromSeconds(1));
+                        return false;
+                    }
                 }
 
                 return connectResult;
@@ -549,6 +570,12 @@ namespace Bittrex.Net
         private void SocketMessageExchangeState(string data)
         {
             var dataResult = DecodeAndDeserializeData<BittrexStreamUpdateExchangeState>(data).Result;
+            if(!dataResult.Success)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to decode and deserialize ExchangeState data: " + dataResult.Error);
+                return;
+            }
+
             IEnumerable<BittrexExchangeStateRegistration> marketRegistrations;
             lock (registrationLock)
                 marketRegistrations = registrations.OfType<BittrexExchangeStateRegistration>().Where(x => x.MarketName == dataResult.Data.MarketName).ToList();
@@ -559,6 +586,12 @@ namespace Bittrex.Net
         private void SocketMessageMarketSummaries(string data)
         {
             var dataResult = DecodeAndDeserializeData<BittrexStreamMarketSummaryUpdate>(data).Result;
+            if (!dataResult.Success)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to decode and deserialize MarketSummaries data: " + dataResult.Error);
+                return;
+            }
+
             IEnumerable<BittrexMarketSummariesRegistration> listeners;
             lock (registrationLock)
                 listeners = registrations.OfType<BittrexMarketSummariesRegistration>().ToList();
@@ -569,6 +602,12 @@ namespace Bittrex.Net
         private void SocketMessageMarketSummariesLite(string data)
         {
             var dataResult = DecodeAndDeserializeData<BittrexStreamMarketSummariesLite>(data).Result;
+            if (!dataResult.Success)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to decode and deserialize MarketSummariesLite data: " + dataResult.Error);
+                return;
+            }
+
             IEnumerable<BittrexMarketSummariesLiteRegistration> listeners;
             lock (registrationLock)
                 listeners = registrations.OfType<BittrexMarketSummariesLiteRegistration>().ToList();
@@ -578,7 +617,13 @@ namespace Bittrex.Net
 
         private void SocketMessageBalance(string data)
         {
-            var dataResult = DecodeAndDeserializeData<BittrexStreamBalanceData>(data).Result;         
+            var dataResult = DecodeAndDeserializeData<BittrexStreamBalanceData>(data).Result;
+            if (!dataResult.Success)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to decode and deserialize Balance data: " + dataResult.Error);
+                return;
+            }
+
             IEnumerable<BittrexBalanceUpdateRegistration> listeners;
             lock (registrationLock)
                 listeners = registrations.OfType<BittrexBalanceUpdateRegistration>().ToList();
@@ -588,7 +633,13 @@ namespace Bittrex.Net
 
         private void SocketMessageOrder(string data)
         {
-            var dataResult = DecodeAndDeserializeData<BittrexStreamOrderData>(data).Result;         
+            var dataResult = DecodeAndDeserializeData<BittrexStreamOrderData>(data).Result;
+            if (!dataResult.Success)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to decode and deserialize Order data: " + dataResult.Error);
+                return;
+            }
+
             IEnumerable<BittrexOrderUpdateRegistration> listeners;
             lock (registrationLock)
                 listeners = registrations.OfType<BittrexOrderUpdateRegistration>().ToList();

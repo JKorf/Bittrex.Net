@@ -152,6 +152,10 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.1.2 - 17 apr 2018
+	* Fix for failed resubscribe handling after connection is restored
+	* Additional error checking on socket data
+	
 * Version 2.1.1 - 06 apr 2018
 	* Fixed reconnect when connection is closed without error
 	* More error checking in socket client
