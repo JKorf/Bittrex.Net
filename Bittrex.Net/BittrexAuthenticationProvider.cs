@@ -10,9 +10,11 @@ namespace Bittrex.Net
     {
         private static long nonce => DateTime.UtcNow.Ticks;
         private readonly HMACSHA512 encryptor;
+        private readonly object locker;
 
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
+            locker = new object();
             encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret));
         }
 
@@ -36,14 +38,17 @@ namespace Bittrex.Net
             if (!signed)
                 return request;
 
-            request.Headers.Add("apisign",
-                ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(request.Uri.ToString()))));
+            lock(locker)
+                request.Headers.Add("apisign",
+                    ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(request.Uri.ToString()))));
+
             return request;
         }
 
         public override string Sign(string toSign)
         {
-            return BitConverter.ToString(encryptor.ComputeHash(Encoding.ASCII.GetBytes(toSign))).Replace("-", string.Empty);
+            lock(locker)
+                return BitConverter.ToString(encryptor.ComputeHash(Encoding.ASCII.GetBytes(toSign))).Replace("-", string.Empty);
         }
     }
 }
