@@ -1,7 +1,9 @@
-﻿namespace Bittrex.Net.Interfaces
+﻿using CryptoExchange.Net.Logging;
+
+namespace Bittrex.Net.Interfaces
 {
     public interface IConnectionFactory
     {
-        IHubConnection Create(string url);
+        IHubConnection Create(Log log, string url);
     }
 }

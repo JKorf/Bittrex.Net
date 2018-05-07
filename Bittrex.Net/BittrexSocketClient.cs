@@ -461,7 +461,7 @@ namespace Bittrex.Net
             {
                 if (connection == null)
                 {
-                    connection = ConnectionFactory.Create(socketAddress);
+                    connection = ConnectionFactory.Create(log, socketAddress);
                     if (apiProxy != null)
                         connection.SetProxy(apiProxy.Host, apiProxy.Port);
                     

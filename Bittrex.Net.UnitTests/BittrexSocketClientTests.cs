@@ -1,5 +1,6 @@
 ﻿using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
+using CryptoExchange.Net.Logging;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Moq;
@@ -159,7 +160,7 @@ namespace Bittrex.Net.UnitTests
             socket.Setup(s => s.CreateHubProxy(It.IsAny<string>())).Returns(proxy.Object);
 
             var factory = new Mock<IConnectionFactory>();
-            factory.Setup(s => s.Create(It.IsAny<string>())).Returns(socket.Object);
+            factory.Setup(s => s.Create(It.IsAny<Log>(), It.IsAny<string>())).Returns(socket.Object);
                         
             var client = new BittrexSocketClient { ConnectionFactory = factory.Object };
             client.GetType().GetField("connection", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, null);

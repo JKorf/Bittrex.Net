@@ -15,6 +15,6 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The base address of the socket connection
         /// </summary>
-        public string SocketAddress { get; set; } = "https://beta.bittrex.com/signalr";
+        public string SocketAddress { get; set; } = "https://socket.bittrex.com/signalr";
     }
 }

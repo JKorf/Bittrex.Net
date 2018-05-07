@@ -5,16 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Microsoft.AspNet.SignalR.Client.Http;
+using CryptoExchange.Net.Logging;
 
 namespace Bittrex.Net.Sockets
 {
     public class BittrexHubConnection: IHubConnection
     {
         private readonly HubConnection connection;
+        private Log log;
 
-        public BittrexHubConnection(HubConnection connection)
+        public BittrexHubConnection(Log log, HubConnection connection)
         {
             this.connection = connection;
+            this.log = log;
         }
 
         public void SetProxy(string proxyHost, int proxyPort)
@@ -69,7 +72,7 @@ namespace Bittrex.Net.Sockets
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(client)
+                new WebsocketCustomTransport(log, client)
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             return connection.Start(autoTransport);

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Implementation;
 using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Logging;
 
 namespace Bittrex.Net.Sockets
 {
@@ -17,11 +18,13 @@ namespace Bittrex.Net.Sockets
         private IConnection connection;
         private string connectionData;
         private IWebsocket websocket;
+        private Log log;
         
         public override bool SupportsKeepAlive => true;
 
-        public WebsocketCustomTransport(IHttpClient client): base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client): base(client, "webSockets")
         {
+            this.log = log;
         }
 
         ~WebsocketCustomTransport()
@@ -50,7 +53,7 @@ namespace Bittrex.Net.Sockets
                     cookies.Add(cookie.Name, cookie.Value);
             }
 
-            websocket = new BaseSocket(connectUrl, cookies, connection.Headers);
+            websocket = new BaseSocket(log, connectUrl, cookies, connection.Headers);
             websocket.OnError += WebSocketOnError;
             websocket.OnClose += WebSocketOnClosed;
             websocket.OnMessage += WebSocketOnMessageReceived;
