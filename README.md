@@ -152,6 +152,10 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.1.3 - 07 may 2018
+	* Moved from beta endpoint to release endpoint
+	* Updated CryptoExchange.Net base
+
 * Version 2.1.2 - 17 apr 2018
 	* Fix for failed resubscribe handling after connection is restored
 	* Additional error checking on socket data
