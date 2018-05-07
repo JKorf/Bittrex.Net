@@ -152,6 +152,9 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.1.4 - 07 may 2018
+	* Fix for logging issue
+
 * Version 2.1.3 - 07 may 2018
 	* Moved from beta endpoint to release endpoint
 	* Updated CryptoExchange.Net base
