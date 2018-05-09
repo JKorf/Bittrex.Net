@@ -152,6 +152,9 @@ BittrexSocketClient.ConnectionRestored += () =>
 ```
 
 ## Release notes
+* Version 2.1.5 - 09 may 2018
+	* Added support for multiple accounts in socket client
+
 * Version 2.1.4 - 07 may 2018
 	* Fix for logging issue
 
