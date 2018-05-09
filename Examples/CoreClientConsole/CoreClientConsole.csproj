@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bittrex.Net" Version="2.1.1" />
+    <PackageReference Include="Bittrex.Net" Version="2.1.5" />
   </ItemGroup>
 
 </Project>
