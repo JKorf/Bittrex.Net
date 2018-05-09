@@ -35,19 +35,18 @@ namespace Bittrex.Net
         private const string QueryExchangeStateRequest = "QueryExchangeState";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
 
-        private static IHubConnection connection;
-        private static IHubProxy proxy;
+        private IHubConnection connection;
+        private IHubProxy proxy;
 
-        private readonly List<BittrexRegistration> localRegistrations;
-        private static readonly List<BittrexRegistration> registrations = new List<BittrexRegistration>();
+        private List<BittrexRegistration> registrations = new List<BittrexRegistration>();
         private static int lastStreamId;
 
-        private static bool reconnecting;
-        private static bool authenticated;
+        private bool reconnecting;
+        private bool authenticated;
 
         private static readonly object streamIdLock = new object();
-        private static readonly object connectionLock = new object();
-        private static readonly object registrationLock = new object();
+        private readonly object connectionLock = new object();
+        private readonly object registrationLock = new object();
         
         private static int NextStreamId
         {
@@ -69,11 +68,11 @@ namespace Bittrex.Net
         /// <summary>
         /// Event that gets called when the socket connection was lost
         /// </summary>
-        public static event Action ConnectionLost;
+        public event Action ConnectionLost;
         /// <summary>
         /// Event that gets called when the socket connection was restored
         /// </summary>
-        public static event Action ConnectionRestored;
+        public event Action ConnectionRestored;
         
         #region ctor
         /// <summary>
@@ -89,7 +88,7 @@ namespace Bittrex.Net
         /// <param name="options">Options to use for this client</param>
         public BittrexSocketClient(BittrexSocketClientOptions options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
-            localRegistrations = new List<BittrexRegistration>();
+            registrations = new List<BittrexRegistration>();
 
             Configure(options);
         }
@@ -184,10 +183,8 @@ namespace Bittrex.Net
 
             var registration = new BittrexExchangeStateRegistration { Callback = onUpdate, MarketName = marketName, StreamId = NextStreamId };
             lock (registrationLock)
-            {
                 registrations.Add(registration);
-                localRegistrations.Add(registration);
-            }
+
             return new CallResult<int>(registration.StreamId, null);
         }
 
@@ -212,11 +209,9 @@ namespace Bittrex.Net
                 return new CallResult<int>(0, subResult.Error ?? new ServerError("Subscribe returned false"));
 
             var registration = new BittrexMarketSummariesRegistration { Callback = onUpdate, StreamId = NextStreamId };
-            lock (registrationLock)
-            {
+            lock (registrationLock)            
                 registrations.Add(registration);
-                localRegistrations.Add(registration);
-            }
+
             return new CallResult<int>(registration.StreamId, null);
         }
 
@@ -242,10 +237,8 @@ namespace Bittrex.Net
 
             var registration = new BittrexMarketSummariesLiteRegistration { Callback = onUpdate, StreamId = NextStreamId };
             lock (registrationLock)
-            {
                 registrations.Add(registration);
-                localRegistrations.Add(registration);
-            }
+
             return new CallResult<int>(registration.StreamId, null);
         }
 
@@ -274,10 +267,8 @@ namespace Bittrex.Net
 
             var registration = new BittrexBalanceUpdateRegistration { Callback = onUpdate, StreamId = NextStreamId };
             lock (registrationLock)
-            {
                 registrations.Add(registration);
-                localRegistrations.Add(registration);
-            }
+
             return new CallResult<int>(registration.StreamId, null);
         }
 
@@ -306,10 +297,8 @@ namespace Bittrex.Net
 
             var registration = new BittrexOrderUpdateRegistration { Callback = onUpdate, StreamId = NextStreamId };
             lock (registrationLock)
-            {
                 registrations.Add(registration);
-                localRegistrations.Add(registration);
-            }
+
             return new CallResult<int>(registration.StreamId, null);
         }
 
@@ -321,10 +310,7 @@ namespace Bittrex.Net
         {
             log.Write(LogVerbosity.Debug, $"Unsubscribing stream with id {streamId}");
             lock (registrationLock)
-            {
-                localRegistrations.RemoveAll(r => r.StreamId == streamId);
                 registrations.RemoveAll(r => r.StreamId == streamId);
-            }
             
             CheckStop();
         }
@@ -336,12 +322,9 @@ namespace Bittrex.Net
         {
             log.Write(LogVerbosity.Info, "Unsubscribing all streams on this client");
             lock (registrationLock)
-            {
-                registrations.RemoveAll(r => localRegistrations.Contains(r));
-                localRegistrations.Clear();
-            }
+                registrations.Clear();
 
-            CheckStop();
+            Stop();
         }
         
         public override void Dispose()
@@ -382,14 +365,17 @@ namespace Bittrex.Net
             log.Write(LogVerbosity.Debug, "Starting authentication");
             var result = await InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key).ConfigureAwait(false);
             if (!result.Success)
+            {
+                log.Write(LogVerbosity.Error, "Authentication failed, api key is probably invalid");
                 return new CallResult<bool>(false, result.Error);
+            }
 
             log.Write(LogVerbosity.Debug, "Auth context retrieved");
             var signed = authProvider.Sign(result.Data);
             var authResult = await InvokeProxy<bool>("Authenticate", authProvider.Credentials.Key, signed).ConfigureAwait(false);
             if (!authResult.Success || !authResult.Data)
             {
-                log.Write(LogVerbosity.Warning, "Authentication failed");
+                log.Write(LogVerbosity.Error, "Authentication failed, api secret is probably invalid");
                 return new CallResult<bool>(false, authResult.Error ?? new ServerError("Authentication failed"));
             }
 
@@ -431,16 +417,19 @@ namespace Bittrex.Net
                 shouldStop = !registrations.Any();
 
             if (shouldStop)
+                Stop();
+        }
+
+        private void Stop()
+        {
+            Task.Run(() =>
             {
-                Task.Run(() =>
+                lock (connectionLock)
                 {
-                    lock (connectionLock)
-                    {
-                        log.Write(LogVerbosity.Info, "No more subscriptions, stopping the socket");
-                        connection.Stop(TimeSpan.FromSeconds(1));
-                    }
-                });
-            }
+                    log.Write(LogVerbosity.Info, "No more subscriptions, stopping the socket");
+                    connection.Stop(TimeSpan.FromSeconds(1));
+                }
+            });
         }
 
         private bool CheckConnection()
@@ -489,7 +478,9 @@ namespace Bittrex.Net
                     lock (registrationLock)
                         registrationsCopy = registrations.ToList();
 
-                    log.Write(LogVerbosity.Info, $"(re)subscribing {registrations.Count} subscriptions");
+                    if(registrationsCopy.Count > 0)
+                        log.Write(LogVerbosity.Info, $"Resubscribing {registrationsCopy.Count} subscriptions");
+
                     bool failedResubscribe = false;
                     foreach (var registration in registrationsCopy)
                     {
