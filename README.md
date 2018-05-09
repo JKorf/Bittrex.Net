@@ -8,7 +8,7 @@ Bittrex.Net is a .Net wrapper for the Bittrex API as described on [Bittrex](http
 * Reading balances and funds
 
 Next to that it adds some convenience features like:
-* Access to the (undocumented) SignalR websocket, allowing for realtime updates
+* Access to the SignalR websocket, allowing for realtime updates
 * Configurable rate limiting
 * Autmatic logging
 
@@ -46,7 +46,7 @@ In Visual Studio in the top menu select 'Tools' -> 'NuGet Package Manager' -> 'P
 After doing either of above steps you should now be ready to actually start using Bittrex.Net.
 
 ## Getting started
-After  it's time to actually use it. To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
+To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
 
 Bittrex.Net provides two clients to interact with the Bittrex API. The  `BittrexClient`  provides all rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
 
@@ -70,9 +70,9 @@ public async Task AsyncMethod()
 ````
 
 ## Response handling
-All API requests will respond with an CallResult object. This object contains whether the call was successful, the data returned from the call and an error if the call wasn't successful. As such, one should always check the Success flag when processing a response.
+All API requests will respond with a CallResult object. This object contains whether the call was successful, the data returned from the call and an error if the call wasn't successful. As such, one should always check the Success flag when processing a response.
 For example:
-```C#
+````C#
 using(var client = new BittrexClient())
 {
 	var priceResult = client.GetTicker("BTC-ETH");
@@ -81,53 +81,29 @@ using(var client = new BittrexClient())
 	else
 		Console.WriteLine($"Error: {priceResult.Error.Message}");
 }
-```
+````
 
 ## Options & Authentication
-The default behavior of the clients can be changed by providing options to the constructor, or using the `SetDefaultOptions` before creating a new client. Api credentials can be provided in the options.
+The default behavior of the clients can be changed by providing options to the constructor, or using the `SetDefaultOptions` before creating a new client. Api credentials can be provided in these options.
 
 ## Websockets
-The Bittrex API exposes a SignalR Websocket connection for realtime updates. Although the websocket isn't described in the API documentation it is open to connect to. The websocket provides updates regarding the latest prices and trades of all markets. Listening to the websocket is easier to implement and less demanding of the Bittrex server than polling using the Rest API.
+The Bittrex API exposes a SignalR Websocket connection for realtime updates. The websocket provides updates regarding the latest prices and trades of all markets, as well as updates for orders and balances for users. Listening to the websocket is easier to implement and less demanding of the Bittrex server than polling using the Rest API.
 
 #### Subscribing
 To subscribe to a socket the `SubscribeXXX` methods on the `BittrexSocketClient` can be used:
-```C#
-using(var socketClient = new BittrexSocketClient())
-{
-	var subcribtionSuccess = socketClient.SubscribeToMarketDelta("BTC-ETH", data =>
+````C#
+    var socketClient = new BittrexSocketClient();
+	var subcribtionSuccess = socketClient.SubscribeToMarketSummariesUpdate("BTC-ETH", data =>
 	{
 		// Handle data
 	});
-}
-```
-
-Be aware that when the socket client is disposed it unsubscribes all. This means that when the code leaves a using block in which the client was created you will no longer receive updates. To prevent this from happening either make sure the code doesn't leave the using block, or don't use a using block:
-```C#
-// Doesn't leave the using block
-using(var client = new BittrexSocketClient())
-{
-	var subcribtionSuccess = socketClient.SubscribeToMarketDelta("BTC-ETH", data =>
-	{
-		// Handle data
-	});
-
-	Console.ReadLine();
-}
-
-// Without using block
-var client = new BittrexSocketClient();
-var subcribtionSuccess = socketClient.SubscribeToMarketDelta("BTC-ETH", data =>
-{
-	// Handle data
-});
-```
+````
 
 #### Unsubscribing
 To unsubscribe from the socket the `UnsubscribeFromStream` method in combination with the stream ID received from subscribing can be used. Alternatively, all subscriptions can be unsubscribed on a client using the `UnsubscribeAllStreams` method:
-```C#
-using(var socketClient = new BittrexSocketClient())
-{
-	var subcribtionSuccess = socketClient.SubscribeToMarketDelta("BTC-ETH", data =>
+````C#
+    var socketClient = new BittrexSocketClient();
+	var subcribtionSuccess = socketClient.SubscribeToMarketSummariesUpdate("BTC-ETH", data =>
 	{
 		// Handle data
 	});
@@ -135,21 +111,22 @@ using(var socketClient = new BittrexSocketClient())
 	socketClient.UnsubscribeFromStream(subcribtionSuccess.Data); // Unsubscribes a single sub
     socketClient.UnsubscribeAllStreams(); // Unsubscribes all subs on this client 
 }
-```
+````
 
 #### Connection events
 If the connection gets lost when it was connected Bittrex.Net will automatically try to reconnect to the websocket. So when the computer that runs the code loses the internet connection or the Bittrex service fails it will keep retrying to connect to the service as long as there are still subscriptions on any client. To be notified of when this happens there are 2 events to which can be listened, the ConnectionLost and ConnectionRestored events. Note that these are on class events, not instance events. This is because internally there is only a single websocket shared over all clients.
-```C#
-BittrexSocketClient.ConnectionLost += () => 
-{
-    Console.WriteLine("Connection lost!");
-};
+````C#
+    var socketClient = new BittrexSocketClient();
+    socketClient.ConnectionLost += () => 
+    {
+        Console.WriteLine("Connection lost!");
+    };
 
-BittrexSocketClient.ConnectionRestored += () => 
-{
-    Console.WriteLine("Connection restored after being lost!");
-};
-```
+    socketClient.ConnectionRestored += () => 
+    {
+        Console.WriteLine("Connection restored after being lost!");
+    };
+````
 
 ## Release notes
 * Version 2.1.5 - 09 may 2018
