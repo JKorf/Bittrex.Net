@@ -399,6 +399,9 @@ namespace Bittrex.Net
                     using (var streamReader = new StreamReader(decompressedStream))
                     {
                         var data = await streamReader.ReadToEndAsync().ConfigureAwait(false);
+                        if (data == "null")
+                            return new CallResult<T>(null, new DeserializeError("Server returned null"));
+
                         return Deserialize<T>(data);
                     }
                 }
