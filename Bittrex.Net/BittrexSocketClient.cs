@@ -66,14 +66,33 @@ namespace Bittrex.Net
         #endregion
 
         /// <summary>
-        /// Event that gets called when the socket connection was lost
+        /// Connection to the server is lost
         /// </summary>
         public event Action ConnectionLost;
         /// <summary>
-        /// Event that gets called when the socket connection was restored
+        /// Connection to the server is restored
         /// </summary>
         public event Action ConnectionRestored;
-        
+        /// <summary>
+        /// Socket opened the connection to the bittrex server event
+        /// </summary>
+        public event Action Opened;
+        /// <summary>
+        /// Socket connection closed event
+        /// </summary>
+        public event Action Closed;
+        /// <summary>
+        /// Socket state changed event
+        /// </summary>
+        public event Action<StateChange> StateChanged;
+        /// <summary>
+        /// Socket error event. Note that this is only for errors thrown by the socket, not for errors in specific calls/events
+        /// </summary>
+        public event Action<Exception> Error;
+        /// <summary>
+        /// Socket connection slow event. Might indicate a lost connection
+        /// </summary>
+        public event Action Slow;
         #region ctor
         /// <summary>
         /// Creates a new socket client using the default options
@@ -549,6 +568,7 @@ namespace Bittrex.Net
             try
             {
                 await connection.Start().ConfigureAwait(false);
+                Opened?.Invoke();
             }
             catch (Exception ex)
             {
@@ -644,21 +664,25 @@ namespace Bittrex.Net
         private void SocketStateChange(StateChange state)
         {
             log.Write(LogVerbosity.Debug, $"Socket state: {state.OldState} -> {state.NewState}");
+            StateChanged?.Invoke(state);
         }
 
         private void SocketSlow()
         {
             log.Write(LogVerbosity.Warning, "Socket connection slow");
+            Slow?.Invoke();
         }
 
         private void SocketError(Exception exception)
         {
             log.Write(LogVerbosity.Error, $"Socket error: {exception.Message}");
+            Error?.Invoke(exception);
         }
 
         private void SocketClosed()
         {
             log.Write(LogVerbosity.Info, "Socket closed");
+            Closed?.Invoke();
             authenticated = false;
             var shouldReconnect = false;
 
