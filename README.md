@@ -129,6 +129,10 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.6 - 04 jun 2018
+	* Added additional events for socket connection
+	* Fix for null reference in QueryExchangeState
+
 * Version 2.1.5 - 09 may 2018
 	* Added support for multiple accounts in socket client
 
