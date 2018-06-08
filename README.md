@@ -129,6 +129,9 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.7 - 08 jun 2018
+	* Fix DateTime objects to have Kind set to Utc
+
 * Version 2.1.6 - 04 jun 2018
 	* Added additional events for socket connection
 	* Fix for null reference in QueryExchangeState
