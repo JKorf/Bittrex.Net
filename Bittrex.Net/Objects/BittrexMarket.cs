@@ -1,4 +1,6 @@
 ﻿using System;
+using CryptoExchange.Net.Converters;
+using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
@@ -38,6 +40,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp when the market was created
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Created { get; set; }
         /// <summary>
         /// Additional information about the state of this market

@@ -1,5 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
+using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -20,6 +21,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp when the order was opened
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime TimeStamp { get; set; }
         /// <summary>
         /// The side of the order
@@ -70,6 +72,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp when the order was closed
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime? Closed { get; set; }
     }
 }

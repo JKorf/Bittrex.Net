@@ -1,4 +1,5 @@
 ﻿using System;
+using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -27,6 +28,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp when withdrawal was opened
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Opened { get; set; }
         /// <summary>
         /// Whether the withdrawal is authorized

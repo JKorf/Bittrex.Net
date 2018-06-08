@@ -1,5 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
+using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -16,6 +17,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp of the order
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// Quantity of the order

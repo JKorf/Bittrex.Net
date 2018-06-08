@@ -1,4 +1,5 @@
 ﻿using System;
+using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -27,6 +28,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp of the last update
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime LastUpdated { get; set; }
         /// <summary>
         /// Transaction id of the deposit

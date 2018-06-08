@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Objects
 {
@@ -38,7 +39,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp of the candle
         /// </summary>
-        [JsonProperty("T")]
+        [JsonProperty("T"), JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Timestamp { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using CryptoExchange.Net.Converters;
+using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
@@ -34,6 +36,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp of the summary
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime TimeStamp { get; set; }
         /// <summary>
         /// The highest bid
@@ -58,6 +61,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp when created
         /// </summary>
+        [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Created { get; set; }
     }
 }
