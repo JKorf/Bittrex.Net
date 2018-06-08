@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>2.1.7</PackageVersion>
+    <PackageVersion>2.1.8</PackageVersion>
 	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -16,12 +16,12 @@
 	<PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageReleaseNotes>2.1.7 - Fixed DateTime objects to be properly have Kind set to Utc
+	<PackageReleaseNotes>2.1.8 - Fix for broken datetime parsing
 	</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CryptoExchange.Net" Version="[0.0.26]" />
+    <PackageReference Include="CryptoExchange.Net" Version="[0.0.27]" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.2.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />	
