@@ -7,7 +7,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The address to use as base for the api calls
         /// </summary>
-        public string BaseAddress { get; set; } = "https://www.bittrex.com";
+        public string BaseAddress { get; set; } = "https://api.bittrex.com";
     }
 
     public class BittrexSocketClientOptions : ExchangeOptions
