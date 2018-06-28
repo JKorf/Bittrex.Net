@@ -29,8 +29,11 @@ Also check out my other exchange API wrappers:
 
 ## Donations
 Donations are greatly appreciated and a motivation to keep improving.
+
 Btc:  12KwZk3r2Y3JZ2uMULcjqqBvXmpDwjhhQS
+
 Eth:  0x069176ca1a4b1d6e0b7901a6bc0dbf3bb0bf5cc2
+
 Nano: xrb_1ocs3hbp561ef76eoctjwg85w5ugr8wgimkj8mfhoyqbx4s1pbc74zggw7gs
 
 
