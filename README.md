@@ -136,6 +136,9 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.10 - 03 jun 2018
+	* Small fix socket event binding
+
 * Version 2.1.9 - 25 jun 2018
 	* Updated base rest api address
 
