@@ -30,7 +30,7 @@ namespace Bittrex.Net
             if (!uri.EndsWith("?"))
                 uri += "&";
 
-            uri += $"apiKey={Credentials.Key}&nonce={nonce}";
+            uri += $"apiKey={Credentials.Key.GetString()}&nonce={nonce}";
             return uri;
         }
 
