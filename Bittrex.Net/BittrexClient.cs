@@ -17,8 +17,6 @@ namespace Bittrex.Net
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
         
-        private string baseAddress;
-
         private const string Api = "api";
         private const string ApiVersion = "1.1";
         private const string ApiVersion2 = "2.0";

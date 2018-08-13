@@ -24,7 +24,12 @@ Also check out my other exchange API wrappers:
 </td>
 <td><img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true">
 <br />
-<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a></td>
+<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a>
+</td>
+<td><img src="https://github.com/JKorf/CoinEx.Net/blob/master/Resources/icon.png?raw=true">
+<br />
+<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
+</td>
 </table>
 
 ## Donations
@@ -136,6 +141,9 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.11 - 03 jul 2018
+	* Updated CryptoExchange.Net
+
 * Version 2.1.10 - 03 jul 2018
 	* Small fix socket event binding
 

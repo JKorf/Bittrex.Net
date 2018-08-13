@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 
@@ -15,7 +16,7 @@ namespace Bittrex.Net
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
             locker = new object();
-            encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret));
+            encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret.GetString()));
         }
 
         public override string AddAuthenticationToUriString(string uri, bool signed)

@@ -18,9 +18,7 @@ namespace Bittrex.Net
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
-
-        private string socketAddress;
-
+        
         private const string HubName = "c2";
 
         private const string BalanceEvent = "uB";
@@ -358,8 +356,6 @@ namespace Bittrex.Net
         private void Configure(BittrexSocketClientOptions options)
         {
             base.Configure(options);
-
-            socketAddress = options.SocketAddress;
         }
 
         private async Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
@@ -382,7 +378,7 @@ namespace Bittrex.Net
                 return new CallResult<bool>(false, new NoApiCredentialsError());
             
             log.Write(LogVerbosity.Debug, "Starting authentication");
-            var result = await InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key).ConfigureAwait(false);
+            var result = await InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key.GetString()).ConfigureAwait(false);
             if (!result.Success)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api key is probably invalid");
@@ -391,7 +387,7 @@ namespace Bittrex.Net
 
             log.Write(LogVerbosity.Debug, "Auth context retrieved");
             var signed = authProvider.Sign(result.Data);
-            var authResult = await InvokeProxy<bool>("Authenticate", authProvider.Credentials.Key, signed).ConfigureAwait(false);
+            var authResult = await InvokeProxy<bool>("Authenticate", authProvider.Credentials.Key.GetString(), signed).ConfigureAwait(false);
             if (!authResult.Success || !authResult.Data)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api secret is probably invalid");
@@ -472,7 +468,7 @@ namespace Bittrex.Net
             {
                 if (connection == null)
                 {
-                    connection = ConnectionFactory.Create(log, socketAddress);
+                    connection = ConnectionFactory.Create(log, baseAddress);
                     if (apiProxy != null)
                         connection.SetProxy(apiProxy.Host, apiProxy.Port);
                     
