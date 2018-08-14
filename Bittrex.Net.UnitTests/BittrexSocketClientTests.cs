@@ -1,14 +1,13 @@
 ﻿using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Logging;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Moq;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,6 +30,23 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             proxy.Verify(p => p.Invoke<bool>("SubscribeToSummaryDeltas"), Times.Once);
+        }
+
+        [TestCase()]
+        public void WhenSubscribingAuthenticatedStream_Should_InvokeAuthentication()
+        {
+            // arrange
+            var client = PrepareClient(true);
+            var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
+            proxy.Setup(p => p.Invoke<string>("GetAuthContext", "TestKey")).Returns(Task.FromResult("TestAuthContext"));
+            proxy.Setup(p => p.Invoke<bool>("Authenticate", "TestKey", authProvider.Sign("TestAuthContext"))).Returns(Task.FromResult(true));
+
+            // act
+            var subscription = client.SubscribeToOrderUpdatesAsync((test) => { });
+
+            // assert
+            proxy.Verify(p => p.Invoke<string>("GetAuthContext", "TestKey"), Times.Once);
+            proxy.Verify(p => p.Invoke<bool>("Authenticate", "TestKey", authProvider.Sign("TestAuthContext")), Times.Once);
         }
 
         [TestCase()]
@@ -145,9 +161,10 @@ namespace Bittrex.Net.UnitTests
             // assert
             Assert.IsTrue(subscription.Success);
             Assert.IsTrue(startDone == 2);
+            proxy.Verify(p => p.Invoke<bool>("SubscribeToSummaryDeltas"), Times.Exactly(2));
         }
 
-        private BittrexSocketClient PrepareClient()
+        private BittrexSocketClient PrepareClient(bool auth = false)
         {
             proxy = new Mock<IHubProxy>();
             proxy.Setup(r => r.Invoke<bool>(It.IsAny<string>())).Returns(Task.FromResult(true));
@@ -162,7 +179,7 @@ namespace Bittrex.Net.UnitTests
             var factory = new Mock<IConnectionFactory>();
             factory.Setup(s => s.Create(It.IsAny<Log>(), It.IsAny<string>())).Returns(socket.Object);
                         
-            var client = new BittrexSocketClient { ConnectionFactory = factory.Object };
+            var client = new BittrexSocketClient (auth? new BittrexSocketClientOptions() { ApiCredentials = new ApiCredentials("TestKey", "TestSecret")}: new BittrexSocketClientOptions()){ ConnectionFactory = factory.Object };
             client.GetType().GetField("connection", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, null);
             client.GetType().GetField("registrations", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, new List<BittrexRegistration>());
             client.GetType().GetField("reconnecting", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).SetValue(client, false);
