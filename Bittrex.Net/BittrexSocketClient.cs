@@ -14,7 +14,7 @@ using System.IO.Compression;
 
 namespace Bittrex.Net
 {
-    public class BittrexSocketClient: ExchangeClient
+    public class BittrexSocketClient: ExchangeClient, IBittrexSocketClient
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
