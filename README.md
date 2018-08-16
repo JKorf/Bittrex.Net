@@ -151,10 +151,18 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
-* Version 2.1.12 - 03 jul 2018
+* Version 2.1.14 - 16 aug 2018
+	* Added interface for socket client
+	* Fixed some minor Resharper warnings
 	* Updated CryptoExchange.Net
 
-* Version 2.1.11 - 03 jul 2018
+* Version 2.1.13 - 13 aug 2018
+	* Fixed auth calls
+	
+* Version 2.1.12 - 13 aug 2018
+	* Updated CryptoExchange.Net
+
+* Version 2.1.11 - 13 aug 2018
 	* Updated CryptoExchange.Net
 
 * Version 2.1.10 - 03 jul 2018
