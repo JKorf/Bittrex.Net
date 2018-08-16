@@ -12,7 +12,7 @@ namespace Bittrex.Net.Sockets
     public class BittrexHubConnection: IHubConnection
     {
         private readonly HubConnection connection;
-        private Log log;
+        private readonly Log log;
 
         public BittrexHubConnection(Log log, HubConnection connection)
         {

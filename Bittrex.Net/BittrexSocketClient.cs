@@ -36,7 +36,7 @@ namespace Bittrex.Net
         private IHubConnection connection;
         private IHubProxy proxy;
 
-        private List<BittrexRegistration> registrations = new List<BittrexRegistration>();
+        private readonly List<BittrexRegistration> registrations = new List<BittrexRegistration>();
         private static int lastStreamId;
 
         private bool reconnecting;
@@ -144,8 +144,7 @@ namespace Bittrex.Net
             var result = await DecodeAndDeserializeData<BittrexStreamMarketSummariesQuery>(data.Data).ConfigureAwait(false);
             if (result.Success)
                 return new CallResult<List<BittrexStreamMarketSummary>>(result.Data.Deltas, null);
-            else
-                return new CallResult<List<BittrexStreamMarketSummary>>(null, result.Error);
+            return new CallResult<List<BittrexStreamMarketSummary>>(null, result.Error);
         }
 
         /// <summary>
@@ -220,7 +219,7 @@ namespace Bittrex.Net
             if (!CheckConnection())
                 return new CallResult<int>(0, new CantConnectError());
 
-            log.Write(LogVerbosity.Info, $"Subscribing to market summaries updates");
+            log.Write(LogVerbosity.Info, "Subscribing to market summaries updates");
             var subResult = await InvokeProxy<bool>(SummaryDeltaSub).ConfigureAwait(false);
             if (!subResult.Success || !subResult.Data)
                 return new CallResult<int>(0, subResult.Error ?? new ServerError("Subscribe returned false"));
@@ -247,7 +246,7 @@ namespace Bittrex.Net
             if (!CheckConnection())
                 return new CallResult<int>(0, new CantConnectError());
 
-            log.Write(LogVerbosity.Info, $"Subscribing to market summaries lite updates");
+            log.Write(LogVerbosity.Info, "Subscribing to market summaries lite updates");
             var subResult = await InvokeProxy<bool>(SummaryLiteDeltaSub).ConfigureAwait(false);
             if (!subResult.Success || !subResult.Data)
                 return new CallResult<int>(0, subResult.Error ?? new ServerError("Subscribe returned false"));
@@ -274,7 +273,7 @@ namespace Bittrex.Net
             if (!CheckConnection())
                 return new CallResult<int>(0, new CantConnectError());
 
-            log.Write(LogVerbosity.Info, $"Subscribing to balance updates");
+            log.Write(LogVerbosity.Info, "Subscribing to balance updates");
             if (!authenticated)
             {
                 var authResult = await Authenticate().ConfigureAwait(false); 
@@ -304,7 +303,7 @@ namespace Bittrex.Net
             if (!CheckConnection())
                 return new CallResult<int>(0, new CantConnectError());
 
-            log.Write(LogVerbosity.Info, $"Subscribing to order updates");
+            log.Write(LogVerbosity.Info, "Subscribing to order updates");
             if (!authenticated)
             {
                 var authResult = await Authenticate().ConfigureAwait(false);
@@ -423,8 +422,8 @@ namespace Bittrex.Net
             }
             catch (Exception e)
             {
-                log.Write(LogVerbosity.Info, $"Exception in decode data: " + e.Message);
-                return new CallResult<T>(null, new DeserializeError($"Exception in decode data: " + e.Message));
+                log.Write(LogVerbosity.Info, "Exception in decode data: " + e.Message);
+                return new CallResult<T>(null, new DeserializeError("Exception in decode data: " + e.Message));
             }
         }
         
@@ -489,70 +488,70 @@ namespace Bittrex.Net
                 // Try connecting
                 var connectResult = TryStart().ConfigureAwait(false).GetAwaiter().GetResult();
 
-                if (connectResult)
+                if (!connectResult)
+                    return connectResult;
+
+                // Resubscribe the subscriptions
+                List<BittrexRegistration> registrationsCopy;
+                lock (registrationLock)
+                    registrationsCopy = registrations.ToList();
+
+                if(registrationsCopy.Count > 0)
+                    log.Write(LogVerbosity.Info, $"Resubscribing {registrationsCopy.Count} subscriptions");
+
+                bool failedResubscribe = false;
+                foreach (var registration in registrationsCopy)
                 {
-                    // Resubscribe the subscriptions
-                    List<BittrexRegistration> registrationsCopy;
-                    lock (registrationLock)
-                        registrationsCopy = registrations.ToList();
-
-                    if(registrationsCopy.Count > 0)
-                        log.Write(LogVerbosity.Info, $"Resubscribing {registrationsCopy.Count} subscriptions");
-
-                    bool failedResubscribe = false;
-                    foreach (var registration in registrationsCopy)
+                    if (registration is BittrexMarketSummariesRegistration)
                     {
-                        if (registration is BittrexMarketSummariesRegistration)
+                        var resubSuccess = InvokeProxy<bool>(SummaryDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
+                        if (!resubSuccess.Success)
                         {
-                            var resubSuccess = InvokeProxy<bool>(SummaryDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
-                            if (!resubSuccess.Success)
+                            log.Write(LogVerbosity.Warning, "Failed to resubscribe summary delta: " + resubSuccess.Error);
+                            failedResubscribe = true;
+                            break;
+                        }
+                    }
+                    else if (registration is BittrexExchangeStateRegistration)
+                    {
+                        var resubSuccess = InvokeProxy<bool>(ExchangeDeltaSub, ((BittrexExchangeStateRegistration)registration).MarketName).ConfigureAwait(false).GetAwaiter().GetResult();
+                        if (!resubSuccess.Success)
+                        {
+                            log.Write(LogVerbosity.Warning, "Failed to resubscribe exchange delta: " + resubSuccess.Error);
+                            failedResubscribe = true;
+                            break;
+                        }
+                    }
+                    else if (registration is BittrexMarketSummariesLiteRegistration)
+                    {
+                        var resubSuccess = InvokeProxy<bool>(SummaryLiteDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
+                        if (!resubSuccess.Success)
+                        {
+                            log.Write(LogVerbosity.Warning, "Failed to resubscribe summary lite delta: " + resubSuccess.Error);
+                            failedResubscribe = true;
+                            break;
+                        }
+                    }
+                    else if (registration is BittrexBalanceUpdateRegistration || registration is BittrexOrderUpdateRegistration)
+                    {
+                        if (!authenticated)
+                        {
+                            var authResult = Authenticate().ConfigureAwait(false).GetAwaiter().GetResult();
+                            if (!authResult.Success)
                             {
-                                log.Write(LogVerbosity.Warning, "Failed to resubscribe summary delta: " + resubSuccess.Error);
+                                log.Write(LogVerbosity.Warning, "Failed to re-authenticate: " + authResult.Error);
                                 failedResubscribe = true;
                                 break;
-                            }
-                        }
-                        else if (registration is BittrexExchangeStateRegistration)
-                        {
-                            var resubSuccess = InvokeProxy<bool>(ExchangeDeltaSub, ((BittrexExchangeStateRegistration)registration).MarketName).ConfigureAwait(false).GetAwaiter().GetResult();
-                            if (!resubSuccess.Success)
-                            {
-                                log.Write(LogVerbosity.Warning, "Failed to resubscribe exchange delta: " + resubSuccess.Error);
-                                failedResubscribe = true;
-                                break;
-                            }
-                        }
-                        else if (registration is BittrexMarketSummariesLiteRegistration)
-                        {
-                            var resubSuccess = InvokeProxy<bool>(SummaryLiteDeltaSub).ConfigureAwait(false).GetAwaiter().GetResult();
-                            if (!resubSuccess.Success)
-                            {
-                                log.Write(LogVerbosity.Warning, "Failed to resubscribe summary lite delta: " + resubSuccess.Error);
-                                failedResubscribe = true;
-                                break;
-                            }
-                        }
-                        else if (registration is BittrexBalanceUpdateRegistration || registration is BittrexOrderUpdateRegistration)
-                        {
-                            if (!authenticated)
-                            {
-                                var authResult = Authenticate().ConfigureAwait(false).GetAwaiter().GetResult();
-                                if (!authResult.Success)
-                                {
-                                    log.Write(LogVerbosity.Warning, "Failed to re-authenticate: " + authResult.Error);
-                                    failedResubscribe = true;
-                                    break;
-                                }
                             }
                         }
                     }
+                }
 
-                    if (failedResubscribe)
-                    {
-                        log.Write(LogVerbosity.Warning, "Failed to resubscribe all running subscriptions -> Reconnect and try again");
-                        connection.Stop(TimeSpan.FromSeconds(1));
-                        return false;
-                    }
+                if (failedResubscribe)
+                {
+                    log.Write(LogVerbosity.Warning, "Failed to resubscribe all running subscriptions -> Reconnect and try again");
+                    connection.Stop(TimeSpan.FromSeconds(1));
+                    return false;
                 }
 
                 return connectResult;

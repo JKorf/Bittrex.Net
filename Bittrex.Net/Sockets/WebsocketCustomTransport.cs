@@ -18,7 +18,7 @@ namespace Bittrex.Net.Sockets
         private IConnection connection;
         private string connectionData;
         private IWebsocket websocket;
-        private Log log;
+        private readonly Log log;
         
         public override bool SupportsKeepAlive => true;
 
