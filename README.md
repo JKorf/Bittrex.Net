@@ -17,29 +17,42 @@ Next to that it adds some convenience features like:
 ---
 Also check out my other exchange API wrappers:
 <table>
-<tr>
-<td><img src="https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true">
-<br />
-<a href="https://github.com/JKorf/Binance.Net">Binance</a>
-</td>
-<td><img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true">
-<br />
-<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a>
-</td>
-<td><img src="https://github.com/JKorf/CoinEx.Net/blob/master/Resources/icon.png?raw=true">
-<br />
-<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
-</td>
+	<tr>
+	<td>
+		<a href="https://github.com/JKorf/Binance.Net">
+			<img src="https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true">
+		</a>
+		<br />
+		<a href="https://github.com/JKorf/Binance.Net">Binance</a>
+	</td>
+	<td>
+		<a href="https://github.com/JKorf/Bitfinex.Net">
+			<img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true">
+		</a>
+		<br />
+		<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a>
+	</td>
+	<td>
+		<a href="https://github.com/JKorf/CoinEx.Net">
+			<img src="https://github.com/JKorf/CoinEx.Net/blob/master/Resources/icon.png?raw=true">
+		</a>
+		<br />
+		<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
+	</td>
+	</tr>
 </table>
 
 And other API wrappers based on CryptoExchange.Net:
 <table>
-<tr>
-<td><img src="https://github.com/Zaliro/Switcheo.Net/blob/master/Resources/switcheo-coin.png?raw=true">
-<br />
-<a href="https://github.com/Zaliro/Switcheo.Net">Switcheo</a>
-</td>
-</tr>
+	<tr>
+		<td>
+			<a href="https://github.com/Zaliro/Switcheo.Net">
+				<img src="https://github.com/Zaliro/Switcheo.Net/blob/master/Resources/switcheo-coin.png?raw=true">
+			</a>
+			<br />
+			<a href="https://github.com/Zaliro/Switcheo.Net">Switcheo</a>
+		</td>
+	</tr>
 </table>
 
 ## Donations
