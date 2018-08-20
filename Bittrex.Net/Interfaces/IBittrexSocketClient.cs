@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.RateLimiter;
 using Microsoft.AspNet.SignalR.Client;
 

@@ -11,6 +11,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Logging;
 using System.IO;
 using System.IO.Compression;
+using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net
 {

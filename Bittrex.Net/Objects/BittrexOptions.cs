@@ -1,4 +1,5 @@
 ﻿using CryptoExchange.Net;
+using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects
 {
