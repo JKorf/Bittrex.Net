@@ -20,16 +20,26 @@ namespace Bittrex.Net
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
-        private static BittrexSocketClientOptions DefaultOptions => new BittrexSocketClientOptions
+        private static BittrexSocketClientOptions DefaultOptions
         {
-            ApiCredentials = new ApiCredentials(defaultOptions.ApiCredentials.Key.GetString(), defaultOptions.ApiCredentials.Secret.GetString()),
-            LogVerbosity = defaultOptions.LogVerbosity,
-            BaseAddress = defaultOptions.BaseAddress,
-            LogWriters = defaultOptions.LogWriters,
-            Proxy = defaultOptions.Proxy,
-            RateLimiters = defaultOptions.RateLimiters,
-            RateLimitingBehaviour = defaultOptions.RateLimitingBehaviour
-        };
+            get
+            {
+                var result = new BittrexSocketClientOptions()
+                {
+                    LogVerbosity = defaultOptions.LogVerbosity,
+                    BaseAddress = defaultOptions.BaseAddress,
+                    LogWriters = defaultOptions.LogWriters,
+                    Proxy = defaultOptions.Proxy,
+                    RateLimiters = defaultOptions.RateLimiters,
+                    RateLimitingBehaviour = defaultOptions.RateLimitingBehaviour
+                };
+
+                if (defaultOptions.ApiCredentials != null)
+                    result.ApiCredentials = new ApiCredentials(defaultOptions.ApiCredentials.Key.GetString(), defaultOptions.ApiCredentials.Secret.GetString());
+
+                return result;
+            }
+        }
 
         private const string HubName = "c2";
 
