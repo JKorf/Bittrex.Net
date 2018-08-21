@@ -17,7 +17,17 @@ namespace Bittrex.Net
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
-        
+        private static BittrexClientOptions DefaultOptions => new BittrexClientOptions
+        {
+            ApiCredentials = new ApiCredentials(defaultOptions.ApiCredentials.Key.GetString(), defaultOptions.ApiCredentials.Secret.GetString()),
+            LogVerbosity = defaultOptions.LogVerbosity,
+            BaseAddress = defaultOptions.BaseAddress,
+            LogWriters = defaultOptions.LogWriters,
+            Proxy = defaultOptions.Proxy,
+            RateLimiters = defaultOptions.RateLimiters,
+            RateLimitingBehaviour = defaultOptions.RateLimitingBehaviour
+        };
+
         private const string Api = "api";
         private const string ApiVersion = "1.1";
         private const string ApiVersion2 = "2.0";
@@ -56,7 +66,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Create a new instance of BittrexClient using the default options
         /// </summary>
-        public BittrexClient(): this(defaultOptions)
+        public BittrexClient(): this(DefaultOptions)
         {
         }
 

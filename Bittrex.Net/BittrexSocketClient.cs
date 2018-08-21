@@ -11,6 +11,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Logging;
 using System.IO;
 using System.IO.Compression;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net
@@ -19,7 +20,17 @@ namespace Bittrex.Net
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
-        
+        private static BittrexSocketClientOptions DefaultOptions => new BittrexSocketClientOptions
+        {
+            ApiCredentials = new ApiCredentials(defaultOptions.ApiCredentials.Key.GetString(), defaultOptions.ApiCredentials.Secret.GetString()),
+            LogVerbosity = defaultOptions.LogVerbosity,
+            BaseAddress = defaultOptions.BaseAddress,
+            LogWriters = defaultOptions.LogWriters,
+            Proxy = defaultOptions.Proxy,
+            RateLimiters = defaultOptions.RateLimiters,
+            RateLimitingBehaviour = defaultOptions.RateLimitingBehaviour
+        };
+
         private const string HubName = "c2";
 
         private const string BalanceEvent = "uB";
@@ -96,7 +107,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Creates a new socket client using the default options
         /// </summary>
-        public BittrexSocketClient(): this(defaultOptions)
+        public BittrexSocketClient(): this(DefaultOptions)
         {
         }
 
