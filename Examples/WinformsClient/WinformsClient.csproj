@@ -33,10 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bittrex.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bittrex.Net.2.1.5\lib\netstandard2.0\Bittrex.Net.dll</HintPath>
+      <HintPath>..\packages\Bittrex.Net.2.1.16\lib\netstandard2.0\Bittrex.Net.dll</HintPath>
     </Reference>
     <Reference Include="CryptoExchange.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CryptoExchange.Net.0.0.25\lib\netstandard2.0\CryptoExchange.Net.dll</HintPath>
+      <HintPath>..\packages\CryptoExchange.Net.0.0.44\lib\netstandard2.0\CryptoExchange.Net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Client.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
