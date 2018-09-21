@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -781,10 +782,12 @@ namespace Bittrex.Net.UnitTests
             var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // act
-            var sign = authProvider.AddAuthenticationToUriString("https://test.test-api.com", true);           
+            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", "GET", new Dictionary<string, object>(),  true);
 
             // assert
-            Assert.IsTrue(sign.StartsWith("https://test.test-api.com?apiKey=TestKey&nonce="));
+            Assert.IsTrue(sign.First().Key == "apiKey");
+            Assert.IsTrue((string)sign.First().Value == "TestKey");
+            Assert.IsTrue(sign.ElementAt(1).Key == "nonce");
         }
 
         [Test]
@@ -796,10 +799,10 @@ namespace Bittrex.Net.UnitTests
             var request = new Request(WebRequest.CreateHttp(uri));
 
             // act
-            var sign = authProvider.AddAuthenticationToRequest(request, true);
+            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), "GET", new Dictionary<string, object>(), true);
 
             // assert
-            Assert.IsTrue(request.Headers["apisign"] == "3A82874271C0B4BE0F5DE44CB2CE7B39645AC93B07FD5570A700DC14C7524269B373DAFFA3A9BF1A2B6A318915D2ACEEC905163E574F34FF39EC62A676D2FBC2");
+            Assert.IsTrue(sign.First().Value == "3A82874271C0B4BE0F5DE44CB2CE7B39645AC93B07FD5570A700DC14C7524269B373DAFFA3A9BF1A2B6A318915D2ACEEC905163E574F34FF39EC62A676D2FBC2");
         }
 
         private BittrexClient Construct(BittrexClientOptions options = null)

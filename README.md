@@ -164,6 +164,10 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.17 - 21 sep 2018
+	* Updated CryptoExchange.Net
+	* Fixed Kline methods
+
 * Version 2.1.16 - 21 aug 2018
 	* Fix for default api credentials getting disposed
 

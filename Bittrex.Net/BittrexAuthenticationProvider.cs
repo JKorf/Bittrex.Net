@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using CryptoExchange.Net;
@@ -19,31 +20,26 @@ namespace Bittrex.Net
             encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret.GetString()));
         }
 
-        public override string AddAuthenticationToUriString(string uri, bool signed)
+        public override Dictionary<string, object> AddAuthenticationToParameters(string uri, string method, Dictionary<string, object> parameters, bool signed)
         {
             if (!signed)
-                return uri;
-
-            if (!uri.Contains("?"))
-                uri += "?";
-
-            if (!uri.EndsWith("?"))
-                uri += "&";
-
-            uri += $"apiKey={Credentials.Key.GetString()}&nonce={nonce}";
-            return uri;
-        }
-
-        public override IRequest AddAuthenticationToRequest(IRequest request, bool signed)
-        {
-            if (!signed)
-                return request;
+                return parameters;
 
             lock(locker)
-                request.Headers.Add("apisign",
-                    ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(request.Uri.ToString()))));
+                parameters.Add("apiKey", Credentials.Key.GetString());
+            parameters.Add("nonce", nonce);
+            return parameters;
+        }
 
-            return request;
+        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, string method, Dictionary<string, object> parameters, bool signed)
+        {
+            if (!signed)
+                return new Dictionary<string, string>();
+
+            var result = new Dictionary<string, string>();
+            lock (locker)
+                result.Add("apisign", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uri))));
+            return result;
         }
 
         public override string Sign(string toSign)

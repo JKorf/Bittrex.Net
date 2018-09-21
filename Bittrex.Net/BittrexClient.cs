@@ -10,6 +10,8 @@ using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Interfaces;
+using System.Text;
 
 namespace Bittrex.Net
 {
@@ -25,6 +27,7 @@ namespace Bittrex.Net
                 {
                     LogVerbosity = defaultOptions.LogVerbosity,
                     BaseAddress = defaultOptions.BaseAddress,
+                    BaseAddressV2 = defaultOptions.BaseAddressV2,
                     LogWriters = defaultOptions.LogWriters,
                     Proxy = defaultOptions.Proxy,
                     RateLimiters = defaultOptions.RateLimiters,
@@ -41,6 +44,7 @@ namespace Bittrex.Net
         private const string Api = "api";
         private const string ApiVersion = "1.1";
         private const string ApiVersion2 = "2.0";
+        private string baseAddressV2;
 
         private const string MarketsEndpoint = "public/getmarkets";
         private const string CurrenciesEndpoint = "public/getcurrencies";
@@ -56,8 +60,8 @@ namespace Bittrex.Net
         private const string SellLimitEndpoint = "market/selllimit";
         private const string CancelEndpoint = "market/cancel";
         private const string OpenOrdersEndpoint = "market/getopenorders";
-        private const string SellV2Endpoint = "key/market/tradesell";
-        private const string BuyV2Endpoint = "key/market/tradebuy";
+        private const string SellV2Endpoint = "auth/market/tradesell";
+        private const string BuyV2Endpoint = "auth/market/tradebuy";
 
         private const string BalanceEndpoint = "account/getbalance";
         private const string BalancesEndpoint = "account/getbalances";
@@ -180,7 +184,8 @@ namespace Bittrex.Net
             };
 
             var result = await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
-            return new CallResult<BittrexMarketSummary>(result.Data.Any() ? result.Data[0]: null, result.Error);
+
+            return new CallResult<BittrexMarketSummary>(result.Data?.Any() == true ? result.Data[0]: null, result.Error);
         }
 
         /// <summary>
@@ -389,7 +394,7 @@ namespace Bittrex.Net
             };
 
             var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2);
-            return await Execute<BittrexOrderResult>(uri, true, parameters).ConfigureAwait(false);
+            return await Execute<BittrexOrderResult>(uri, true, parameters, "POST").ConfigureAwait(false);
         }
 
         /// <summary>
@@ -592,15 +597,19 @@ namespace Bittrex.Net
 
         protected Uri GetUrl(string endpoint, string api, string version)
         {
-            var result = $"{baseAddress}/{api}/v{version}/{endpoint}";
+            string address = baseAddress;
+            if (version == ApiVersion2)
+                address = baseAddressV2;
+
+            var result = $"{address}/{api}/v{version}/{endpoint}";
             return new Uri(result);
         }
 
-        private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false, Dictionary<string, object> parameters = null) where T: class
+        private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false, Dictionary<string, object> parameters = null, string method = "GET") where T: class
         {
-            return GetResult(await ExecuteRequest<BittrexApiResult<T>>(uri, "GET", parameters, signed).ConfigureAwait(false));
+            return GetResult(await ExecuteRequest<BittrexApiResult<T>>(uri, method, parameters, signed).ConfigureAwait(false));
         }
-
+        
         private static CallResult<T> GetResult<T>(CallResult<BittrexApiResult<T>> result) where T : class
         {
             if (result.Error != null || result.Data == null)
@@ -617,6 +626,7 @@ namespace Bittrex.Net
                 SetAuthenticationProvider(new BittrexAuthenticationProvider(options.ApiCredentials));
 
             baseAddress = options.BaseAddress;
+            baseAddressV2 = options.BaseAddressV2;
         }
 
         #endregion
