@@ -164,6 +164,9 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.18 - 25 sep 2018
+	* Fixed PlaceConditionalOrder endpoint
+
 * Version 2.1.17 - 21 sep 2018
 	* Updated CryptoExchange.Net
 	* Fixed Kline methods
