@@ -12,6 +12,8 @@ using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Interfaces;
 using System.Text;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace Bittrex.Net
 {
@@ -60,8 +62,8 @@ namespace Bittrex.Net
         private const string SellLimitEndpoint = "market/selllimit";
         private const string CancelEndpoint = "market/cancel";
         private const string OpenOrdersEndpoint = "market/getopenorders";
-        private const string SellV2Endpoint = "auth/market/tradesell";
-        private const string BuyV2Endpoint = "auth/market/tradebuy";
+        private const string SellV2Endpoint = "key/market/TradeSell";
+        private const string BuyV2Endpoint = "key/market/TradeBuy";
 
         private const string BalanceEndpoint = "account/getbalance";
         private const string BalancesEndpoint = "account/getbalances";
@@ -394,7 +396,7 @@ namespace Bittrex.Net
             };
 
             var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2);
-            return await Execute<BittrexOrderResult>(uri, true, parameters, "POST").ConfigureAwait(false);
+            return await Execute<BittrexOrderResult>(uri, true, parameters, "GET").ConfigureAwait(false);
         }
 
         /// <summary>
