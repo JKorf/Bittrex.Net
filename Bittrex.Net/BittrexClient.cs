@@ -10,10 +10,6 @@ using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
-using CryptoExchange.Net.Interfaces;
-using System.Text;
-using System.Collections.Specialized;
-using System.Web;
 
 namespace Bittrex.Net
 {

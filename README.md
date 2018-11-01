@@ -164,6 +164,9 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.19 - 01 nov 2018
+	* Fix MarketSummaryLite failing to deserialize when there is a new market without data
+
 * Version 2.1.18 - 25 sep 2018
 	* Fixed PlaceConditionalOrder endpoint
 

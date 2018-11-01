@@ -20,11 +20,11 @@ namespace Bittrex.Net.Objects
         /// Price of last executed trade
         /// </summary>
         [JsonProperty("l")]
-        public decimal Last { get; set; }
+        public decimal? Last { get; set; }
         /// <summary>
         /// The base volume
         /// </summary>
         [JsonProperty("m")]
-        public decimal BaseVolume { get; set; }
+        public decimal? BaseVolume { get; set; }
     }
 }
