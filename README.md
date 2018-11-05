@@ -164,6 +164,9 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 2.1.20 - 05 nov 2018
+	* Fix for v2 api methods resulting in INVALID_SIGNATURE
+
 * Version 2.1.19 - 01 nov 2018
 	* Fix MarketSummaryLite failing to deserialize when there is a new market without data
 
