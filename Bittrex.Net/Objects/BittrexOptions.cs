@@ -10,7 +10,7 @@ namespace Bittrex.Net.Objects
             BaseAddress = "https://api.bittrex.com";
         }
 
-        public string BaseAddressV2 { get; set; } = "https://bittrex.com";
+        public string BaseAddressV2 { get; set; } = "https://international.bittrex.com";
     }
 
     public class BittrexSocketClientOptions : ExchangeOptions
@@ -19,7 +19,5 @@ namespace Bittrex.Net.Objects
         {
             BaseAddress = "https://socket.bittrex.com/signalr";
         }
-
-        public string BaseAddressV2 { get; set; } = "https://bittrex.com";
     }
 }
