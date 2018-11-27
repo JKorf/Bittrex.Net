@@ -23,8 +23,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.2.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />	
-	<PackageReference Include="CryptoExchange.Net" Version="1.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CryptoExchange.Net\CryptoExchange.Net\CryptoExchange.Net.csproj" />
   </ItemGroup>
 
 </Project>

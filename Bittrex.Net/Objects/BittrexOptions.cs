@@ -3,7 +3,7 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects
 {
-    public class BittrexClientOptions : ExchangeOptions
+    public class BittrexClientOptions : ClientOptions
     {
         public BittrexClientOptions()
         {
@@ -13,7 +13,7 @@ namespace Bittrex.Net.Objects
         public string BaseAddressV2 { get; set; } = "https://international.bittrex.com";
     }
 
-    public class BittrexSocketClientOptions : ExchangeOptions
+    public class BittrexSocketClientOptions : SocketClientOptions
     {
         public BittrexSocketClientOptions()
         {

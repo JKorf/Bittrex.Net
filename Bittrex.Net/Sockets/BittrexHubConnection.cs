@@ -6,61 +6,58 @@ using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Microsoft.AspNet.SignalR.Client.Http;
 using CryptoExchange.Net.Logging;
+using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
-    public class BittrexHubConnection: IHubConnection
+    public class BittrexHubConnection: BaseSocket, ISignalRSocket//, IHubConnection
     {
         private readonly HubConnection connection;
-        private readonly Log log;
+        private IHubProxy proxy;
 
-        public BittrexHubConnection(Log log, HubConnection connection)
+        public BittrexHubConnection(Log log, HubConnection connection): base(null, connection.Url)
         {
             this.connection = connection;
             this.log = log;
+
+            connection.StateChanged += StateChangeHandler;
+            connection.Error += (s) => Handle(errorHandlers, s);
+            connection.Received += (str) => Handle(messageHandlers, str);
         }
 
-        public void SetProxy(string proxyHost, int proxyPort)
+        private void StateChangeHandler(StateChange change)
+        {
+            if (change.NewState == ConnectionState.Connected)
+                Handle(openHandlers);
+            if (change.NewState == ConnectionState.Disconnected)
+                Handle(closeHandlers);
+            if (change.NewState == ConnectionState.Reconnecting)
+                connection.Stop(TimeSpan.FromMilliseconds(100));
+        }        
+
+        public void SetHub(string name)
+        {
+            proxy = connection.CreateHubProxy(name);
+        }
+
+        public override void SetProxy(string proxyHost, int proxyPort)
         {
             connection.Proxy = new WebProxy(proxyHost, proxyPort);
         }
-
-        public ConnectionState State => connection.State;
         
-        public event Action<StateChange> StateChanged
+        public async Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
         {
-            add => connection.StateChanged += value;
-            remove => connection.StateChanged -= value;
-        }
-
-        public event Action Closed
-        {
-            add => connection.Closed += value;
-            remove => connection.Closed -= value;
-        }
-
-        public event Action<Exception> Error
-        {
-            add => connection.Error += value;
-            remove => connection.Error -= value;
-        }
-
-        public event Action ConnectionSlow
-        {
-            add => connection.ConnectionSlow += value;
-            remove => connection.ConnectionSlow -= value;
-        }
-
-        public CookieContainer Cookies
-        {
-            get => connection.CookieContainer;
-            set => connection.CookieContainer = value;
-        }
-
-        public string UserAgent
-        {
-            get => connection.Headers["User-Agent"];
-            set => connection.Headers["User-Agent"] = value;
+            try
+            {
+                var sub = await proxy.Invoke<T>(call, pars).ConfigureAwait(false);
+                return new CallResult<T>(sub, null);
+            }
+            catch (Exception e)
+            {
+                log.Write(LogVerbosity.Warning, "Failed to invoke proxy: " + e.Message);
+                return new CallResult<T>(default(T), new UnknownError("Failed to invoke proxy: " + e.Message));
+            }
         }
 
         public IHubProxy CreateHubProxy(string hubName)
@@ -68,19 +65,30 @@ namespace Bittrex.Net.Sockets
             return connection.CreateHubProxy(hubName);
         }
 
-        public Task Start()
+        public override async Task<bool> Connect()
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
                 new WebsocketCustomTransport(log, client)
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
-            return connection.Start(autoTransport);
+            try
+            {
+                await connection.Start(autoTransport);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public void Stop(TimeSpan timeout)
+        public override async Task Close()
         {
-            connection.Stop(timeout);
+            await Task.Run(() =>
+            {
+                connection.Stop(TimeSpan.FromSeconds(1));
+            });
         }
     }
 }

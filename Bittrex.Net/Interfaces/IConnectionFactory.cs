@@ -2,8 +2,8 @@
 
 namespace Bittrex.Net.Interfaces
 {
-    public interface IConnectionFactory
-    {
-        IHubConnection Create(Log log, string url);
-    }
+    //public interface IConnectionFactory
+    //{
+    //    W Create(Log log, string url);
+    //}
 }

@@ -12,7 +12,7 @@ namespace Bittrex.Net.Interfaces
 {
     public interface IBittrexSocketClient
     {
-        IConnectionFactory ConnectionFactory { get; set; }
+        //IConnectionFactory ConnectionFactory { get; set; }
         IRequestFactory RequestFactory { get; set; }
 
         /// <summary>

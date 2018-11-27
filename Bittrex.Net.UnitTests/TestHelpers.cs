@@ -56,7 +56,7 @@ namespace Bittrex.Net.UnitTests
             return self == to;
         }
 
-        public static MockObjects<T> PrepareClient<T>(Func<T> construct, string responseData) where T : ExchangeClient, new()
+        public static MockObjects<T> PrepareClient<T>(Func<T> construct, string responseData) where T : RestClient, new()
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();
@@ -91,7 +91,7 @@ namespace Bittrex.Net.UnitTests
             };
         }
 
-        public static T PrepareExceptionClient<T>(string responseData, string exceptionMessage, int statusCode) where T : ExchangeClient, new()
+        public static T PrepareExceptionClient<T>(string responseData, string exceptionMessage, int statusCode) where T : RestClient, new()
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();
@@ -127,13 +127,12 @@ namespace Bittrex.Net.UnitTests
             return client;
         }
 
-        public static (Mock<IWebsocket>, T) PrepareSocketClient<T>(Func<T> construct) where T : ExchangeClient, new()
+        public static (Mock<IWebsocket>, T) PrepareSocketClient<T>(Func<T> construct) where T : SocketClient, new()
         {
             List<IWebsocket> sockets = new List<IWebsocket>();
             var socket = new Mock<IWebsocket>();
             socket.Setup(s => s.Close()).Returns(Task.FromResult(true));
             socket.Setup(s => s.Connect()).Returns(Task.FromResult(true));
-            socket.Setup(s => s.SetEnabledSslProtocols(It.IsAny<System.Security.Authentication.SslProtocols>()));
 
             var factory = new Mock<IWebsocketFactory>();
             factory.Setup(s => s.CreateWebsocket(It.IsAny<Log>(), It.IsAny<string>())).Returns(socket.Object);
@@ -151,7 +150,7 @@ namespace Bittrex.Net.UnitTests
             socket.Raise(r => r.OnMessage += null, data);
         }
 
-        public class MockObjects<T> where T : ExchangeClient
+        public class MockObjects<T> where T : RestClient
         {
             public T Client { get; set; }
             public Mock<IRequest> Request { get; set; }

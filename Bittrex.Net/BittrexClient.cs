@@ -13,7 +13,7 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net
 {
-    public class BittrexClient: ExchangeClient, IBittrexClient
+    public class BittrexClient: RestClient//, IBittrexClient
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
