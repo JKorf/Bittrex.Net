@@ -20,25 +20,7 @@ namespace Bittrex.Net
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
-        private static BittrexSocketClientOptions DefaultOptions
-        {
-            get
-            {
-                var result = new BittrexSocketClientOptions()
-                {
-                    LogVerbosity = defaultOptions.LogVerbosity,
-                    BaseAddress = defaultOptions.BaseAddress,
-                    LogWriters = defaultOptions.LogWriters,
-                    Proxy = defaultOptions.Proxy,
-                    ReconnectInterval = defaultOptions.ReconnectInterval
-                };
-
-                if (defaultOptions.ApiCredentials != null)
-                    result.ApiCredentials = new ApiCredentials(defaultOptions.ApiCredentials.Key.GetString(), defaultOptions.ApiCredentials.Secret.GetString());
-
-                return result;
-            }
-        }
+        private static BittrexSocketClientOptions DefaultOptions => defaultOptions.Copy<BittrexSocketClientOptions>();
 
         private const string HubName = "c2";
 
@@ -276,7 +258,7 @@ namespace Bittrex.Net
             var socket = CreateSocket(baseAddress);
             var subscription = new SocketSubscription(socket);
             if (subscribing)
-                subscription.DataHandlers.Add((subs, data) => UpdateHandler(subs, data, onData));            
+                subscription.MessageHandlers.Add((subs, data) => UpdateHandler(subs, data, onData));            
 
             var connectResult = await ConnectSocket(subscription);
             if (!connectResult.Success)
@@ -333,32 +315,33 @@ namespace Bittrex.Net
             onData(decData.Data);
         }
 
-        private void UpdateHandler<T>(SocketSubscription subscription, JToken data, Action<T> onData)
+        private bool UpdateHandler<T>(SocketSubscription subscription, JToken data, Action<T> onData)
         {
             if (data["A"] == null)
-                return;
+                return false;
 
             var decData = DecodeData((string)((JArray)data["A"])[0]).Result;
             if (!decData.Success)
             {
                 log.Write(LogVerbosity.Warning, $"Failed to decode data: " + decData.Error);
-                return;
+                return false;
             }
 
             if(typeof(T) == typeof(string))
             {
                 onData((T)Convert.ChangeType(decData.Data, typeof(T)));
-                return;
+                return true;
             }
 
             var desData = Deserialize<T>(decData.Data);
             if (!desData.Success)
             {
                 log.Write(LogVerbosity.Warning, $"Failed to deserialize data into {typeof(T).Name}: " + desData.Error);
-                return;
+                return false;
             }
 
             onData(desData.Data);
+            return true;
         }
 
         private async Task<CallResult<bool>> Authenticate(SocketSubscription subscription)
@@ -390,7 +373,7 @@ namespace Bittrex.Net
 
         protected override void ProcessMessage(SocketSubscription subscription, string data)
         {
-            foreach (var handler in subscription.DataHandlers)
+            foreach (var handler in subscription.MessageHandlers)
                 handler(subscription, JToken.Parse(data));
         }
 

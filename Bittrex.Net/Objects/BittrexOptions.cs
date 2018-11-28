@@ -11,6 +11,13 @@ namespace Bittrex.Net.Objects
         }
 
         public string BaseAddressV2 { get; set; } = "https://international.bittrex.com";
+
+        public BittrexClientOptions Copy()
+        {
+            var copy = Copy<BittrexClientOptions>();
+            copy.BaseAddressV2 = BaseAddressV2;
+            return copy;
+        }
     }
 
     public class BittrexSocketClientOptions : SocketClientOptions
