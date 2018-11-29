@@ -195,11 +195,17 @@ namespace Bittrex.Net
 
         private async Task<CallResult<T>> Query<T>(ConnectionRequest request)
         {
-            var connectResult = await CreateAndConnectSocket<object>(request.Signed, false, null);
-            if (!connectResult.Success)
-                return new CallResult<T>(default(T), connectResult.Error);
+            var subscription = GetBackgroundSocket(request.Signed);
+            if (subscription == null)
+            {
+                // We dont have a background socket to query, create a new one
+                var connectResult = await CreateAndConnectSocket<object>(request.Signed, false, null);
+                if (!connectResult.Success)
+                    return new CallResult<T>(default(T), connectResult.Error);
 
-            var subscription = connectResult.Data;
+                subscription = connectResult.Data;
+                subscription.Type = request.Signed ? SocketType.BackgroundAuthenticated : SocketType.Background;
+            }
 
             var queryResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<string>(request.RequestName, request.Parameters);
             if (!queryResult.Success)
@@ -218,11 +224,9 @@ namespace Bittrex.Net
             var desResult = Deserialize<T>(decResult.Data);
             if (!desResult.Success)
             {
-                var closeTask = subscription.Close();
                 return new CallResult<T>(default(T), desResult.Error);
             }
 
-            var closeTask2 = subscription.Close();
             return new CallResult<T>(desResult.Data, null);
         }
 
@@ -258,7 +262,7 @@ namespace Bittrex.Net
             var socket = CreateSocket(baseAddress);
             var subscription = new SocketSubscription(socket);
             if (subscribing)
-                subscription.MessageHandlers.Add((subs, data) => UpdateHandler(subs, data, onData));            
+                subscription.MessageHandlers.Add(DataHandlerName, (subs, data) => UpdateHandler(subs, data, onData));            
 
             var connectResult = await ConnectSocket(subscription);
             if (!connectResult.Success)
@@ -374,7 +378,7 @@ namespace Bittrex.Net
         protected override void ProcessMessage(SocketSubscription subscription, string data)
         {
             foreach (var handler in subscription.MessageHandlers)
-                handler(subscription, JToken.Parse(data));
+                handler.Value(subscription, JToken.Parse(data));
         }
 
         private async Task<CallResult<string>> DecodeData(string rawData)
