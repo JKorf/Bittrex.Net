@@ -15,7 +15,7 @@ using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net
 {
-    public class BittrexSocketClient: SocketClient
+    public class BittrexSocketClient: SocketClient, IBittrexSocketClient
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
