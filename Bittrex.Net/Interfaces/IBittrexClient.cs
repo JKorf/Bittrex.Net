@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
-using CryptoExchange.Net;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.RateLimiter;
@@ -18,9 +17,9 @@ namespace Bittrex.Net.Interfaces
         void SetApiCredentials(string apiKey, string apiSecret);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetMarketsAsync"/> method
+        /// Gets information about all available markets
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of markets</returns>
         CallResult<BittrexMarket[]> GetMarkets();
 
         /// <summary>
@@ -30,9 +29,9 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexMarket[]>> GetMarketsAsync();
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetCurrenciesAsync"/> method
+        /// Gets information about all available currencies
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of currencies</returns>
         CallResult<BittrexCurrency[]> GetCurrencies();
 
         /// <summary>
@@ -42,9 +41,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexCurrency[]>> GetCurrenciesAsync();
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetTickerAsync"/> method
+        /// Gets the price of a market
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Market to get price for</param>
+        /// <returns>The current ask, bid and last prices for the market</returns>
         CallResult<BittrexPrice> GetTicker(string market);
 
         /// <summary>
@@ -55,9 +55,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexPrice>> GetTickerAsync(string market);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetMarketSummaryAsync"/> method
+        /// Gets a summary of the market
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">The market to get info for</param>
+        /// <returns>List with single entry containing info for the market</returns>
         CallResult<BittrexMarketSummary> GetMarketSummary(string market);
 
         /// <summary>
@@ -68,9 +69,9 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetMarketSummariesAsync"/> method
+        /// Gets a summary for all markets
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of summaries for all markets</returns>
         CallResult<BittrexMarketSummary[]> GetMarketSummaries();
 
         /// <summary>
@@ -80,48 +81,52 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexMarketSummary[]>> GetMarketSummariesAsync();
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetOrderBookAsync"/> method
+        /// Gets the order book with bids and asks for a market
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">The market to get the order book for</param>
+        /// <returns>Order book for the market</returns>
         CallResult<BittrexOrderBook> GetOrderBook(string market);
 
         /// <summary>
         /// Gets the order book with bids and asks for a market
         /// </summary>
         /// <param name="market">The market to get the order book for</param>
-        /// <returns>Orderbook for the market</returns>
+        /// <returns>Order book for the market</returns>
         Task<CallResult<BittrexOrderBook>> GetOrderBookAsync(string market);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetBuyOrderBookAsync"/> method
+        /// Gets the order book with asks for a market
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Market to get the order book for</param>
+        /// <returns>Order book for the market</returns>
         CallResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market);
 
         /// <summary>
         /// Gets the order book with asks for a market
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
-        /// <returns>Orderbook for the market</returns>
+        /// <returns>Order book for the market</returns>
         Task<CallResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetSellOrderBookAsync"/> method
+        /// Gets the order book with bids for a market
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Market to get the order book for</param>
+        /// <returns>Order book for the market</returns>
         CallResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market);
 
         /// <summary>
         /// Gets the order book with bids for a market
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
-        /// <returns>Orderbook for the market</returns>
+        /// <returns>Order book for the market</returns>
         Task<CallResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetMarketHistoryAsync"/> method
+        /// Gets the last trades on a market
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Market to get history for</param>
+        /// <returns>List of trade aggregations</returns>
         CallResult<BittrexMarketHistory[]> GetMarketHistory(string market);
 
         /// <summary>
@@ -132,9 +137,11 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetCandlesAsync"/> method
+        /// Gets candle data for a market on a specific interval
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Market to get candles for</param>
+        /// <param name="interval">The candle interval</param>
+        /// <returns>List of candles</returns>
         CallResult<BittrexCandle[]> GetCandles(string market, TickInterval interval);
 
         /// <summary>
@@ -146,9 +153,11 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetLatestCandleAsync"/> method
+        /// Gets candle data for a market on a specific interval
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Market to get candles for</param>
+        /// <param name="interval">The candle interval</param>
+        /// <returns>List of candles</returns>
         CallResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval);
 
         /// <summary>
@@ -160,8 +169,12 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.PlaceOrderAsync"/> method
+        /// Places an order
         /// </summary>
+        /// <param name="side">Side of the order</param>
+        /// <param name="market">Market to place the order on</param>
+        /// <param name="quantity">The quantity of the order</param>
+        /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
         CallResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate);
 
@@ -176,8 +189,15 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.PlaceConditionalOrderAsync"/> method
+        /// Places a conditional order. The order will be executed when the condition that is set becomes true.
         /// </summary>
+        /// <param name="side">Buy or sell</param>
+        /// <param name="timeInEffect">The time the order stays active</param>
+        /// <param name="market">Market the order is for</param>
+        /// <param name="quantity">The quantity of the order</param>
+        /// <param name="rate">The rate of the order</param>
+        /// <param name="conditionType">The type of condition</param>
+        /// <param name="target">The target of the condition type</param>
         /// <returns></returns>
         CallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
 
@@ -195,8 +215,9 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.CancelOrderAsync"/> method
+        /// Cancels an open order
         /// </summary>
+        /// <param name="guid">The Guid of the order to cancel</param>
         /// <returns></returns>
         CallResult<object> CancelOrder(Guid guid);
 
@@ -208,9 +229,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<object>> CancelOrderAsync(Guid guid);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetOpenOrdersAsync"/> method
+        /// Gets a list of open orders
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Filter list by market</param>
+        /// <returns>List of open orders</returns>
         CallResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null);
 
         /// <summary>
@@ -221,9 +243,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetBalanceAsync"/> method
+        /// Gets the balance of a single currency
         /// </summary>
-        /// <returns></returns>
+        /// <param name="currency">Currency to get the balance for</param>
+        /// <returns>The balance of the currency</returns>
         CallResult<BittrexBalance> GetBalance(string currency);
 
         /// <summary>
@@ -234,9 +257,9 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexBalance>> GetBalanceAsync(string currency);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetBalancesAsync"/> method
+        /// Gets a list of all balances for the current account
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of balances</returns>
         CallResult<BittrexBalance[]> GetBalances();
 
         /// <summary>
@@ -246,22 +269,27 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexBalance[]>> GetBalancesAsync();
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetDepositAddressAsync"/> method
+        /// Gets the deposit address for a specific currency
         /// </summary>
-        /// <returns></returns>
+        /// <param name="currency">Currency to get deposit address for</param>
+        /// <returns>The deposit address of the currency</returns>
         CallResult<BittrexDepositAddress> GetDepositAddress(string currency);
 
         /// <summary>
-        /// Gets the desposit address for a specific currency
+        /// Gets the deposit address for a specific currency
         /// </summary>
         /// <param name="currency">Currency to get deposit address for</param>
         /// <returns>The deposit address of the currency</returns>
         Task<CallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.WithdrawAsync"/> method
+        /// Places a withdraw request on Bittrex
         /// </summary>
-        /// <returns></returns>
+        /// <param name="currency">The currency to withdraw</param>
+        /// <param name="quantity">The quantity to withdraw</param>
+        /// <param name="address">The address to withdraw to</param>
+        /// <param name="paymentId">Optional string identifier to add to the withdraw</param>
+        /// <returns>Guid of the withdrawal</returns>
         CallResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null);
 
         /// <summary>
@@ -275,9 +303,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetOrderAsync"/> method
+        /// Gets an order by it's guid
         /// </summary>
-        /// <returns></returns>
+        /// <param name="guid">The guid of the order</param>
+        /// <returns>The requested order</returns>
         CallResult<BittrexAccountOrder> GetOrder(Guid guid);
 
         /// <summary>
@@ -288,9 +317,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexAccountOrder>> GetOrderAsync(Guid guid);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetOrderHistoryAsync"/> method
+        /// Gets the order history for the current account
         /// </summary>
-        /// <returns></returns>
+        /// <param name="market">Filter on market</param>
+        /// <returns>List of orders</returns>
         CallResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null);
 
         /// <summary>
@@ -301,9 +331,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetWithdrawalHistoryAsync"/> method
+        /// Gets the withdrawal history of the current account
         /// </summary>
-        /// <returns></returns>
+        /// <param name="currency">Filter on currency</param>
+        /// <returns>List of withdrawals</returns>
         CallResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null);
 
         /// <summary>
@@ -314,9 +345,10 @@ namespace Bittrex.Net.Interfaces
         Task<CallResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null);
 
         /// <summary>
-        /// Synchronized version of the <see cref="BittrexClient.GetDepositHistoryAsync"/> method
+        /// Gets the deposit history of the current account
         /// </summary>
-        /// <returns></returns>
+        /// <param name="currency">Filter on currency</param>
+        /// <returns>List of deposits</returns>
         CallResult<BittrexDeposit[]> GetDepositHistory(string currency = null);
 
         /// <summary>
@@ -326,11 +358,34 @@ namespace Bittrex.Net.Interfaces
         /// <returns>List of deposits</returns>
         Task<CallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null);
 
-        void AddRateLimiter(IRateLimiter limiter);
-        void RemoveRateLimiters();
-        CallResult<long> Ping();
-        void Dispose();
-        Task<CallResult<long>> PingAsync();
+        /// <summary>
+        /// The factory for creating requests. Used for unit testing
+        /// </summary>
         IRequestFactory RequestFactory { get; set; }
+
+        /// <summary>
+        /// Adds a rate limiter to the client. There are 2 choices, the <see cref="RateLimiterTotal"/> and the <see cref="RateLimiterPerEndpoint"/>.
+        /// </summary>
+        /// <param name="limiter">The limiter to add</param>
+        void AddRateLimiter(IRateLimiter limiter);
+
+        /// <summary>
+        /// Removes all rate limiters from this client
+        /// </summary>
+        void RemoveRateLimiters();
+
+        /// <summary>
+        /// Ping to see if the server is reachable
+        /// </summary>
+        /// <returns>The roundtrip time of the ping request</returns>
+        CallResult<long> Ping();
+
+        /// <summary>
+        /// Ping to see if the server is reachable
+        /// </summary>
+        /// <returns>The roundtrip time of the ping request</returns>
+        Task<CallResult<long>> PingAsync();
+
+        void Dispose();
     }
 }

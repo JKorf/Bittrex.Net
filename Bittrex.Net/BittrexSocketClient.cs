@@ -8,7 +8,6 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Logging;
 using System.IO;
 using System.IO.Compression;
-using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Newtonsoft.Json.Linq;
@@ -16,20 +15,14 @@ using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net
 {
-    public class BittrexSocketClient: SocketClient//, IBittrexSocketClient
+    public class BittrexSocketClient: SocketClient
     {
         #region fields
         private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
         private static BittrexSocketClientOptions DefaultOptions => defaultOptions.Copy<BittrexSocketClientOptions>();
 
         private const string HubName = "c2";
-
-        private const string BalanceEvent = "uB";
-        private const string MarketEvent = "uE";
-        private const string SummaryLiteEvent = "uL";
-        private const string SummaryEvent = "uS";
-        private const string OrderEvent = "uO";
-
+        
         private const string SummaryDeltaSub = "SubscribeToSummaryDeltas";
         private const string SummaryLiteDeltaSub = "SubscribeToSummaryLiteDeltas";
         private const string ExchangeDeltaSub = "SubscribeToExchangeDeltas";
@@ -69,96 +62,113 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Synchronized version of the <see cref="QuerySummaryStatesAsync"/> method
+        /// Gets the current summaries for all markets
         /// </summary>
+        /// <returns>Market summaries</returns>
         public CallResult<List<BittrexStreamMarketSummary>> QuerySummaryStates() => QuerySummaryStatesAsync().Result;
 
-        ///// <summary>
-        ///// Gets the current summaries for all markets
-        ///// </summary>
-        ///// <returns>Market summaries</returns>
+        /// <summary>
+        /// Gets the current summaries for all markets
+        /// </summary>
+        /// <returns>Market summaries</returns>
         public async Task<CallResult<List<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync()
         {
             var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(false, QuerySummaryStateRequest));
             return new CallResult<List<BittrexStreamMarketSummary>>(result.Data?.Deltas, result.Error);
         }
 
-        ///// <summary>
-        ///// Synchronized version of the <see cref="QueryExchangeStateAsync"/> method
-        ///// </summary>
+        /// <summary>
+        /// Gets the state of a specific market
+        /// 500 Buys
+        /// 100 Fills
+        /// 500 Sells
+        /// </summary>
+        /// <param name="marketName">The name of the market to query</param>
+        /// <returns>The current exchange state</returns>
         public CallResult<BittrexStreamQueryExchangeState> QueryExchangeState(string marketName) => QueryExchangeStateAsync(marketName).Result;
 
-        ///// <summary>
-        ///// Gets the state of a specific market
-        ///// 500 Buys
-        ///// 100 Fills
-        ///// 500 Sells
-        ///// </summary>
-        ///// <param name="marketName">The name of the market to query</param>
-        ///// <returns>The current exchange state</returns>
+        /// <summary>
+        /// Gets the state of a specific market
+        /// 500 Buys
+        /// 100 Fills
+        /// 500 Sells
+        /// </summary>
+        /// <param name="marketName">The name of the market to query</param>
+        /// <returns>The current exchange state</returns>
         public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
         {
             return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(false, QueryExchangeStateRequest, marketName));
         }
 
         /// <summary>
-        /// Synchronized version of the <see cref="SubscribeToExchangeStateUpdatesAsync"/> method
-        /// </summary>
-        public CallResult<UpdateSubscription> SubscribeToExchangeStateUpdates(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeStateUpdatesAsync(marketName, onUpdate).Result;
-
-        /// <summary>
-        /// Subscribes to orderbook and trade updates on a specific market
+        /// Subscribes to order book and trade updates on a specific market
         /// </summary>
         /// <param name="marketName">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
-        /// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        public CallResult<UpdateSubscription> SubscribeToExchangeStateUpdates(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeStateUpdatesAsync(marketName, onUpdate).Result;
+
+        /// <summary>
+        /// Subscribes to order book and trade updates on a specific market
+        /// </summary>
+        /// <param name="marketName">The name of the market to subscribe on</param>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToExchangeStateUpdatesAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
             return await Subscribe(new ConnectionRequest(false, ExchangeDeltaSub, marketName), onUpdate);
         }
 
-        ///// <summary>
-        ///// Synchronized version of the <see cref="SubscribeToMarketSummariesUpdateAsync"/> method
-        ///// </summary>
+        /// <summary>
+        /// Subscribes to updates of summaries for all markets
+        /// </summary>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public CallResult<UpdateSubscription> SubscribeToMarketSummariesUpdate(Action<List<BittrexStreamMarketSummary>> onUpdate) => SubscribeToMarketSummariesUpdateAsync(onUpdate).Result;
 
-        ///// <summary>
-        ///// Subscribes to updates of summaries for all markets
-        ///// </summary>
-        ///// <param name="onUpdate">The update event handler</param>
-        ///// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        /// <summary>
+        /// Subscribes to updates of summaries for all markets
+        /// </summary>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<List<BittrexStreamMarketSummary>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummaryUpdate>(data => onUpdate(data.Deltas));
             return await Subscribe(new ConnectionRequest(false, SummaryDeltaSub), inner);
         }
 
-        ///// <summary>
-        ///// Synchronized version of the <see cref="SubscribeToMarketSummariesLiteUpdateAsync"/> method
-        ///// </summary>
+        /// <summary>
+        /// Subscribes to lite summary updates for all markets
+        /// </summary>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public CallResult<UpdateSubscription> SubscribeToMarketSummariesLiteUpdate(Action<List<BittrexStreamMarketSummaryLite>> onUpdate) => SubscribeToMarketSummariesLiteUpdateAsync(onUpdate).Result;
 
-        ///// <summary>
-        ///// Subscribes to lite summary updates for all markets
-        ///// </summary>
-        ///// <param name="onUpdate">The update event handler</param>
-        ///// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        /// <summary>
+        /// Subscribes to lite summary updates for all markets
+        /// </summary>
+        /// <param name="onUpdate">The update event handler</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<List<BittrexStreamMarketSummaryLite>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummariesLite>(data => onUpdate(data.Deltas));
             return await Subscribe(new ConnectionRequest(false, SummaryLiteDeltaSub), inner);
         }
 
-        ///// <summary>
-        ///// Synchronized version of the <see cref="SubscribeToBalanceUpdatesAsync"/> method
-        ///// </summary>
+        /// <summary>
+        /// Subscribes to balance updates
+        /// </summary>
+        /// <param name="onBalanceUpdate">The update event handler for balance updates</param>
+        /// <param name="onOrderUpdate">The update event handler for order updates</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public CallResult<UpdateSubscription> SubscribeToAccountUpdates(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate) => SubscribeToAccountUpdatesAsync(onBalanceUpdate, onOrderUpdate).Result;
 
-        ///// <summary>
-        ///// Subscribes to balance updates
-        ///// </summary>
-        ///// <param name="onUpdate">The update event handler</param>
-        ///// <returns>ApiResult whether subscription was successful. The Result property contains the Stream Id which can be used to unsubscribe the stream again</returns>
+        /// <summary>
+        /// Subscribes to balance updates
+        /// </summary>
+        /// <param name="onBalanceUpdate">The update event handler for balance updates</param>
+        /// <param name="onOrderUpdate">The update event handler for order updates</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToAccountUpdatesAsync(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate)
         {
             var handler = new Action<string>(data =>
@@ -198,7 +208,7 @@ namespace Bittrex.Net
             var subscription = GetBackgroundSocket(request.Signed);
             if (subscription == null)
             {
-                // We dont have a background socket to query, create a new one
+                // We don't have a background socket to query, create a new one
                 var connectResult = await CreateAndConnectSocket<object>(request.Signed, false, null);
                 if (!connectResult.Success)
                     return new CallResult<T>(default(T), connectResult.Error);
@@ -262,7 +272,7 @@ namespace Bittrex.Net
             var socket = CreateSocket(baseAddress);
             var subscription = new SocketSubscription(socket);
             if (subscribing)
-                subscription.MessageHandlers.Add(DataHandlerName, (subs, data) => UpdateHandler(subs, data, onData));            
+                subscription.MessageHandlers.Add(DataHandlerName, (subs, data) => UpdateHandler(data, onData));            
 
             var connectResult = await ConnectSocket(subscription);
             if (!connectResult.Success)
@@ -304,22 +314,7 @@ namespace Bittrex.Net
             return socket;
         }
 
-        private void AuthUpdateHandler<T>(SocketSubscription subscription, JToken data, Action<string> onData)
-        {
-            if (data["A"] == null)
-                return;
-
-            var decData = DecodeData((string)((JArray)data["A"])[0]).Result;
-            if (!decData.Success)
-            {
-                log.Write(LogVerbosity.Warning, $"Failed to decode data: " + decData.Error);
-                return;
-            }
-
-            onData(decData.Data);
-        }
-
-        private bool UpdateHandler<T>(SocketSubscription subscription, JToken data, Action<T> onData)
+        private bool UpdateHandler<T>(JToken data, Action<T> onData)
         {
             if (data["A"] == null)
                 return false;
@@ -327,7 +322,7 @@ namespace Bittrex.Net
             var decData = DecodeData((string)((JArray)data["A"])[0]).Result;
             if (!decData.Success)
             {
-                log.Write(LogVerbosity.Warning, $"Failed to decode data: " + decData.Error);
+                log.Write(LogVerbosity.Warning, "Failed to decode data: " + decData.Error);
                 return false;
             }
 

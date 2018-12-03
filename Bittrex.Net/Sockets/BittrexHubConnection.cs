@@ -11,7 +11,7 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
-    public class BittrexHubConnection: BaseSocket, ISignalRSocket//, IHubConnection
+    public class BittrexHubConnection: BaseSocket, ISignalRSocket
     {
         private readonly HubConnection connection;
         private IHubProxy proxy;
@@ -28,12 +28,18 @@ namespace Bittrex.Net.Sockets
 
         private void StateChangeHandler(StateChange change)
         {
-            if (change.NewState == ConnectionState.Connected)
-                Handle(openHandlers);
-            if (change.NewState == ConnectionState.Disconnected)
-                Handle(closeHandlers);
-            if (change.NewState == ConnectionState.Reconnecting)
-                connection.Stop(TimeSpan.FromMilliseconds(100));
+            switch (change.NewState)
+            {
+                case ConnectionState.Connected:
+                    Handle(openHandlers);
+                    break;
+                case ConnectionState.Disconnected:
+                    Handle(closeHandlers);
+                    break;
+                case ConnectionState.Reconnecting:
+                    connection.Stop(TimeSpan.FromMilliseconds(100));
+                    break;
+            }
         }        
 
         public void SetHub(string name)
@@ -58,11 +64,6 @@ namespace Bittrex.Net.Sockets
                 log.Write(LogVerbosity.Warning, "Failed to invoke proxy: " + e.Message);
                 return new CallResult<T>(default(T), new UnknownError("Failed to invoke proxy: " + e.Message));
             }
-        }
-
-        public IHubProxy CreateHubProxy(string hubName)
-        {
-            return connection.CreateHubProxy(hubName);
         }
 
         public override async Task<bool> Connect()

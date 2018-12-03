@@ -17,7 +17,7 @@ namespace Bittrex.Net.UnitTests
 {
     public class BittrexSocketClientTests
     {
-        Mock<Interfaces.IHubConnection> socket;
+        //Mock<Interfaces.IHubConnection> socket;
         Mock<IHubProxy> proxy;
                 
         [TestCase()]
