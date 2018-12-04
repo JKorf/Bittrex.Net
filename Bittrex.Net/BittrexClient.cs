@@ -10,6 +10,7 @@ using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
+using Newtonsoft.Json.Linq;
 
 namespace Bittrex.Net
 {
@@ -393,7 +394,7 @@ namespace Bittrex.Net
             };
 
             var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2);
-            return await Execute<BittrexOrderResult>(uri, true, parameters, "GET").ConfigureAwait(false);
+            return await Execute<BittrexOrderResult>(uri, true, parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -608,12 +609,25 @@ namespace Bittrex.Net
 
         protected Uri GetUrl(string endpoint, string api, string version)
         {
-            string address = baseAddress;
+            string address = BaseAddress;
             if (version == ApiVersion2)
                 address = baseAddressV2;
 
             var result = $"{address}/{api}/v{version}/{endpoint}";
             return new Uri(result);
+        }
+
+        protected override bool IsErrorResponse(JToken data)
+        {
+            return data["success"] != null && !(bool) data["success"];
+        }
+
+        protected override Error ParseErrorResponse(JToken data)
+        {
+            if(data["message"] == null)
+                return new UnknownError("Unknown response from server: " + data);
+
+            return new ServerError((string)data["message"]);
         }
 
         private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false, Dictionary<string, object> parameters = null, string method = "GET") where T: class
@@ -636,7 +650,6 @@ namespace Bittrex.Net
             if (options.ApiCredentials != null)
                 SetAuthenticationProvider(new BittrexAuthenticationProvider(options.ApiCredentials));
 
-            baseAddress = options.BaseAddress;
             baseAddressV2 = options.BaseAddressV2;
         }
 

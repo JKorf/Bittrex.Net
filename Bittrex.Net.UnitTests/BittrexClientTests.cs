@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Bittrex.Net.Objects;
+using Bittrex.Net.UnitTests.TestImplementations;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Objects;
-using CryptoExchange.Net.Requests;
-using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Bittrex.Net.UnitTests
@@ -55,15 +48,15 @@ namespace Bittrex.Net.UnitTests
                     Notice = "Test notice"
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetMarkets();
+            var result = client.GetMarkets();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -95,15 +88,16 @@ namespace Bittrex.Net.UnitTests
                     Notice = null
                 },
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetCurrencies();
+            var result = client.GetCurrencies();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -111,44 +105,47 @@ namespace Bittrex.Net.UnitTests
         {
             // arrange
             var expected = new BittrexPrice() { Ask = 0.001m, Bid = 0.002m, Last = 0.003m };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetTicker("TestMarket");
+            var result = client.GetTicker("TestMarket");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected));
         }
 
         [TestCase()]
         public void GetMarketSummary_Should_RespondWithMarketSummary()
         {
             // arrange
-            var expected = new BittrexMarketSummary()
+            var expected = new List<BittrexMarketSummary>
             {
-                Ask = 0.001m,
-                Bid = 0.002m,
-                Last = 0.003m,
-                Created = new DateTime(2017, 1, 1),
-                MarketName = "TestMarket",
-                BaseVolume = 1.1m,
-                High = 2.2m,
-                Low = 3.3m,
-                OpenBuyOrders = 10,
-                OpenSellOrders = 20,
-                PrevDay = 4.4m,
-                TimeStamp = new DateTime(2016, 1, 1),
-                Volume = 5.5m
+                new BittrexMarketSummary
+                {
+                    Ask = 0.001m,
+                    Bid = 0.002m,
+                    Last = 0.003m,
+                    Created = new DateTime(2017, 1, 1),
+                    MarketName = "TestMarket",
+                    BaseVolume = 1.1m,
+                    High = 2.2m,
+                    Low = 3.3m,
+                    OpenBuyOrders = 10,
+                    OpenSellOrders = 20,
+                    PrevDay = 4.4m,
+                    TimeStamp = new DateTime(2016, 1, 1),
+                    Volume = 5.5m
+                }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(new List<BittrexMarketSummary>() { expected })));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetMarketSummary("TestMarket");
+            var result = client.GetMarketSummary("TestMarket");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected[0]));
         }
 
         [TestCase()]
@@ -206,16 +203,16 @@ namespace Bittrex.Net.UnitTests
                     Volume = null
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetMarketSummaries();
+            var result = client.GetMarketSummaries();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[2], expected[2]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[2], expected[2]));
         }
 
         [TestCase()]
@@ -235,17 +232,17 @@ namespace Bittrex.Net.UnitTests
                     new BittrexOrderBookEntry(){Quantity = 6.6m, Rate = 7.7m},
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetOrderBook("TestMarket");
+            var result = client.GetOrderBook("TestMarket");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data.Buy[0], expected.Buy[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data.Buy[1], expected.Buy[1]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data.Sell[0], expected.Sell[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data.Sell[1], expected.Sell[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy[0], expected.Buy[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy[1], expected.Buy[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell[0], expected.Sell[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell[1], expected.Sell[1]));
         }
 
         [TestCase()]
@@ -258,15 +255,15 @@ namespace Bittrex.Net.UnitTests
                 new BittrexOrderBookEntry() {Quantity = 1.1m, Rate = 2.2m},
                 new BittrexOrderBookEntry() {Quantity = 3.3m, Rate = 3.3m},
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetBuyOrderBook("TestMarket");
+            var result = client.GetBuyOrderBook("TestMarket");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -279,15 +276,15 @@ namespace Bittrex.Net.UnitTests
                 new BittrexOrderBookEntry() {Quantity = 1.1m, Rate = 2.2m},
                 new BittrexOrderBookEntry() {Quantity = 3.3m, Rate = 3.3m},
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetSellOrderBook("TestMarket");
+            var result = client.GetSellOrderBook("TestMarket");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -317,15 +314,15 @@ namespace Bittrex.Net.UnitTests
                     Total = 6.6m
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetMarketHistory("TestMarket");
+            var result = client.GetMarketHistory("TestMarket");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -333,17 +330,14 @@ namespace Bittrex.Net.UnitTests
         {
             // arrange
             var expected = new BittrexGuid() { Uuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301") };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.PlaceOrder(OrderSide.Buy, "TestMarket", 1, 1);
+            var result = client.PlaceOrder(OrderSide.Buy, "TestMarket", 1, 1);
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -351,13 +345,10 @@ namespace Bittrex.Net.UnitTests
         {
             // arrange
             var expected = new object();
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.CancelOrder(new Guid());
+            var result = client.CancelOrder(new Guid());
 
             // assert
             Assert.IsTrue(result.Success);
@@ -410,18 +401,15 @@ namespace Bittrex.Net.UnitTests
                     QuantityRemaining = 10.1m
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetOpenOrders();
+            var result = client.GetOpenOrders();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -436,17 +424,14 @@ namespace Bittrex.Net.UnitTests
                 CryptoAddress = "TestAddress",
                 Pending = 3.3m,
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetBalance("TestCurrency");
+            var result = client.GetBalance("TestCurrency");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -472,22 +457,19 @@ namespace Bittrex.Net.UnitTests
                     Pending = 6.6m
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetBalances();
+            var result = client.GetBalances();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
-        public void GetDepositAddress_Should_ReturnDespositAddress()
+        public void GetDepositAddress_Should_ReturnDepositAddress()
         {
             // arrange
             var expected = new BittrexDepositAddress()
@@ -495,17 +477,14 @@ namespace Bittrex.Net.UnitTests
                 Currency = "TestCurrency",
                 Address = "TestAddress"
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetDepositAddress("TestCurrency");
+            var result = client.GetDepositAddress("TestCurrency");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -516,17 +495,14 @@ namespace Bittrex.Net.UnitTests
             {
                 Uuid = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301")
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.Withdraw("TestCurrency", 1, "TestAddress");
+            var result = client.Withdraw("TestCurrency", 1, "TestAddress");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -559,17 +535,14 @@ namespace Bittrex.Net.UnitTests
                 Sentinel = new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"),
                 Type = OrderSideExtended.LimitBuy
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetOrder(new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"));
+            var result = client.GetOrder(new Guid("3F2504E0-4F89-11D3-9A0C-0305E82C3301"));
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data, expected));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data, expected));
         }
 
         [TestCase()]
@@ -615,18 +588,15 @@ namespace Bittrex.Net.UnitTests
                     QuantityRemaining = 10.1m
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetOrderHistory();
+            var result = client.GetOrderHistory();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -664,18 +634,15 @@ namespace Bittrex.Net.UnitTests
                     TransactionId = "TestId"
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetWithdrawalHistory();
+            var result = client.GetWithdrawalHistory();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -705,18 +672,15 @@ namespace Bittrex.Net.UnitTests
                     LastUpdated = new DateTime(2016, 1, 1)
                 }
             };
-            var objects = TestHelpers.PrepareClient(() => Construct(new BittrexClientOptions()
-            {
-                ApiCredentials = new ApiCredentials("Test", "Test")
-            }), JsonConvert.SerializeObject(WrapInResult(expected)));
+            var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = objects.Client.GetDepositHistory();
+            var result = client.GetDepositHistory();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.PublicInstancePropertiesEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
         }
 
         [TestCase()]
@@ -724,32 +688,17 @@ namespace Bittrex.Net.UnitTests
         {
             // arrange
             var errorMessage = "TestErrorMessage";
-            var objects = TestHelpers.PrepareClient(() => Construct(), JsonConvert.SerializeObject(WrapInResult<BittrexPrice>(null, false, errorMessage)));
+            var client = TestHelpers.CreateResponseClient(WrapInResult<object>(null, false, errorMessage));
 
             // act
-            var result = objects.Client.GetTicker("TestMarket");
+            var result = client.GetTicker("TestMarket");
 
             // assert
             Assert.IsFalse(result.Success);
             Assert.AreNotEqual(0, result.Error.Code);
             Assert.IsTrue(result.Error.Message.Contains(errorMessage));
         }
-
-        [Test]
-        public void ReceivingServerError_Should_ReturnServerErrorAndNotSuccess()
-        {
-            // arrange
-            var client = TestHelpers.PrepareExceptionClient<BittrexClient>("", "Unavailable", 504);
-
-            // act
-            var result = client.GetMarkets();
-
-            // assert
-            Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Error);
-            Assert.IsTrue(result.Error.Message.Contains("Unavailable"));
-        }
-
+        
         [Test]
         public void ProvidingApiCredentials_Should_SaveApiCredentials()
         {
@@ -796,21 +745,12 @@ namespace Bittrex.Net.UnitTests
             // arrange
             var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
             var uri = new Uri("https://test.test-api.com");
-            var request = new Request(WebRequest.CreateHttp(uri));
 
             // act
             var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), "GET", new Dictionary<string, object>(), true);
 
             // assert
             Assert.IsTrue(sign.First().Value == "3A82874271C0B4BE0F5DE44CB2CE7B39645AC93B07FD5570A700DC14C7524269B373DAFFA3A9BF1A2B6A318915D2ACEEC905163E574F34FF39EC62A676D2FBC2");
-        }
-
-        private BittrexClient Construct(BittrexClientOptions options = null)
-        {
-            if (options != null)
-                return new BittrexClient(options);
-
-            return new BittrexClient();
         }
 
         private BittrexApiResult<T> WrapInResult<T>(T data, bool success = true, string message = null) where T: class

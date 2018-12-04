@@ -28,8 +28,6 @@ namespace Bittrex.Net
         private const string ExchangeDeltaSub = "SubscribeToExchangeDeltas";
         private const string QueryExchangeStateRequest = "QueryExchangeState";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
-
-        public override IWebsocketFactory SocketFactory { get; set; } = new ConnectionFactory();        
         #endregion
         
         #region ctor
@@ -269,7 +267,7 @@ namespace Bittrex.Net
 
         private async Task<CallResult<SocketSubscription>> CreateAndConnectSocket<T>(bool authenticated, bool subscribing, Action<T> onData)
         {
-            var socket = CreateSocket(baseAddress);
+            var socket = CreateSocket(BaseAddress);
             var subscription = new SocketSubscription(socket);
             if (subscribing)
                 subscription.MessageHandlers.Add(DataHandlerName, (subs, data) => UpdateHandler(data, onData));            
@@ -290,7 +288,7 @@ namespace Bittrex.Net
 
         protected override IWebsocket CreateSocket(string address)
         {
-            var socket = (ISignalRSocket)SocketFactory.CreateWebsocket(log, baseAddress);
+            var socket = (ISignalRSocket)SocketFactory.CreateWebsocket(log, BaseAddress);
             socket.SetHub(HubName);
             log.Write(LogVerbosity.Debug, "Created new socket for " + address);
 

@@ -21,11 +21,5 @@ namespace Bittrex.Net.Objects
 
         [JsonProperty("message")]
         public string Message { get; internal set; }
-
-        /// <summary>
-        /// The error if the call wasn't successful
-        /// </summary>
-        [JsonIgnore]
-        public BittrexError Error { get; internal set; }
     }
 }
