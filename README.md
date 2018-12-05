@@ -164,6 +164,11 @@ If the connection gets lost when it was connected Bittrex.Net will automatically
 ````
 
 ## Release notes
+* Version 3.0.0 - 05 dec 2018
+	* Updated to CryptoExchange.Net version 2
+		* Libraries now use the same standard functionalities
+		* Objects returned by socket subscriptions standardized across libraries
+
 * Version 2.1.20 - 05 nov 2018
 	* Fix for v2 api methods resulting in INVALID_SIGNATURE
 
