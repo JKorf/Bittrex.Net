@@ -7,7 +7,7 @@ Bittrex.Net is a .Net wrapper for the Bittrex API as described on [Bittrex](http
 * Placing and managing orders
 * Reading balances and funds
 
-Next to that it adds some convenience features like:
+Additionally it adds some convenience features like:
 * Access to the SignalR websocket, allowing for realtime updates
 * Configurable rate limiting
 * Autmatic logging
@@ -121,47 +121,62 @@ using(var client = new BittrexClient())
 ## Options & Authentication
 The default behavior of the clients can be changed by providing options to the constructor, or using the `SetDefaultOptions` before creating a new client. Api credentials can be provided in these options.
 
-## Websockets
-The Bittrex API exposes a SignalR Websocket connection for realtime updates. The websocket provides updates regarding the latest prices and trades of all markets, as well as updates for orders and balances for users. Listening to the websocket is easier to implement and less demanding of the Bittrex server than polling using the Rest API.
+**Handling socket events**
 
-#### Subscribing
-To subscribe to a socket the `SubscribeXXX` methods on the `BittrexSocketClient` can be used:
+Subscribing to a socket stream returns a UpdateSubscription object. This object can be used to be notified when a socket is disconnected or reconnected:
 ````C#
-    var socketClient = new BittrexSocketClient();
-	var subcribtionSuccess = socketClient.SubscribeToMarketSummariesUpdate("BTC-ETH", data =>
-	{
-		// Handle data
-	});
-````
+var subscriptionResult = client.SubscribeToMarketSummariesUpdate(data =>
+{
+	Console.WriteLine("Received summaries update");
+});
 
-#### Unsubscribing
-To unsubscribe from the socket the `UnsubscribeFromStream` method in combination with the stream ID received from subscribing can be used. Alternatively, all subscriptions can be unsubscribed on a client using the `UnsubscribeAllStreams` method:
-````C#
-    var socketClient = new BittrexSocketClient();
-	var subcribtionSuccess = socketClient.SubscribeToMarketSummariesUpdate("BTC-ETH", data =>
+if(subscriptionResult.Success){
+	sub.Data.Disconnected += () =>
 	{
-		// Handle data
-	});
-	
-	socketClient.UnsubscribeFromStream(subcribtionSuccess.Data); // Unsubscribes a single sub
-    socketClient.UnsubscribeAllStreams(); // Unsubscribes all subs on this client 
+		Console.WriteLine("Socket disconnected");
+	};
+
+	sub.Data.Reconnected += (e) =>
+	{
+		Console.WriteLine("Socket reconnected after " + e);
+	};
 }
 ````
 
-#### Connection events
-If the connection gets lost when it was connected Bittrex.Net will automatically try to reconnect to the websocket. So when the computer that runs the code loses the internet connection or the Bittrex service fails it will keep retrying to connect to the service as long as there are still subscriptions on any client. To be notified of when this happens there are 2 events to which can be listened, the ConnectionLost and ConnectionRestored events. Note that these are on class events, not instance events. This is because internally there is only a single websocket shared over all clients.
-````C#
-    var socketClient = new BittrexSocketClient();
-    socketClient.ConnectionLost += () => 
-    {
-        Console.WriteLine("Connection lost!");
-    };
+**Unsubscribing from socket endpoints:**
 
-    socketClient.ConnectionRestored += () => 
-    {
-        Console.WriteLine("Connection restored after being lost!");
-    };
-````
+Sockets streams can be unsubscribed by using the `client.Unsubscribe` method in combination with the stream subscription received from subscribing:
+```C#
+var client = new BittrexSocketClient();
+
+var successSummaries = client.SubscribeToMarketSummariesUpdate((data) =>
+{
+	// handle data
+});
+
+client.Unsubscribe(successTicker.Data);
+```
+
+Additionaly, all sockets can be closed with the `UnsubscribeAll` method. Beware that when a client is disposed the sockets are automatically disposed. This means that if the code is no longer in the using statement the eventhandler won't fire anymore. To prevent this from happening make sure the code doesn't leave the using statement or don't use the socket client in a using statement:
+```C#
+// Doesn't leave the using block
+using(var client = new BittrexSocketClient())
+{
+	var successSummaries = client.SubscribeToMarketSummariesUpdate((data) =>
+	{
+		// handle data
+	});
+
+	Console.ReadLine();
+}
+
+// Without using block
+var client = new BittrexSocketClient();
+client.SubscribeToMarketSummariesUpdate((data) =>
+{
+	// handle data
+});
+```
 
 ## Release notes
 * Version 3.0.0 - 05 dec 2018
