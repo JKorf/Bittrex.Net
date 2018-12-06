@@ -19,7 +19,7 @@ namespace Bittrex.Net.Converters
             { OrderUpdateType.Open, "0" },
             { OrderUpdateType.PartialFill, "1" },
             { OrderUpdateType.Fill, "2" },
-            { OrderUpdateType.Cancel, "3" },
+            { OrderUpdateType.Cancel, "3" }
         };
     }
 }

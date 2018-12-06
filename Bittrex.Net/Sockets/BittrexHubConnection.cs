@@ -22,8 +22,8 @@ namespace Bittrex.Net.Sockets
             this.log = log;
 
             connection.StateChanged += StateChangeHandler;
-            connection.Error += (s) => Handle(errorHandlers, s);
-            connection.Received += (str) => Handle(messageHandlers, str);
+            connection.Error += s => Handle(errorHandlers, s);
+            connection.Received += str => Handle(messageHandlers, str);
         }
 
         private void StateChangeHandler(StateChange change)

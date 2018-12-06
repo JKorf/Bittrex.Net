@@ -29,7 +29,7 @@ namespace Bittrex.Net
         private const string QueryExchangeStateRequest = "QueryExchangeState";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
         #endregion
-        
+
         #region ctor
         /// <summary>
         /// Creates a new socket client using the default options
@@ -44,7 +44,7 @@ namespace Bittrex.Net
         /// <param name="options">Options to use for this client</param>
         public BittrexSocketClient(BittrexSocketClientOptions options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
-            Configure(options);
+            SocketFactory = new ConnectionFactory();
         }
         #endregion
 
@@ -300,7 +300,7 @@ namespace Bittrex.Net
             {
                 SocketOnClose(socket);
             };
-            socket.OnError += (e) =>
+            socket.OnError += e =>
             {
                 log.Write(LogVerbosity.Warning, $"Socket {socket.Id} error: " + e.ToString());
                 SocketError(socket, e);
@@ -378,7 +378,7 @@ namespace Bittrex.Net
         {
             try
             {
-                byte[] gzipData = Convert.FromBase64String(rawData);
+                var gzipData = Convert.FromBase64String(rawData);
                 using (var decompressedStream = new MemoryStream())
                 using (var compressedStream = new MemoryStream(gzipData))
                 using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))

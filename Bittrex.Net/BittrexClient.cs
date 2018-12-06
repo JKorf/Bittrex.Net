@@ -609,7 +609,7 @@ namespace Bittrex.Net
 
         protected Uri GetUrl(string endpoint, string api, string version)
         {
-            string address = BaseAddress;
+            var address = BaseAddress;
             if (version == ApiVersion2)
                 address = baseAddressV2;
 
