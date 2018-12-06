@@ -71,7 +71,7 @@ namespace Bittrex.Net
         /// <returns>Market summaries</returns>
         public async Task<CallResult<List<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync()
         {
-            var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(false, QuerySummaryStateRequest));
+            var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(false, QuerySummaryStateRequest)).ConfigureAwait(false);
             return new CallResult<List<BittrexStreamMarketSummary>>(result.Data?.Deltas, result.Error);
         }
 
@@ -95,7 +95,7 @@ namespace Bittrex.Net
         /// <returns>The current exchange state</returns>
         public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
         {
-            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(false, QueryExchangeStateRequest, marketName));
+            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(false, QueryExchangeStateRequest, marketName)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Bittrex.Net
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToExchangeStateUpdatesAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
-            return await Subscribe(new ConnectionRequest(false, ExchangeDeltaSub, marketName), onUpdate);
+            return await Subscribe(new ConnectionRequest(false, ExchangeDeltaSub, marketName), onUpdate).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Bittrex.Net
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<List<BittrexStreamMarketSummary>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummaryUpdate>(data => onUpdate(data.Deltas));
-            return await Subscribe(new ConnectionRequest(false, SummaryDeltaSub), inner);
+            return await Subscribe(new ConnectionRequest(false, SummaryDeltaSub), inner).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Bittrex.Net
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<List<BittrexStreamMarketSummaryLite>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummariesLite>(data => onUpdate(data.Deltas));
-            return await Subscribe(new ConnectionRequest(false, SummaryLiteDeltaSub), inner);
+            return await Subscribe(new ConnectionRequest(false, SummaryLiteDeltaSub), inner).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace Bittrex.Net
                 }
             });
 
-            return await Subscribe(new ConnectionRequest(true, null), handler);
+            return await Subscribe(new ConnectionRequest(true, null), handler).ConfigureAwait(false);
         }        
         #endregion
         #region private
@@ -207,7 +207,7 @@ namespace Bittrex.Net
             if (subscription == null)
             {
                 // We don't have a background socket to query, create a new one
-                var connectResult = await CreateAndConnectSocket<object>(request.Signed, false, null);
+                var connectResult = await CreateAndConnectSocket<object>(request.Signed, false, null).ConfigureAwait(false);
                 if (!connectResult.Success)
                     return new CallResult<T>(default(T), connectResult.Error);
 
@@ -215,14 +215,14 @@ namespace Bittrex.Net
                 subscription.Type = request.Signed ? SocketType.BackgroundAuthenticated : SocketType.Background;
             }
 
-            var queryResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<string>(request.RequestName, request.Parameters);
+            var queryResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<string>(request.RequestName, request.Parameters).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 var closeTask = subscription.Close();
                 return new CallResult<T>(default(T), queryResult.Error);
             }
 
-            var decResult = await DecodeData(queryResult.Data);
+            var decResult = await DecodeData(queryResult.Data).ConfigureAwait(false);
             if (!decResult.Success)
             {
                 var closeTask = subscription.Close();
@@ -240,11 +240,11 @@ namespace Bittrex.Net
 
         private async Task<CallResult<UpdateSubscription>> Subscribe<T>(ConnectionRequest request, Action<T> onData)
         {
-            var connectResult = await CreateAndConnectSocket(request.Signed, true, onData);
+            var connectResult = await CreateAndConnectSocket(request.Signed, true, onData).ConfigureAwait(false);
             if (!connectResult.Success)
                 return new CallResult<UpdateSubscription>(null, connectResult.Error);
 
-            return await Subscribe(connectResult.Data, request);
+            return await Subscribe(connectResult.Data, request).ConfigureAwait(false);
         }
 
 
@@ -252,7 +252,7 @@ namespace Bittrex.Net
         {
             if (request.RequestName != null)
             {
-                var subResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<bool>(request.RequestName, request.Parameters);
+                var subResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<bool>(request.RequestName, request.Parameters).ConfigureAwait(false);
                 if (!subResult.Success || !subResult.Data)
                 {
                     var closeTask = subscription.Close();
@@ -272,13 +272,13 @@ namespace Bittrex.Net
             if (subscribing)
                 subscription.MessageHandlers.Add(DataHandlerName, (subs, data) => UpdateHandler(data, onData));            
 
-            var connectResult = await ConnectSocket(subscription);
+            var connectResult = await ConnectSocket(subscription).ConfigureAwait(false);
             if (!connectResult.Success)
                 return new CallResult<SocketSubscription>(null, connectResult.Error);
 
             if(authenticated)
             {
-                var authResult = await Authenticate(subscription);
+                var authResult = await Authenticate(subscription).ConfigureAwait(false);
                 if (!authResult.Success)
                     return new CallResult<SocketSubscription>(null, authResult.Error);
             }
