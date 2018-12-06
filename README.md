@@ -191,6 +191,10 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.0.1 - 06 dec 2018
+	 * Fix for socket client
+	 * Fix for freezes if called from UI thread
+
 * Version 3.0.0 - 05 dec 2018
 	* Updated to CryptoExchange.Net version 2
 		* Libraries now use the same standard functionalities
