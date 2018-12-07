@@ -39,6 +39,13 @@ Also check out my other exchange API wrappers:
 		<br />
 		<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
 	</td>
+	<td>
+		<a href="https://github.com/JKorf/Huobi.Net">
+			<img src="https://github.com/JKorf/Huobi.Net/blob/master/Resources/icon.png?raw=true">
+		</a>
+		<br />
+		<a href="https://github.com/JKorf/Huobi.Net">Huobi</a>
+	</td>
 	</tr>
 </table>
 
