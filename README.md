@@ -198,6 +198,9 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.0.2 - 17 dec 2018
+	* Fix for error while reconnecting
+
 * Version 3.0.1 - 06 dec 2018
 	 * Fix for socket client
 	 * Fix for freezes if called from UI thread
