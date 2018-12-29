@@ -75,7 +75,7 @@ namespace Bittrex.Net.Sockets
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try
             {
-                await connection.Start(autoTransport);
+                await connection.Start(autoTransport).ConfigureAwait(false);
                 return true;
             }
             catch (Exception)
