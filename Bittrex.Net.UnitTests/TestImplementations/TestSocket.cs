@@ -25,6 +25,7 @@ namespace Bittrex.Net.UnitTests.TestImplementations
 
         public int Id { get; }
         public bool ShouldReconnect { get; set; }
+        public bool Reconnecting { get; set; }
         public Func<byte[], string> DataInterpreter { get; set; }
         public DateTime? DisconnectTime { get; set; }
         public string Url { get; }
