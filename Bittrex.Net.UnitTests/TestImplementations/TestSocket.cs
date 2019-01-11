@@ -36,6 +36,7 @@ namespace Bittrex.Net.UnitTests.TestImplementations
         public TimeSpan PingInterval { get; set; }
         public SslProtocols SSLProtocols { get; set; }
         public TimeSpan Timeout { get; set; }
+        public string Origin { get; set; }
 
         public Task<bool> Connect()
         {

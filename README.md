@@ -198,6 +198,12 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.0.4 - 11 jan 2019
+	* Updated CryptoExchange.Net
+
+* Version 3.0.3 - 29 dec 2018
+	* Updated CryptoExchange.Net
+
 * Version 3.0.2 - 17 dec 2018
 	* Fix for error while reconnecting
 
