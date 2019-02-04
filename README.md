@@ -59,7 +59,15 @@ And other API wrappers based on CryptoExchange.Net:
 			<br />
 			<a href="https://github.com/Zaliro/Switcheo.Net">Switcheo</a>
 		</td>
+		<td>
+			<a href="https://github.com/ridicoulous/LiquidQuoine.Net">
+				<img src="https://github.com/ridicoulous/LiquidQuoine.Net/blob/master/Resources/icon.png?raw=true">
+			</a>
+			<br />
+			<a href="https://github.com/ridicoulous/LiquidQuoine.Net">Liquid</a>
+		</td>
 	</tr>
+	
 </table>
 
 ## Donations
