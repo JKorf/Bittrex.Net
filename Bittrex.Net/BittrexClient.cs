@@ -97,13 +97,13 @@ namespace Bittrex.Net
         /// Gets information about all available markets
         /// </summary>
         /// <returns>List of markets</returns>
-        public CallResult<BittrexMarket[]> GetMarkets() => GetMarketsAsync().Result;
+        public WebCallResult<BittrexMarket[]> GetMarkets() => GetMarketsAsync().Result;
 
         /// <summary>
         /// Gets information about all available markets
         /// </summary>
         /// <returns>List of markets</returns>
-        public async Task<CallResult<BittrexMarket[]>> GetMarketsAsync()
+        public async Task<WebCallResult<BittrexMarket[]>> GetMarketsAsync()
         {
             return await Execute<BittrexMarket[]>(GetUrl(MarketsEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
@@ -112,13 +112,13 @@ namespace Bittrex.Net
         /// Gets information about all available currencies
         /// </summary>
         /// <returns>List of currencies</returns>
-        public CallResult<BittrexCurrency[]> GetCurrencies() => GetCurrenciesAsync().Result;
+        public WebCallResult<BittrexCurrency[]> GetCurrencies() => GetCurrenciesAsync().Result;
 
         /// <summary>
         /// Gets information about all available currencies
         /// </summary>
         /// <returns>List of currencies</returns>
-        public async Task<CallResult<BittrexCurrency[]>> GetCurrenciesAsync()
+        public async Task<WebCallResult<BittrexCurrency[]>> GetCurrenciesAsync()
         {
             return await Execute<BittrexCurrency[]>(GetUrl(CurrenciesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
@@ -128,14 +128,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">Market to get price for</param>
         /// <returns>The current ask, bid and last prices for the market</returns>
-        public CallResult<BittrexPrice> GetTicker(string market) => GetTickerAsync(market).Result;
+        public WebCallResult<BittrexPrice> GetTicker(string market) => GetTickerAsync(market).Result;
 
         /// <summary>
         /// Gets the price of a market
         /// </summary>
         /// <param name="market">Market to get price for</param>
         /// <returns>The current ask, bid and last prices for the market</returns>
-        public async Task<CallResult<BittrexPrice>> GetTickerAsync(string market)
+        public async Task<WebCallResult<BittrexPrice>> GetTickerAsync(string market)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -150,14 +150,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">The market to get info for</param>
         /// <returns>List with single entry containing info for the market</returns>
-        public CallResult<BittrexMarketSummary> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
+        public WebCallResult<BittrexMarketSummary> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
 
         /// <summary>
         /// Gets a summary of the market
         /// </summary>
         /// <param name="market">The market to get info for</param>
         /// <returns>List with single entry containing info for the market</returns>
-        public async Task<CallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market)
+        public async Task<WebCallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -165,21 +165,20 @@ namespace Bittrex.Net
             };
 
             var result = await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
-
-            return new CallResult<BittrexMarketSummary>(result.Data?.Any() == true ? result.Data[0]: null, result.Error);
+            return new WebCallResult<BittrexMarketSummary>(result.ResponseStatusCode, result.Data?.Any() == true ? result.Data[0]: null, result.Error);
         }
 
         /// <summary>
         /// Gets a summary for all markets
         /// </summary>
         /// <returns>List of summaries for all markets</returns>
-        public CallResult<BittrexMarketSummary[]> GetMarketSummaries() => GetMarketSummariesAsync().Result;
+        public WebCallResult<BittrexMarketSummary[]> GetMarketSummaries() => GetMarketSummariesAsync().Result;
 
         /// <summary>
         /// Gets a summary for all markets
         /// </summary>
         /// <returns>List of summaries for all markets</returns>
-        public async Task<CallResult<BittrexMarketSummary[]>> GetMarketSummariesAsync()
+        public async Task<WebCallResult<BittrexMarketSummary[]>> GetMarketSummariesAsync()
         {
             return await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummariesEndpoint, Api, ApiVersion)).ConfigureAwait(false);
         }
@@ -189,14 +188,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">The market to get the order book for</param>
         /// <returns>Order book for the market</returns>
-        public CallResult<BittrexOrderBook> GetOrderBook(string market) => GetOrderBookAsync(market).Result;
+        public WebCallResult<BittrexOrderBook> GetOrderBook(string market) => GetOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book with bids and asks for a market
         /// </summary>
         /// <param name="market">The market to get the order book for</param>
         /// <returns>Order book for the market</returns>
-        public async Task<CallResult<BittrexOrderBook>> GetOrderBookAsync(string market)
+        public async Task<WebCallResult<BittrexOrderBook>> GetOrderBookAsync(string market)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -212,14 +211,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
         /// <returns>Order book for the market</returns>
-        public CallResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market) => GetBuyOrderBookAsync(market).Result;
+        public WebCallResult<BittrexOrderBookEntry[]> GetBuyOrderBook(string market) => GetBuyOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book with asks for a market
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
         /// <returns>Order book for the market</returns>
-        public async Task<CallResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market)
+        public async Task<WebCallResult<BittrexOrderBookEntry[]>> GetBuyOrderBookAsync(string market)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -235,14 +234,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
         /// <returns>Order book for the market</returns>
-        public CallResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market) => GetSellOrderBookAsync(market).Result;
+        public WebCallResult<BittrexOrderBookEntry[]> GetSellOrderBook(string market) => GetSellOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book with bids for a market
         /// </summary>
         /// <param name="market">Market to get the order book for</param>
         /// <returns>Order book for the market</returns>
-        public async Task<CallResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market)
+        public async Task<WebCallResult<BittrexOrderBookEntry[]>> GetSellOrderBookAsync(string market)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -258,14 +257,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">Market to get history for</param>
         /// <returns>List of trade aggregations</returns>
-        public CallResult<BittrexMarketHistory[]> GetMarketHistory(string market) => GetMarketHistoryAsync(market).Result;
+        public WebCallResult<BittrexMarketHistory[]> GetMarketHistory(string market) => GetMarketHistoryAsync(market).Result;
 
         /// <summary>
         /// Gets the last trades on a market
         /// </summary>
         /// <param name="market">Market to get history for</param>
         /// <returns>List of trade aggregations</returns>
-        public async Task<CallResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market)
+        public async Task<WebCallResult<BittrexMarketHistory[]>> GetMarketHistoryAsync(string market)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -281,7 +280,7 @@ namespace Bittrex.Net
         /// <param name="market">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
-        public CallResult<BittrexCandle[]> GetCandles(string market, TickInterval interval) => GetCandlesAsync(market, interval).Result;
+        public WebCallResult<BittrexCandle[]> GetCandles(string market, TickInterval interval) => GetCandlesAsync(market, interval).Result;
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
@@ -289,7 +288,7 @@ namespace Bittrex.Net
         /// <param name="market">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
-        public async Task<CallResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
+        public async Task<WebCallResult<BittrexCandle[]>> GetCandlesAsync(string market, TickInterval interval)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -306,7 +305,7 @@ namespace Bittrex.Net
         /// <param name="market">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
-        public CallResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval) => GetLatestCandleAsync(market, interval).Result;
+        public WebCallResult<BittrexCandle[]> GetLatestCandle(string market, TickInterval interval) => GetLatestCandleAsync(market, interval).Result;
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
@@ -314,7 +313,7 @@ namespace Bittrex.Net
         /// <param name="market">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <returns>List of candles</returns>
-        public async Task<CallResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
+        public async Task<WebCallResult<BittrexCandle[]>> GetLatestCandleAsync(string market, TickInterval interval)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -333,7 +332,7 @@ namespace Bittrex.Net
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
-        public CallResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate) => PlaceOrderAsync(side, market, quantity, rate).Result;
+        public WebCallResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate) => PlaceOrderAsync(side, market, quantity, rate).Result;
         
         /// <summary>
         /// Places an order
@@ -343,7 +342,7 @@ namespace Bittrex.Net
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
-        public async Task<CallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate)
+        public async Task<WebCallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -367,7 +366,7 @@ namespace Bittrex.Net
         /// <param name="conditionType">The type of condition</param>
         /// <param name="target">The target of the condition type</param>
         /// <returns></returns>
-        public CallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target) => PlaceConditionalOrderAsync(side, timeInEffect, market, quantity, rate, conditionType, target).Result;
+        public WebCallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target) => PlaceConditionalOrderAsync(side, timeInEffect, market, quantity, rate, conditionType, target).Result;
 
         /// <summary>
         /// Places a conditional order. The order will be executed when the condition that is set becomes true.
@@ -380,7 +379,7 @@ namespace Bittrex.Net
         /// <param name="conditionType">The type of condition</param>
         /// <param name="target">The target of the condition type</param>
         /// <returns></returns>
-        public async Task<CallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
+        public async Task<WebCallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -402,14 +401,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="guid">The Guid of the order to cancel</param>
         /// <returns></returns>
-        public CallResult<object> CancelOrder(Guid guid) => CancelOrderAsync(guid).Result;
+        public WebCallResult<object> CancelOrder(Guid guid) => CancelOrderAsync(guid).Result;
         
         /// <summary>
         /// Cancels an open order
         /// </summary>
         /// <param name="guid">The Guid of the order to cancel</param>
         /// <returns></returns>
-        public async Task<CallResult<object>> CancelOrderAsync(Guid guid)
+        public async Task<WebCallResult<object>> CancelOrderAsync(Guid guid)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -424,14 +423,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">Filter list by market</param>
         /// <returns>List of open orders</returns>
-        public CallResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
+        public WebCallResult<BittrexOpenOrdersOrder[]> GetOpenOrders(string market = null) => GetOpenOrdersAsync(market).Result;
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
         /// <param name="market">Filter list by market</param>
         /// <returns>List of open orders</returns>
-        public async Task<CallResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null)
+        public async Task<WebCallResult<BittrexOpenOrdersOrder[]>> GetOpenOrdersAsync(string market = null)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("market", market);
@@ -444,14 +443,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="currency">Currency to get the balance for</param>
         /// <returns>The balance of the currency</returns>
-        public CallResult<BittrexBalance> GetBalance(string currency) => GetBalanceAsync(currency).Result;
+        public WebCallResult<BittrexBalance> GetBalance(string currency) => GetBalanceAsync(currency).Result;
 
         /// <summary>
         /// Gets the balance of a single currency
         /// </summary>
         /// <param name="currency">Currency to get the balance for</param>
         /// <returns>The balance of the currency</returns>
-        public async Task<CallResult<BittrexBalance>> GetBalanceAsync(string currency)
+        public async Task<WebCallResult<BittrexBalance>> GetBalanceAsync(string currency)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -464,13 +463,13 @@ namespace Bittrex.Net
         /// Gets a list of all balances for the current account
         /// </summary>
         /// <returns>List of balances</returns>
-        public CallResult<BittrexBalance[]> GetBalances() => GetBalancesAsync().Result;
+        public WebCallResult<BittrexBalance[]> GetBalances() => GetBalancesAsync().Result;
 
         /// <summary>
         /// Gets a list of all balances for the current account
         /// </summary>
         /// <returns>List of balances</returns>
-        public async Task<CallResult<BittrexBalance[]>> GetBalancesAsync()
+        public async Task<WebCallResult<BittrexBalance[]>> GetBalancesAsync()
         {
             return await Execute<BittrexBalance[]>(GetUrl(BalancesEndpoint, Api, ApiVersion), true).ConfigureAwait(false);
         }
@@ -480,14 +479,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="currency">Currency to get deposit address for</param>
         /// <returns>The deposit address of the currency</returns>
-        public CallResult<BittrexDepositAddress> GetDepositAddress(string currency) => GetDepositAddressAsync(currency).Result;
+        public WebCallResult<BittrexDepositAddress> GetDepositAddress(string currency) => GetDepositAddressAsync(currency).Result;
 
         /// <summary>
         /// Gets the deposit address for a specific currency
         /// </summary>
         /// <param name="currency">Currency to get deposit address for</param>
         /// <returns>The deposit address of the currency</returns>
-        public async Task<CallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
+        public async Task<WebCallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -504,7 +503,7 @@ namespace Bittrex.Net
         /// <param name="address">The address to withdraw to</param>
         /// <param name="paymentId">Optional string identifier to add to the withdraw</param>
         /// <returns>Guid of the withdrawal</returns>
-        public CallResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
+        public WebCallResult<BittrexGuid> Withdraw(string currency, decimal quantity, string address, string paymentId = null) => WithdrawAsync(currency, quantity, address, paymentId).Result;
 
         /// <summary>
         /// Places a withdraw request on Bittrex
@@ -514,7 +513,7 @@ namespace Bittrex.Net
         /// <param name="address">The address to withdraw to</param>
         /// <param name="paymentId">Optional string identifier to add to the withdraw</param>
         /// <returns>Guid of the withdrawal</returns>
-        public async Task<CallResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null)
+        public async Task<WebCallResult<BittrexGuid>> WithdrawAsync(string currency, decimal quantity, string address, string paymentId = null)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -532,14 +531,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="guid">The guid of the order</param>
         /// <returns>The requested order</returns>
-        public CallResult<BittrexAccountOrder> GetOrder(Guid guid) => GetOrderAsync(guid).Result;
+        public WebCallResult<BittrexAccountOrder> GetOrder(Guid guid) => GetOrderAsync(guid).Result;
 
         /// <summary>
         /// Gets an order by it's guid
         /// </summary>
         /// <param name="guid">The guid of the order</param>
         /// <returns>The requested order</returns>
-        public async Task<CallResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
+        public async Task<WebCallResult<BittrexAccountOrder>> GetOrderAsync(Guid guid)
         {
             var parameters = new Dictionary<string, object>
             {
@@ -553,14 +552,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="market">Filter on market</param>
         /// <returns>List of orders</returns>
-        public CallResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
+        public WebCallResult<BittrexOrderHistoryOrder[]> GetOrderHistory(string market = null) => GetOrderHistoryAsync(market).Result;
 
         /// <summary>
         /// Gets the order history for the current account
         /// </summary>
         /// <param name="market">Filter on market</param>
         /// <returns>List of orders</returns>
-        public async Task<CallResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null)
+        public async Task<WebCallResult<BittrexOrderHistoryOrder[]>> GetOrderHistoryAsync(string market = null)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("market", market);
@@ -572,14 +571,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of withdrawals</returns>
-        public CallResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null) => GetWithdrawalHistoryAsync(currency).Result;
+        public WebCallResult<BittrexWithdrawal[]> GetWithdrawalHistory(string currency = null) => GetWithdrawalHistoryAsync(currency).Result;
 
         /// <summary>
         /// Gets the withdrawal history of the current account
         /// </summary>
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of withdrawals</returns>
-        public async Task<CallResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
+        public async Task<WebCallResult<BittrexWithdrawal[]>> GetWithdrawalHistoryAsync(string currency = null)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currency", currency);
@@ -591,14 +590,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of deposits</returns>
-        public CallResult<BittrexDeposit[]> GetDepositHistory(string currency = null) => GetDepositHistoryAsync(currency).Result;
+        public WebCallResult<BittrexDeposit[]> GetDepositHistory(string currency = null) => GetDepositHistoryAsync(currency).Result;
 
         /// <summary>
         /// Gets the deposit history of the current account
         /// </summary>
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of deposits</returns>
-        public async Task<CallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
+        public async Task<WebCallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currency", currency);
@@ -630,18 +629,18 @@ namespace Bittrex.Net
             return new ServerError((string)data["message"]);
         }
 
-        private async Task<CallResult<T>> Execute<T>(Uri uri, bool signed = false, Dictionary<string, object> parameters = null, string method = "GET") where T: class
+        private async Task<WebCallResult<T>> Execute<T>(Uri uri, bool signed = false, Dictionary<string, object> parameters = null, string method = "GET") where T: class
         {
             return GetResult(await ExecuteRequest<BittrexApiResult<T>>(uri, method, parameters, signed).ConfigureAwait(false));
         }
         
-        private static CallResult<T> GetResult<T>(CallResult<BittrexApiResult<T>> result) where T : class
+        private static WebCallResult<T> GetResult<T>(WebCallResult<BittrexApiResult<T>> result) where T : class
         {
             if (result.Error != null || result.Data == null)
-                return new CallResult<T>(null, result.Error);
+                return new WebCallResult<T>(result.ResponseStatusCode, null, result.Error);
 
             var messageEmpty = string.IsNullOrEmpty(result.Data.Message);
-            return new CallResult<T>(!messageEmpty ? null: result.Data.Result, !messageEmpty ? new ServerError(result.Data.Message): null);
+            return new WebCallResult<T>(result.ResponseStatusCode, !messageEmpty ? null: result.Data.Result, !messageEmpty ? new ServerError(result.Data.Message): null);
         }
         
         private void Configure(BittrexClientOptions options)
