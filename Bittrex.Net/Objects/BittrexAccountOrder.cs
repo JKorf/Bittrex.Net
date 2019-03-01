@@ -42,19 +42,19 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The reserved currency for this order
         /// </summary>
-        public decimal Reserved { get; set; }
+        public decimal? Reserved { get; set; }
         /// <summary>
         /// The remaining reserve currency for this order
         /// </summary>
-        public decimal ReserveRemaining { get; set; }
+        public decimal? ReserveRemaining { get; set; }
         /// <summary>
         /// The commission reserverd for this order
         /// </summary>
-        public decimal CommissionReserved { get; set; }
+        public decimal? CommissionReserved { get; set; }
         /// <summary>
         /// The remaining commission reserve for this order
         /// </summary>
-        public decimal CommissionReserveRemaining { get; set; }
+        public decimal? CommissionReserveRemaining { get; set; }
         /// <summary>
         /// The amount of commission paid for this order
         /// </summary>
@@ -84,7 +84,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// 
         /// </summary>
-        public Guid Sentinel { get; set; }
+        public Guid? Sentinel { get; set; }
         /// <summary>
         /// Whether a cancel has begun processing
         /// </summary>

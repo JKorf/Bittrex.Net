@@ -11,7 +11,7 @@ namespace Bittrex.Net.Converters
 
         protected override Dictionary<ConditionType, string> Mapping => new Dictionary<ConditionType, string>
         {
-            { ConditionType.None, "NONE" },
+            { ConditionType.None, "" },
             { ConditionType.GreaterThan, "GREATER_THAN" },
             { ConditionType.LessThan, "LESS_THAN" },
             { ConditionType.StopLossFixed, "STOP_LOSS_FIXED" },
