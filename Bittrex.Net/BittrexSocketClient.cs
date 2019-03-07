@@ -28,6 +28,8 @@ namespace Bittrex.Net
         private const string ExchangeDeltaSub = "SubscribeToExchangeDeltas";
         private const string QueryExchangeStateRequest = "QueryExchangeState";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
+
+        private object backgroundSocketLock;
         #endregion
 
         #region ctor
@@ -45,6 +47,7 @@ namespace Bittrex.Net
         public BittrexSocketClient(BittrexSocketClientOptions options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             SocketFactory = new ConnectionFactory();
+            backgroundSocketLock = new object();
         }
         #endregion
 
@@ -203,16 +206,20 @@ namespace Bittrex.Net
 
         private async Task<CallResult<T>> Query<T>(ConnectionRequest request)
         {
-            var subscription = GetBackgroundSocket(request.Signed);
-            if (subscription == null)
+            SocketSubscription subscription;
+            lock (backgroundSocketLock)
             {
-                // We don't have a background socket to query, create a new one
-                var connectResult = await CreateAndConnectSocket<object>(request.Signed, false, null).ConfigureAwait(false);
-                if (!connectResult.Success)
-                    return new CallResult<T>(default(T), connectResult.Error);
+                subscription = GetBackgroundSocket(request.Signed);
+                if (subscription == null)
+                {
+                    // We don't have a background socket to query, create a new one
+                    var connectResult = CreateAndConnectSocket<object>(request.Signed, false, null).ConfigureAwait(false).GetAwaiter().GetResult();
+                    if (!connectResult.Success)
+                        return new CallResult<T>(default(T), connectResult.Error);
 
-                subscription = connectResult.Data;
-                subscription.Type = request.Signed ? SocketType.BackgroundAuthenticated : SocketType.Background;
+                    subscription = connectResult.Data;
+                    subscription.Type = request.Signed ? SocketType.BackgroundAuthenticated : SocketType.Background;
+                }
             }
 
             var queryResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<string>(request.RequestName, request.Parameters).ConfigureAwait(false);
