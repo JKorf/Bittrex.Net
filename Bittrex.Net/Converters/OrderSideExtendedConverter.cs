@@ -9,10 +9,10 @@ namespace Bittrex.Net.Converters
         public OrderSideExtendedConverter(): this(true) { }
         public OrderSideExtendedConverter(bool quotes) : base(quotes){ }
 
-        protected override Dictionary<OrderSideExtended, string> Mapping => new Dictionary<OrderSideExtended, string>
+        protected override List<KeyValuePair<OrderSideExtended, string>> Mapping => new List<KeyValuePair<OrderSideExtended, string>>
         {
-            { OrderSideExtended.LimitBuy, "LIMIT_BUY" },
-            { OrderSideExtended.LimitSell, "LIMIT_SELL" }
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitBuy, "LIMIT_BUY"),
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "LIMIT_SELL")
         };
     }
 }

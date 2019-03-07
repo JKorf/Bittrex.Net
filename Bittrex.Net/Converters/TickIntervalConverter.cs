@@ -9,13 +9,13 @@ namespace Bittrex.Net.Converters
         public TickIntervalConverter(): this(true) { }
         public TickIntervalConverter(bool quotes) : base(quotes){ }
 
-        protected override Dictionary<TickInterval, string> Mapping => new Dictionary<TickInterval, string>
+        protected override List<KeyValuePair<TickInterval, string>> Mapping => new List<KeyValuePair<TickInterval, string>>
         {
-            { TickInterval.OneMinute, "oneMin" },
-            { TickInterval.FiveMinutes, "fiveMin" },
-            { TickInterval.HalfHour, "thirtyMin" },
-            { TickInterval.OneHour, "hour" },
-            { TickInterval.OneDay, "day" }
+            new KeyValuePair<TickInterval, string>(TickInterval.OneMinute, "oneMin"),
+            new KeyValuePair<TickInterval, string>(TickInterval.FiveMinutes, "fiveMin"),
+            new KeyValuePair<TickInterval, string>(TickInterval.HalfHour, "thirtyMin"),
+            new KeyValuePair<TickInterval, string>(TickInterval.OneHour, "hour"),
+            new KeyValuePair<TickInterval, string>(TickInterval.OneDay, "day")
         };
     }
 }

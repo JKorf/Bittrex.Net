@@ -206,6 +206,10 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.0.7 - 07 mar 2019
+	* Fixed parsing of ConditionType
+	* Fixed linq exception on Query in socket client
+
 * Version 3.0.6 - 01 mar 2019
 	* Fixed nullable fields in orders
 	* CallResult to WebCallResult for BittrexClient
