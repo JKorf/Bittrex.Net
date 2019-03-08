@@ -41,11 +41,11 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The highest bid
         /// </summary>
-        public decimal Bid { get; set; }
+        public decimal? Bid { get; set; }
         /// <summary>
         /// The lowest ask
         /// </summary>
-        public decimal Ask { get; set; }
+        public decimal? Ask { get; set; }
         /// <summary>
         /// Current open buy orders
         /// </summary>

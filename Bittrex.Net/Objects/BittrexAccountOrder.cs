@@ -48,7 +48,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal? ReserveRemaining { get; set; }
         /// <summary>
-        /// The commission reserverd for this order
+        /// The commission reserved for this order
         /// </summary>
         public decimal? CommissionReserved { get; set; }
         /// <summary>

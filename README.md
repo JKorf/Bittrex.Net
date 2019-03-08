@@ -206,6 +206,9 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.0.8 - 08 mar 2019
+	* Fixed Bid/Ask being nullable in market summary
+
 * Version 3.0.7 - 07 mar 2019
 	* Fixed parsing of ConditionType
 	* Fixed linq exception on Query in socket client
