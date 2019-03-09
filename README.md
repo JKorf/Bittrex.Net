@@ -206,6 +206,9 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.0.9 - 09 mar 2019
+	* Fixed stream order condition parsing
+
 * Version 3.0.8 - 08 mar 2019
 	* Fixed Bid/Ask being nullable in market summary
 

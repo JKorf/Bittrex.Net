@@ -114,7 +114,7 @@ namespace Bittrex.Net.Objects
         /// The condition of the order
         /// </summary>
         [JsonProperty("J"), JsonConverter(typeof(ConditionTypeConverter))]
-        public ConditionType Condition { get; set; }
+        public ConditionType? Condition { get; set; }
         /// <summary>
         /// The condition target of the order
         /// </summary>
