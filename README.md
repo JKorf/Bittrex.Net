@@ -206,7 +206,7 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
-* Version 3.0.10 - 01 may 2019
+* Version 3.1.0 - 01 may 2019
 	* Updated to latest CryptoExchange.Net
 		* Adds response header to REST call result
 		* Added rate limiter per API key
