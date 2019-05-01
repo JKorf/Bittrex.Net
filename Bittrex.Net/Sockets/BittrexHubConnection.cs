@@ -1,5 +1,6 @@
 ﻿using Bittrex.Net.Interfaces;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
@@ -14,10 +15,12 @@ namespace Bittrex.Net.Sockets
     public class BittrexHubConnection: BaseSocket, ISignalRSocket
     {
         private readonly HubConnection connection;
-        private IHubProxy proxy;
-
+        private IHubProxy hubProxy;
+        public new string Url { get; }
+        
         public BittrexHubConnection(Log log, HubConnection connection): base(null, connection.Url)
         {
+            Url = connection.Url;
             this.connection = connection;
             this.log = log;
 
@@ -44,7 +47,7 @@ namespace Bittrex.Net.Sockets
 
         public void SetHub(string name)
         {
-            proxy = connection.CreateHubProxy(name);
+            hubProxy = connection.CreateHubProxy(name);
         }
 
         public override void SetProxy(string proxyHost, int proxyPort)
@@ -56,7 +59,8 @@ namespace Bittrex.Net.Sockets
         {
             try
             {
-                var sub = await proxy.Invoke<T>(call, pars).ConfigureAwait(false);
+                log.Write(LogVerbosity.Debug, $"Sending data: {call}, [{string.Join(", ", pars)}]");
+                var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                 return new CallResult<T>(sub, null);
             }
             catch (Exception e)
@@ -70,7 +74,7 @@ namespace Bittrex.Net.Sockets
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(log, client)
+                new WebsocketCustomTransport(log, client, DataInterpreterString)
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try

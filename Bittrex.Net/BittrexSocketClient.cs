@@ -8,6 +8,7 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Logging;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Newtonsoft.Json.Linq;
@@ -29,7 +30,11 @@ namespace Bittrex.Net
         private const string QueryExchangeStateRequest = "QueryExchangeState";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
 
-        private object backgroundSocketLock;
+        private const string ExchangeStateUpdate = "uE";
+        private const string MarketSummariesUpdate = "uS";
+        private const string MarketSummariesLiteUpdate = "uL";
+        private const string BalanceUpdate = "uB";
+        private const string OrderUpdate = "uO";
         #endregion
 
         #region ctor
@@ -47,7 +52,8 @@ namespace Bittrex.Net
         public BittrexSocketClient(BittrexSocketClientOptions options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             SocketFactory = new ConnectionFactory();
-            backgroundSocketLock = new object();
+
+            SocketCombineTarget = 10;
         }
         #endregion
 
@@ -74,7 +80,7 @@ namespace Bittrex.Net
         /// <returns>Market summaries</returns>
         public async Task<CallResult<List<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync()
         {
-            var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(false, QuerySummaryStateRequest)).ConfigureAwait(false);
+            var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(QuerySummaryStateRequest), false).ConfigureAwait(false);
             return new CallResult<List<BittrexStreamMarketSummary>>(result.Data?.Deltas, result.Error);
         }
 
@@ -98,7 +104,7 @@ namespace Bittrex.Net
         /// <returns>The current exchange state</returns>
         public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
         {
-            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(false, QueryExchangeStateRequest, marketName)).ConfigureAwait(false);
+            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(QueryExchangeStateRequest, marketName), false).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -117,7 +123,7 @@ namespace Bittrex.Net
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToExchangeStateUpdatesAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
-            return await Subscribe(new ConnectionRequest(false, ExchangeDeltaSub, marketName), onUpdate).ConfigureAwait(false);
+            return await Subscribe<JToken>(new ConnectionRequest(ExchangeDeltaSub, marketName), null, false, data => DecodeSignalRData(data, onUpdate)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -135,7 +141,7 @@ namespace Bittrex.Net
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<List<BittrexStreamMarketSummary>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummaryUpdate>(data => onUpdate(data.Deltas));
-            return await Subscribe(new ConnectionRequest(false, SummaryDeltaSub), inner).ConfigureAwait(false);
+            return await Subscribe<JToken>(new ConnectionRequest(SummaryDeltaSub), null, false, data => DecodeSignalRData(data, inner)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -153,7 +159,7 @@ namespace Bittrex.Net
         public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<List<BittrexStreamMarketSummaryLite>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummariesLite>(data => onUpdate(data.Deltas));
-            return await Subscribe(new ConnectionRequest(false, SummaryLiteDeltaSub), inner).ConfigureAwait(false);
+            return await Subscribe<JToken>(new ConnectionRequest(SummaryLiteDeltaSub), null, false, data => DecodeSignalRData(data, inner)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -172,9 +178,8 @@ namespace Bittrex.Net
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToAccountUpdatesAsync(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate)
         {
-            var handler = new Action<string>(data =>
+            var handler = new Action<JToken>(token =>
             {
-                var token = JToken.Parse(data);
                 if(token["d"] != null)
                 {
                     var desResult = Deserialize<BittrexStreamBalanceData>(token);
@@ -199,44 +204,66 @@ namespace Bittrex.Net
                 }
             });
 
-            return await Subscribe(new ConnectionRequest(true, null), handler).ConfigureAwait(false);
-        }        
+            return await Subscribe<JToken>(null, "AccountUpdates", true, data => DecodeSignalRData(data, handler)).ConfigureAwait(false);
+        }
         #endregion
         #region private
-
-        private async Task<CallResult<T>> Query<T>(ConnectionRequest request)
+        protected override SocketConnection GetWebsocket(string address, bool authenticated)
         {
-            SocketSubscription subscription;
-            lock (backgroundSocketLock)
-            {
-                subscription = GetBackgroundSocket(request.Signed);
-                if (subscription == null)
-                {
-                    // We don't have a background socket to query, create a new one
-                    var connectResult = CreateAndConnectSocket<object>(request.Signed, false, null).ConfigureAwait(false).GetAwaiter().GetResult();
-                    if (!connectResult.Success)
-                        return new CallResult<T>(default(T), connectResult.Error);
 
-                    subscription = connectResult.Data;
-                    subscription.Type = request.Signed ? SocketType.BackgroundAuthenticated : SocketType.Background;
+            // Override because signalr puts `/signalr/` add the end of the url
+            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/" && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.HandlerCount).FirstOrDefault();
+            var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
+            if (result != null)
+            {
+                if (result.HandlerCount < SocketCombineTarget || (sockets.Count >= MaxSocketConnections && sockets.All(s => s.Value.HandlerCount >= SocketCombineTarget)))
+                {
+                    // Use existing socket if it has less than target connections OR it has the least connections and we can't make new
+                    return result;
                 }
             }
 
-            var queryResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<string>(request.RequestName, request.Parameters).ConfigureAwait(false);
+            // Create new socket
+            var socket = CreateSocket(address);
+            var socketWrapper = new SocketConnection(this, socket);
+            foreach (var kvp in genericHandlers)
+                socketWrapper.AddHandler(kvp.Key, false, kvp.Value);
+            return socketWrapper;
+        }
+
+        protected override async Task<CallResult<bool>> SubscribeAndWait(SocketConnection socket, object request, SocketSubscription subscription)
+        {
+            ConnectionRequest btRequest = (ConnectionRequest) request;
+            if (btRequest.RequestName != null)
+            {
+                var subResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<bool>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
+                if (!subResult.Success || !subResult.Data)
+                {
+                    var closeTask = socket.Close(subscription);
+                    return new CallResult<bool>(false, subResult.Error ?? new ServerError("Subscribe returned false"));
+                }
+            }
+
+            subscription.Confirmed = true;
+            return new CallResult<bool>(true, null);
+        }
+
+        protected override async Task<CallResult<T>> QueryAndWait<T>(SocketConnection socket, object request)
+        {
+            var btRequest = (ConnectionRequest) request;
+            var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
             if (!queryResult.Success)
             {
-                var closeTask = subscription.Close();
                 return new CallResult<T>(default(T), queryResult.Error);
             }
 
-            var decResult = await DecodeData(queryResult.Data).ConfigureAwait(false);
-            if (!decResult.Success)
+            var decResult = DecodeData(queryResult.Data);
+            if (decResult == null)
             {
-                var closeTask = subscription.Close();
-                return new CallResult<T>(default(T), decResult.Error);
+                return new CallResult<T>(default(T), new DeserializeError("Failed to decode data"));
             }
 
-            var desResult = Deserialize<T>(decResult.Data);
+            var desResult = Deserialize<T>(decResult);
             if (!desResult.Success)
             {
                 return new CallResult<T>(default(T), desResult.Error);
@@ -245,120 +272,68 @@ namespace Bittrex.Net
             return new CallResult<T>(desResult.Data, null);
         }
 
-        private async Task<CallResult<UpdateSubscription>> Subscribe<T>(ConnectionRequest request, Action<T> onData)
+        protected override bool HandleQueryResponse<T>(SocketConnection s, object request, JToken data, out CallResult<T> callResult)
         {
-            var connectResult = await CreateAndConnectSocket(request.Signed, true, onData).ConfigureAwait(false);
-            if (!connectResult.Success)
-                return new CallResult<UpdateSubscription>(null, connectResult.Error);
-
-            return await Subscribe(connectResult.Data, request).ConfigureAwait(false);
+            throw new NotImplementedException();
         }
 
-
-        private async Task<CallResult<UpdateSubscription>> Subscribe(SocketSubscription subscription, ConnectionRequest request)
+        protected override bool HandleSubscriptionResponse(SocketConnection s, SocketSubscription subscription, object request, JToken message, out CallResult<object> callResult)
         {
-            if (request.RequestName != null)
-            {
-                var subResult = await ((ISignalRSocket)subscription.Socket).InvokeProxy<bool>(request.RequestName, request.Parameters).ConfigureAwait(false);
-                if (!subResult.Success || !subResult.Data)
-                {
-                    var closeTask = subscription.Close();
-                    return new CallResult<UpdateSubscription>(null, subResult.Error ?? new ServerError("Subscribe returned false"));
-                }
-            }
-
-            subscription.Request = request;
-            subscription.Socket.ShouldReconnect = true;
-            return new CallResult<UpdateSubscription>(new UpdateSubscription(subscription), null);
+            throw new NotImplementedException();
         }
 
-        private async Task<CallResult<SocketSubscription>> CreateAndConnectSocket<T>(bool authenticated, bool subscribing, Action<T> onData)
+        protected override bool MessageMatchesHandler(JToken message, object request)
         {
-            var socket = CreateSocket(BaseAddress);
-            var subscription = new SocketSubscription(socket);
-            if (subscribing)
-                subscription.MessageHandlers.Add(DataHandlerName, (subs, data) => UpdateHandler(data, onData));            
-
-            var connectResult = await ConnectSocket(subscription).ConfigureAwait(false);
-            if (!connectResult.Success)
-                return new CallResult<SocketSubscription>(null, connectResult.Error);
-
-            if(authenticated)
-            {
-                var authResult = await Authenticate(subscription).ConfigureAwait(false);
-                if (!authResult.Success)
-                    return new CallResult<SocketSubscription>(null, authResult.Error);
-            }
-
-            return new CallResult<SocketSubscription>(subscription, null);
-        }
-
-        protected override IWebsocket CreateSocket(string address)
-        {
-            var socket = (ISignalRSocket)SocketFactory.CreateWebsocket(log, BaseAddress);
-            socket.SetHub(HubName);
-            log.Write(LogVerbosity.Debug, "Created new socket for " + address);
-
-            if (apiProxy != null)
-                socket.SetProxy(apiProxy.Host, apiProxy.Port);
-
-            socket.DataInterpreter = dataInterpreter;
-            socket.OnClose += () =>
-            {
-                SocketOnClose(socket);
-            };
-            socket.OnError += e =>
-            {
-                log.Write(LogVerbosity.Warning, $"Socket {socket.Id} error: " + e.ToString());
-                SocketError(socket, e);
-            };
-            socket.OnOpen += () =>
-            {
-                SocketOpened(socket);
-            };
-            return socket;
-        }
-
-        private bool UpdateHandler<T>(JToken data, Action<T> onData)
-        {
-            if (data["A"] == null)
+            var msg = message["A"];
+            if (msg == null)
                 return false;
 
-            var decData = DecodeData((string)((JArray)data["A"])[0]).Result;
-            if (!decData.Success)
-            {
-                log.Write(LogVerbosity.Warning, "Failed to decode data: " + decData.Error);
+            string method = (string) message["M"];
+            var data = DecodeData((string) message["A"][0]);
+            if (data == null)
                 return false;
+
+            var btRequest = (ConnectionRequest) request;
+            if (btRequest.RequestName == ExchangeDeltaSub && method == ExchangeStateUpdate)
+            {
+                var token = JToken.Parse(data);
+                if ((string)token["M"] == btRequest.Parameters[0])
+                    return true;
             }
 
-            if(typeof(T) == typeof(string))
-            {
-                onData((T)Convert.ChangeType(decData.Data, typeof(T)));
+            if (btRequest.RequestName == SummaryDeltaSub && method == MarketSummariesUpdate)
                 return true;
-            }
 
-            var desData = Deserialize<T>(decData.Data);
-            if (!desData.Success)
-            {
-                log.Write(LogVerbosity.Warning, $"Failed to deserialize data into {typeof(T).Name}: " + desData.Error);
-                return false;
-            }
+            if (btRequest.RequestName == SummaryLiteDeltaSub && method == MarketSummariesLiteUpdate)
+                return true;
 
-            onData(desData.Data);
-            return true;
+            return false;
         }
 
-        private async Task<CallResult<bool>> Authenticate(SocketSubscription subscription)
+        protected override bool MessageMatchesHandler(JToken message, string identifier)
+        {
+            var msg = message["A"];
+            if (msg == null)
+                return false;
+
+            string method = (string)message["M"];
+
+            if (identifier == "AccountUpdates" && (method == BalanceUpdate || method == OrderUpdate))
+                return true;
+            return false;
+        }
+
+        protected override async Task<CallResult<bool>> AuthenticateSocket(SocketConnection s)
         {
             if (authProvider == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
 
             log.Write(LogVerbosity.Debug, "Starting authentication");
-            var socket = (ISignalRSocket)subscription.Socket;
+            var socket = (ISignalRSocket)s.Socket;
             var result = await socket.InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key.GetString()).ConfigureAwait(false);
             if (!result.Success)
             {
-                log.Write(LogVerbosity.Error, "Authentication failed, api key is probably invalid");
+                log.Write(LogVerbosity.Error, "Api key is probably invalid");
                 return new CallResult<bool>(false, result.Error);
             }
 
@@ -368,20 +343,53 @@ namespace Bittrex.Net
             if (!authResult.Success || !authResult.Data)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api secret is probably invalid");
-                return new CallResult<bool>(false, authResult.Error ?? new ServerError("Authentication failed"));
+                return new CallResult<bool>(false, authResult.Error ?? new ServerError("Api secret is probably invalid"));
             }
 
             log.Write(LogVerbosity.Info, "Authentication successful");
             return new CallResult<bool>(true, null);
         }
 
-        protected override void ProcessMessage(SocketSubscription subscription, string data)
+        /// <summary>
+        /// Unsubscribe from a stream
+        /// * NOT SUPPORTED BY BITTREX' CURRENT SOCKET IMPLEMENTATION *
+        /// </summary>
+        /// <param name="subscription">The subscription to unsubscribe</param>
+        /// <returns></returns>
+        public override Task Unsubscribe(UpdateSubscription subscription)
         {
-            foreach (var handler in subscription.MessageHandlers)
-                handler.Value(subscription, JToken.Parse(data));
+            throw new NotImplementedException("Bittrex sockets do not offer unsubscription functionality");
         }
 
-        private async Task<CallResult<string>> DecodeData(string rawData)
+        protected override Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override IWebsocket CreateSocket(string address)
+        {
+            var socket = (ISignalRSocket)base.CreateSocket(address);
+            socket.SetHub(HubName);
+            return socket;
+        }
+
+        private void DecodeSignalRData<T>(JToken data, Action<T> handler)
+        {
+            var actualData = (string)data["A"][0];
+            var result = DecodeData(actualData);
+            if (result == null)
+                return;
+
+            log.Write(LogVerbosity.Debug, "Socket received data: " + result);
+
+            var decodeResult = Deserialize<T>(result);
+            if (!decodeResult.Success)
+                log.Write(LogVerbosity.Debug, "Failed to decode data: " + decodeResult.Error);
+
+            handler(decodeResult.Data);
+        }
+
+        private string DecodeData(string rawData)
         {
             try
             {
@@ -395,32 +403,19 @@ namespace Bittrex.Net
 
                     using (var streamReader = new StreamReader(decompressedStream))
                     {
-                        var data = await streamReader.ReadToEndAsync().ConfigureAwait(false);
-                        log.Write(LogVerbosity.Debug, "Socket received data: " + data);
+                        var data = streamReader.ReadToEnd();
                         if (data == "null")
-                            return new CallResult<string>(null, new DeserializeError("Server returned null"));
+                            return null;
 
-                        return new CallResult<string>(data, null);
+                        return data;
                     }
                 }
             }
             catch (Exception e)
             {
                 log.Write(LogVerbosity.Info, "Exception in decode data: " + e.Message);
-                return new CallResult<string>(null, new DeserializeError("Exception in decode data: " + e.Message));
+                return null;
             }
-        }
-
-        protected override bool SocketReconnect(SocketSubscription subscription, TimeSpan disconnectedTime)
-        {
-            var request = (ConnectionRequest)subscription.Request;
-            if (request.Signed)
-            {
-                if (!Authenticate(subscription).Result.Success)
-                    return false;
-            }
-
-            return Subscribe(subscription, request).Result.Success;
         }
         #endregion
         #endregion

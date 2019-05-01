@@ -2,15 +2,15 @@
 
 namespace Bittrex.Net.Sockets
 {
-    internal class ConnectionRequest: SocketRequest
+    internal class ConnectionRequest
     {
         public string RequestName { get; set; }
         public string[] Parameters { get; set; }
 
-        public ConnectionRequest(bool authenticated, string name, params string[] parameters)
+
+        public ConnectionRequest(string name, params string[] parameters)
         {
             RequestName = name;
-            Signed = authenticated;
             Parameters = parameters;
         }
     }

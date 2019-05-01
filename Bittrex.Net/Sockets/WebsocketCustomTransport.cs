@@ -19,12 +19,14 @@ namespace Bittrex.Net.Sockets
         private string connectionData;
         private IWebsocket websocket;
         private readonly Log log;
-        
+        private readonly Func<string, string> interpreter;
+
         public override bool SupportsKeepAlive => true;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client): base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client, Func<string, string> interpreter): base(client, "webSockets")
         {
             this.log = log;
+            this.interpreter = interpreter;
         }
 
         ~WebsocketCustomTransport()
@@ -57,6 +59,7 @@ namespace Bittrex.Net.Sockets
             websocket.OnError += WebSocketOnError;
             websocket.OnClose += WebSocketOnClosed;
             websocket.OnMessage += WebSocketOnMessageReceived;
+            websocket.DataInterpreterString = interpreter;
 
             if (connection.Proxy != null)
             {

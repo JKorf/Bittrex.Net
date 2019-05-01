@@ -60,9 +60,9 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             return self == to;
         }
 
-        public static IBittrexSocketClient CreateSocketClient(IWebsocket socket, BittrexSocketClientOptions options = null)
+        public static BittrexSocketClient CreateSocketClient(IWebsocket socket, BittrexSocketClientOptions options = null)
         {
-            IBittrexSocketClient client;
+            BittrexSocketClient client;
             client = options != null ? new BittrexSocketClient(options) : new BittrexSocketClient();
             client.SocketFactory = Mock.Of<IWebsocketFactory>();
             Mock.Get(client.SocketFactory).Setup(f => f.CreateWebsocket(It.IsAny<Log>(), It.IsAny<string>())).Returns(socket);

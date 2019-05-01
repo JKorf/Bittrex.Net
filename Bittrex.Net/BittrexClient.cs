@@ -165,7 +165,7 @@ namespace Bittrex.Net
             };
 
             var result = await Execute<BittrexMarketSummary[]>(GetUrl(MarketSummaryEndpoint, Api, ApiVersion), false, parameters).ConfigureAwait(false);
-            return new WebCallResult<BittrexMarketSummary>(result.ResponseStatusCode, result.Data?.Any() == true ? result.Data[0]: null, result.Error);
+            return new WebCallResult<BittrexMarketSummary>(result.ResponseStatusCode, result.ResponseHeaders, result.Data?.Any() == true ? result.Data[0]: null, result.Error);
         }
 
         /// <summary>
@@ -637,10 +637,10 @@ namespace Bittrex.Net
         private static WebCallResult<T> GetResult<T>(WebCallResult<BittrexApiResult<T>> result) where T : class
         {
             if (result.Error != null || result.Data == null)
-                return new WebCallResult<T>(result.ResponseStatusCode, null, result.Error);
+                return WebCallResult<T>.CreateErrorResult(result.ResponseStatusCode, result.ResponseHeaders, result.Error);
 
             var messageEmpty = string.IsNullOrEmpty(result.Data.Message);
-            return new WebCallResult<T>(result.ResponseStatusCode, !messageEmpty ? null: result.Data.Result, !messageEmpty ? new ServerError(result.Data.Message): null);
+            return new WebCallResult<T>(result.ResponseStatusCode, result.ResponseHeaders, !messageEmpty ? null: result.Data.Result, !messageEmpty ? new ServerError(result.Data.Message): null);
         }
         
         private void Configure(BittrexClientOptions options)

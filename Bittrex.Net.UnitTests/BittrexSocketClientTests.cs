@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Text;
 using Bittrex.Net.UnitTests.TestImplementations;
+using CryptoExchange.Net.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -52,7 +53,7 @@ namespace Bittrex.Net.UnitTests
             
 
             // act
-            socket.InvokeMessage(WrapResult(data));
+            socket.InvokeMessage(WrapResult("uS", data));
 
             // assert
             Assert.IsNotNull(result);
@@ -87,7 +88,7 @@ namespace Bittrex.Net.UnitTests
 
 
             // act
-            socket.InvokeMessage(WrapResult(data));
+            socket.InvokeMessage(WrapResult("uL", data));
 
             // assert
             Assert.IsNotNull(result);
@@ -101,7 +102,10 @@ namespace Bittrex.Net.UnitTests
             var socket = new TestSocket();
             socket.SetProxyResponse(true);
             socket.CanConnect = true;
-            var client = TestHelpers.CreateSocketClient(socket);
+            var client = TestHelpers.CreateSocketClient(socket, new BittrexSocketClientOptions()
+            {
+                LogVerbosity = LogVerbosity.Debug
+            });
 
             BittrexStreamUpdateExchangeState result = null;
             var subResponse = client.SubscribeToExchangeStateUpdates("market", (test) => result = test);
@@ -118,7 +122,7 @@ namespace Bittrex.Net.UnitTests
 
 
             // act
-            socket.InvokeMessage(WrapResult(data));
+            socket.InvokeMessage(WrapResult("uE", data));
 
             // assert
             Assert.IsNotNull(result);
@@ -128,7 +132,7 @@ namespace Bittrex.Net.UnitTests
             Assert.IsTrue(TestHelpers.AreEqual(data.Fills[0], result.Fills[0]));
         }
 
-        private JObject WrapResult<T>(T data)
+        private JObject WrapResult<T>(string method, T data)
         {
             var stringData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
 
@@ -139,6 +143,7 @@ namespace Bittrex.Net.UnitTests
                 deflateStream.Flush();
 
                 var result = new JObject();
+                result["M"] = method;
                 result["A"] = new JArray(Convert.ToBase64String(compressedStream.ToArray()));
                 return result;
                 

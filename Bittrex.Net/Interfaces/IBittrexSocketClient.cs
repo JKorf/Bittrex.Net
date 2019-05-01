@@ -8,10 +8,8 @@ using CryptoExchange.Net.Sockets;
 
 namespace Bittrex.Net.Interfaces
 {
-    public interface IBittrexSocketClient
+    public interface IBittrexSocketClient: ISocketClient
     {
-        IWebsocketFactory SocketFactory { get; set; }
-
         /// <summary>
         /// Gets the current summaries for all markets
         /// </summary>
@@ -104,19 +102,5 @@ namespace Bittrex.Net.Interfaces
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToAccountUpdatesAsync(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate);
 
-        /// <summary>
-        /// Unsubscribe from a stream
-        /// </summary>
-        /// <param name="subscription">The subscription to unsubscribe</param>
-        /// <returns></returns>
-        Task Unsubscribe(UpdateSubscription subscription);
-
-        /// <summary>
-        /// Unsubscribe all subscriptions
-        /// </summary>
-        /// <returns></returns>
-        Task UnsubscribeAll();
-
-        void Dispose();
     }
 }

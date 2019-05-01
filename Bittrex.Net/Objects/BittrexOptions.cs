@@ -23,7 +23,8 @@ namespace Bittrex.Net.Objects
     {
         public BittrexSocketClientOptions()
         {
-            BaseAddress = "https://socket.bittrex.com/signalr";
+            BaseAddress = "https://socket.bittrex.com";
+            SocketSubscriptionsCombineTarget = 10;
         }
     }
 }
