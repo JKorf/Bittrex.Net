@@ -58,4 +58,65 @@
         Fill,
         Cancel
     }
+
+    public enum TimeInForce
+    {
+        GoodTillCancelled,
+        ImmediateOrCancel,
+        FillOrKill,
+        PostOnlyGoodTillCancelled
+    }
+
+    public enum OrderTypeV3
+    {
+        Limit,
+        Market,
+        CeilingLimit,
+        CeilingMarket
+    }
+
+    public enum DepositAddressStatus
+    {
+        Requested,
+        Provisioned
+    }
+
+    public enum DepositStatus
+    {
+        Pending,
+        Completed,
+        Orphaned,
+        Invalidated
+    }
+
+    public enum SymbolStatus
+    {
+        Online,
+        Offline
+    }
+
+    public enum OrderStatus
+    {
+        Open,
+        Closed
+    }
+
+    public enum WithdrawalStatus
+    {
+        Requested,
+        Authorized,
+        Pending,
+        Completed,
+        InvalidAddress,
+        Cancelled
+    }
+
+    public enum CandleInterval
+    {
+        OneMinute,
+        FiveMinutes,
+        OneHour,
+        OneDay
+    }
+
 }
