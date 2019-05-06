@@ -206,6 +206,9 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.1.2 - 06 may 2019
+	* Fixed limit being a nullable field on orders
+
 * Version 3.1.1 - 06 may 2019
 	* Fixed market order type parsing
 	* Added support for the V3 open beta API
