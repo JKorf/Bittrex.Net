@@ -98,7 +98,7 @@ After doing either of above steps you should now be ready to actually start usin
 ## Getting started
 To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
 
-Bittrex.Net provides two clients to interact with the Bittrex API. The  `BittrexClient`  provides all rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
+Bittrex.Net provides three clients to interact with the Bittrex API. The  `BittrexClient`  provides all V1.1 rest API calls, whereas the `BittrexClientV3` gives access to the V3 rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
 
 Most API methods are available in two flavors, sync and async:
 ````C#
@@ -206,6 +206,10 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.1.1 - 06 may 2019
+	* Fixed market order type parsing
+	* Added support for the V3 open beta API
+
 * Version 3.1.0 - 01 may 2019
 	* Updated to latest CryptoExchange.Net
 		* Adds response header to REST call result

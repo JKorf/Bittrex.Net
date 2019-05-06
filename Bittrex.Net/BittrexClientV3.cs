@@ -14,6 +14,10 @@ using Newtonsoft.Json.Linq;
 
 namespace Bittrex.Net
 {
+    /// <summary>
+    /// Client for the V3 API
+    /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
+    /// </summary>
     public class BittrexClientV3: RestClient
     {
         #region fields
@@ -24,7 +28,7 @@ namespace Bittrex.Net
         #region ctor
         /// <summary>
         /// Create a new instance of BittrexClient using the default options
-        /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on http://github.com/bittrex.net
+        /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
         /// </summary>
         public BittrexClientV3() : this(DefaultOptions)
         {
@@ -32,7 +36,7 @@ namespace Bittrex.Net
 
         /// <summary>
         /// Create a new instance of BittrexClient using the default options
-        /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on http://github.com/bittrex.net
+        /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
         /// </summary>
         public BittrexClientV3(BittrexClientOptions options) : base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProviderV3(options.ApiCredentials))
         {
@@ -61,15 +65,15 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets information about all available markets
+        /// Gets the server time
         /// </summary>
-        /// <returns>List of markets</returns>
+        /// <returns>Time of the server</returns>
         public WebCallResult<DateTime> GetServerTime() => GetServerTimeAsync().Result;
 
         /// <summary>
-        /// Gets information about all available markets
+        /// Gets the server time
         /// </summary>
-        /// <returns>List of markets</returns>
+        /// <returns>Time of the server</returns>
         public async Task<WebCallResult<DateTime>> GetServerTimeAsync()
         {
             var result = await ExecuteRequest<BittrexServerTimeV3>(GetUrl("ping")).ConfigureAwait(false);
@@ -95,12 +99,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets information about a market
         /// </summary>
+        /// <param name="market">The market to get info for</param>
         /// <returns>List of markets</returns>
         public WebCallResult<BittrexMarketV3> GetMarket(string market) => GetMarketAsync(market).Result;
 
         /// <summary>
         /// Gets information about a market
         /// </summary>
+        /// <param name="market">The market to get info for</param>
         /// <returns>Market info</returns>
         public async Task<WebCallResult<BittrexMarketV3>> GetMarketAsync(string market)
         {
@@ -110,13 +116,13 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets summaries of all markets
         /// </summary>
-        /// <returns>List of markets</returns>
+        /// <returns>List of market summaries</returns>
         public WebCallResult<BittrexMarketSummariesV3[]> GetMarketSummaries() => GetMarketSummariesAsync().Result;
 
         /// <summary>
         /// Gets summaries of all markets
         /// </summary>
-        /// <returns>List of market info</returns>
+        /// <returns>List of market summaries</returns>
         public async Task<WebCallResult<BittrexMarketSummariesV3[]>> GetMarketSummariesAsync()
         {
             return await ExecuteRequest<BittrexMarketSummariesV3[]>(GetUrl("markets/summaries")).ConfigureAwait(false);
@@ -125,12 +131,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets summary of a market
         /// </summary>
+        /// <param name="market">The market to get info for</param>
         /// <returns>Market summary</returns>
         public WebCallResult<BittrexMarketSummariesV3> GetMarketSummary(string market) => GetMarketSummaryAsync(market).Result;
 
         /// <summary>
         /// Gets summary of a market
         /// </summary>
+        /// <param name="market">The market to get info for</param>
         /// <returns>Market summary</returns>
         public async Task<WebCallResult<BittrexMarketSummariesV3>> GetMarketSummaryAsync(string market)
         {
@@ -140,13 +148,15 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets the order book of a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get the order book for</param>
+        /// <returns>Market order book</returns>
         public WebCallResult<BittrexMarketOrderBookV3> GetMarketOrderBook(string market) => GetMarketOrderBookAsync(market).Result;
 
         /// <summary>
         /// Gets the order book of a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get the order book for</param>
+        /// <returns>Market order book</returns>
         public async Task<WebCallResult<BittrexMarketOrderBookV3>> GetMarketOrderBookAsync(string market)
         {
             return await ExecuteRequest<BittrexMarketOrderBookV3>(GetUrl($"markets/{market}/orderbook")).ConfigureAwait(false);
@@ -155,13 +165,15 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets the trade history of a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get trades for</param>
+        /// <returns>Market trade list</returns>
         public WebCallResult<BittrexMarketTradeV3[]> GetMarketTrades(string market) => GetMarketTradesAsync(market).Result;
 
         /// <summary>
         /// Gets the trade history of a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get trades for</param>
+        /// <returns>Market trade list</returns>
         public async Task<WebCallResult<BittrexMarketTradeV3[]>> GetMarketTradesAsync(string market)
         {
             return await ExecuteRequest<BittrexMarketTradeV3[]>(GetUrl($"markets/{market}/trades")).ConfigureAwait(false);
@@ -170,28 +182,34 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets the ticker of a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get ticker for</param>
+        /// <returns>Market ticker</returns>
         public WebCallResult<BittrexMarketTickV3> GetMarketTicker(string market) => GetMarketTickerAsync(market).Result;
 
         /// <summary>
         /// Gets the ticker of a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get ticker for</param>
+        /// <returns>Market ticker</returns>
         public async Task<WebCallResult<BittrexMarketTickV3>> GetMarketTickerAsync(string market)
         {
             return await ExecuteRequest<BittrexMarketTickV3>(GetUrl($"markets/{market}/ticker")).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets the ticker of a market
+        /// Gets the candles for a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get candles for</param>
+        /// <param name="interval">The interval of the candles</param>
+        /// <returns>Market candles</returns>
         public WebCallResult<BittrexMarketCandleV3[]> GetMarketCandles(string market, CandleInterval interval) => GetMarketCandlesAsync(market, interval).Result;
 
         /// <summary>
-        /// Gets the ticker of a market
+        /// Gets the candles for a market
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <param name="market">The market to get candles for</param>
+        /// <param name="interval">The interval of the candles</param>
+        /// <returns>Market candles</returns>
         public async Task<WebCallResult<BittrexMarketCandleV3[]>> GetMarketCandlesAsync(string market, CandleInterval interval)
         {
             var parameters = new Dictionary<string, object>()
@@ -220,12 +238,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets info on a currency
         /// </summary>
+        /// <param name="currency">The name of the currency</param>
         /// <returns>Currency info</returns>
         public WebCallResult<BittrexCurrencyV3> GetCurrency(string currency) => GetCurrencyAsync(currency).Result;
 
         /// <summary>
         /// Gets info on a currency
         /// </summary>
+        /// <param name="currency">The name of the currency</param>
         /// <returns>Currency info</returns>
         public async Task<WebCallResult<BittrexCurrencyV3>> GetCurrencyAsync(string currency)
         {
@@ -235,7 +255,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets current balances
         /// </summary>
-        /// <returns>Market summary</returns>
+        /// <returns>List of balances</returns>
         public WebCallResult<BittrexBalanceV3[]> GetBalances() => GetBalancesAsync().Result;
 
         /// <summary>
@@ -248,14 +268,16 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets current balance for a market
+        /// Gets current balance for a currency
         /// </summary>
+        /// <param name="currency">The name of the currency to get balance for</param>
         /// <returns>Balance for market</returns>
         public WebCallResult<BittrexBalanceV3> GetBalance(string currency) => GetBalanceAsync(currency).Result;
 
         /// <summary>
         /// Gets current balance for a market
         /// </summary>
+        /// <param name="currency">The name of the currency to get balance for</param>
         /// <returns>Balance for market</returns>
         public async Task<WebCallResult<BittrexBalanceV3>> GetBalanceAsync(string currency)
         {
@@ -280,12 +302,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets deposit addresses for a currency
         /// </summary>
+        /// <param name="currency">The name of the currency to get the deposit address for</param>
         /// <returns>Deposit addresses</returns>
         public WebCallResult<BittrexDepositAddressV3> GetDepositAddress(string currency) => GetDepositAddressAsync(currency).Result;
 
         /// <summary>
         /// Gets deposit addresses for a currency
         /// </summary>
+        /// <param name="currency">The name of the currency to get the deposit address for</param>
         /// <returns>Deposit addresses</returns>
         public async Task<WebCallResult<BittrexDepositAddressV3>> GetDepositAddressAsync(string currency)
         {
@@ -295,6 +319,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Request a deposit address for a currency
         /// </summary>
+        /// <param name="currency">The name of the currency to get request a deposit address for</param>
         /// <returns>The deposit address</returns>
         public WebCallResult<BittrexDepositAddressV3> RequestDepositAddress(string currency) => RequestDepositAddressAsync(currency).Result;
 
@@ -315,17 +340,19 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets list of open deposits
         /// </summary>
+        /// <param name="currency">Filter the list by currency</param>
         /// <returns>List of deposits</returns>
-        public WebCallResult<BittrexDepositV3[]> GetOpenDeposits(string market = null) => GetOpenDepositsAsync(market).Result;
+        public WebCallResult<BittrexDepositV3[]> GetOpenDeposits(string currency = null) => GetOpenDepositsAsync(currency).Result;
 
         /// <summary>
         /// Gets list of open deposits
         /// </summary>
+        /// <param name="currency">Filter the list by currency</param>
         /// <returns>List of deposits</returns>
-        public async Task<WebCallResult<BittrexDepositV3[]>> GetOpenDepositsAsync(string market = null)
+        public async Task<WebCallResult<BittrexDepositV3[]>> GetOpenDepositsAsync(string currency = null)
         {
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", market);
+            parameters.AddOptionalParameter("currencySymbol", currency);
 
             return await ExecuteRequest<BittrexDepositV3[]>(GetUrl("deposits/open"), parameters: parameters, signed: true).ConfigureAwait(false);
         }
@@ -333,20 +360,43 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets list of closed deposits
         /// </summary>
+        /// <param name="currency">Filter the list by currency</param>
+        /// <param name="status">Filter the list by status of the deposit</param>
+        /// <param name="startDate">Filter the list by date</param>
+        /// <param name="endDate">Filter the list by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
         /// <returns>List of deposits</returns>
-        public WebCallResult<BittrexDepositV3[]> GetClosedDeposits(string market = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null) => GetClosedDepositsAsync(market, status, startDate, endDate).Result;
+        public WebCallResult<BittrexDepositV3[]> GetClosedDeposits(string currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null) => GetClosedDepositsAsync(currency, status, startDate, endDate, pageSize, nextPageToken, previousPageToken).Result;
 
         /// <summary>
         /// Gets list of closed deposits
         /// </summary>
+        /// <param name="currency">Filter the list by currency</param>
+        /// <param name="status">Filter the list by status of the deposit</param>
+        /// <param name="startDate">Filter the list by date</param>
+        /// <param name="endDate">Filter the list by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
         /// <returns>List of deposits</returns>
-        public async Task<WebCallResult<BittrexDepositV3[]>> GetClosedDepositsAsync(string market = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<WebCallResult<BittrexDepositV3[]>> GetClosedDepositsAsync(string currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null)
         {
+            if (nextPageToken != null && previousPageToken != null)
+                return WebCallResult<BittrexDepositV3[]>.CreateErrorResult(new ArgumentError("Can't specify startDate and endData simultaneously"));
+
+            if (pageSize < 1 || pageSize > 200)
+                return WebCallResult<BittrexDepositV3[]>.CreateErrorResult(new ArgumentError("Page size should be between 1 and 200"));
+
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", market);
+            parameters.AddOptionalParameter("currencySymbol", currency);
             parameters.AddOptionalParameter("status", status.HasValue ? JsonConvert.SerializeObject(status, new DepositStatusConverter(false)): null);
             parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("pageSize", pageSize);
+            parameters.AddOptionalParameter("nextPageToken", nextPageToken);
+            parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
             return await ExecuteRequest<BittrexDepositV3[]>(GetUrl("deposits/closed"), parameters: parameters, signed: true).ConfigureAwait(false);
         }
@@ -354,12 +404,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets list of deposits for a transaction id
         /// </summary>
+        /// <param name="transactionId">The id of the transaction</param>
         /// <returns>List of deposits</returns>
         public WebCallResult<BittrexDepositV3[]> GetDepositsByTransactionId(string transactionId) => GetDepositsByTransactionIdAsync(transactionId).Result;
 
         /// <summary>
         /// Gets list of deposits for a transaction id
         /// </summary>
+        /// <param name="transactionId">The id of the transaction</param>
         /// <returns>List of deposits</returns>
         public async Task<WebCallResult<BittrexDepositV3[]>> GetDepositsByTransactionIdAsync(string transactionId)
         {
@@ -369,12 +421,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets a deposit by id
         /// </summary>
+        /// <param name="depositId">The id of the deposit</param>
         /// <returns>Deposit info</returns>
         public WebCallResult<BittrexDepositV3> GetDeposit(string depositId) => GetDepositAsync(depositId).Result;
 
         /// <summary>
         /// Gets a deposit by id
         /// </summary>
+        /// <param name="depositId">The id of the deposit</param>
         /// <returns>Deposit info</returns>
         public async Task<WebCallResult<BittrexDepositV3>> GetDepositAsync(string depositId)
         {
@@ -384,19 +438,40 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets a list of closed orders
         /// </summary>
+        /// <param name="symbol">Filter the list by symbol</param>
+        /// <param name="startDate">Filter the list by date</param>
+        /// <param name="endDate">Filter the list by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
         /// <returns>List of closed orders</returns>
-        public WebCallResult<BittrexOrderV3[]> GetClosedOrders(string symbol = null, DateTime? startDate = null, DateTime? endDate = null) => GetClosedOrdersAsync(symbol, startDate, endDate).Result;
+        public WebCallResult<BittrexOrderV3[]> GetClosedOrders(string symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null) => GetClosedOrdersAsync(symbol, startDate, endDate, pageSize, nextPageToken, previousPageToken).Result;
 
         /// <summary>
         /// Gets a list of closed orders
         /// </summary>
+        /// <param name="symbol">Filter the list by symbol</param>
+        /// <param name="startDate">Filter the list by date</param>
+        /// <param name="endDate">Filter the list by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
         /// <returns>List of closed orders</returns>
-        public async Task<WebCallResult<BittrexOrderV3[]>> GetClosedOrdersAsync(string symbol = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<WebCallResult<BittrexOrderV3[]>> GetClosedOrdersAsync(string symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null)
         {
+            if (nextPageToken != null && previousPageToken != null)
+                return WebCallResult<BittrexOrderV3[]>.CreateErrorResult(new ArgumentError("Can't specify startDate and endData simultaneously"));
+
+            if (pageSize < 1 || pageSize > 200)
+                return WebCallResult<BittrexOrderV3[]>.CreateErrorResult(new ArgumentError("Page size should be between 1 and 200"));
+
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
             parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("pageSize", pageSize);
+            parameters.AddOptionalParameter("nextPageToken", nextPageToken);
+            parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
             return await ExecuteRequest<BittrexOrderV3[]>(GetUrl("orders/closed"), parameters: parameters, signed: true).ConfigureAwait(false);
         }
@@ -404,13 +479,15 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
+        /// <param name="symbol">The symbol to get open orders for</param>
         /// <returns>List of open orders</returns>
         public WebCallResult<BittrexOrderV3[]> GetOpenOrders(string symbol = null) => GetOpenOrdersAsync(symbol).Result;
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
-        /// <returns>Order info</returns>
+        /// <param name="symbol">The symbol to get open orders for</param>
+        /// <returns>List of open orders</returns>
         public async Task<WebCallResult<BittrexOrderV3[]>> GetOpenOrdersAsync(string symbol = null)
         {
             var parameters = new Dictionary<string, object>();
@@ -420,14 +497,16 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets a list of open orders
+        /// Gets info on an order
         /// </summary>
+        /// <param name="orderId">The id of the order to retrieve</param>
         /// <returns>Order info</returns>
         public WebCallResult<BittrexOrderV3> GetOrder(string orderId) => GetOrderAsync(orderId).Result;
 
         /// <summary>
-        /// Gets a list of open orders
+        /// Gets info on an order
         /// </summary>
+        /// <param name="orderId">The id of the order to retrieve</param>
         /// <returns>Order info</returns>
         public async Task<WebCallResult<BittrexOrderV3>> GetOrderAsync(string orderId)
         {
@@ -437,13 +516,15 @@ namespace Bittrex.Net
         /// <summary>
         /// Cancels an order
         /// </summary>
+        /// <param name="orderId">The id of the order</param>
         /// <returns>Order info</returns>
         public WebCallResult<BittrexOrderV3> CancelOrder(string orderId) => CancelOrderAsync(orderId).Result;
 
         /// <summary>
         /// Cancels an order
         /// </summary>
-        /// <returns>List of open orders</returns>
+        /// <param name="orderId">The id of the order</param>
+        /// <returns>Order info</returns>
         public async Task<WebCallResult<BittrexOrderV3>> CancelOrderAsync(string orderId)
         {
             return await ExecuteRequest<BittrexOrderV3>(GetUrl($"orders/{orderId}"), method: Constants.DeleteMethod, signed: true).ConfigureAwait(false);
@@ -452,13 +533,29 @@ namespace Bittrex.Net
         /// <summary>
         /// Places an order
         /// </summary>
-        /// <returns>Order info</returns>
+        /// <param name="symbol">The symbol of the order</param>
+        /// <param name="direction">The direction of the order</param>
+        /// <param name="type">The type of order</param>
+        /// <param name="quantity">The quantity of the order</param>
+        /// <param name="timeInForce">The time in force of the order</param>
+        /// <param name="limit">The limit price of the order (limit orders only)</param>
+        /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
+        /// <param name="clientOrderId">Id to track the order by</param>
+        /// <returns>The order info</returns>
         public WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity,  TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string clientOrderId = null) => PlaceOrderAsync(symbol, direction, type, quantity, timeInForce, limit, ceiling, clientOrderId).Result;
 
         /// <summary>
         /// Places an order
         /// </summary>
-        /// <returns>List of open orders</returns>
+        /// <param name="symbol">The symbol of the order</param>
+        /// <param name="direction">The direction of the order</param>
+        /// <param name="type">The type of order</param>
+        /// <param name="quantity">The quantity of the order</param>
+        /// <param name="timeInForce">The time in force of the order</param>
+        /// <param name="limit">The limit price of the order (limit orders only)</param>
+        /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
+        /// <param name="clientOrderId">Id to track the order by</param>
+        /// <returns>The order info</returns>
         public async Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity, TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string clientOrderId = null)
         {
             var parameters = new Dictionary<string, object>()
@@ -479,35 +576,66 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets a list of open withdrawals
         /// </summary>
+        /// <param name="currency">Filter by currency</param>
+        /// <param name="status">Filter by status</param>
         /// <returns>List of open withdrawals</returns>
-        public WebCallResult<BittrexWithdrawalV3[]> GetOpenWithdrawals() => GetOpenWithdrawalsAsync().Result;
+        public WebCallResult<BittrexWithdrawalV3[]> GetOpenWithdrawals(string currency = null, WithdrawalStatus? status = null) => GetOpenWithdrawalsAsync(currency, status).Result;
 
         /// <summary>
         /// Gets a list of open withdrawals
         /// </summary>
+        /// <param name="currency">Filter by currency</param>
+        /// <param name="status">Filter by status</param>
         /// <returns>List of open withdrawals</returns>
-        public async Task<WebCallResult<BittrexWithdrawalV3[]>> GetOpenWithdrawalsAsync()
+        public async Task<WebCallResult<BittrexWithdrawalV3[]>> GetOpenWithdrawalsAsync(string currency = null, WithdrawalStatus? status = null)
         {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("currencySymbol", currency);
+            parameters.AddOptionalParameter("status", status);
+
             return await ExecuteRequest<BittrexWithdrawalV3[]>(GetUrl($"withdrawals/open"), signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Gets a list of closed withdrawals
         /// </summary>
+        /// <param name="currency">Filter by currency</param>
+        /// <param name="status">Filter by status</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <returns>List of closed withdrawals</returns>
-        public WebCallResult<BittrexWithdrawalV3[]> GetClosedWithdrawals(string symbol = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null) => GetClosedWithdrawalsAsync(symbol, status, startDate, endDate).Result;
+        public WebCallResult<BittrexWithdrawalV3[]> GetClosedWithdrawals(string currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null) => GetClosedWithdrawalsAsync(currency, status, startDate, endDate, pageSize, nextPageToken, previousPageToken).Result;
 
         /// <summary>
         /// Gets a list of closed withdrawals
         /// </summary>
+        /// <param name="currency">Filter by currency</param>
+        /// <param name="status">Filter by status</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <returns>List of closed withdrawals</returns>
-        public async Task<WebCallResult<BittrexWithdrawalV3[]>> GetClosedWithdrawalsAsync(string symbol = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<WebCallResult<BittrexWithdrawalV3[]>> GetClosedWithdrawalsAsync(string currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null)
         {
+            if (nextPageToken != null && previousPageToken != null)
+                return WebCallResult<BittrexWithdrawalV3[]>.CreateErrorResult(new ArgumentError("Can't specify startDate and endData simultaneously"));
+
+            if (pageSize < 1 || pageSize > 200)
+                return WebCallResult<BittrexWithdrawalV3[]>.CreateErrorResult(new ArgumentError("Page size should be between 1 and 200"));
+
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", symbol);
+            parameters.AddOptionalParameter("currencySymbol", currency);
             parameters.AddOptionalParameter("status", status.HasValue ? JsonConvert.SerializeObject(status, new WithdrawalStatusConverter(false)) : null);
             parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("pageSize", pageSize);
+            parameters.AddOptionalParameter("nextPageToken", nextPageToken);
+            parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
             return await ExecuteRequest<BittrexWithdrawalV3[]>(GetUrl($"withdrawals/closed"), parameters: parameters, signed: true).ConfigureAwait(false);
         }
@@ -515,12 +643,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets a list of withdrawals by transaction id
         /// </summary>
+        /// <param name="transactionId">The id of the transaction</param>
         /// <returns>List withdrawals</returns>
         public WebCallResult<BittrexWithdrawalV3[]> GetWithdrawalsByTransactionId(string transactionId) => GetWithdrawalsByTransactionIdAsync(transactionId).Result;
 
         /// <summary>
         /// Gets a list of withdrawals by transaction id
         /// </summary>
+        /// <param name="transactionId">The id of the transaction</param>
         /// <returns>List withdrawals</returns>
         public async Task<WebCallResult<BittrexWithdrawalV3[]>> GetWithdrawalsByTransactionIdAsync(string transactionId)
         {
@@ -530,12 +660,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Gets withdrawal by id
         /// </summary>
+        /// <param name="id">The id of the withdrawal</param>
         /// <returns>Withdrawal info</returns>
         public WebCallResult<BittrexWithdrawalV3> GetWithdrawal(string id) => GetWithdrawalAsync(id).Result;
 
         /// <summary>
         /// Gets withdrawal by id
         /// </summary>
+        /// <param name="id">The id of the withdrawal</param>
         /// <returns>Withdrawal info</returns>
         public async Task<WebCallResult<BittrexWithdrawalV3>> GetWithdrawalAsync(string id)
         {
@@ -545,12 +677,14 @@ namespace Bittrex.Net
         /// <summary>
         /// Cancels a withdrawal
         /// </summary>
+        /// <param name="id">The id of the withdrawal to cancel</param>
         /// <returns>Withdrawal info</returns>
         public WebCallResult<BittrexWithdrawalV3> CancelWithdrawal(string id) => CancelWithdrawalAsync(id).Result;
 
         /// <summary>
         /// Cancels a withdrawal
         /// </summary>
+        /// <param name="id">The id of the withdrawal to cancel</param>
         /// <returns>Withdrawal info</returns>
         public async Task<WebCallResult<BittrexWithdrawalV3>> CancelWithdrawalAsync(string id)
         {
@@ -558,15 +692,23 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Cancels a withdrawal
+        /// Withdraw from Bittrex
         /// </summary>
-        /// <returns>Withdrawal info</returns>
+        /// <param name="currency">The currency to withdraw</param>
+        /// <param name="quantity">The quantity to withdraw</param>
+        /// <param name="address">The address to withdraw to</param>
+        /// <param name="addressTag">A tag for the address</param>
+        /// <returns>Info about the withdrawal</returns>
         public WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string addressTag) => WithdrawAsync(currency, quantity, address, addressTag).Result;
 
         /// <summary>
-        /// Cancels a withdrawal
+        /// Withdraw from Bittrex
         /// </summary>
-        /// <returns>Withdrawal info</returns>
+        /// <param name="currency">The currency to withdraw</param>
+        /// <param name="quantity">The quantity to withdraw</param>
+        /// <param name="address">The address to withdraw to</param>
+        /// <param name="addressTag">A tag for the address</param>
+        /// <returns>Info about the withdrawal</returns>
         public async Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string addressTag)
         {
             var parameters = new Dictionary<string, object>()
@@ -580,8 +722,7 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexWithdrawalV3>(GetUrl("withdrawals"), method: Constants.PostMethod, parameters: parameters, signed: true).ConfigureAwait(false);
         }
 
-
-
+        
         protected override Error ParseErrorResponse(JToken data)
         {
             if (data["code"] == null)

@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
 	<Authors>JKorf</Authors>
-    <PackageVersion>3.1.0</PackageVersion>
+    <PackageVersion>3.1.1</PackageVersion>
 	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -16,18 +16,15 @@
 	<PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageReleaseNotes>3.1.0 - Updated to latest CryptoExchange.Net. Added response headers in rest call results, rate limiter per API key.
+	<PackageReleaseNotes>3.1.1 - Fixed parsing of market order types, added support for V3 beta rest API
 	</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CryptoExchange.Net" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />	
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\CryptoExchange.Net\CryptoExchange.Net\CryptoExchange.Net.csproj" />
   </ItemGroup>
 
 </Project>
