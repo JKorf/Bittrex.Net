@@ -31,7 +31,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The limit of the order
         /// </summary>
-        public decimal Limit { get; set; }
+        public decimal? Limit { get; set; }
         /// <summary>
         /// Quantity of the order
         /// </summary>

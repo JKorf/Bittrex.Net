@@ -64,7 +64,7 @@ namespace Bittrex.Net.Objects
         /// The order limit
         /// </summary>
         [JsonProperty("X")]
-        public decimal Limit { get; set; }
+        public decimal? Limit { get; set; }
         /// <summary>
         /// The amount of commission paid for this order
         /// </summary>

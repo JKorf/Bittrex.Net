@@ -38,7 +38,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The order limit
         /// </summary>
-        public decimal Limit { get; set; }
+        public decimal? Limit { get; set; }
         /// <summary>
         /// The reserved currency for this order
         /// </summary>
