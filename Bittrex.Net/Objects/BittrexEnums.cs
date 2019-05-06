@@ -24,7 +24,9 @@
     public enum OrderSideExtended
     {
         LimitBuy,
-        LimitSell
+        LimitSell,
+        MarketBuy,
+        MarketSell
     }
 
     public enum TickInterval

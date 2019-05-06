@@ -12,7 +12,9 @@ namespace Bittrex.Net.Converters
         protected override List<KeyValuePair<OrderSideExtended, string>> Mapping => new List<KeyValuePair<OrderSideExtended, string>>
         {
             new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitBuy, "LIMIT_BUY"),
-            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "LIMIT_SELL")
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "LIMIT_SELL"),
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "MARKET_SELL"),
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "MARKET_BUY")
         };
     }
 }
