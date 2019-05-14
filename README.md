@@ -14,8 +14,10 @@ Additionally it adds some convenience features like:
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Bittrex.Net/issues)**
 
----
-Also check out my other exchange API wrappers:
+## CryptoExchange.Net
+Implementation is build upon the CryptoExchange.Net library, make sure to also check out the documentation on that: [docs](https://github.com/JKorf/CryptoExchange.Net)
+
+Other CryptoExchange.Net implementations:
 <table>
 	<tr>
 	<td>
@@ -52,8 +54,7 @@ Also check out my other exchange API wrappers:
 	</td>
 	</tr>
 </table>
-
-And other API wrappers based on CryptoExchange.Net:
+Implementations from third parties:
 <table>
 	<tr>
 		<td>
@@ -103,111 +104,6 @@ After doing either of above steps you should now be ready to actually start usin
 To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
 
 Bittrex.Net provides three clients to interact with the Bittrex API. The  `BittrexClient`  provides all V1.1 rest API calls, whereas the `BittrexClientV3` gives access to the V3 rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
-
-Most API methods are available in two flavors, sync and async:
-````C#
-public void NonAsyncMethod()
-{
-    using(var client = new BittrexClient())
-    {
-        var result = client.GetTicker("BTC-ETH");
-    }
-}
-
-public async Task AsyncMethod()
-{
-    using(var client = new BittrexClient())
-    {
-        var result2 = await client.GetTickerAsync("BTC-ETH");
-    }
-}
-````
-
-## Response handling
-All API requests will respond with a CallResult object. This object contains whether the call was successful, the data returned from the call and an error if the call wasn't successful. As such, one should always check the Success flag when processing a response.
-For example:
-````C#
-using(var client = new BittrexClient())
-{
-	var priceResult = client.GetTicker("BTC-ETH");
-	if (priceResult.Success)
-		Console.WriteLine($"BTC-ETH price: {priceResult.Data.Last}");
-	else
-		Console.WriteLine($"Error: {priceResult.Error.Message}");
-}
-````
-
-## Options & Authentication
-The default behavior of the clients can be changed by providing options to the constructor, or using the `SetDefaultOptions` before creating a new client. Api credentials can be provided in these options.
-
-## Websockets
-The Bittrex.Net socket client provides several socket endpoint to which can be subscribed and follow this function structure
-
-```C#
-var client = new BittrexSocketClient();
-
-var subscribeResult = client.SubscribeToMarketSummariesUpdate(data =>
-{
-	// handle data
-});
-```
-
-**Handling socket events**
-
-Subscribing to a socket stream returns a UpdateSubscription object. This object can be used to be notified when a socket is disconnected or reconnected:
-````C#
-var subscriptionResult = client.SubscribeToMarketSummariesUpdate(data =>
-{
-	Console.WriteLine("Received summaries update");
-});
-
-if(subscriptionResult.Success){
-	sub.Data.Disconnected += () =>
-	{
-		Console.WriteLine("Socket disconnected");
-	};
-
-	sub.Data.Reconnected += (e) =>
-	{
-		Console.WriteLine("Socket reconnected after " + e);
-	};
-}
-````
-
-**Unsubscribing from socket endpoints:**
-
-Sockets streams can be unsubscribed by using the `client.Unsubscribe` method in combination with the stream subscription received from subscribing:
-```C#
-var client = new BittrexSocketClient();
-
-var successSummaries = client.SubscribeToMarketSummariesUpdate((data) =>
-{
-	// handle data
-});
-
-client.Unsubscribe(successTicker.Data);
-```
-
-Additionaly, all sockets can be closed with the `UnsubscribeAll` method. Beware that when a client is disposed the sockets are automatically disposed. This means that if the code is no longer in the using statement the eventhandler won't fire anymore. To prevent this from happening make sure the code doesn't leave the using statement or don't use the socket client in a using statement:
-```C#
-// Doesn't leave the using block
-using(var client = new BittrexSocketClient())
-{
-	var successSummaries = client.SubscribeToMarketSummariesUpdate((data) =>
-	{
-		// handle data
-	});
-
-	Console.ReadLine();
-}
-
-// Without using block
-var client = new BittrexSocketClient();
-client.SubscribeToMarketSummariesUpdate((data) =>
-{
-	// handle data
-});
-```
 
 ## Release notes
 * Version 3.1.3 - 14 may 2019
