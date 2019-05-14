@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using CryptoExchange.Net.OrderBook;
+using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
-    public class BittrexStreamOrderBookEntry
+    public class BittrexStreamOrderBookEntry: ISymbolOrderBookEntry
     {
         /// <summary>
         /// Total quantity of order at this price
@@ -13,7 +14,7 @@ namespace Bittrex.Net.Objects
         /// Price of the orders
         /// </summary>
         [JsonProperty("R")]
-        public decimal Rate { get; set; }
+        public decimal Price { get; set; }
     }
 
     public class BittrexStreamOrderBookUpdateEntry: BittrexStreamOrderBookEntry

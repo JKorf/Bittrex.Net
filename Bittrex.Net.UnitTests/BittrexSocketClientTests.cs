@@ -115,8 +115,8 @@ namespace Bittrex.Net.UnitTests
                 {
                     Nonce = 1,
                     MarketName = "market",
-                    Buys = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.1m, Rate = 0.2m, Type = OrderBookEntryType.NewEntry} },
-                    Sells = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.4m, Rate = 0.5m, Type = OrderBookEntryType.RemoveEntry } },
+                    Buys = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.1m, Price = 0.2m, Type = OrderBookEntryType.NewEntry} },
+                    Sells = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.4m, Price = 0.5m, Type = OrderBookEntryType.RemoveEntry } },
                     Fills = new List<BittrexStreamFill> { new BittrexStreamFill(){ Rate = 0.6m, Quantity = 0.7m, OrderType = OrderSide.Buy, Timestamp = new DateTime(2018, 1, 1)} }
                 };
 

@@ -210,6 +210,10 @@ client.SubscribeToMarketSummariesUpdate((data) =>
 ```
 
 ## Release notes
+* Version 3.1.3 - 14 may 2019
+	* Added an order book implementation for easily keeping an updated order book
+	* Added additional constructor to ApiCredentials to be able to read from file
+
 * Version 3.1.2 - 06 may 2019
 	* Fixed limit being a nullable field on orders
 

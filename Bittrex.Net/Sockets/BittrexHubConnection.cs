@@ -93,7 +93,7 @@ namespace Bittrex.Net.Sockets
             await Task.Run(() =>
             {
                 connection.Stop(TimeSpan.FromSeconds(1));
-            });
+            }).ConfigureAwait(false);
         }
     }
 }
