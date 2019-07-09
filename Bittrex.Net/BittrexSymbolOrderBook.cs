@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
@@ -13,11 +12,16 @@ namespace Bittrex.Net
 {
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
-        private readonly BittrexSocketClient socketClient;
+        private readonly IBittrexSocketClient socketClient;
 
-        public BittrexSymbolOrderBook(string symbol, LogVerbosity logVerbosity = LogVerbosity.Info, IEnumerable<TextWriter> logWriters = null) : base("Bittrex", symbol, true, logVerbosity, logWriters)
+        /// <summary>
+        /// Create a new order book instance
+        /// </summary>
+        /// <param name="symbol">The symbol the order book is for</param>
+        /// <param name="options">Options for the order book</param>
+        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
         {
-            socketClient = new BittrexSocketClient();
+            socketClient = options?.SocketClient ?? new BittrexSocketClient();
         }
 
         protected override async Task<CallResult<UpdateSubscription>> DoStart()
