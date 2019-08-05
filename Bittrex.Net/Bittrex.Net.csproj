@@ -1,30 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
-     
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
-	<Authors>JKorf</Authors>
-    <PackageVersion>3.1.4</PackageVersion>
-	<Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
+    <Authors>JKorf</Authors>
+    <PackageVersion>3.1.5</PackageVersion>
+    <Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
     <PackageProjectUrl>https://github.com/JKorf/Bittrex.Net</PackageProjectUrl>
-	<PackageLicenseUrl>https://github.com/JKorf/Bittrex.Net/blob/master/LICENSE</PackageLicenseUrl>
-	<PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
-	<NeutralLanguage>en</NeutralLanguage>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageReleaseNotes>3.1.4 - Updated BittrexSymbolOrderBook
-	</PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/JKorf/Bittrex.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
+    <NeutralLanguage>en</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReleaseNotes>3.1.5 - Added xml file for code documentation</PackageReleaseNotes>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CryptoExchange.Net" Version="2.1.5" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />	
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
-
 </Project>
