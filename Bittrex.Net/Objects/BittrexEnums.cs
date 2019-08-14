@@ -66,7 +66,8 @@
         GoodTillCancelled,
         ImmediateOrCancel,
         FillOrKill,
-        PostOnlyGoodTillCancelled
+        PostOnlyGoodTillCancelled,
+        PostOnlyGoodTillDate
     }
 
     public enum OrderTypeV3

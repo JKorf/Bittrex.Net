@@ -2998,12 +2998,12 @@
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Commission">
             <summary>
-            The commision paid for this order
+            The commission paid for this order
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Proceeds">
             <summary>
-            the proceeds of this order
+            The proceeds of this order
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Status">

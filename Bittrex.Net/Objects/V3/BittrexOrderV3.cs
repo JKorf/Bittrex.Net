@@ -56,11 +56,11 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         public decimal FillQuantity { get; set; }
         /// <summary>
-        /// The commision paid for this order
+        /// The commission paid for this order
         /// </summary>
         public decimal Commission { get; set; }
         /// <summary>
-        /// the proceeds of this order
+        /// The proceeds of this order
         /// </summary>
         public decimal Proceeds { get; set; }
         /// <summary>
