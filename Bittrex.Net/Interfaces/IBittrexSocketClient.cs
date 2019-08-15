@@ -8,6 +8,9 @@ using CryptoExchange.Net.Sockets;
 
 namespace Bittrex.Net.Interfaces
 {
+    /// <summary>
+    /// Interface for the Bittrex socket client
+    /// </summary>
     public interface IBittrexSocketClient: ISocketClient
     {
         /// <summary>

@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream fill
+    /// </summary>
     public class BittrexStreamFill
     {
         /// <summary>

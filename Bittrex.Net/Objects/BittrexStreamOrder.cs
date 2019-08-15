@@ -5,6 +5,9 @@ using System;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream order data
+    /// </summary>
     public class BittrexStreamOrderData
     {
         /// <summary>
@@ -12,6 +15,9 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("w")]
         public Guid AccountId { get; set; }
+        /// <summary>
+        /// Nonce
+        /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
         /// <summary>
@@ -26,6 +32,9 @@ namespace Bittrex.Net.Objects
         public BittrexStreamOrder Order { get; set; }
     }
 
+    /// <summary>
+    /// Stream order
+    /// </summary>
     public class BittrexStreamOrder
     {
         /// <summary>
@@ -33,6 +42,9 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("U")]
         public Guid Uuid { get; set; }
+        /// <summary>
+        /// Id
+        /// </summary>
         [JsonProperty("I")]
         public long Id { get; set; }
         /// <summary>

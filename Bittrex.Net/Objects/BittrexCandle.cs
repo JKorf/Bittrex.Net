@@ -4,6 +4,9 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Bittrex market candle
+    /// </summary>
     public class BittrexCandle
     {
         /// <summary>

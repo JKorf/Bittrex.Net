@@ -4,7 +4,7 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters.V3
 {
-    public class DepositAddressStatusConverter : BaseConverter<DepositAddressStatus>
+    internal class DepositAddressStatusConverter : BaseConverter<DepositAddressStatus>
     {
         public DepositAddressStatusConverter() : this(true) { }
         public DepositAddressStatusConverter(bool quotes) : base(quotes) { }

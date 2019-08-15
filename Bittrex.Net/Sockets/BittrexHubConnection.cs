@@ -12,7 +12,7 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
-    public class BittrexHubConnection: BaseSocket, ISignalRSocket
+    internal class BittrexHubConnection: BaseSocket, ISignalRSocket
     {
         private readonly HubConnection connection;
         private IHubProxy hubProxy;

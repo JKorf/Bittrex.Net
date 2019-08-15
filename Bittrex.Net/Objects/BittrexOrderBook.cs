@@ -17,6 +17,9 @@ namespace Bittrex.Net.Objects
         public List<BittrexOrderBookEntry> Sell { get; set; }
     }
 
+    /// <summary>
+    /// Order book entry
+    /// </summary>
     public class BittrexOrderBookEntry
     {
         /// <summary>
@@ -42,8 +45,17 @@ namespace Bittrex.Net.Objects
     /// </summary>
     public enum OrderBookEntryType
     {
+        /// <summary>
+        /// A newly added entry
+        /// </summary>
         NewEntry = 0,
+        /// <summary>
+        /// A entry to remove
+        /// </summary>
         RemoveEntry = 1,
+        /// <summary>
+        /// An updated entry
+        /// </summary>
         UpdateEntry = 2
     }
 }

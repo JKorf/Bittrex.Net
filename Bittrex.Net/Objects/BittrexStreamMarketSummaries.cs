@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream market summary update
+    /// </summary>
     public class BittrexStreamMarketSummaryUpdate
     {
         /// <summary>
-        /// Nounce
+        /// Nonce
         /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
@@ -18,10 +21,13 @@ namespace Bittrex.Net.Objects
         public List<BittrexStreamMarketSummary> Deltas { get; set; }
     }
 
+    /// <summary>
+    /// Stream summary query response
+    /// </summary>
     public class BittrexStreamMarketSummariesQuery
     {
         /// <summary>
-        /// Nounce
+        /// Nonce
         /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }

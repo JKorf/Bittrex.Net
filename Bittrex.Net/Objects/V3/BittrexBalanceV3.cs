@@ -2,6 +2,9 @@
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Balance info
+    /// </summary>
     public class BittrexBalanceV3
     {
         /// <summary>

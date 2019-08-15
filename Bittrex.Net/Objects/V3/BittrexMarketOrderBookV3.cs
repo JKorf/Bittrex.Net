@@ -2,6 +2,9 @@
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Order book
+    /// </summary>
     public class BittrexMarketOrderBookV3
     {
         /// <summary>
@@ -14,6 +17,9 @@ namespace Bittrex.Net.Objects.V3
         public BittrexOrderBookEntryV3[] Ask { get; set; }
     }
 
+    /// <summary>
+    /// Entry for the order book
+    /// </summary>
     public class BittrexOrderBookEntryV3
     {
         /// <summary>
@@ -26,6 +32,9 @@ namespace Bittrex.Net.Objects.V3
         public decimal Rate { get; set; }
     }
 
+    /// <summary>
+    /// Trade entry
+    /// </summary>
     public class BittrexMarketTradeV3 : BittrexOrderBookEntryV3
     {
         /// <summary>

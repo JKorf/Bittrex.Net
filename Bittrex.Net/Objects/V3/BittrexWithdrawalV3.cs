@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Withdrawal info
+    /// </summary>
     public class BittrexWithdrawalV3
     {
         /// <summary>

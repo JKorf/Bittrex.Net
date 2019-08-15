@@ -13,7 +13,7 @@ using CryptoExchange.Net.Sockets;
 
 namespace Bittrex.Net.Sockets
 {
-    public class WebsocketCustomTransport : ClientTransportBase
+    internal class WebsocketCustomTransport : ClientTransportBase
     {
         private IConnection connection;
         private string connectionData;

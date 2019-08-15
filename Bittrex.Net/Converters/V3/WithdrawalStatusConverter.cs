@@ -4,7 +4,7 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters.V3
 {
-    public class WithdrawalStatusConverter : BaseConverter<WithdrawalStatus>
+    internal class WithdrawalStatusConverter : BaseConverter<WithdrawalStatus>
     {
         public WithdrawalStatusConverter() : this(true) { }
         public WithdrawalStatusConverter(bool quotes) : base(quotes) { }

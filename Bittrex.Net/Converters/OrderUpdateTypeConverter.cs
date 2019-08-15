@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Converters
 {
-    public class OrderUpdateTypeConverter : BaseConverter<OrderUpdateType>
+    internal class OrderUpdateTypeConverter : BaseConverter<OrderUpdateType>
     {
         public OrderUpdateTypeConverter() :this(true)
         {

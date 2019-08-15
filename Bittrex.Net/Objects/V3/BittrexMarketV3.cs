@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Market info
+    /// </summary>
     public class BittrexMarketV3
     {
         /// <summary>

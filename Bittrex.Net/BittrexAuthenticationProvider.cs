@@ -9,11 +9,10 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Bittrex.Net
 {
-    public class BittrexAuthenticationProvider: AuthenticationProvider
+    internal class BittrexAuthenticationProvider: AuthenticationProvider
     {
         private static long nonce => DateTime.UtcNow.Ticks;
         private readonly HMACSHA512 encryptor;
@@ -54,7 +53,7 @@ namespace Bittrex.Net
         }
     }
 
-    public class BittrexAuthenticationProviderV3 : AuthenticationProvider
+    internal class BittrexAuthenticationProviderV3 : AuthenticationProvider
     {
         private readonly HMACSHA512 encryptorHmac;
         private readonly SHA512 encryptor;

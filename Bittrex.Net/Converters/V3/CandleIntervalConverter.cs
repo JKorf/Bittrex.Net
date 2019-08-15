@@ -4,7 +4,7 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters.V3
 {
-    public class CandleIntervalConverter : BaseConverter<CandleInterval>
+    internal class CandleIntervalConverter : BaseConverter<CandleInterval>
     {
         public CandleIntervalConverter() : this(true) { }
         public CandleIntervalConverter(bool quotes) : base(quotes) { }

@@ -10,6 +10,9 @@ using OrderBookEntryType = CryptoExchange.Net.Objects.OrderBookEntryType;
 
 namespace Bittrex.Net
 {
+    /// <summary>
+    /// Order book implementation
+    /// </summary>
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
         private readonly IBittrexSocketClient socketClient;
@@ -24,6 +27,7 @@ namespace Bittrex.Net
             socketClient = options?.SocketClient ?? new BittrexSocketClient();
         }
 
+        /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStart()
         {
             var subResult = await socketClient.SubscribeToExchangeStateUpdatesAsync(Symbol, HandleUpdate).ConfigureAwait(false);
@@ -50,6 +54,7 @@ namespace Bittrex.Net
             UpdateOrderBook(data.Nonce, data.Nonce, updates);
         }
 
+        /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResync()
         {
             var queryResult = await socketClient.QueryExchangeStateAsync(Symbol).ConfigureAwait(false);
@@ -60,6 +65,7 @@ namespace Bittrex.Net
             return new CallResult<bool>(true, null);
         }
 
+        /// <inheritdoc />
         public override void Dispose()
         {
             processBuffer.Clear();

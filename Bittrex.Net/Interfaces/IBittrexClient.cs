@@ -4,10 +4,14 @@ using System.Threading.Tasks;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.RateLimiter;
 
 namespace Bittrex.Net.Interfaces
 {
-    public interface IBittrexClient
+    /// <summary>
+    /// Bittrex client interface
+    /// </summary>
+    public interface IBittrexClient: IRestClient
     {
         /// <summary>
         /// Set the API key and secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
@@ -187,33 +191,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="rate">The rate per unit of the order</param>
         /// <returns></returns>
         Task<WebCallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate);
-
-        /// <summary>
-        /// Places a conditional order. The order will be executed when the condition that is set becomes true.
-        /// </summary>
-        /// <param name="side">Buy or sell</param>
-        /// <param name="timeInEffect">The time the order stays active</param>
-        /// <param name="market">Market the order is for</param>
-        /// <param name="quantity">The quantity of the order</param>
-        /// <param name="rate">The rate of the order</param>
-        /// <param name="conditionType">The type of condition</param>
-        /// <param name="target">The target of the condition type</param>
-        /// <returns></returns>
-        WebCallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
-
-        /// <summary>
-        /// Places a conditional order. The order will be executed when the condition that is set becomes true.
-        /// </summary>
-        /// <param name="side">Buy or sell</param>
-        /// <param name="timeInEffect">The time the order stays active</param>
-        /// <param name="market">Market the order is for</param>
-        /// <param name="quantity">The quantity of the order</param>
-        /// <param name="rate">The rate of the order</param>
-        /// <param name="conditionType">The type of condition</param>
-        /// <param name="target">The target of the condition type</param>
-        /// <returns></returns>
-        Task<WebCallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target);
-
+        
         /// <summary>
         /// Cancels an open order
         /// </summary>
@@ -357,35 +335,5 @@ namespace Bittrex.Net.Interfaces
         /// <param name="currency">Filter on currency</param>
         /// <returns>List of deposits</returns>
         Task<WebCallResult<BittrexDeposit[]>> GetDepositHistoryAsync(string currency = null);
-
-        /// <summary>
-        /// The factory for creating requests. Used for unit testing
-        /// </summary>
-        IRequestFactory RequestFactory { get; set; }
-
-        /// <summary>
-        /// Adds a rate limiter to the client. There are 2 choices, the <see cref="RateLimiterTotal"/> and the <see cref="RateLimiterPerEndpoint"/>.
-        /// </summary>
-        /// <param name="limiter">The limiter to add</param>
-        void AddRateLimiter(IRateLimiter limiter);
-
-        /// <summary>
-        /// Removes all rate limiters from this client
-        /// </summary>
-        void RemoveRateLimiters();
-
-        /// <summary>
-        /// Ping to see if the server is reachable
-        /// </summary>
-        /// <returns>The roundtrip time of the ping request</returns>
-        CallResult<long> Ping();
-
-        /// <summary>
-        /// Ping to see if the server is reachable
-        /// </summary>
-        /// <returns>The roundtrip time of the ping request</returns>
-        Task<CallResult<long>> PingAsync();
-
-        void Dispose();
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Market candle info
+    /// </summary>
     public class BittrexMarketCandleV3
     {
         /// <summary>

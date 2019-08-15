@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Deposit address info
+    /// </summary>
     public class BittrexDepositAddressV3
     {
         /// <summary>

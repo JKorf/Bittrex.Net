@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Bittrex.Net.Interfaces
 {
-    public interface ISignalRSocket: IWebsocket
+    internal interface ISignalRSocket: IWebsocket
     {
         void SetHub(string name);
 

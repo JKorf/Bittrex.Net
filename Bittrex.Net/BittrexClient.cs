@@ -14,6 +14,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Bittrex.Net
 {
+    /// <summary>
+    /// Client for the Bittrex Rest API
+    /// </summary>
     public class BittrexClient: RestClient, IBittrexClient
     {
         #region fields
@@ -356,47 +359,6 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Places a conditional order. The order will be executed when the condition that is set becomes true.
-        /// </summary>
-        /// <param name="side">Buy or sell</param>
-        /// <param name="timeInEffect">The time the order stays active</param>
-        /// <param name="market">Market the order is for</param>
-        /// <param name="quantity">The quantity of the order</param>
-        /// <param name="rate">The rate of the order</param>
-        /// <param name="conditionType">The type of condition</param>
-        /// <param name="target">The target of the condition type</param>
-        /// <returns></returns>
-        public WebCallResult<BittrexOrderResult> PlaceConditionalOrder(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target) => PlaceConditionalOrderAsync(side, timeInEffect, market, quantity, rate, conditionType, target).Result;
-
-        /// <summary>
-        /// Places a conditional order. The order will be executed when the condition that is set becomes true.
-        /// </summary>
-        /// <param name="side">Buy or sell</param>
-        /// <param name="timeInEffect">The time the order stays active</param>
-        /// <param name="market">Market the order is for</param>
-        /// <param name="quantity">The quantity of the order</param>
-        /// <param name="rate">The rate of the order</param>
-        /// <param name="conditionType">The type of condition</param>
-        /// <param name="target">The target of the condition type</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<BittrexOrderResult>> PlaceConditionalOrderAsync(OrderSide side, TimeInEffect timeInEffect, string market, decimal quantity, decimal rate, ConditionType conditionType, decimal target)
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                { "ordertype", OrderType.Limit.ToString() },
-                { "timeineffect", JsonConvert.SerializeObject(timeInEffect, new TimeInEffectConverter(false)) },
-                { "marketname", market },
-                { "quantity", quantity.ToString(CultureInfo.InvariantCulture) },
-                { "rate", rate.ToString(CultureInfo.InvariantCulture) },
-                { "conditiontype", JsonConvert.SerializeObject(conditionType, new ConditionTypeConverter(false)) },
-                { "target", target.ToString(CultureInfo.InvariantCulture) }
-            };
-
-            var uri = GetUrl(side == OrderSide.Buy ? BuyV2Endpoint : SellV2Endpoint, Api, ApiVersion2);
-            return await Execute<BittrexOrderResult>(uri, true, parameters).ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Cancels an open order
         /// </summary>
         /// <param name="guid">The Guid of the order to cancel</param>
@@ -605,7 +567,13 @@ namespace Bittrex.Net
         }
         #endregion
         #region private
-
+        /// <summary>
+        /// Get url for endpoint
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="api"></param>
+        /// <param name="version"></param>
+        /// <returns></returns>
         protected Uri GetUrl(string endpoint, string api, string version)
         {
             var address = BaseAddress;
@@ -616,11 +584,13 @@ namespace Bittrex.Net
             return new Uri(result);
         }
 
+        /// <inheritdoc />
         protected override bool IsErrorResponse(JToken data)
         {
             return data["success"] != null && !(bool) data["success"];
         }
 
+        /// <inheritdoc />
         protected override Error ParseErrorResponse(JToken data)
         {
             if(data["message"] == null)

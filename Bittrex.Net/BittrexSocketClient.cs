@@ -16,6 +16,9 @@ using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net
 {
+    /// <summary>
+    /// Client for the Bittrex socket API
+    /// </summary>
     public class BittrexSocketClient: SocketClient, IBittrexSocketClient
     {
         #region fields
@@ -208,6 +211,7 @@ namespace Bittrex.Net
         }
         #endregion
         #region private
+        /// <inheritdoc />
         protected override SocketConnection GetWebsocket(string address, bool authenticated)
         {
 
@@ -231,6 +235,7 @@ namespace Bittrex.Net
             return socketWrapper;
         }
 
+        /// <inheritdoc />
         protected override async Task<CallResult<bool>> SubscribeAndWait(SocketConnection socket, object request, SocketSubscription subscription)
         {
             ConnectionRequest btRequest = (ConnectionRequest) request;
@@ -248,6 +253,7 @@ namespace Bittrex.Net
             return new CallResult<bool>(true, null);
         }
 
+        /// <inheritdoc />
         protected override async Task<CallResult<T>> QueryAndWait<T>(SocketConnection socket, object request)
         {
             var btRequest = (ConnectionRequest) request;
@@ -272,16 +278,19 @@ namespace Bittrex.Net
             return new CallResult<T>(desResult.Data, null);
         }
 
+        /// <inheritdoc />
         protected override bool HandleQueryResponse<T>(SocketConnection s, object request, JToken data, out CallResult<T> callResult)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         protected override bool HandleSubscriptionResponse(SocketConnection s, SocketSubscription subscription, object request, JToken message, out CallResult<object> callResult)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         protected override bool MessageMatchesHandler(JToken message, object request)
         {
             var msg = message["A"];
@@ -310,6 +319,7 @@ namespace Bittrex.Net
             return false;
         }
 
+        /// <inheritdoc />
         protected override bool MessageMatchesHandler(JToken message, string identifier)
         {
             var msg = message["A"];
@@ -323,6 +333,7 @@ namespace Bittrex.Net
             return false;
         }
 
+        /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocket(SocketConnection s)
         {
             if (authProvider == null)
@@ -361,11 +372,13 @@ namespace Bittrex.Net
             throw new NotImplementedException("Bittrex sockets do not offer unsubscription functionality");
         }
 
+        /// <inheritdoc />
         protected override Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
         protected override IWebsocket CreateSocket(string address)
         {
             var socket = (ISignalRSocket)base.CreateSocket(address);

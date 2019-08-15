@@ -4,18 +4,30 @@ using System;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream balance data
+    /// </summary>
     public class BittrexStreamBalanceData
     {
+        /// <summary>
+        /// Nonce
+        /// </summary>
         [JsonProperty("N")]
         public int Nonce { get; set; }
+        /// <summary>
+        /// Deltas
+        /// </summary>
         [JsonProperty("D")]
         public BittrexStreamBalance Delta { get; set; }
     }
 
+    /// <summary>
+    /// Stream balance
+    /// </summary>
     public class BittrexStreamBalance
     {
         /// <summary>
-        /// 
+        /// Id
         /// </summary>
         [JsonProperty("U")]
         public Guid Guid { get; set; }

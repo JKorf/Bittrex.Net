@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Order result
+    /// </summary>
     public class BittrexOrderResult
     {
         /// <summary>

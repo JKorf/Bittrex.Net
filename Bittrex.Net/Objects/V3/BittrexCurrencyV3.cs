@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Bittrex currency info
+    /// </summary>
     public class BittrexCurrencyV3
     {
         /// <summary>

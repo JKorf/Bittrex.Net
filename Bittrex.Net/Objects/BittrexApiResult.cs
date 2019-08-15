@@ -6,7 +6,7 @@ namespace Bittrex.Net.Objects
     /// The result of an Api call
     /// </summary>
     /// <typeparam name="T">The result type</typeparam>
-    public class BittrexApiResult<T>
+    internal class BittrexApiResult<T>
     {
         /// <summary>
         /// Whether the Api call was successful

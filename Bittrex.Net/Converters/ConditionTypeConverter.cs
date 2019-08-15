@@ -4,7 +4,7 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
 {
-    public class ConditionTypeConverter: BaseConverter<ConditionType>
+    internal class ConditionTypeConverter: BaseConverter<ConditionType>
     {
         public ConditionTypeConverter(): this(true) { }
         public ConditionTypeConverter(bool quotes) : base(quotes) { }

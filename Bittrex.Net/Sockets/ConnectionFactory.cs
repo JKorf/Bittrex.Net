@@ -5,7 +5,7 @@ using Microsoft.AspNet.SignalR.Client;
 
 namespace Bittrex.Net.Sockets
 {
-    public class ConnectionFactory : IWebsocketFactory
+    internal class ConnectionFactory : IWebsocketFactory
     {
         public IWebsocket CreateWebsocket(Log log, string url)
         {

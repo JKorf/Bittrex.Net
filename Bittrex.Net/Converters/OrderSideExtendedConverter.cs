@@ -4,7 +4,7 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
 {
-    public class OrderSideExtendedConverter : BaseConverter<OrderSideExtended>
+    internal class OrderSideExtendedConverter : BaseConverter<OrderSideExtended>
     {
         public OrderSideExtendedConverter(): this(true) { }
         public OrderSideExtendedConverter(bool quotes) : base(quotes){ }

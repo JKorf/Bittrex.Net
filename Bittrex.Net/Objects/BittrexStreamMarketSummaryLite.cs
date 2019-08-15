@@ -3,12 +3,15 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
-    public class BittrexStreamMarketSummariesLite
+    internal class BittrexStreamMarketSummariesLite
     {
         [JsonProperty("D")]
         public List<BittrexStreamMarketSummaryLite> Deltas { get; set; }
     }
 
+    /// <summary>
+    /// Stream lite market symmary
+    /// </summary>
     public class BittrexStreamMarketSummaryLite
     {
         /// <summary>

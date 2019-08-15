@@ -741,7 +741,7 @@ namespace Bittrex.Net
             return await ExecuteRequest<BittrexWithdrawalV3>(GetUrl("withdrawals"), method: Constants.PostMethod, parameters: parameters, signed: true).ConfigureAwait(false);
         }
 
-        
+        /// <inheritdoc />
         protected override Error ParseErrorResponse(JToken data)
         {
             if (data["code"] == null)
@@ -756,6 +756,11 @@ namespace Bittrex.Net
             return new ServerError(info);
         }
 
+        /// <summary>
+        /// Get url for an enpoint
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <returns></returns>
         protected Uri GetUrl(string endpoint)
         {
             return new Uri($"{BaseAddress}/v3/{endpoint}");

@@ -3,15 +3,28 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Options for the Bittrex client
+    /// </summary>
     public class BittrexClientOptions : RestClientOptions
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         public BittrexClientOptions()
         {
             BaseAddress = "https://api.bittrex.com";
         }
 
+        /// <summary>
+        /// The V2 API base address
+        /// </summary>
         public string BaseAddressV2 { get; set; } = "https://international.bittrex.com";
 
+        /// <summary>
+        /// Copy the options
+        /// </summary>
+        /// <returns></returns>
         public BittrexClientOptions Copy()
         {
             var copy = Copy<BittrexClientOptions>();
@@ -20,8 +33,14 @@ namespace Bittrex.Net.Objects
         }
     }
 
+    /// <summary>
+    /// Options for the Bittrex socket client
+    /// </summary>
     public class BittrexSocketClientOptions : SocketClientOptions
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         public BittrexSocketClientOptions()
         {
             BaseAddress = "https://socket.bittrex.com";
@@ -29,6 +48,9 @@ namespace Bittrex.Net.Objects
         }
     }
 
+    /// <summary>
+    /// Options for the Bittrex symbol order book
+    /// </summary>
     public class BittrexOrderBookOptions : OrderBookOptions
     {
         /// <summary>

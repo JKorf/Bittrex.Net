@@ -4,6 +4,11 @@
         <name>Bittrex.Net</name>
     </assembly>
     <members>
+        <member name="T:Bittrex.Net.BittrexClient">
+            <summary>
+            Client for the Bittrex Rest API
+            </summary>
+        </member>
         <member name="M:Bittrex.Net.BittrexClient.#ctor">
             <summary>
             Create a new instance of BittrexClient using the default options
@@ -199,32 +204,6 @@
             <param name="rate">The rate per unit of the order</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.PlaceConditionalOrder(Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.TimeInEffect,System.String,System.Decimal,System.Decimal,Bittrex.Net.Objects.ConditionType,System.Decimal)">
-            <summary>
-            Places a conditional order. The order will be executed when the condition that is set becomes true.
-            </summary>
-            <param name="side">Buy or sell</param>
-            <param name="timeInEffect">The time the order stays active</param>
-            <param name="market">Market the order is for</param>
-            <param name="quantity">The quantity of the order</param>
-            <param name="rate">The rate of the order</param>
-            <param name="conditionType">The type of condition</param>
-            <param name="target">The target of the condition type</param>
-            <returns></returns>
-        </member>
-        <member name="M:Bittrex.Net.BittrexClient.PlaceConditionalOrderAsync(Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.TimeInEffect,System.String,System.Decimal,System.Decimal,Bittrex.Net.Objects.ConditionType,System.Decimal)">
-            <summary>
-            Places a conditional order. The order will be executed when the condition that is set becomes true.
-            </summary>
-            <param name="side">Buy or sell</param>
-            <param name="timeInEffect">The time the order stays active</param>
-            <param name="market">Market the order is for</param>
-            <param name="quantity">The quantity of the order</param>
-            <param name="rate">The rate of the order</param>
-            <param name="conditionType">The type of condition</param>
-            <param name="target">The target of the condition type</param>
-            <returns></returns>
-        </member>
         <member name="M:Bittrex.Net.BittrexClient.CancelOrder(System.Guid)">
             <summary>
             Cancels an open order
@@ -368,6 +347,21 @@
             </summary>
             <param name="currency">Filter on currency</param>
             <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.GetUrl(System.String,System.String,System.String)">
+            <summary>
+            Get url for endpoint
+            </summary>
+            <param name="endpoint"></param>
+            <param name="api"></param>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.IsErrorResponse(Newtonsoft.Json.Linq.JToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
+            <inheritdoc />
         </member>
         <member name="T:Bittrex.Net.BittrexClientV3">
             <summary>
@@ -891,6 +885,21 @@
             <param name="addressTag">A tag for the address</param>
             <returns>Info about the withdrawal</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetUrl(System.String)">
+            <summary>
+            Get url for an enpoint
+            </summary>
+            <param name="endpoint"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Bittrex.Net.BittrexSocketClient">
+            <summary>
+            Client for the Bittrex socket API
+            </summary>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.#ctor">
             <summary>
             Creates a new socket client using the default options
@@ -1000,6 +1009,30 @@
             <param name="onOrderUpdate">The update event handler for order updates</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.GetWebsocket(System.String,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeAndWait(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.QueryAndWait``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.HandleQueryResponse``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{``0}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.HandleSubscriptionResponse(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{System.Object}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.MessageMatchesHandler(Newtonsoft.Json.Linq.JToken,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.MessageMatchesHandler(Newtonsoft.Json.Linq.JToken,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.AuthenticateSocket(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.Unsubscribe(CryptoExchange.Net.Sockets.UpdateSubscription)">
             <summary>
             Unsubscribe from a stream
@@ -1008,12 +1041,37 @@
             <param name="subscription">The subscription to unsubscribe</param>
             <returns></returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.Unsubscribe(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.CreateSocket(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:Bittrex.Net.BittrexSymbolOrderBook">
+            <summary>
+            Order book implementation
+            </summary>
+        </member>
         <member name="M:Bittrex.Net.BittrexSymbolOrderBook.#ctor(System.String,Bittrex.Net.Objects.BittrexOrderBookOptions)">
             <summary>
             Create a new order book instance
             </summary>
             <param name="symbol">The symbol the order book is for</param>
             <param name="options">Options for the order book</param>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoStart">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoResync">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Bittrex.Net.Interfaces.IBittrexClient">
+            <summary>
+            Bittrex client interface
+            </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.SetApiCredentials(System.String,System.String)">
             <summary>
@@ -1194,32 +1252,6 @@
             <param name="rate">The rate per unit of the order</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceConditionalOrder(Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.TimeInEffect,System.String,System.Decimal,System.Decimal,Bittrex.Net.Objects.ConditionType,System.Decimal)">
-            <summary>
-            Places a conditional order. The order will be executed when the condition that is set becomes true.
-            </summary>
-            <param name="side">Buy or sell</param>
-            <param name="timeInEffect">The time the order stays active</param>
-            <param name="market">Market the order is for</param>
-            <param name="quantity">The quantity of the order</param>
-            <param name="rate">The rate of the order</param>
-            <param name="conditionType">The type of condition</param>
-            <param name="target">The target of the condition type</param>
-            <returns></returns>
-        </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceConditionalOrderAsync(Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.TimeInEffect,System.String,System.Decimal,System.Decimal,Bittrex.Net.Objects.ConditionType,System.Decimal)">
-            <summary>
-            Places a conditional order. The order will be executed when the condition that is set becomes true.
-            </summary>
-            <param name="side">Buy or sell</param>
-            <param name="timeInEffect">The time the order stays active</param>
-            <param name="market">Market the order is for</param>
-            <param name="quantity">The quantity of the order</param>
-            <param name="rate">The rate of the order</param>
-            <param name="conditionType">The type of condition</param>
-            <param name="target">The target of the condition type</param>
-            <returns></returns>
-        </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.CancelOrder(System.Guid)">
             <summary>
             Cancels an open order
@@ -1364,33 +1396,513 @@
             <param name="currency">Filter on currency</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="P:Bittrex.Net.Interfaces.IBittrexClient.RequestFactory">
+        <member name="T:Bittrex.Net.Interfaces.IBittrexClientV3">
             <summary>
-            The factory for creating requests. Used for unit testing
+            V3 client interface
             </summary>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.AddRateLimiter(CryptoExchange.Net.Interfaces.IRateLimiter)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.SetApiCredentials(System.String,System.String)">
             <summary>
-            Adds a rate limiter to the client. There are 2 choices, the <see cref="!:RateLimiterTotal"/> and the <see cref="!:RateLimiterPerEndpoint"/>.
+            Set the API key and secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
             </summary>
-            <param name="limiter">The limiter to add</param>
+            <param name="apiKey">The api key</param>
+            <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.RemoveRateLimiters">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetServerTime">
             <summary>
-            Removes all rate limiters from this client
+            Gets the server time
             </summary>
+            <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.Ping">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetServerTimeAsync">
             <summary>
-            Ping to see if the server is reachable
+            Gets the server time
             </summary>
-            <returns>The roundtrip time of the ping request</returns>
+            <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PingAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarkets">
             <summary>
-            Ping to see if the server is reachable
+            Gets information about all available markets
             </summary>
-            <returns>The roundtrip time of the ping request</returns>
+            <returns>List of markets</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketsAsync">
+            <summary>
+            Gets information about all available markets
+            </summary>
+            <returns>List of markets</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarket(System.String)">
+            <summary>
+            Gets information about a market
+            </summary>
+            <param name="market">The market to get info for</param>
+            <returns>List of markets</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketAsync(System.String)">
+            <summary>
+            Gets information about a market
+            </summary>
+            <param name="market">The market to get info for</param>
+            <returns>Market info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaries">
+            <summary>
+            Gets summaries of all markets
+            </summary>
+            <returns>List of market summaries</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummariesAsync">
+            <summary>
+            Gets summaries of all markets
+            </summary>
+            <returns>List of market summaries</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummary(System.String)">
+            <summary>
+            Gets summary of a market
+            </summary>
+            <param name="market">The market to get info for</param>
+            <returns>Market summary</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaryAsync(System.String)">
+            <summary>
+            Gets summary of a market
+            </summary>
+            <param name="market">The market to get info for</param>
+            <returns>Market summary</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBook(System.String)">
+            <summary>
+            Gets the order book of a market
+            </summary>
+            <param name="market">The market to get the order book for</param>
+            <returns>Market order book</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBookAsync(System.String)">
+            <summary>
+            Gets the order book of a market
+            </summary>
+            <param name="market">The market to get the order book for</param>
+            <returns>Market order book</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTrades(System.String)">
+            <summary>
+            Gets the trade history of a market
+            </summary>
+            <param name="market">The market to get trades for</param>
+            <returns>Market trade list</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTradesAsync(System.String)">
+            <summary>
+            Gets the trade history of a market
+            </summary>
+            <param name="market">The market to get trades for</param>
+            <returns>Market trade list</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTicker(System.String)">
+            <summary>
+            Gets the ticker of a market
+            </summary>
+            <param name="market">The market to get ticker for</param>
+            <returns>Market ticker</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickerAsync(System.String)">
+            <summary>
+            Gets the ticker of a market
+            </summary>
+            <param name="market">The market to get ticker for</param>
+            <returns>Market ticker</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickers">
+            <summary>
+            Gets list of tickers for all market
+            </summary>
+            <returns>Market tickers</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickersAsync">
+            <summary>
+            Gets list of tickers for all market
+            </summary>
+            <returns>Market tickers</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval)">
+            <summary>
+            Gets the candles for a market
+            </summary>
+            <param name="market">The market to get candles for</param>
+            <param name="interval">The interval of the candles</param>
+            <returns>Market candles</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval)">
+            <summary>
+            Gets the candles for a market
+            </summary>
+            <param name="market">The market to get candles for</param>
+            <param name="interval">The interval of the candles</param>
+            <returns>Market candles</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencies">
+            <summary>
+            Gets a list of all currencies
+            </summary>
+            <returns>List of currencies</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrenciesAsync">
+            <summary>
+            Gets a list of all currencies
+            </summary>
+            <returns>List of currencies</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrency(System.String)">
+            <summary>
+            Gets info on a currency
+            </summary>
+            <param name="currency">The name of the currency</param>
+            <returns>Currency info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencyAsync(System.String)">
+            <summary>
+            Gets info on a currency
+            </summary>
+            <param name="currency">The name of the currency</param>
+            <returns>Currency info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalances">
+            <summary>
+            Gets current balances
+            </summary>
+            <returns>List of balances</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalancesAsync">
+            <summary>
+            Gets current balances
+            </summary>
+            <returns>List of balances</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalance(System.String)">
+            <summary>
+            Gets current balance for a currency
+            </summary>
+            <param name="currency">The name of the currency to get balance for</param>
+            <returns>Balance for market</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalanceAsync(System.String)">
+            <summary>
+            Gets current balance for a market
+            </summary>
+            <param name="currency">The name of the currency to get balance for</param>
+            <returns>Balance for market</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddresses">
+            <summary>
+            Gets list of deposit addresses
+            </summary>
+            <returns>List of deposit addresses</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddressesAsync">
+            <summary>
+            Gets list of deposit addresses
+            </summary>
+            <returns>List of deposit addresses</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddress(System.String)">
+            <summary>
+            Gets deposit addresses for a currency
+            </summary>
+            <param name="currency">The name of the currency to get the deposit address for</param>
+            <returns>Deposit addresses</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddressAsync(System.String)">
+            <summary>
+            Gets deposit addresses for a currency
+            </summary>
+            <param name="currency">The name of the currency to get the deposit address for</param>
+            <returns>Deposit addresses</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.RequestDepositAddress(System.String)">
+            <summary>
+            Request a deposit address for a currency
+            </summary>
+            <param name="currency">The name of the currency to get request a deposit address for</param>
+            <returns>The deposit address</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.RequestDepositAddressAsync(System.String)">
+            <summary>
+            Request a deposit address for a currency
+            </summary>
+            <returns>The deposit address</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenDeposits(System.String)">
+            <summary>
+            Gets list of open deposits
+            </summary>
+            <param name="currency">Filter the list by currency</param>
+            <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenDepositsAsync(System.String)">
+            <summary>
+            Gets list of open deposits
+            </summary>
+            <param name="currency">Filter the list by currency</param>
+            <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedDeposits(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+            <summary>
+            Gets list of closed deposits
+            </summary>
+            <param name="currency">Filter the list by currency</param>
+            <param name="status">Filter the list by status of the deposit</param>
+            <param name="startDate">Filter the list by date</param>
+            <param name="endDate">Filter the list by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+            <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedDepositsAsync(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+            <summary>
+            Gets list of closed deposits
+            </summary>
+            <param name="currency">Filter the list by currency</param>
+            <param name="status">Filter the list by status of the deposit</param>
+            <param name="startDate">Filter the list by date</param>
+            <param name="endDate">Filter the list by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+            <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositsByTransactionId(System.String)">
+            <summary>
+            Gets list of deposits for a transaction id
+            </summary>
+            <param name="transactionId">The id of the transaction</param>
+            <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositsByTransactionIdAsync(System.String)">
+            <summary>
+            Gets list of deposits for a transaction id
+            </summary>
+            <param name="transactionId">The id of the transaction</param>
+            <returns>List of deposits</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDeposit(System.String)">
+            <summary>
+            Gets a deposit by id
+            </summary>
+            <param name="depositId">The id of the deposit</param>
+            <returns>Deposit info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAsync(System.String)">
+            <summary>
+            Gets a deposit by id
+            </summary>
+            <param name="depositId">The id of the deposit</param>
+            <returns>Deposit info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedOrders(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+            <summary>
+            Gets a list of closed orders
+            </summary>
+            <param name="symbol">Filter the list by symbol</param>
+            <param name="startDate">Filter the list by date</param>
+            <param name="endDate">Filter the list by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+            <returns>List of closed orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedOrdersAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+            <summary>
+            Gets a list of closed orders
+            </summary>
+            <param name="symbol">Filter the list by symbol</param>
+            <param name="startDate">Filter the list by date</param>
+            <param name="endDate">Filter the list by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+            <returns>List of closed orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenOrders(System.String)">
+            <summary>
+            Gets a list of open orders
+            </summary>
+            <param name="symbol">The symbol to get open orders for</param>
+            <returns>List of open orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenOrdersAsync(System.String)">
+            <summary>
+            Gets a list of open orders
+            </summary>
+            <param name="symbol">The symbol to get open orders for</param>
+            <returns>List of open orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrder(System.String)">
+            <summary>
+            Gets info on an order
+            </summary>
+            <param name="orderId">The id of the order to retrieve</param>
+            <returns>Order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderAsync(System.String)">
+            <summary>
+            Gets info on an order
+            </summary>
+            <param name="orderId">The id of the order to retrieve</param>
+            <returns>Order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelOrder(System.String)">
+            <summary>
+            Cancels an order
+            </summary>
+            <param name="orderId">The id of the order</param>
+            <returns>Order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelOrderAsync(System.String)">
+            <summary>
+            Cancels an order
+            </summary>
+            <param name="orderId">The id of the order</param>
+            <returns>Order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+            <summary>
+            Places an order
+            </summary>
+            <param name="symbol">The symbol of the order</param>
+            <param name="direction">The direction of the order</param>
+            <param name="type">The type of order</param>
+            <param name="quantity">The quantity of the order</param>
+            <param name="timeInForce">The time in force of the order</param>
+            <param name="limit">The limit price of the order (limit orders only)</param>
+            <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
+            <param name="clientOrderId">Id to track the order by</param>
+            <returns>The order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+            <summary>
+            Places an order
+            </summary>
+            <param name="symbol">The symbol of the order</param>
+            <param name="direction">The direction of the order</param>
+            <param name="type">The type of order</param>
+            <param name="quantity">The quantity of the order</param>
+            <param name="timeInForce">The time in force of the order</param>
+            <param name="limit">The limit price of the order (limit orders only)</param>
+            <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
+            <param name="clientOrderId">Id to track the order by</param>
+            <returns>The order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus})">
+            <summary>
+            Gets a list of open withdrawals
+            </summary>
+            <param name="currency">Filter by currency</param>
+            <param name="status">Filter by status</param>
+            <returns>List of open withdrawals</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus})">
+            <summary>
+            Gets a list of open withdrawals
+            </summary>
+            <param name="currency">Filter by currency</param>
+            <param name="status">Filter by status</param>
+            <returns>List of open withdrawals</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+            <summary>
+            Gets a list of closed withdrawals
+            </summary>
+            <param name="currency">Filter by currency</param>
+            <param name="status">Filter by status</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <returns>List of closed withdrawals</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+            <summary>
+            Gets a list of closed withdrawals
+            </summary>
+            <param name="currency">Filter by currency</param>
+            <param name="status">Filter by status</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <returns>List of closed withdrawals</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalsByTransactionId(System.String)">
+            <summary>
+            Gets a list of withdrawals by transaction id
+            </summary>
+            <param name="transactionId">The id of the transaction</param>
+            <returns>List withdrawals</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalsByTransactionIdAsync(System.String)">
+            <summary>
+            Gets a list of withdrawals by transaction id
+            </summary>
+            <param name="transactionId">The id of the transaction</param>
+            <returns>List withdrawals</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawal(System.String)">
+            <summary>
+            Gets withdrawal by id
+            </summary>
+            <param name="id">The id of the withdrawal</param>
+            <returns>Withdrawal info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalAsync(System.String)">
+            <summary>
+            Gets withdrawal by id
+            </summary>
+            <param name="id">The id of the withdrawal</param>
+            <returns>Withdrawal info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelWithdrawal(System.String)">
+            <summary>
+            Cancels a withdrawal
+            </summary>
+            <param name="id">The id of the withdrawal to cancel</param>
+            <returns>Withdrawal info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelWithdrawalAsync(System.String)">
+            <summary>
+            Cancels a withdrawal
+            </summary>
+            <param name="id">The id of the withdrawal to cancel</param>
+            <returns>Withdrawal info</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String)">
+            <summary>
+            Withdraw from Bittrex
+            </summary>
+            <param name="currency">The currency to withdraw</param>
+            <param name="quantity">The quantity to withdraw</param>
+            <param name="address">The address to withdraw to</param>
+            <param name="addressTag">A tag for the address</param>
+            <returns>Info about the withdrawal</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String)">
+            <summary>
+            Withdraw from Bittrex
+            </summary>
+            <param name="currency">The currency to withdraw</param>
+            <param name="quantity">The quantity to withdraw</param>
+            <param name="address">The address to withdraw to</param>
+            <param name="addressTag">A tag for the address</param>
+            <returns>Info about the withdrawal</returns>
+        </member>
+        <member name="T:Bittrex.Net.Interfaces.IBittrexSocketClient">
+            <summary>
+            Interface for the Bittrex socket client
+            </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QuerySummaryStates">
             <summary>
@@ -1650,6 +2162,11 @@
             The crypto address this balance is on
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexCandle">
+            <summary>
+            Bittrex market candle
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexCandle.Open">
             <summary>
             Open price of the candle
@@ -1788,6 +2305,356 @@
         <member name="T:Bittrex.Net.Objects.FillType">
             <summary>
             Whether the order is partially or fully filled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.FillType.Fill">
+            <summary>
+            Filled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.FillType.PartialFill">
+            <summary>
+            Partially filled
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.OrderSide">
+            <summary>
+            Side of an order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderSide.Buy">
+            <summary>
+            Buy
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderSide.Sell">
+            <summary>
+            Sell
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.OrderType">
+            <summary>
+            The type of order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderType.Limit">
+            <summary>
+            Limit order; place an order for a specific price
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderType.Market">
+            <summary>
+            Market order; execute order at the best price available when placed
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.OrderSideExtended">
+            <summary>
+            Order type and side
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderSideExtended.LimitBuy">
+            <summary>
+            Buy limit order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderSideExtended.LimitSell">
+            <summary>
+            Sell limit order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderSideExtended.MarketBuy">
+            <summary>
+            Buy market order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderSideExtended.MarketSell">
+            <summary>
+            Sell market order
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.TickInterval">
+            <summary>
+            Interval for candles
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TickInterval.OneMinute">
+            <summary>
+            1m
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TickInterval.FiveMinutes">
+            <summary>
+            5m
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TickInterval.HalfHour">
+            <summary>
+            30m
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TickInterval.OneHour">
+            <summary>
+            1h
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TickInterval.OneDay">
+            <summary>
+            1d
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.TimeInEffect">
+            <summary>
+            The time an order is active
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInEffect.GoodTillCancelled">
+            <summary>
+            Order will be active until cancelled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInEffect.ImmediateOrCancel">
+            <summary>
+            Order has to be at least partially filled or it will be canceled on placing
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.ConditionType">
+            <summary>
+            Type of condition
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.ConditionType.None">
+            <summary>
+            No condition
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.ConditionType.GreaterThan">
+            <summary>
+            Greater than
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.ConditionType.LessThan">
+            <summary>
+            Lesser than
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.ConditionType.StopLossFixed">
+            <summary>
+            Stop loss fixed
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.ConditionType.StopLossPercentage">
+            <summary>
+            Stop loss percentage
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.OrderUpdateType">
+            <summary>
+            Update type for an order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderUpdateType.Open">
+            <summary>
+            Open
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderUpdateType.PartialFill">
+            <summary>
+            Partially filled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderUpdateType.Fill">
+            <summary>
+            Fully filled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderUpdateType.Cancel">
+            <summary>
+            Cancelled
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.TimeInForce">
+            <summary>
+            Time an order is active
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInForce.GoodTillCancelled">
+            <summary>
+            Active until cancelled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInForce.ImmediateOrCancel">
+            <summary>
+            Has to be at least partially filled upon placing or cancelled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInForce.FillOrKill">
+            <summary>
+            Has to be fully filled upon placing or cancelled
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInForce.PostOnlyGoodTillCancelled">
+            <summary>
+            Post only good till cancel
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.TimeInForce.PostOnlyGoodTillDate">
+            <summary>
+            Post only good till specific date
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.OrderTypeV3">
+            <summary>
+            Type of order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderTypeV3.Limit">
+            <summary>
+            Limit order; place at specific price
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderTypeV3.Market">
+            <summary>
+            Market order; execute order at best price on placing
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderTypeV3.CeilingLimit">
+            <summary>
+            Ceiling limit order; a limit order filling for a specific amount of base currency
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderTypeV3.CeilingMarket">
+            <summary>
+            Ceiling market order; a market order filling for a specific amount of base currency
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.DepositAddressStatus">
+            <summary>
+            Deposit address state
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.DepositAddressStatus.Requested">
+            <summary>
+            Requested
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.DepositAddressStatus.Provisioned">
+            <summary>
+            Provisioned
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.DepositStatus">
+            <summary>
+            Status of a deposit
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.DepositStatus.Pending">
+            <summary>
+            Pending
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.DepositStatus.Completed">
+            <summary>
+            Completed
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.DepositStatus.Orphaned">
+            <summary>
+            Orphaned
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.DepositStatus.Invalidated">
+            <summary>
+            Invalidated
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.SymbolStatus">
+            <summary>
+            Status of a symbol
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.SymbolStatus.Online">
+            <summary>
+            Online
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.SymbolStatus.Offline">
+            <summary>
+            Offline, not tradable
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.OrderStatus">
+            <summary>
+            Status of an order
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderStatus.Open">
+            <summary>
+            Order is open/active
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderStatus.Closed">
+            <summary>
+            Order is closed
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.WithdrawalStatus">
+            <summary>
+            Status of a withdrawal
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.WithdrawalStatus.Requested">
+            <summary>
+            Requested
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.WithdrawalStatus.Authorized">
+            <summary>
+            Authorized
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.WithdrawalStatus.Pending">
+            <summary>
+            Pending
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.WithdrawalStatus.Completed">
+            <summary>
+            Completed
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.WithdrawalStatus.InvalidAddress">
+            <summary>
+            Failed; invalid address
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.WithdrawalStatus.Cancelled">
+            <summary>
+            Cancelled
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.CandleInterval">
+            <summary>
+            Interval of candles
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.CandleInterval.OneMinute">
+            <summary>
+            1m
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.CandleInterval.FiveMinutes">
+            <summary>
+            5m
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.CandleInterval.OneHour">
+            <summary>
+            1h
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.CandleInterval.OneDay">
+            <summary>
+            1d
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexGuid">
@@ -2060,6 +2927,42 @@
             The condition target of the order
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexClientOptions">
+            <summary>
+            Options for the Bittrex client
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexClientOptions.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexClientOptions.BaseAddressV2">
+            <summary>
+            The V2 API base address
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexClientOptions.Copy">
+            <summary>
+            Copy the options
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexSocketClientOptions">
+            <summary>
+            Options for the Bittrex socket client
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexSocketClientOptions.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexOrderBookOptions">
+            <summary>
+            Options for the Bittrex symbol order book
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexOrderBookOptions.SocketClient">
             <summary>
             The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
@@ -2085,6 +2988,11 @@
             List of sell orders in the order book
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexOrderBookEntry">
+            <summary>
+            Order book entry
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexOrderBookEntry.Quantity">
             <summary>
             Total quantity of order at this price
@@ -2106,6 +3014,21 @@
             Type 0 – you need to add this entry into your orderbook. There were no orders at matching price before.
             Type 1 – you need to delete this entry from your orderbook.This entry no longer exists (no orders at matching price)
             Type 2 – you need to edit this entry.There are different number of orders at this price.
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderBookEntryType.NewEntry">
+            <summary>
+            A newly added entry
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderBookEntryType.RemoveEntry">
+            <summary>
+            A entry to remove
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.OrderBookEntryType.UpdateEntry">
+            <summary>
+            An updated entry
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexOrderHistoryOrder">
@@ -2188,6 +3111,11 @@
             Timestamp when the order was closed
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexOrderResult">
+            <summary>
+            Order result
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexOrderResult.Side">
             <summary>
             The side of the order
@@ -2243,9 +3171,29 @@
             The last price an order was completen at
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamBalanceData">
+            <summary>
+            Stream balance data
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamBalanceData.Nonce">
+            <summary>
+            Nonce
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamBalanceData.Delta">
+            <summary>
+            Deltas
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamBalance">
+            <summary>
+            Stream balance
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamBalance.Guid">
             <summary>
-            
+            Id
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamBalance.AccountId">
@@ -2293,6 +3241,16 @@
             
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState">
+            <summary>
+            Stream exchange state update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.Nonce">
+            <summary>
+            Nonce
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.MarketName">
             <summary>
             Name of the market
@@ -2313,6 +3271,16 @@
             Market history
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamQueryExchangeState">
+            <summary>
+            Stream query state
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.Nonce">
+            <summary>
+            Nonce
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.MarketName">
             <summary>
             Name of the market
@@ -2331,6 +3299,11 @@
         <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.Fills">
             <summary>
             Market history
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamFill">
+            <summary>
+            Stream fill
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamFill.Timestamp">
@@ -2393,9 +3366,14 @@
             The side of the order
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummaryUpdate">
+            <summary>
+            Stream market summary update
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryUpdate.Nonce">
             <summary>
-            Nounce
+            Nonce
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryUpdate.Deltas">
@@ -2403,9 +3381,14 @@
             The current market summaries
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummariesQuery">
+            <summary>
+            Stream summary query response
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummariesQuery.Nonce">
             <summary>
-            Nounce
+            Nonce
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummariesQuery.Deltas">
@@ -2483,6 +3466,11 @@
             Timestamp when created
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummaryLite">
+            <summary>
+            Stream lite market symmary
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryLite.MarketName">
             <summary>
             Name of the market
@@ -2498,9 +3486,19 @@
             The base volume
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamOrderData">
+            <summary>
+            Stream order data
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrderData.AccountId">
             <summary>
             Account id associated with the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderData.Nonce">
+            <summary>
+            Nonce
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrderData.Type">
@@ -2513,9 +3511,19 @@
             Order information
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamOrder">
+            <summary>
+            Stream order
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrder.Uuid">
             <summary>
             The unique identifier
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrder.Id">
+            <summary>
+            Id
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrder.OrderId">
@@ -2608,6 +3616,11 @@
             Last update time
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamOrderBookEntry">
+            <summary>
+            Stream order book
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookEntry.Quantity">
             <summary>
             Total quantity of order at this price
@@ -2616,6 +3629,11 @@
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookEntry.Price">
             <summary>
             Price of the orders
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamOrderBookUpdateEntry">
+            <summary>
+            Stream order book entry
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdateEntry.Type">
@@ -2683,6 +3701,11 @@
             Whether the withdrawal is to an invalid address
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexBalanceV3">
+            <summary>
+            Balance info
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexBalanceV3.Currency">
             <summary>
             The currency
@@ -2696,6 +3719,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexBalanceV3.Available">
             <summary>
             The available funds
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexCurrencyV3">
+            <summary>
+            Bittrex currency info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyV3.Symbol">
@@ -2738,6 +3766,11 @@
             Url to the logo
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexDepositAddressV3">
+            <summary>
+            Deposit address info
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexDepositAddressV3.Status">
             <summary>
             The status of the deposit address
@@ -2756,6 +3789,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexDepositAddressV3.AddressTag">
             <summary>
             The tag of the address
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexDepositV3">
+            <summary>
+            Deposit info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexDepositV3.Id">
@@ -2808,6 +3846,11 @@
             The status of the deposit
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketCandleV3">
+            <summary>
+            Market candle info
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.StartsAt">
             <summary>
             The opening time of this candle
@@ -2843,6 +3886,11 @@
             The volume of this candle in the base currency
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketOrderBookV3">
+            <summary>
+            Order book
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketOrderBookV3.Bid">
             <summary>
             The bids in this book
@@ -2851,6 +3899,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketOrderBookV3.Ask">
             <summary>
             The asks in this book
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexOrderBookEntryV3">
+            <summary>
+            Entry for the order book
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookEntryV3.Quantity">
@@ -2863,9 +3916,19 @@
             The price of the entry
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketTradeV3">
+            <summary>
+            Trade entry
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTradeV3.ExecutedAt">
             <summary>
             The timestamp of the trade execution
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3">
+            <summary>
+            Market summary info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.Symbol">
@@ -2903,6 +3966,11 @@
             The timestamp of when this summary was last updated
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketTickV3">
+            <summary>
+            Market tick
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.Symbol">
             <summary>
             Symbol of the ticker
@@ -2921,6 +3989,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.AskRate">
             <summary>
             The lowest ask price
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketV3">
+            <summary>
+            Market info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Symbol">
@@ -2961,6 +4034,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Notice">
             <summary>
             Additional info
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexOrderV3">
+            <summary>
+            Bittrex order info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Id">
@@ -3046,6 +4124,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.ClosedAt">
             <summary>
             When the order was closed
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexWithdrawalV3">
+            <summary>
+            Withdrawal info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexWithdrawalV3.Id">

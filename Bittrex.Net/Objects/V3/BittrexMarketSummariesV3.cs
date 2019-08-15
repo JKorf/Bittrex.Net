@@ -2,6 +2,9 @@
 
 namespace Bittrex.Net.Objects.V3
 {
+    /// <summary>
+    /// Market summary info
+    /// </summary>
     public class BittrexMarketSummariesV3
     {
         /// <summary>

@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream order book
+    /// </summary>
     public class BittrexStreamOrderBookEntry: ISymbolOrderBookEntry
     {
         /// <summary>
@@ -17,6 +20,9 @@ namespace Bittrex.Net.Objects
         public decimal Price { get; set; }
     }
 
+    /// <summary>
+    /// Stream order book entry
+    /// </summary>
     public class BittrexStreamOrderBookUpdateEntry: BittrexStreamOrderBookEntry
     {
         /// <summary>

@@ -3,8 +3,14 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream exchange state update
+    /// </summary>
     public class BittrexStreamUpdateExchangeState
     {
+        /// <summary>
+        /// Nonce
+        /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
 
@@ -32,8 +38,14 @@ namespace Bittrex.Net.Objects
         public List<BittrexStreamFill> Fills { get; set; }
     }
 
+    /// <summary>
+    /// Stream query state
+    /// </summary>
     public class BittrexStreamQueryExchangeState
     {
+        /// <summary>
+        /// Nonce
+        /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
 

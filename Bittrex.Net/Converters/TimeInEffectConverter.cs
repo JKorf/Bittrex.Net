@@ -4,7 +4,7 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
 {
-    public class TimeInEffectConverter: BaseConverter<TimeInEffect>
+    internal class TimeInEffectConverter: BaseConverter<TimeInEffect>
     {
         public TimeInEffectConverter(): this(true) { }
         public TimeInEffectConverter(bool quotes) : base(quotes){ }
