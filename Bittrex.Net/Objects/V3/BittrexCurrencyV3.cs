@@ -35,5 +35,9 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         [JsonProperty("txFee")]
         public decimal TransactionFee { get; set; }
+        /// <summary>
+        /// Url to the logo
+        /// </summary>
+        public string LogoUrl { get; set; }
     }
 }

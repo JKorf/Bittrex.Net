@@ -506,6 +506,18 @@
             <param name="market">The market to get ticker for</param>
             <returns>Market ticker</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickers">
+            <summary>
+            Gets list of tickers for all market
+            </summary>
+            <returns>Market tickers</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickersAsync">
+            <summary>
+            Gets list of tickers for all market
+            </summary>
+            <returns>Market tickers</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval)">
             <summary>
             Gets the candles for a market
@@ -2721,6 +2733,11 @@
             The transaction fee
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyV3.LogoUrl">
+            <summary>
+            Url to the logo
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexDepositAddressV3.Status">
             <summary>
             The status of the deposit address
@@ -2884,6 +2901,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.UpdatedAt">
             <summary>
             The timestamp of when this summary was last updated
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.Symbol">
+            <summary>
+            Symbol of the ticker
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.LastTradeRate">

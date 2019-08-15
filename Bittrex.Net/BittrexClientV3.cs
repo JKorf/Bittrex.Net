@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Bittrex.Net.Converters;
 using Bittrex.Net.Converters.V3;
+using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.V3;
 using CryptoExchange.Net;
@@ -18,7 +19,7 @@ namespace Bittrex.Net
     /// Client for the V3 API
     /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
     /// </summary>
-    public class BittrexClientV3: RestClient
+    public class BittrexClientV3: RestClient, IBittrexClientV3
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
@@ -193,7 +194,25 @@ namespace Bittrex.Net
         /// <returns>Market ticker</returns>
         public async Task<WebCallResult<BittrexMarketTickV3>> GetMarketTickerAsync(string market)
         {
-            return await ExecuteRequest<BittrexMarketTickV3>(GetUrl($"markets/{market}/ticker")).ConfigureAwait(false);
+            var result = await ExecuteRequest<BittrexMarketTickV3>(GetUrl($"markets/{market}/ticker")).ConfigureAwait(false);
+            if (result.Success)
+                result.Data.Symbol = market;
+            return result;
+        }
+
+        /// <summary>
+        /// Gets list of tickers for all market
+        /// </summary>
+        /// <returns>Market tickers</returns>
+        public WebCallResult<BittrexMarketTickV3[]> GetMarketTickers() => GetMarketTickersAsync().Result;
+
+        /// <summary>
+        /// Gets list of tickers for all market
+        /// </summary>
+        /// <returns>Market tickers</returns>
+        public async Task<WebCallResult<BittrexMarketTickV3[]>> GetMarketTickersAsync()
+        {
+            return await ExecuteRequest<BittrexMarketTickV3[]>(GetUrl("markets/tickers")).ConfigureAwait(false);
         }
 
         /// <summary>

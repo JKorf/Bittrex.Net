@@ -4,6 +4,10 @@ namespace Bittrex.Net.Objects.V3
     public class BittrexMarketTickV3
     {
         /// <summary>
+        /// Symbol of the ticker
+        /// </summary>
+        public string Symbol { get; set; }
+        /// <summary>
         /// The price of the last trade
         /// </summary>
         public decimal LastTradeRate { get; set; }
