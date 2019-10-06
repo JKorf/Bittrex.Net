@@ -48,12 +48,12 @@ namespace Bittrex.Net.Objects
         /// The highest bid
         /// </summary>
         [JsonProperty("B")]
-        public decimal Bid { get; set; }
+        public decimal? Bid { get; set; }
         /// <summary>
         /// The lowest ask
         /// </summary>
         [JsonProperty("A")]
-        public decimal Ask { get; set; }
+        public decimal? Ask { get; set; }
         /// <summary>
         /// Current open buy orders
         /// </summary>
