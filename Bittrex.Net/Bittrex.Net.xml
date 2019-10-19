@@ -3306,6 +3306,11 @@
             Stream fill
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamFill.Id">
+            <summary>
+            ID of the fill
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamFill.Timestamp">
             <summary>
             Timestamp of the fill
