@@ -6,7 +6,7 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Stream market summary update
     /// </summary>
-    public class BittrexStreamMarketSummaryUpdate
+    internal class BittrexStreamMarketSummaryUpdate
     {
         /// <summary>
         /// Nonce
@@ -18,13 +18,13 @@ namespace Bittrex.Net.Objects
         /// The current market summaries
         /// </summary>
         [JsonProperty("D")]
-        public List<BittrexStreamMarketSummary> Deltas { get; set; }
+        public IEnumerable<BittrexStreamMarketSummary> Deltas { get; set; } = new List<BittrexStreamMarketSummary>();
     }
 
     /// <summary>
     /// Stream summary query response
     /// </summary>
-    public class BittrexStreamMarketSummariesQuery
+    internal class BittrexStreamMarketSummariesQuery
     {
         /// <summary>
         /// Nonce
@@ -36,6 +36,6 @@ namespace Bittrex.Net.Objects
         /// The current market summaries
         /// </summary>
         [JsonProperty("s")]
-        public List<BittrexStreamMarketSummary> Deltas { get; set; }
+        public IEnumerable<BittrexStreamMarketSummary> Deltas { get; set; } = new List<BittrexStreamMarketSummary>();
     }
 }

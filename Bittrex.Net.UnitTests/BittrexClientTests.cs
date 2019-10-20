@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using Bittrex.Net.Objects;
 using Bittrex.Net.UnitTests.TestImplementations;
@@ -55,8 +56,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -96,8 +97,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -210,9 +211,9 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[2], expected[2]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[2], expected[2]));
         }
 
         [TestCase()]
@@ -239,10 +240,10 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy[0], expected.Buy[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy[1], expected.Buy[1]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell[0], expected.Sell[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell[1], expected.Sell[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy.ToList()[0], expected.Buy.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy.ToList()[1], expected.Buy.ToList()[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell.ToList()[0], expected.Sell.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell.ToList()[1], expected.Sell.ToList()[1]));
         }
 
         [TestCase()]
@@ -262,8 +263,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -283,8 +284,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -321,8 +322,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -408,8 +409,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -464,8 +465,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -595,8 +596,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -641,8 +642,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -679,8 +680,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -731,7 +732,7 @@ namespace Bittrex.Net.UnitTests
             var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // act
-            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", "GET", new Dictionary<string, object>(),  true);
+            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", HttpMethod.Get, new Dictionary<string, object>(),  true);
 
             // assert
             Assert.IsTrue(sign.First().Key == "apiKey");
@@ -747,7 +748,7 @@ namespace Bittrex.Net.UnitTests
             var uri = new Uri("https://test.test-api.com");
 
             // act
-            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), "GET", new Dictionary<string, object>(), true);
+            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), HttpMethod.Get, new Dictionary<string, object>(), true);
 
             // assert
             Assert.IsTrue(sign.First().Value == "3A82874271C0B4BE0F5DE44CB2CE7B39645AC93B07FD5570A700DC14C7524269B373DAFFA3A9BF1A2B6A318915D2ACEEC905163E574F34FF39EC62A676D2FBC2");

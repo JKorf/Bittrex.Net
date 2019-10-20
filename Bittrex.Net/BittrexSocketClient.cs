@@ -75,16 +75,16 @@ namespace Bittrex.Net
         /// Gets the current summaries for all markets
         /// </summary>
         /// <returns>Market summaries</returns>
-        public CallResult<List<BittrexStreamMarketSummary>> QuerySummaryStates() => QuerySummaryStatesAsync().Result;
+        public CallResult<IEnumerable<BittrexStreamMarketSummary>> QuerySummaryStates() => QuerySummaryStatesAsync().Result;
 
         /// <summary>
         /// Gets the current summaries for all markets
         /// </summary>
         /// <returns>Market summaries</returns>
-        public async Task<CallResult<List<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync()
+        public async Task<CallResult<IEnumerable<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync()
         {
             var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(QuerySummaryStateRequest), false).ConfigureAwait(false);
-            return new CallResult<List<BittrexStreamMarketSummary>>(result.Data?.Deltas, result.Error);
+            return new CallResult<IEnumerable<BittrexStreamMarketSummary>>(result.Data?.Deltas, result.Error);
         }
 
         /// <summary>
@@ -134,14 +134,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public CallResult<UpdateSubscription> SubscribeToMarketSummariesUpdate(Action<List<BittrexStreamMarketSummary>> onUpdate) => SubscribeToMarketSummariesUpdateAsync(onUpdate).Result;
+        public CallResult<UpdateSubscription> SubscribeToMarketSummariesUpdate(Action<IEnumerable<BittrexStreamMarketSummary>> onUpdate) => SubscribeToMarketSummariesUpdateAsync(onUpdate).Result;
 
         /// <summary>
         /// Subscribes to updates of summaries for all markets
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<List<BittrexStreamMarketSummary>> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<IEnumerable<BittrexStreamMarketSummary>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummaryUpdate>(data => onUpdate(data.Deltas));
             return await Subscribe<JToken>(new ConnectionRequest(SummaryDeltaSub), null, false, data => DecodeSignalRData(data, inner)).ConfigureAwait(false);
@@ -152,14 +152,14 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public CallResult<UpdateSubscription> SubscribeToMarketSummariesLiteUpdate(Action<List<BittrexStreamMarketSummaryLite>> onUpdate) => SubscribeToMarketSummariesLiteUpdateAsync(onUpdate).Result;
+        public CallResult<UpdateSubscription> SubscribeToMarketSummariesLiteUpdate(Action<IEnumerable<BittrexStreamMarketSummaryLite>> onUpdate) => SubscribeToMarketSummariesLiteUpdateAsync(onUpdate).Result;
 
         /// <summary>
         /// Subscribes to lite summary updates for all markets
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<List<BittrexStreamMarketSummaryLite>> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<IEnumerable<BittrexStreamMarketSummaryLite>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummariesLite>(data => onUpdate(data.Deltas));
             return await Subscribe<JToken>(new ConnectionRequest(SummaryLiteDeltaSub), null, false, data => DecodeSignalRData(data, inner)).ConfigureAwait(false);
@@ -231,20 +231,20 @@ namespace Bittrex.Net
             var socket = CreateSocket(address);
             var socketWrapper = new SocketConnection(this, socket);
             foreach (var kvp in genericHandlers)
-                socketWrapper.AddHandler(kvp.Key, false, kvp.Value);
+                socketWrapper.AddHandler(SocketSubscription.CreateForIdentifier(kvp.Key, false, kvp.Value));
             return socketWrapper;
         }
 
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> SubscribeAndWait(SocketConnection socket, object request, SocketSubscription subscription)
         {
-            ConnectionRequest btRequest = (ConnectionRequest) request;
+            var btRequest = (ConnectionRequest) request;
             if (btRequest.RequestName != null)
             {
                 var subResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<bool>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
                 if (!subResult.Success || !subResult.Data)
                 {
-                    var closeTask = socket.Close(subscription);
+                    _ = socket.Close(subscription);
                     return new CallResult<bool>(false, subResult.Error ?? new ServerError("Subscribe returned false"));
                 }
             }
@@ -260,19 +260,19 @@ namespace Bittrex.Net
             var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
             if (!queryResult.Success)
             {
-                return new CallResult<T>(default(T), queryResult.Error);
+                return new CallResult<T>(default, queryResult.Error);
             }
 
             var decResult = DecodeData(queryResult.Data);
             if (decResult == null)
             {
-                return new CallResult<T>(default(T), new DeserializeError("Failed to decode data"));
+                return new CallResult<T>(default, new DeserializeError("Failed to decode data"));
             }
 
             var desResult = Deserialize<T>(decResult);
             if (!desResult.Success)
             {
-                return new CallResult<T>(default(T), desResult.Error);
+                return new CallResult<T>(default, desResult.Error);
             }
 
             return new CallResult<T>(desResult.Data, null);
@@ -297,7 +297,7 @@ namespace Bittrex.Net
             if (msg == null)
                 return false;
 
-            string method = (string) message["M"];
+            var method = (string) message["M"];
             var data = DecodeData((string) message["A"][0]);
             if (data == null)
                 return false;
@@ -306,7 +306,7 @@ namespace Bittrex.Net
             if (btRequest.RequestName == ExchangeDeltaSub && method == ExchangeStateUpdate)
             {
                 var token = JToken.Parse(data);
-                if ((string)token["M"] == btRequest.Parameters[0])
+                if ((string)token["M"] == btRequest.Parameters[0].ToString())
                     return true;
             }
 
@@ -326,7 +326,7 @@ namespace Bittrex.Net
             if (msg == null)
                 return false;
 
-            string method = (string)message["M"];
+            var method = (string)message["M"];
 
             if (identifier == "AccountUpdates" && (method == BalanceUpdate || method == OrderUpdate))
                 return true;
@@ -341,7 +341,7 @@ namespace Bittrex.Net
 
             log.Write(LogVerbosity.Debug, "Starting authentication");
             var socket = (ISignalRSocket)s.Socket;
-            var result = await socket.InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key.GetString()).ConfigureAwait(false);
+            var result = await socket.InvokeProxy<string>("GetAuthContext", authProvider.Credentials.Key!.GetString()).ConfigureAwait(false);
             if (!result.Success)
             {
                 log.Write(LogVerbosity.Error, "Api key is probably invalid");
@@ -350,7 +350,7 @@ namespace Bittrex.Net
 
             log.Write(LogVerbosity.Debug, "Auth context retrieved");
             var signed = authProvider.Sign(result.Data);
-            var authResult = await socket.InvokeProxy<bool>("Authenticate", authProvider.Credentials.Key.GetString(), signed).ConfigureAwait(false);
+            var authResult = await socket.InvokeProxy<bool>("Authenticate", authProvider.Credentials.Key!.GetString(), signed).ConfigureAwait(false);
             if (!authResult.Success || !authResult.Data)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api secret is probably invalid");
@@ -402,27 +402,23 @@ namespace Bittrex.Net
             handler(decodeResult.Data);
         }
 
-        private string DecodeData(string rawData)
+        private string? DecodeData(string rawData)
         {
             try
             {
                 var gzipData = Convert.FromBase64String(rawData);
-                using (var decompressedStream = new MemoryStream())
-                using (var compressedStream = new MemoryStream(gzipData))
-                using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress))
-                {
-                    deflateStream.CopyTo(decompressedStream);
-                    decompressedStream.Position = 0;
+                using var decompressedStream = new MemoryStream();
+                using var compressedStream = new MemoryStream(gzipData);
+                using var deflateStream = new DeflateStream(compressedStream, CompressionMode.Decompress);
+                deflateStream.CopyTo(decompressedStream);
+                decompressedStream.Position = 0;
 
-                    using (var streamReader = new StreamReader(decompressedStream))
-                    {
-                        var data = streamReader.ReadToEnd();
-                        if (data == "null")
-                            return null;
+                using var streamReader = new StreamReader(decompressedStream);
+                var data = streamReader.ReadToEnd();
+                if (data == "null")
+                    return null;
 
-                        return data;
-                    }
-                }
+                return data;
             }
             catch (Exception e)
             {

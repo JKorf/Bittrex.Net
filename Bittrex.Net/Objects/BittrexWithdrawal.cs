@@ -16,7 +16,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Currency of the withdrawal
         /// </summary>
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// Amount of the withdrawal
         /// </summary>
@@ -24,7 +24,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Address the withdrawal is to
         /// </summary>
-        public string Address { get; set; }
+        public string Address { get; set; } = "";
         /// <summary>
         /// Timestamp when withdrawal was opened
         /// </summary>
@@ -47,7 +47,7 @@ namespace Bittrex.Net.Objects
         /// Id of the transaction
         /// </summary>
         [JsonProperty("TxId")]
-        public string TransactionId { get; set; }
+        public string TransactionId { get; set; } = "";
         /// <summary>
         /// Whether the withdrawal is canceled
         /// </summary>

@@ -14,7 +14,7 @@
         /// </summary>
         public decimal Ask { get; set; }
         /// <summary>
-        /// The last price an order was completen at
+        /// The last price an order was completed at
         /// </summary>
         public decimal Last { get; set; }
     }

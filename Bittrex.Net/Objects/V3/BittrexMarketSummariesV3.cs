@@ -10,7 +10,7 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// the symbol the summary is for
         /// </summary>
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The high price for this symbol in the last 24 hours
         /// </summary>

@@ -12,19 +12,19 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The market currency
         /// </summary>
-        public string MarketCurrency { get; set; }
+        public string MarketCurrency { get; set; } = "";
         /// <summary>
         /// The base currency
         /// </summary>
-        public string BaseCurrency { get; set; }
+        public string BaseCurrency { get; set; } = "";
         /// <summary>
         /// The long name of the market currency
         /// </summary>
-        public string MarketCurrencyLong { get; set; }
+        public string MarketCurrencyLong { get; set; } = "";
         /// <summary>
         /// The long name of the base currency
         /// </summary>
-        public string BaseCurrencyLong { get; set; }
+        public string BaseCurrencyLong { get; set; } = "";
         /// <summary>
         /// The minimun size of an order
         /// </summary>
@@ -32,7 +32,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The name of the market
         /// </summary>
-        public string MarketName { get; set; }
+        public string MarketName { get; set; } = "";
         /// <summary>
         /// Whether the market is active
         /// </summary>
@@ -45,7 +45,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Additional information about the state of this market
         /// </summary>
-        public string Notice { get; set; }
+        public string Notice { get; set; } = "";
         /// <summary>
         /// Whether the market is sponsored by Bittrex
         /// </summary>
@@ -53,6 +53,6 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Url of the logo
         /// </summary>
-        public string LogoUrl { get; set; }
+        public string LogoUrl { get; set; } = "";
     }
 }

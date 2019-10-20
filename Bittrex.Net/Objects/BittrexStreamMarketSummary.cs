@@ -13,7 +13,7 @@ namespace Bittrex.Net.Objects
         /// The name of the market
         /// </summary>
         [JsonProperty("M")]
-        public string MarketName { get; set; }
+        public string MarketName { get; set; } = "";
         /// <summary>
         /// The highest price in the last 24 hour
         /// </summary>

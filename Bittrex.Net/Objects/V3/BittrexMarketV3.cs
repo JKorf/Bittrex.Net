@@ -12,23 +12,23 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// The symbol of the market
         /// </summary>
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The base currency of the market
         /// </summary>
         [JsonProperty("baseCurrencySymbol")]
-        public string BaseCurrency { get; set; }
+        public string BaseCurrency { get; set; } = "";
         /// <summary>
         /// The quote currency of the market
         /// </summary>
         [JsonProperty("quoteCurrencySymbol")]
-        public string QuoteCurrency { get; set; }
+        public string QuoteCurrency { get; set; } = "";
         /// <summary>
         /// The minimum trade size for this market
         /// </summary>
         public decimal MinTradeSize { get; set; }
         /// <summary>
-        /// The max pricision for this market
+        /// The max precision for this market
         /// </summary>
         public int Precision { get; set; }
         /// <summary>
@@ -43,6 +43,6 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// Additional info
         /// </summary>
-        public string Notice { get; set; }
+        public string Notice { get; set; } = "";
     }
 }

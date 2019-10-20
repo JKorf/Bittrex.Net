@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects.V3
 {
@@ -10,11 +11,11 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// The bids in this book
         /// </summary>
-        public BittrexOrderBookEntryV3[] Bid { get; set; }
+        public IEnumerable<BittrexOrderBookEntryV3> Bid { get; set; } = new List<BittrexOrderBookEntryV3>();
         /// <summary>
         /// The asks in this book
         /// </summary>
-        public BittrexOrderBookEntryV3[] Ask { get; set; }
+        public IEnumerable<BittrexOrderBookEntryV3> Ask { get; set; } = new List<BittrexOrderBookEntryV3>();
     }
 
     /// <summary>

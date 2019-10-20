@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.V3;
@@ -10,7 +11,7 @@ using CryptoExchange.Net.RateLimiter;
 namespace Bittrex.Net.Interfaces
 {
     /// <summary>
-    /// V3 client interface
+    /// Interface for the Bittrex v3 client
     /// </summary>
     public interface IBittrexClientV3: IRestClient
     {
@@ -24,241 +25,278 @@ namespace Bittrex.Net.Interfaces
         /// <summary>
         /// Gets the server time
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Time of the server</returns>
-        WebCallResult<DateTime> GetServerTime();
+        WebCallResult<DateTime> GetServerTime(CancellationToken ct = default);
 
         /// <summary>
         /// Gets the server time
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Time of the server</returns>
-        Task<WebCallResult<DateTime>> GetServerTimeAsync();
+        Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets information about all available markets
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of markets</returns>
-        WebCallResult<BittrexMarketV3[]> GetMarkets();
+        WebCallResult<IEnumerable<BittrexMarketV3>> GetMarkets(CancellationToken ct = default);
 
         /// <summary>
         /// Gets information about all available markets
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of markets</returns>
-        Task<WebCallResult<BittrexMarketV3[]>> GetMarketsAsync();
+        Task<WebCallResult<IEnumerable<BittrexMarketV3>>> GetMarketsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets information about a market
         /// </summary>
         /// <param name="market">The market to get info for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of markets</returns>
-        WebCallResult<BittrexMarketV3> GetMarket(string market);
+        WebCallResult<BittrexMarketV3> GetMarket(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets information about a market
         /// </summary>
         /// <param name="market">The market to get info for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market info</returns>
-        Task<WebCallResult<BittrexMarketV3>> GetMarketAsync(string market);
+        Task<WebCallResult<BittrexMarketV3>> GetMarketAsync(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets summaries of all markets
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of market summaries</returns>
-        WebCallResult<BittrexMarketSummariesV3[]> GetMarketSummaries();
+        WebCallResult<IEnumerable<BittrexMarketSummariesV3>> GetMarketSummaries(CancellationToken ct = default);
 
         /// <summary>
         /// Gets summaries of all markets
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of market summaries</returns>
-        Task<WebCallResult<BittrexMarketSummariesV3[]>> GetMarketSummariesAsync();
+        Task<WebCallResult<IEnumerable<BittrexMarketSummariesV3>>> GetMarketSummariesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets summary of a market
         /// </summary>
         /// <param name="market">The market to get info for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market summary</returns>
-        WebCallResult<BittrexMarketSummariesV3> GetMarketSummary(string market);
+        WebCallResult<BittrexMarketSummariesV3> GetMarketSummary(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets summary of a market
         /// </summary>
         /// <param name="market">The market to get info for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market summary</returns>
-        Task<WebCallResult<BittrexMarketSummariesV3>> GetMarketSummaryAsync(string market);
+        Task<WebCallResult<BittrexMarketSummariesV3>> GetMarketSummaryAsync(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book of a market
         /// </summary>
         /// <param name="market">The market to get the order book for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market order book</returns>
-        WebCallResult<BittrexMarketOrderBookV3> GetMarketOrderBook(string market);
+        WebCallResult<BittrexMarketOrderBookV3> GetMarketOrderBook(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book of a market
         /// </summary>
         /// <param name="market">The market to get the order book for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market order book</returns>
-        Task<WebCallResult<BittrexMarketOrderBookV3>> GetMarketOrderBookAsync(string market);
+        Task<WebCallResult<BittrexMarketOrderBookV3>> GetMarketOrderBookAsync(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the trade history of a market
         /// </summary>
         /// <param name="market">The market to get trades for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market trade list</returns>
-        WebCallResult<BittrexMarketTradeV3[]> GetMarketTrades(string market);
+        WebCallResult<IEnumerable<BittrexMarketTradeV3>> GetMarketTrades(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the trade history of a market
         /// </summary>
         /// <param name="market">The market to get trades for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market trade list</returns>
-        Task<WebCallResult<BittrexMarketTradeV3[]>> GetMarketTradesAsync(string market);
+        Task<WebCallResult<IEnumerable<BittrexMarketTradeV3>>> GetMarketTradesAsync(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the ticker of a market
         /// </summary>
         /// <param name="market">The market to get ticker for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market ticker</returns>
-        WebCallResult<BittrexMarketTickV3> GetMarketTicker(string market);
+        WebCallResult<BittrexMarketTickV3> GetMarketTicker(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the ticker of a market
         /// </summary>
         /// <param name="market">The market to get ticker for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market ticker</returns>
-        Task<WebCallResult<BittrexMarketTickV3>> GetMarketTickerAsync(string market);
+        Task<WebCallResult<BittrexMarketTickV3>> GetMarketTickerAsync(string market, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of tickers for all market
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market tickers</returns>
-        WebCallResult<BittrexMarketTickV3[]> GetMarketTickers();
+        WebCallResult<IEnumerable<BittrexMarketTickV3>> GetMarketTickers(CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of tickers for all market
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market tickers</returns>
-        Task<WebCallResult<BittrexMarketTickV3[]>> GetMarketTickersAsync();
+        Task<WebCallResult<IEnumerable<BittrexMarketTickV3>>> GetMarketTickersAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets the candles for a market
         /// </summary>
         /// <param name="market">The market to get candles for</param>
         /// <param name="interval">The interval of the candles</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market candles</returns>
-        WebCallResult<BittrexMarketCandleV3[]> GetMarketCandles(string market, CandleInterval interval);
+        WebCallResult<IEnumerable<BittrexMarketCandleV3>> GetMarketCandles(string market, CandleInterval interval, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the candles for a market
         /// </summary>
         /// <param name="market">The market to get candles for</param>
         /// <param name="interval">The interval of the candles</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Market candles</returns>
-        Task<WebCallResult<BittrexMarketCandleV3[]>> GetMarketCandlesAsync(string market, CandleInterval interval);
+        Task<WebCallResult<IEnumerable<BittrexMarketCandleV3>>> GetMarketCandlesAsync(string market, CandleInterval interval, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of all currencies
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of currencies</returns>
-        WebCallResult<BittrexCurrencyV3[]> GetCurrencies();
+        WebCallResult<IEnumerable<BittrexCurrencyV3>> GetCurrencies(CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of all currencies
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of currencies</returns>
-        Task<WebCallResult<BittrexCurrencyV3[]>> GetCurrenciesAsync();
+        Task<WebCallResult<IEnumerable<BittrexCurrencyV3>>> GetCurrenciesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets info on a currency
         /// </summary>
         /// <param name="currency">The name of the currency</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Currency info</returns>
-        WebCallResult<BittrexCurrencyV3> GetCurrency(string currency);
+        WebCallResult<BittrexCurrencyV3> GetCurrency(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Gets info on a currency
         /// </summary>
         /// <param name="currency">The name of the currency</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Currency info</returns>
-        Task<WebCallResult<BittrexCurrencyV3>> GetCurrencyAsync(string currency);
+        Task<WebCallResult<BittrexCurrencyV3>> GetCurrencyAsync(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Gets current balances
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of balances</returns>
-        WebCallResult<BittrexBalanceV3[]> GetBalances();
+        WebCallResult<IEnumerable<BittrexBalanceV3>> GetBalances(CancellationToken ct = default);
 
         /// <summary>
         /// Gets current balances
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of balances</returns>
-        Task<WebCallResult<BittrexBalanceV3[]>> GetBalancesAsync();
+        Task<WebCallResult<IEnumerable<BittrexBalanceV3>>> GetBalancesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets current balance for a currency
         /// </summary>
         /// <param name="currency">The name of the currency to get balance for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Balance for market</returns>
-        WebCallResult<BittrexBalanceV3> GetBalance(string currency);
+        WebCallResult<BittrexBalanceV3> GetBalance(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Gets current balance for a market
         /// </summary>
         /// <param name="currency">The name of the currency to get balance for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Balance for market</returns>
-        Task<WebCallResult<BittrexBalanceV3>> GetBalanceAsync(string currency);
+        Task<WebCallResult<BittrexBalanceV3>> GetBalanceAsync(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of deposit addresses
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposit addresses</returns>
-        WebCallResult<BittrexDepositAddressV3[]> GetDepositAddresses();
+        WebCallResult<IEnumerable<BittrexDepositAddressV3>> GetDepositAddresses(CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of deposit addresses
         /// </summary>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposit addresses</returns>
-        Task<WebCallResult<BittrexDepositAddressV3[]>> GetDepositAddressesAsync();
+        Task<WebCallResult<IEnumerable<BittrexDepositAddressV3>>> GetDepositAddressesAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets deposit addresses for a currency
         /// </summary>
         /// <param name="currency">The name of the currency to get the deposit address for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Deposit addresses</returns>
-        WebCallResult<BittrexDepositAddressV3> GetDepositAddress(string currency);
+        WebCallResult<BittrexDepositAddressV3> GetDepositAddress(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Gets deposit addresses for a currency
         /// </summary>
         /// <param name="currency">The name of the currency to get the deposit address for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Deposit addresses</returns>
-        Task<WebCallResult<BittrexDepositAddressV3>> GetDepositAddressAsync(string currency);
+        Task<WebCallResult<BittrexDepositAddressV3>> GetDepositAddressAsync(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Request a deposit address for a currency
         /// </summary>
         /// <param name="currency">The name of the currency to get request a deposit address for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>The deposit address</returns>
-        WebCallResult<BittrexDepositAddressV3> RequestDepositAddress(string currency);
+        WebCallResult<BittrexDepositAddressV3> RequestDepositAddress(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Request a deposit address for a currency
         /// </summary>
+        /// <param name="currency">The name of the currency to get request a deposit address for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>The deposit address</returns>
-        Task<WebCallResult<BittrexDepositAddressV3>> RequestDepositAddressAsync(string currency);
+        Task<WebCallResult<BittrexDepositAddressV3>> RequestDepositAddressAsync(string currency, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of open deposits
         /// </summary>
         /// <param name="currency">Filter the list by currency</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        WebCallResult<BittrexDepositV3[]> GetOpenDeposits(string currency = null);
+        WebCallResult<IEnumerable<BittrexDepositV3>> GetOpenDeposits(string? currency = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of open deposits
         /// </summary>
         /// <param name="currency">Filter the list by currency</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        Task<WebCallResult<BittrexDepositV3[]>> GetOpenDepositsAsync(string currency = null);
+        Task<WebCallResult<IEnumerable<BittrexDepositV3>>> GetOpenDepositsAsync(string? currency = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of closed deposits
@@ -270,8 +308,9 @@ namespace Bittrex.Net.Interfaces
         /// <param name="pageSize">The max amount of results to return</param>
         /// <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        WebCallResult<BittrexDepositV3[]> GetClosedDeposits(string currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null);
+        WebCallResult<IEnumerable<BittrexDepositV3>> GetClosedDeposits(string? currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of closed deposits
@@ -283,36 +322,41 @@ namespace Bittrex.Net.Interfaces
         /// <param name="pageSize">The max amount of results to return</param>
         /// <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        Task<WebCallResult<BittrexDepositV3[]>> GetClosedDepositsAsync(string currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null);
+        Task<WebCallResult<IEnumerable<BittrexDepositV3>>> GetClosedDepositsAsync(string? currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of deposits for a transaction id
         /// </summary>
         /// <param name="transactionId">The id of the transaction</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        WebCallResult<BittrexDepositV3[]> GetDepositsByTransactionId(string transactionId);
+        WebCallResult<IEnumerable<BittrexDepositV3>> GetDepositsByTransactionId(string transactionId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets list of deposits for a transaction id
         /// </summary>
         /// <param name="transactionId">The id of the transaction</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        Task<WebCallResult<BittrexDepositV3[]>> GetDepositsByTransactionIdAsync(string transactionId);
+        Task<WebCallResult<IEnumerable<BittrexDepositV3>>> GetDepositsByTransactionIdAsync(string transactionId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a deposit by id
         /// </summary>
         /// <param name="depositId">The id of the deposit</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Deposit info</returns>
-        WebCallResult<BittrexDepositV3> GetDeposit(string depositId);
+        WebCallResult<BittrexDepositV3> GetDeposit(string depositId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a deposit by id
         /// </summary>
         /// <param name="depositId">The id of the deposit</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Deposit info</returns>
-        Task<WebCallResult<BittrexDepositV3>> GetDepositAsync(string depositId);
+        Task<WebCallResult<BittrexDepositV3>> GetDepositAsync(string depositId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of closed orders
@@ -323,8 +367,9 @@ namespace Bittrex.Net.Interfaces
         /// <param name="pageSize">The max amount of results to return</param>
         /// <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of closed orders</returns>
-        WebCallResult<BittrexOrderV3[]> GetClosedOrders(string symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null);
+        WebCallResult<IEnumerable<BittrexOrderV3>> GetClosedOrders(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of closed orders
@@ -335,50 +380,57 @@ namespace Bittrex.Net.Interfaces
         /// <param name="pageSize">The max amount of results to return</param>
         /// <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of closed orders</returns>
-        Task<WebCallResult<BittrexOrderV3[]>> GetClosedOrdersAsync(string symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null);
+        Task<WebCallResult<IEnumerable<BittrexOrderV3>>> GetClosedOrdersAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
         /// <param name="symbol">The symbol to get open orders for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of open orders</returns>
-        WebCallResult<BittrexOrderV3[]> GetOpenOrders(string symbol = null);
+        WebCallResult<IEnumerable<BittrexOrderV3>> GetOpenOrders(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
         /// <param name="symbol">The symbol to get open orders for</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of open orders</returns>
-        Task<WebCallResult<BittrexOrderV3[]>> GetOpenOrdersAsync(string symbol = null);
+        Task<WebCallResult<IEnumerable<BittrexOrderV3>>> GetOpenOrdersAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets info on an order
         /// </summary>
         /// <param name="orderId">The id of the order to retrieve</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Order info</returns>
-        WebCallResult<BittrexOrderV3> GetOrder(string orderId);
+        WebCallResult<BittrexOrderV3> GetOrder(string orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets info on an order
         /// </summary>
         /// <param name="orderId">The id of the order to retrieve</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Order info</returns>
-        Task<WebCallResult<BittrexOrderV3>> GetOrderAsync(string orderId);
+        Task<WebCallResult<BittrexOrderV3>> GetOrderAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels an order
         /// </summary>
         /// <param name="orderId">The id of the order</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Order info</returns>
-        WebCallResult<BittrexOrderV3> CancelOrder(string orderId);
+        WebCallResult<BittrexOrderV3> CancelOrder(string orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels an order
         /// </summary>
         /// <param name="orderId">The id of the order</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Order info</returns>
-        Task<WebCallResult<BittrexOrderV3>> CancelOrderAsync(string orderId);
+        Task<WebCallResult<BittrexOrderV3>> CancelOrderAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Places an order
@@ -391,8 +443,9 @@ namespace Bittrex.Net.Interfaces
         /// <param name="limit">The limit price of the order (limit orders only)</param>
         /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
         /// <param name="clientOrderId">Id to track the order by</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
-        WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity,  TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string clientOrderId = null);
+        WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity,  TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Places an order
@@ -405,24 +458,27 @@ namespace Bittrex.Net.Interfaces
         /// <param name="limit">The limit price of the order (limit orders only)</param>
         /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
         /// <param name="clientOrderId">Id to track the order by</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
-        Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity, TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string clientOrderId = null);
+        Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity, TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of open withdrawals
         /// </summary>
         /// <param name="currency">Filter by currency</param>
         /// <param name="status">Filter by status</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of open withdrawals</returns>
-        WebCallResult<BittrexWithdrawalV3[]> GetOpenWithdrawals(string currency = null, WithdrawalStatus? status = null);
+        WebCallResult<IEnumerable<BittrexWithdrawalV3>> GetOpenWithdrawals(string? currency = null, WithdrawalStatus? status = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of open withdrawals
         /// </summary>
         /// <param name="currency">Filter by currency</param>
         /// <param name="status">Filter by status</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of open withdrawals</returns>
-        Task<WebCallResult<BittrexWithdrawalV3[]>> GetOpenWithdrawalsAsync(string currency = null, WithdrawalStatus? status = null);
+        Task<WebCallResult<IEnumerable<BittrexWithdrawalV3>>> GetOpenWithdrawalsAsync(string? currency = null, WithdrawalStatus? status = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of closed withdrawals
@@ -434,8 +490,9 @@ namespace Bittrex.Net.Interfaces
         /// <param name="pageSize">The max amount of results to return</param>
         /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of closed withdrawals</returns>
-        WebCallResult<BittrexWithdrawalV3[]> GetClosedWithdrawals(string currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null);
+        WebCallResult<IEnumerable<BittrexWithdrawalV3>> GetClosedWithdrawals(string? currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of closed withdrawals
@@ -447,50 +504,57 @@ namespace Bittrex.Net.Interfaces
         /// <param name="pageSize">The max amount of results to return</param>
         /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List of closed withdrawals</returns>
-        Task<WebCallResult<BittrexWithdrawalV3[]>> GetClosedWithdrawalsAsync(string currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string nextPageToken = null, string previousPageToken = null);
+        Task<WebCallResult<IEnumerable<BittrexWithdrawalV3>>> GetClosedWithdrawalsAsync(string? currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of withdrawals by transaction id
         /// </summary>
         /// <param name="transactionId">The id of the transaction</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List withdrawals</returns>
-        WebCallResult<BittrexWithdrawalV3[]> GetWithdrawalsByTransactionId(string transactionId);
+        WebCallResult<IEnumerable<BittrexWithdrawalV3>> GetWithdrawalsByTransactionId(string transactionId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of withdrawals by transaction id
         /// </summary>
         /// <param name="transactionId">The id of the transaction</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>List withdrawals</returns>
-        Task<WebCallResult<BittrexWithdrawalV3[]>> GetWithdrawalsByTransactionIdAsync(string transactionId);
+        Task<WebCallResult<IEnumerable<BittrexWithdrawalV3>>> GetWithdrawalsByTransactionIdAsync(string transactionId, CancellationToken ct = default);
 
         /// <summary>
         /// Gets withdrawal by id
         /// </summary>
         /// <param name="id">The id of the withdrawal</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Withdrawal info</returns>
-        WebCallResult<BittrexWithdrawalV3> GetWithdrawal(string id);
+        WebCallResult<BittrexWithdrawalV3> GetWithdrawal(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Gets withdrawal by id
         /// </summary>
         /// <param name="id">The id of the withdrawal</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Withdrawal info</returns>
-        Task<WebCallResult<BittrexWithdrawalV3>> GetWithdrawalAsync(string id);
+        Task<WebCallResult<BittrexWithdrawalV3>> GetWithdrawalAsync(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels a withdrawal
         /// </summary>
         /// <param name="id">The id of the withdrawal to cancel</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Withdrawal info</returns>
-        WebCallResult<BittrexWithdrawalV3> CancelWithdrawal(string id);
+        WebCallResult<BittrexWithdrawalV3> CancelWithdrawal(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels a withdrawal
         /// </summary>
         /// <param name="id">The id of the withdrawal to cancel</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Withdrawal info</returns>
-        Task<WebCallResult<BittrexWithdrawalV3>> CancelWithdrawalAsync(string id);
+        Task<WebCallResult<BittrexWithdrawalV3>> CancelWithdrawalAsync(string id, CancellationToken ct = default);
 
         /// <summary>
         /// Withdraw from Bittrex
@@ -499,8 +563,9 @@ namespace Bittrex.Net.Interfaces
         /// <param name="quantity">The quantity to withdraw</param>
         /// <param name="address">The address to withdraw to</param>
         /// <param name="addressTag">A tag for the address</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string addressTag);
+        WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string addressTag, CancellationToken ct = default);
 
         /// <summary>
         /// Withdraw from Bittrex
@@ -509,7 +574,8 @@ namespace Bittrex.Net.Interfaces
         /// <param name="quantity">The quantity to withdraw</param>
         /// <param name="address">The address to withdraw to</param>
         /// <param name="addressTag">A tag for the address</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string addressTag);
+        Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string addressTag, CancellationToken ct = default);
     }
 }

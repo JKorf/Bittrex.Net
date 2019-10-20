@@ -8,7 +8,7 @@
         /// <summary>
         /// The currency for which the balance is
         /// </summary>
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The total balance
         /// </summary>
@@ -24,6 +24,6 @@
         /// <summary>
         /// The crypto address this balance is on
         /// </summary>
-        public string CryptoAddress { get; set; }
+        public string CryptoAddress { get; set; } = "";
     }
 }

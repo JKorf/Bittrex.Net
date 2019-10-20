@@ -21,7 +21,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The market the order is on
         /// </summary>
-        public string Exchange { get; set; }
+        public string Exchange { get; set; } = "";
         /// <summary>
         /// The order side
         /// </summary>

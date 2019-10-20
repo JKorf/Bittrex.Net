@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using Bittrex.Net.UnitTests.TestImplementations;
 using CryptoExchange.Net.Logging;
@@ -24,7 +25,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateSocketClient(socket);
 
             List<BittrexStreamMarketSummary> result = null;
-            var subResponse = client.SubscribeToMarketSummariesUpdate((test) => result = test);
+            var subResponse = client.SubscribeToMarketSummariesUpdate((test) => result = test.ToList());
 
             var data =
                 new BittrexStreamMarketSummaryUpdate()
@@ -57,7 +58,7 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas[0], result[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas.ToList()[0], result[0]));
         }
 
         [TestCase()]
@@ -70,7 +71,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateSocketClient(socket);
 
             List<BittrexStreamMarketSummaryLite> result = null;
-            var subResponse = client.SubscribeToMarketSummariesLiteUpdate((test) => result = test);
+            var subResponse = client.SubscribeToMarketSummariesLiteUpdate((test) => result = test.ToList());
 
             var data =
                 new BittrexStreamMarketSummariesLite()
@@ -92,7 +93,7 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas[0], result[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas.ToList()[0], result[0]));
         }
 
         [TestCase()]
@@ -127,9 +128,9 @@ namespace Bittrex.Net.UnitTests
             // assert
             Assert.IsNotNull(result);
             Assert.IsTrue(TestHelpers.AreEqual(data, result, "Buys", "Sells", "Fills"));
-            Assert.IsTrue(TestHelpers.AreEqual(data.Buys[0], result.Buys[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(data.Sells[0], result.Sells[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(data.Fills[0], result.Fills[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Buys.ToList()[0], result.Buys.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Sells.ToList()[0], result.Sells.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Fills.ToList()[0], result.Fills.ToList()[0]));
         }
 
         private JObject WrapResult<T>(string method, T data)

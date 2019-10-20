@@ -9,7 +9,7 @@ using CryptoExchange.Net.Sockets;
 namespace Bittrex.Net.Interfaces
 {
     /// <summary>
-    /// Interface for the Bittrex socket client
+    /// Client for the Bittrex socket client
     /// </summary>
     public interface IBittrexSocketClient: ISocketClient
     {
@@ -17,13 +17,13 @@ namespace Bittrex.Net.Interfaces
         /// Gets the current summaries for all markets
         /// </summary>
         /// <returns>Market summaries</returns>
-        CallResult<List<BittrexStreamMarketSummary>> QuerySummaryStates();
+        CallResult<IEnumerable<BittrexStreamMarketSummary>> QuerySummaryStates();
 
         /// <summary>
         /// Gets the current summaries for all markets
         /// </summary>
         /// <returns>Market summaries</returns>
-        Task<CallResult<List<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync();
+        Task<CallResult<IEnumerable<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync();
 
         /// <summary>
         /// Gets the state of a specific market
@@ -66,28 +66,28 @@ namespace Bittrex.Net.Interfaces
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        CallResult<UpdateSubscription> SubscribeToMarketSummariesUpdate(Action<List<BittrexStreamMarketSummary>> onUpdate);
+        CallResult<UpdateSubscription> SubscribeToMarketSummariesUpdate(Action<IEnumerable<BittrexStreamMarketSummary>> onUpdate);
 
         /// <summary>
         /// Subscribes to updates of summaries for all markets
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<List<BittrexStreamMarketSummary>> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<IEnumerable<BittrexStreamMarketSummary>> onUpdate);
 
         /// <summary>
         /// Subscribes to lite summary updates for all markets
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        CallResult<UpdateSubscription> SubscribeToMarketSummariesLiteUpdate(Action<List<BittrexStreamMarketSummaryLite>> onUpdate);
+        CallResult<UpdateSubscription> SubscribeToMarketSummariesLiteUpdate(Action<IEnumerable<BittrexStreamMarketSummaryLite>> onUpdate);
 
         /// <summary>
         /// Subscribes to lite summary updates for all markets
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<List<BittrexStreamMarketSummaryLite>> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<IEnumerable<BittrexStreamMarketSummaryLite>> onUpdate);
 
         /// <summary>
         /// Subscribes to balance updates
@@ -104,6 +104,5 @@ namespace Bittrex.Net.Interfaces
         /// <param name="onOrderUpdate">The update event handler for order updates</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToAccountUpdatesAsync(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate);
-
     }
 }

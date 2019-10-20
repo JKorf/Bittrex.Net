@@ -22,7 +22,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="symbol">The symbol the order book is for</param>
         /// <param name="options">Options for the order book</param>
-        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
+        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions? options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
         {
             socketClient = options?.SocketClient ?? new BittrexSocketClient();
         }

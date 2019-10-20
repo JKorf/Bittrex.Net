@@ -18,24 +18,24 @@ namespace Bittrex.Net.Objects
         /// Name of the market
         /// </summary>
         [JsonProperty("M")]
-        public string MarketName { get; set; }
+        public string MarketName { get; set; } = "";
 
         /// <summary>
         /// Buys in the order book
         /// </summary>
         [JsonProperty("Z")]
-        public List<BittrexStreamOrderBookUpdateEntry> Buys { get; set; }
+        public IEnumerable<BittrexStreamOrderBookUpdateEntry> Buys { get; set; } = new List<BittrexStreamOrderBookUpdateEntry>();
 
         /// <summary>
         /// Sells in the order book
         /// </summary>
         [JsonProperty("S")]
-        public List<BittrexStreamOrderBookUpdateEntry> Sells { get; set; }
+        public IEnumerable<BittrexStreamOrderBookUpdateEntry> Sells { get; set; } = new List<BittrexStreamOrderBookUpdateEntry>();
         /// <summary>
         /// Market history
         /// </summary>
         [JsonProperty("f")]
-        public List<BittrexStreamFill> Fills { get; set; }
+        public IEnumerable<BittrexStreamFill> Fills { get; set; } = new List<BittrexStreamFill>();
     }
 
     /// <summary>
@@ -53,23 +53,23 @@ namespace Bittrex.Net.Objects
         /// Name of the market
         /// </summary>
         [JsonProperty("M")]
-        public string MarketName { get; set; }
+        public string MarketName { get; set; } = "";
 
         /// <summary>
         /// Buys in the order book
         /// </summary>
         [JsonProperty("Z")]
-        public List<BittrexStreamOrderBookEntry> Buys { get; set; }
+        public IEnumerable<BittrexStreamOrderBookEntry> Buys { get; set; } = new List<BittrexStreamOrderBookEntry>();
 
         /// <summary>
         /// Sells in the order book
         /// </summary>
         [JsonProperty("S")]
-        public List<BittrexStreamOrderBookEntry> Sells { get; set; }
+        public IEnumerable<BittrexStreamOrderBookEntry> Sells { get; set; } = new List<BittrexStreamOrderBookEntry>();
         /// <summary>
         /// Market history
         /// </summary>
         [JsonProperty("f")]
-        public List<BittrexStreamMarketHistory> Fills { get; set; }
+        public IEnumerable<BittrexStreamMarketHistory> Fills { get; set; } = new List<BittrexStreamMarketHistory>();
     }
 }

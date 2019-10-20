@@ -12,7 +12,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The name of the market
         /// </summary>
-        public string MarketName { get; set; }
+        public string MarketName { get; set; } = "";
         /// <summary>
         /// The highest price in the last 24 hour
         /// </summary>

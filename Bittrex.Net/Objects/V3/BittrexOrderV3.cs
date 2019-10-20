@@ -13,12 +13,12 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// The id of the order
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = "";
         /// <summary>
         /// The symbol of the order
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The direction of the order
         /// </summary>
@@ -53,7 +53,7 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// Id to track the order by
         /// </summary>
-        public string ClientOrderId { get; set; }
+        public string ClientOrderId { get; set; } = "";
         /// <summary>
         /// The quantity that's been filled
         /// </summary>

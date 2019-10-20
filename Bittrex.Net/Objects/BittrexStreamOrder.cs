@@ -25,11 +25,12 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("TY"), JsonConverter(typeof(OrderUpdateTypeConverter))]
         public OrderUpdateType Type { get; set; }
+
         /// <summary>
         /// Order information
         /// </summary>
         [JsonProperty("o")]
-        public BittrexStreamOrder Order { get; set; }
+        public BittrexStreamOrder Order { get; set; } = default!;
     }
 
     /// <summary>
@@ -56,7 +57,7 @@ namespace Bittrex.Net.Objects
         /// The market this order is for
         /// </summary>
         [JsonProperty("E")]
-        public string Market { get; set; }
+        public string Market { get; set; } = "";
         /// <summary>
         /// The order type
         /// </summary>

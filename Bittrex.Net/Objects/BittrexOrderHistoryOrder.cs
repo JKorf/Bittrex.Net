@@ -17,7 +17,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Market the order is on
         /// </summary>
-        public string Exchange { get; set; }
+        public string Exchange { get; set; } = "";
         /// <summary>
         /// Timestamp when the order was opened
         /// </summary>

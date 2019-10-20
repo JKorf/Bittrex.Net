@@ -93,14 +93,14 @@ namespace Bittrex.Net.UnitTests.TestImplementations
         {
         }
 
+        public Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
+        {
+            return Task.FromResult<CallResult<T>>(new CallResult<T>((T)proxyData, null));
+        }
+
         public void SetProxyResponse<T>(T data)
         {
             proxyData = data;
-        }
-
-        public Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
-        {
-            return Task.FromResult<CallResult<T>>(new CallResult<T>((T)proxyData, null));
         }
     }
 }

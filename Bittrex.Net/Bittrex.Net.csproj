@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+	<LangVersion>8.0</LangVersion>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
@@ -10,7 +12,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
     <PackageProjectUrl>https://github.com/JKorf/Bittrex.Net</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/JKorf/Bittrex.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -20,9 +22,10 @@
     <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CryptoExchange.Net" Version="2.1.8" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CryptoExchange.Net\CryptoExchange.Net\CryptoExchange.Net.csproj" />
   </ItemGroup>
 </Project>

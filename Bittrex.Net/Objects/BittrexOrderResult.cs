@@ -14,14 +14,15 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonConverter(typeof(OrderSideConverter)), JsonProperty("BuyOrSell")]
         public OrderSide Side { get; set; }
+
         /// <summary>
         /// The market currency
         /// </summary>
-        public string MarketCurrency { get; set; }
+        public string MarketCurrency { get; set; } = "";
         /// <summary>
         /// The market the order is on
         /// </summary>
-        public string MarketName { get; set; }
+        public string MarketName { get; set; } = "";
         /// <summary>
         /// The order id of the currency
         /// </summary>
@@ -29,7 +30,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The type of order
         /// </summary>
-        public string OrderType { get; set; }
+        public string OrderType { get; set; } = "";
         /// <summary>
         /// The quantity of the order
         /// </summary>
