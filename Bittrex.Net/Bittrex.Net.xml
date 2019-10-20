@@ -32,159 +32,181 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarkets">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarkets(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketsAsync">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketsAsync(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetCurrencies">
+        <member name="M:Bittrex.Net.BittrexClient.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetCurrenciesAsync">
+        <member name="M:Bittrex.Net.BittrexClient.GetCurrenciesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetTicker(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetTicker(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the price of a market
             </summary>
             <param name="market">Market to get price for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetTickerAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the price of a market
             </summary>
             <param name="market">Market to get price for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummary(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummary(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a summary of the market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummaryAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a summary of the market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummaries">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummaries(System.Threading.CancellationToken)">
             <summary>
             Gets a summary for all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of summaries for all markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummariesAsync">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummariesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets a summary for all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of summaries for all markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrderBook(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetBuyOrderBook(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetBuyOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with asks for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetBuyOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetBuyOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with asks for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetSellOrderBook(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSellOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetSellOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSellOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketHistory(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the last trades on a market
             </summary>
             <param name="market">Market to get history for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetMarketHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the last trades on a market
             </summary>
             <param name="market">Market to get history for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetCandles(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.BittrexClient.GetCandles(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetCandlesAsync(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.BittrexClient.GetCandlesAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetLatestCandle(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.BittrexClient.GetLatestCandle(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetLatestCandleAsync(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.BittrexClient.GetLatestCandleAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.PlaceOrder(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal)">
+        <member name="M:Bittrex.Net.BittrexClient.PlaceOrder(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -192,9 +214,10 @@
             <param name="market">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.PlaceOrderAsync(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal)">
+        <member name="M:Bittrex.Net.BittrexClient.PlaceOrderAsync(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -202,77 +225,88 @@
             <param name="market">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.CancelOrder(System.Guid)">
+        <member name="M:Bittrex.Net.BittrexClient.CancelOrder(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Cancels an open order
             </summary>
             <param name="guid">The Guid of the order to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.CancelOrderAsync(System.Guid)">
+        <member name="M:Bittrex.Net.BittrexClient.CancelOrderAsync(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Cancels an open order
             </summary>
             <param name="guid">The Guid of the order to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOpenOrders(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOpenOrders(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="market">Filter list by market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOpenOrdersAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOpenOrdersAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="market">Filter list by market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetBalance(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetBalance(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the balance of a single currency
             </summary>
             <param name="currency">Currency to get the balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The balance of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetBalanceAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetBalanceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the balance of a single currency
             </summary>
             <param name="currency">Currency to get the balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The balance of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetBalances">
+        <member name="M:Bittrex.Net.BittrexClient.GetBalances(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all balances for the current account
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetBalancesAsync">
+        <member name="M:Bittrex.Net.BittrexClient.GetBalancesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all balances for the current account
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetDepositAddress(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetDepositAddress(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit address for a specific currency
             </summary>
             <param name="currency">Currency to get deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetDepositAddressAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetDepositAddressAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit address for a specific currency
             </summary>
             <param name="currency">Currency to get deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.Withdraw(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.Withdraw(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Places a withdraw request on Bittrex
             </summary>
@@ -280,9 +314,10 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="paymentId">Optional string identifier to add to the withdraw</param>
+            <param name="ct">Cancellation token</param>
             <returns>Guid of the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.WithdrawAsync(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Places a withdraw request on Bittrex
             </summary>
@@ -290,62 +325,71 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="paymentId">Optional string identifier to add to the withdraw</param>
+            <param name="ct">Cancellation token</param>
             <returns>Guid of the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrder(System.Guid)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrder(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Gets an order by it's guid
             </summary>
             <param name="guid">The guid of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>The requested order</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrderAsync(System.Guid)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrderAsync(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Gets an order by it's guid
             </summary>
             <param name="guid">The guid of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>The requested order</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrderHistory(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrderHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order history for the current account
             </summary>
             <param name="market">Filter on market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrderHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrderHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order history for the current account
             </summary>
             <param name="market">Filter on market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetWithdrawalHistory(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetWithdrawalHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the withdrawal history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetWithdrawalHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetWithdrawalHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the withdrawal history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetDepositHistory(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetDepositHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetDepositHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClient.GetDepositHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetUrl(System.String,System.String,System.String)">
@@ -356,9 +400,6 @@
             <param name="api"></param>
             <param name="version"></param>
             <returns></returns>
-        </member>
-        <member name="M:Bittrex.Net.BittrexClient.IsErrorResponse(Newtonsoft.Json.Linq.JToken)">
-            <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.BittrexClient.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc />
@@ -394,246 +435,283 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetServerTime">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetServerTime(System.Threading.CancellationToken)">
             <summary>
             Gets the server time
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetServerTimeAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetServerTimeAsync(System.Threading.CancellationToken)">
             <summary>
             Gets the server time
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarkets">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarkets(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketsAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketsAsync(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarket(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarket(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets information about a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets information about a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummaries">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummaries(System.Threading.CancellationToken)">
             <summary>
             Gets summaries of all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of market summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummariesAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummariesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets summaries of all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of market summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummary(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummary(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets summary of a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummaryAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets summary of a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketOrderBook(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTrades(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTrades(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the trade history of a market
             </summary>
             <param name="market">The market to get trades for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTradesAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the trade history of a market
             </summary>
             <param name="market">The market to get trades for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTicker(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTicker(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the ticker of a market
             </summary>
             <param name="market">The market to get ticker for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickerAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the ticker of a market
             </summary>
             <param name="market">The market to get ticker for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickers">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickers(System.Threading.CancellationToken)">
             <summary>
             Gets list of tickers for all market
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Market tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickersAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickersAsync(System.Threading.CancellationToken)">
             <summary>
             Gets list of tickers for all market
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Market tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
             <summary>
             Gets the candles for a market
             </summary>
             <param name="market">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
             <summary>
             Gets the candles for a market
             </summary>
             <param name="market">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencies">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrenciesAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrenciesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrency(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrency(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on a currency
             </summary>
             <param name="currency">The name of the currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>Currency info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencyAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencyAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on a currency
             </summary>
             <param name="currency">The name of the currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>Currency info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetBalances">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetBalances(System.Threading.CancellationToken)">
             <summary>
             Gets current balances
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetBalancesAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetBalancesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets current balances
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetBalance(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetBalance(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets current balance for a currency
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Balance for market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetBalanceAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetBalanceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets current balance for a market
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Balance for market</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddresses">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddresses(System.Threading.CancellationToken)">
             <summary>
             Gets list of deposit addresses
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddressesAsync">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddressesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets list of deposit addresses
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddress(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddress(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets deposit addresses for a currency
             </summary>
             <param name="currency">The name of the currency to get the deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddressAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddressAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets deposit addresses for a currency
             </summary>
             <param name="currency">The name of the currency to get the deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.RequestDepositAddress(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.RequestDepositAddress(System.String,System.Threading.CancellationToken)">
             <summary>
             Request a deposit address for a currency
             </summary>
             <param name="currency">The name of the currency to get request a deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.RequestDepositAddressAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.RequestDepositAddressAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Request a deposit address for a currency
             </summary>
+            <param name="currency">The name of the currency to get request a deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenDeposits(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenDeposits(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of open deposits
             </summary>
             <param name="currency">Filter the list by currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenDepositsAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenDepositsAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of open deposits
             </summary>
             <param name="currency">Filter the list by currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedDeposits(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedDeposits(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of closed deposits
             </summary>
@@ -644,9 +722,10 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedDepositsAsync(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedDepositsAsync(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of closed deposits
             </summary>
@@ -657,37 +736,42 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositsByTransactionId(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositsByTransactionId(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of deposits for a transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositsByTransactionIdAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositsByTransactionIdAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of deposits for a transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDeposit(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDeposit(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a deposit by id
             </summary>
             <param name="depositId">The id of the deposit</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a deposit by id
             </summary>
             <param name="depositId">The id of the deposit</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedOrders(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedOrders(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed orders
             </summary>
@@ -697,9 +781,10 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedOrdersAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedOrdersAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed orders
             </summary>
@@ -709,51 +794,58 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenOrders(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenOrders(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="symbol">The symbol to get open orders for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenOrdersAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenOrdersAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="symbol">The symbol to get open orders for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOrder(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrder(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on an order
             </summary>
             <param name="orderId">The id of the order to retrieve</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on an order
             </summary>
             <param name="orderId">The id of the order to retrieve</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.CancelOrder(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelOrder(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels an order
             </summary>
             <param name="orderId">The id of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.CancelOrderAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelOrderAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels an order
             </summary>
             <param name="orderId">The id of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -765,9 +857,10 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -779,25 +872,28 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus})">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Threading.CancellationToken)">
             <summary>
             Gets a list of open withdrawals
             </summary>
             <param name="currency">Filter by currency</param>
             <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus})">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Threading.CancellationToken)">
             <summary>
             Gets a list of open withdrawals
             </summary>
             <param name="currency">Filter by currency</param>
             <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed withdrawals
             </summary>
@@ -808,9 +904,10 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed withdrawals
             </summary>
@@ -821,51 +918,58 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalsByTransactionId(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalsByTransactionId(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of withdrawals by transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalsByTransactionIdAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalsByTransactionIdAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of withdrawals by transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawal(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawal(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets withdrawal by id
             </summary>
             <param name="id">The id of the withdrawal</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets withdrawal by id
             </summary>
             <param name="id">The id of the withdrawal</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.CancelWithdrawal(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelWithdrawal(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels a withdrawal
             </summary>
             <param name="id">The id of the withdrawal to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.CancelWithdrawalAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelWithdrawalAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels a withdrawal
             </summary>
             <param name="id">The id of the withdrawal to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -873,9 +977,10 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.BittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -883,6 +988,7 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
@@ -890,10 +996,21 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetUrl(System.String)">
             <summary>
-            Get url for an enpoint
+            Get url for an endpoint
             </summary>
             <param name="endpoint"></param>
             <returns></returns>
+        </member>
+        <member name="T:Bittrex.Net.BittrexHelpers">
+            <summary>
+            Helper functions
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.BittrexHelpers.ValidateBittrexSymbol(System.String)">
+            <summary>
+            Validate the string is a valid Bittrex symbol.
+            </summary>
+            <param name="symbolString">string to validate</param>
         </member>
         <member name="T:Bittrex.Net.BittrexSocketClient">
             <summary>
@@ -965,28 +1082,28 @@
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesUpdate(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
             <summary>
             Subscribes to updates of summaries for all markets
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesUpdateAsync(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
             <summary>
             Subscribes to updates of summaries for all markets
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesLiteUpdate(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesLiteUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
             <summary>
             Subscribes to lite summary updates for all markets
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
             <summary>
             Subscribes to lite summary updates for all markets
             </summary>
@@ -1070,7 +1187,7 @@
         </member>
         <member name="T:Bittrex.Net.Interfaces.IBittrexClient">
             <summary>
-            Bittrex client interface
+            Interface for the Bittrex client
             </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.SetApiCredentials(System.String,System.String)">
@@ -1080,159 +1197,181 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarkets">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarkets(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketsAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketsAsync(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCurrencies">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCurrenciesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCurrenciesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetTicker(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetTicker(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the price of a market
             </summary>
             <param name="market">Market to get price for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetTickerAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the price of a market
             </summary>
             <param name="market">Market to get price for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummary(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummary(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a summary of the market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummaryAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a summary of the market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummaries">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummaries(System.Threading.CancellationToken)">
             <summary>
             Gets a summary for all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of summaries for all markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummariesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummariesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets a summary for all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of summaries for all markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderBook(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBuyOrderBook(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBuyOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with asks for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBuyOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBuyOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with asks for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSellOrderBook(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSellOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSellOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSellOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book with bids for a market
             </summary>
             <param name="market">Market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketHistory(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the last trades on a market
             </summary>
             <param name="market">Market to get history for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the last trades on a market
             </summary>
             <param name="market">Market to get history for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCandles(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCandles(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCandlesAsync(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCandlesAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLatestCandle(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLatestCandle(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLatestCandleAsync(System.String,Bittrex.Net.Objects.TickInterval)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLatestCandleAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
             <param name="market">Market to get candles for</param>
             <param name="interval">The candle interval</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceOrder(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceOrder(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -1240,9 +1379,10 @@
             <param name="market">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceOrderAsync(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceOrderAsync(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -1250,77 +1390,88 @@
             <param name="market">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.CancelOrder(System.Guid)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.CancelOrder(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Cancels an open order
             </summary>
             <param name="guid">The Guid of the order to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.CancelOrderAsync(System.Guid)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.CancelOrderAsync(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Cancels an open order
             </summary>
             <param name="guid">The Guid of the order to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOpenOrders(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOpenOrders(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="market">Filter list by market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOpenOrdersAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOpenOrdersAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="market">Filter list by market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalance(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalance(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the balance of a single currency
             </summary>
             <param name="currency">Currency to get the balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The balance of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalanceAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalanceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the balance of a single currency
             </summary>
             <param name="currency">Currency to get the balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The balance of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalances">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalances(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all balances for the current account
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalancesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBalancesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all balances for the current account
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositAddress(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositAddress(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit address for a specific currency
             </summary>
             <param name="currency">Currency to get deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositAddressAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositAddressAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit address for a specific currency
             </summary>
             <param name="currency">Currency to get deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address of the currency</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.Withdraw(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.Withdraw(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Places a withdraw request on Bittrex
             </summary>
@@ -1328,9 +1479,10 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="paymentId">Optional string identifier to add to the withdraw</param>
+            <param name="ct">Cancellation token</param>
             <returns>Guid of the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.WithdrawAsync(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Places a withdraw request on Bittrex
             </summary>
@@ -1338,67 +1490,76 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="paymentId">Optional string identifier to add to the withdraw</param>
+            <param name="ct">Cancellation token</param>
             <returns>Guid of the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrder(System.Guid)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrder(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Gets an order by it's guid
             </summary>
             <param name="guid">The guid of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>The requested order</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderAsync(System.Guid)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderAsync(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Gets an order by it's guid
             </summary>
             <param name="guid">The guid of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>The requested order</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderHistory(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order history for the current account
             </summary>
             <param name="market">Filter on market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order history for the current account
             </summary>
             <param name="market">Filter on market</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetWithdrawalHistory(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetWithdrawalHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the withdrawal history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetWithdrawalHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetWithdrawalHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the withdrawal history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositHistory(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositHistory(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositHistoryAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetDepositHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the deposit history of the current account
             </summary>
             <param name="currency">Filter on currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
         <member name="T:Bittrex.Net.Interfaces.IBittrexClientV3">
             <summary>
-            V3 client interface
+            Interface for the Bittrex v3 client
             </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.SetApiCredentials(System.String,System.String)">
@@ -1408,246 +1569,283 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetServerTime">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetServerTime(System.Threading.CancellationToken)">
             <summary>
             Gets the server time
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetServerTimeAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetServerTimeAsync(System.Threading.CancellationToken)">
             <summary>
             Gets the server time
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarkets">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarkets(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketsAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketsAsync(System.Threading.CancellationToken)">
             <summary>
             Gets information about all available markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarket(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarket(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets information about a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets information about a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaries">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaries(System.Threading.CancellationToken)">
             <summary>
             Gets summaries of all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of market summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummariesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummariesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets summaries of all markets
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of market summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummary(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummary(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets summary of a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaryAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets summary of a market
             </summary>
             <param name="market">The market to get info for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBook(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBookAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a market
             </summary>
             <param name="market">The market to get the order book for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTrades(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTrades(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the trade history of a market
             </summary>
             <param name="market">The market to get trades for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTradesAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the trade history of a market
             </summary>
             <param name="market">The market to get trades for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTicker(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTicker(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the ticker of a market
             </summary>
             <param name="market">The market to get ticker for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickerAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the ticker of a market
             </summary>
             <param name="market">The market to get ticker for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickers">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickers(System.Threading.CancellationToken)">
             <summary>
             Gets list of tickers for all market
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Market tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickersAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickersAsync(System.Threading.CancellationToken)">
             <summary>
             Gets list of tickers for all market
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>Market tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
             <summary>
             Gets the candles for a market
             </summary>
             <param name="market">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
             <summary>
             Gets the candles for a market
             </summary>
             <param name="market">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
+            <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencies">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrenciesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrenciesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all currencies
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of currencies</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrency(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrency(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on a currency
             </summary>
             <param name="currency">The name of the currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>Currency info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencyAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencyAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on a currency
             </summary>
             <param name="currency">The name of the currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>Currency info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalances">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalances(System.Threading.CancellationToken)">
             <summary>
             Gets current balances
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalancesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalancesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets current balances
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalance(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalance(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets current balance for a currency
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Balance for market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalanceAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalanceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets current balance for a market
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Balance for market</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddresses">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddresses(System.Threading.CancellationToken)">
             <summary>
             Gets list of deposit addresses
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddressesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddressesAsync(System.Threading.CancellationToken)">
             <summary>
             Gets list of deposit addresses
             </summary>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddress(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddress(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets deposit addresses for a currency
             </summary>
             <param name="currency">The name of the currency to get the deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddressAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddressAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets deposit addresses for a currency
             </summary>
             <param name="currency">The name of the currency to get the deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit addresses</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.RequestDepositAddress(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.RequestDepositAddress(System.String,System.Threading.CancellationToken)">
             <summary>
             Request a deposit address for a currency
             </summary>
             <param name="currency">The name of the currency to get request a deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.RequestDepositAddressAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.RequestDepositAddressAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Request a deposit address for a currency
             </summary>
+            <param name="currency">The name of the currency to get request a deposit address for</param>
+            <param name="ct">Cancellation token</param>
             <returns>The deposit address</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenDeposits(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenDeposits(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of open deposits
             </summary>
             <param name="currency">Filter the list by currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenDepositsAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenDepositsAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of open deposits
             </summary>
             <param name="currency">Filter the list by currency</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedDeposits(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedDeposits(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of closed deposits
             </summary>
@@ -1658,9 +1856,10 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedDepositsAsync(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedDepositsAsync(System.String,System.Nullable{Bittrex.Net.Objects.DepositStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of closed deposits
             </summary>
@@ -1671,37 +1870,42 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositsByTransactionId(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositsByTransactionId(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of deposits for a transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositsByTransactionIdAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositsByTransactionIdAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets list of deposits for a transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of deposits</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDeposit(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDeposit(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a deposit by id
             </summary>
             <param name="depositId">The id of the deposit</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a deposit by id
             </summary>
             <param name="depositId">The id of the deposit</param>
+            <param name="ct">Cancellation token</param>
             <returns>Deposit info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedOrders(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedOrders(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed orders
             </summary>
@@ -1711,9 +1915,10 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedOrdersAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedOrdersAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed orders
             </summary>
@@ -1723,51 +1928,58 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenOrders(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenOrders(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="symbol">The symbol to get open orders for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenOrdersAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenOrdersAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of open orders
             </summary>
             <param name="symbol">The symbol to get open orders for</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrder(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrder(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on an order
             </summary>
             <param name="orderId">The id of the order to retrieve</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets info on an order
             </summary>
             <param name="orderId">The id of the order to retrieve</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelOrder(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelOrder(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels an order
             </summary>
             <param name="orderId">The id of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelOrderAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelOrderAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels an order
             </summary>
             <param name="orderId">The id of the order</param>
+            <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -1779,9 +1991,10 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -1793,25 +2006,28 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Threading.CancellationToken)">
             <summary>
             Gets a list of open withdrawals
             </summary>
             <param name="currency">Filter by currency</param>
             <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOpenWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Threading.CancellationToken)">
             <summary>
             Gets a list of open withdrawals
             </summary>
             <param name="currency">Filter by currency</param>
             <param name="status">Filter by status</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of open withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed withdrawals
             </summary>
@@ -1822,9 +2038,10 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetClosedWithdrawalsAsync(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of closed withdrawals
             </summary>
@@ -1835,51 +2052,58 @@
             <param name="pageSize">The max amount of results to return</param>
             <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
             <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
             <returns>List of closed withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalsByTransactionId(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalsByTransactionId(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of withdrawals by transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalsByTransactionIdAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalsByTransactionIdAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets a list of withdrawals by transaction id
             </summary>
             <param name="transactionId">The id of the transaction</param>
+            <param name="ct">Cancellation token</param>
             <returns>List withdrawals</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawal(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawal(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets withdrawal by id
             </summary>
             <param name="id">The id of the withdrawal</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetWithdrawalAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets withdrawal by id
             </summary>
             <param name="id">The id of the withdrawal</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelWithdrawal(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelWithdrawal(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels a withdrawal
             </summary>
             <param name="id">The id of the withdrawal to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelWithdrawalAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.CancelWithdrawalAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels a withdrawal
             </summary>
             <param name="id">The id of the withdrawal to cancel</param>
+            <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -1887,9 +2111,10 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -1897,11 +2122,12 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
         <member name="T:Bittrex.Net.Interfaces.IBittrexSocketClient">
             <summary>
-            Interface for the Bittrex socket client
+            Client for the Bittrex socket client
             </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QuerySummaryStates">
@@ -1952,28 +2178,28 @@
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesUpdate(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
             <summary>
             Subscribes to updates of summaries for all markets
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesUpdateAsync(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
             <summary>
             Subscribes to updates of summaries for all markets
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesLiteUpdate(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesLiteUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
             <summary>
             Subscribes to lite summary updates for all markets
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.List{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
             <summary>
             Subscribes to lite summary updates for all markets
             </summary>
@@ -3168,7 +3394,7 @@
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexPrice.Last">
             <summary>
-            The last price an order was completen at
+            The last price an order was completed at
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexStreamBalanceData">
@@ -4023,7 +4249,7 @@
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Precision">
             <summary>
-            The max pricision for this market
+            The max precision for this market
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Status">

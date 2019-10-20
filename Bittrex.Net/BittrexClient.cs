@@ -633,7 +633,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override Error ParseErrorResponse(JToken data)
         {
-            if(data["message"] == null)
+            if(!data.HasValues || data["message"] == null)
                 return new UnknownError("Unknown response from server: " + data);
 
             return new ServerError((string)data["message"]);

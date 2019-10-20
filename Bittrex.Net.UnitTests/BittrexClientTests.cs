@@ -699,7 +699,22 @@ namespace Bittrex.Net.UnitTests
             Assert.AreNotEqual(0, result.Error.Code);
             Assert.IsTrue(result.Error.Message.Contains(errorMessage));
         }
-        
+
+        [TestCase()]
+        public void HttpErrorResponse_Should_GiveFailedResult()
+        {
+            // arrange
+            var errorMessage = "TestErrorMessage";
+            var client = TestHelpers.CreateResponseClient(errorMessage, null, System.Net.HttpStatusCode.BadRequest);
+
+            // act
+            var result = client.GetTicker("TestMarket");
+
+            // assert
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.Error.ToString().Contains(errorMessage));
+        }
+
         [Test]
         public void ProvidingApiCredentials_Should_SaveApiCredentials()
         {
@@ -761,6 +776,22 @@ namespace Bittrex.Net.UnitTests
             result.GetType().GetProperty("Success").SetValue(result, success);
             result.GetType().GetProperty("Message", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(result, message);
             return result;
+        }
+
+        [TestCase("BTC-USDT", true)]
+        [TestCase("NANO-USDT", true)]
+        [TestCase("NANO-BTC", true)]
+        [TestCase("ETH-BTC", true)]
+        [TestCase("BE-ETC", false)]
+        [TestCase("NANO-USDTD", false)]
+        [TestCase("BTCUSDT", false)]
+        [TestCase("BTCUSD", false)]
+        public void CheckValidBittrexSymbol(string symbol, bool isValid)
+        {
+            if (isValid)
+                Assert.DoesNotThrow(() => symbol.ValidateBittrexSymbol());
+            else
+                Assert.Throws(typeof(ArgumentException), () => symbol.ValidateBittrexSymbol());
         }
     }
 }
