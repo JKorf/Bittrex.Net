@@ -93,9 +93,9 @@ namespace Bittrex.Net
         /// 100 Fills
         /// 500 Sells
         /// </summary>
-        /// <param name="marketName">The name of the market to query</param>
+        /// <param name="symbol">The name of the market to query</param>
         /// <returns>The current exchange state</returns>
-        public CallResult<BittrexStreamQueryExchangeState> QueryExchangeState(string marketName) => QueryExchangeStateAsync(marketName).Result;
+        public CallResult<BittrexStreamQueryExchangeState> QueryExchangeState(string symbol) => QueryExchangeStateAsync(symbol).Result;
 
         /// <summary>
         /// Gets the state of a specific market
@@ -103,30 +103,34 @@ namespace Bittrex.Net
         /// 100 Fills
         /// 500 Sells
         /// </summary>
-        /// <param name="marketName">The name of the market to query</param>
+        /// <param name="symbol">The name of the market to query</param>
         /// <returns>The current exchange state</returns>
-        public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string marketName)
+        public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string symbol)
         {
-            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(QueryExchangeStateRequest, marketName), false).ConfigureAwait(false);
+            symbol.ValidateBittrexSymbol();
+
+            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(QueryExchangeStateRequest, symbol), false).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Subscribes to order book and trade updates on a specific market
         /// </summary>
-        /// <param name="marketName">The name of the market to subscribe on</param>
+        /// <param name="symbol">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public CallResult<UpdateSubscription> SubscribeToExchangeStateUpdates(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeStateUpdatesAsync(marketName, onUpdate).Result;
+        public CallResult<UpdateSubscription> SubscribeToExchangeStateUpdates(string symbol, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeStateUpdatesAsync(symbol, onUpdate).Result;
 
         /// <summary>
         /// Subscribes to order book and trade updates on a specific market
         /// </summary>
-        /// <param name="marketName">The name of the market to subscribe on</param>
+        /// <param name="symbol">The name of the market to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToExchangeStateUpdatesAsync(string marketName, Action<BittrexStreamUpdateExchangeState> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToExchangeStateUpdatesAsync(string symbol, Action<BittrexStreamUpdateExchangeState> onUpdate)
         {
-            return await Subscribe<JToken>(new ConnectionRequest(ExchangeDeltaSub, marketName), null, false, data => DecodeSignalRData(data, onUpdate)).ConfigureAwait(false);
+            symbol.ValidateBittrexSymbol();
+
+            return await Subscribe<JToken>(new ConnectionRequest(ExchangeDeltaSub, symbol), null, false, data => DecodeSignalRData(data, onUpdate)).ConfigureAwait(false);
         }
 
         /// <summary>

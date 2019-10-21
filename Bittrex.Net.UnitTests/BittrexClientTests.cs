@@ -109,7 +109,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetTicker("TestMarket");
+            var result = client.GetTicker("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -142,7 +142,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketSummary("TestMarket");
+            var result = client.GetMarketSummary("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -236,7 +236,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetOrderBook("TestMarket");
+            var result = client.GetOrderBook("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -259,7 +259,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetBuyOrderBook("TestMarket");
+            var result = client.GetBuyOrderBook("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -280,7 +280,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetSellOrderBook("TestMarket");
+            var result = client.GetSellOrderBook("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -318,7 +318,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketHistory("TestMarket");
+            var result = client.GetMarketHistory("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -334,7 +334,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.PlaceOrder(OrderSide.Buy, "TestMarket", 1, 1);
+            var result = client.PlaceOrder(OrderSide.Buy, "BTC-ETH", 1, 1);
 
             // assert
             Assert.IsTrue(result.Success);
@@ -692,7 +692,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult<object>(null, false, errorMessage));
 
             // act
-            var result = client.GetTicker("TestMarket");
+            var result = client.GetTicker("BTC-ETH");
 
             // assert
             Assert.IsFalse(result.Success);
@@ -708,7 +708,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(errorMessage, null, System.Net.HttpStatusCode.BadRequest);
 
             // act
-            var result = client.GetTicker("TestMarket");
+            var result = client.GetTicker("BTC-ETH");
 
             // assert
             Assert.IsFalse(result.Success);

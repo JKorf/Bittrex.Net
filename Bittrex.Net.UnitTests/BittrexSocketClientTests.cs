@@ -109,13 +109,13 @@ namespace Bittrex.Net.UnitTests
             });
 
             BittrexStreamUpdateExchangeState result = null;
-            var subResponse = client.SubscribeToExchangeStateUpdates("market", (test) => result = test);
+            var subResponse = client.SubscribeToExchangeStateUpdates("BTC-ETH", (test) => result = test);
 
             var data =
                 new BittrexStreamUpdateExchangeState()
                 {
                     Nonce = 1,
-                    MarketName = "market",
+                    MarketName = "BTC-ETH",
                     Buys = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.1m, Price = 0.2m, Type = OrderBookEntryType.NewEntry} },
                     Sells = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.4m, Price = 0.5m, Type = OrderBookEntryType.RemoveEntry } },
                     Fills = new List<BittrexStreamFill> { new BittrexStreamFill(){ Rate = 0.6m, Quantity = 0.7m, OrderType = OrderSide.Buy, Timestamp = new DateTime(2018, 1, 1)} }

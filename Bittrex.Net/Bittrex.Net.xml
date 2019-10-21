@@ -64,7 +64,7 @@
             <summary>
             Gets the price of a market
             </summary>
-            <param name="market">Market to get price for</param>
+            <param name="symbol">Market to get price for</param>
             <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
@@ -72,7 +72,7 @@
             <summary>
             Gets the price of a market
             </summary>
-            <param name="market">Market to get price for</param>
+            <param name="symbol">Market to get price for</param>
             <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
@@ -80,7 +80,7 @@
             <summary>
             Gets a summary of the market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
@@ -88,7 +88,7 @@
             <summary>
             Gets a summary of the market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
@@ -110,7 +110,7 @@
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -118,7 +118,7 @@
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -126,7 +126,7 @@
             <summary>
             Gets the order book with asks for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -134,7 +134,7 @@
             <summary>
             Gets the order book with asks for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -142,7 +142,7 @@
             <summary>
             Gets the order book with bids for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -150,7 +150,7 @@
             <summary>
             Gets the order book with bids for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -158,7 +158,7 @@
             <summary>
             Gets the last trades on a market
             </summary>
-            <param name="market">Market to get history for</param>
+            <param name="symbol">Market to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
@@ -166,7 +166,7 @@
             <summary>
             Gets the last trades on a market
             </summary>
-            <param name="market">Market to get history for</param>
+            <param name="symbol">Market to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
@@ -174,7 +174,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -183,7 +183,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -192,7 +192,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -201,7 +201,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -211,7 +211,7 @@
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="market">Market to place the order on</param>
+            <param name="symbol">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -222,7 +222,7 @@
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="market">Market to place the order on</param>
+            <param name="symbol">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -248,7 +248,7 @@
             <summary>
             Gets a list of open orders
             </summary>
-            <param name="market">Filter list by market</param>
+            <param name="symbol">Filter list by market</param>
             <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
@@ -256,7 +256,7 @@
             <summary>
             Gets a list of open orders
             </summary>
-            <param name="market">Filter list by market</param>
+            <param name="symbol">Filter list by market</param>
             <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
@@ -348,7 +348,7 @@
             <summary>
             Gets the order history for the current account
             </summary>
-            <param name="market">Filter on market</param>
+            <param name="symbol">Filter on market</param>
             <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
@@ -356,7 +356,7 @@
             <summary>
             Gets the order history for the current account
             </summary>
-            <param name="market">Filter on market</param>
+            <param name="symbol">Filter on market</param>
             <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
@@ -467,7 +467,7 @@
             <summary>
             Gets information about a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
@@ -475,7 +475,7 @@
             <summary>
             Gets information about a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market info</returns>
         </member>
@@ -497,7 +497,7 @@
             <summary>
             Gets summary of a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
@@ -505,7 +505,7 @@
             <summary>
             Gets summary of a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
@@ -513,7 +513,7 @@
             <summary>
             Gets the order book of a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
@@ -521,7 +521,7 @@
             <summary>
             Gets the order book of a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
@@ -529,7 +529,7 @@
             <summary>
             Gets the trade history of a market
             </summary>
-            <param name="market">The market to get trades for</param>
+            <param name="symbol">The market to get trades for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
@@ -537,7 +537,7 @@
             <summary>
             Gets the trade history of a market
             </summary>
-            <param name="market">The market to get trades for</param>
+            <param name="symbol">The market to get trades for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
@@ -545,7 +545,7 @@
             <summary>
             Gets the ticker of a market
             </summary>
-            <param name="market">The market to get ticker for</param>
+            <param name="symbol">The market to get ticker for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
@@ -553,7 +553,7 @@
             <summary>
             Gets the ticker of a market
             </summary>
-            <param name="market">The market to get ticker for</param>
+            <param name="symbol">The market to get ticker for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
@@ -575,7 +575,7 @@
             <summary>
             Gets the candles for a market
             </summary>
-            <param name="market">The market to get candles for</param>
+            <param name="symbol">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
             <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
@@ -584,7 +584,7 @@
             <summary>
             Gets the candles for a market
             </summary>
-            <param name="market">The market to get candles for</param>
+            <param name="symbol">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
             <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
@@ -1053,7 +1053,7 @@
             100 Fills
             500 Sells
             </summary>
-            <param name="marketName">The name of the market to query</param>
+            <param name="symbol">The name of the market to query</param>
             <returns>The current exchange state</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.QueryExchangeStateAsync(System.String)">
@@ -1063,14 +1063,14 @@
             100 Fills
             500 Sells
             </summary>
-            <param name="marketName">The name of the market to query</param>
+            <param name="symbol">The name of the market to query</param>
             <returns>The current exchange state</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToExchangeStateUpdates(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamUpdateExchangeState})">
             <summary>
             Subscribes to order book and trade updates on a specific market
             </summary>
-            <param name="marketName">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the market to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
@@ -1078,7 +1078,7 @@
             <summary>
             Subscribes to order book and trade updates on a specific market
             </summary>
-            <param name="marketName">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the market to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
@@ -1229,7 +1229,7 @@
             <summary>
             Gets the price of a market
             </summary>
-            <param name="market">Market to get price for</param>
+            <param name="symbol">Market to get price for</param>
             <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
@@ -1237,7 +1237,7 @@
             <summary>
             Gets the price of a market
             </summary>
-            <param name="market">Market to get price for</param>
+            <param name="symbol">Market to get price for</param>
             <param name="ct">Cancellation token</param>
             <returns>The current ask, bid and last prices for the market</returns>
         </member>
@@ -1245,7 +1245,7 @@
             <summary>
             Gets a summary of the market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
@@ -1253,7 +1253,7 @@
             <summary>
             Gets a summary of the market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>List with single entry containing info for the market</returns>
         </member>
@@ -1275,7 +1275,7 @@
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -1283,7 +1283,7 @@
             <summary>
             Gets the order book with bids and asks for a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -1291,7 +1291,7 @@
             <summary>
             Gets the order book with asks for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -1299,7 +1299,7 @@
             <summary>
             Gets the order book with asks for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -1307,7 +1307,7 @@
             <summary>
             Gets the order book with bids for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -1315,7 +1315,7 @@
             <summary>
             Gets the order book with bids for a market
             </summary>
-            <param name="market">Market to get the order book for</param>
+            <param name="symbol">Market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Order book for the market</returns>
         </member>
@@ -1323,7 +1323,7 @@
             <summary>
             Gets the last trades on a market
             </summary>
-            <param name="market">Market to get history for</param>
+            <param name="symbol">Market to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
@@ -1331,7 +1331,7 @@
             <summary>
             Gets the last trades on a market
             </summary>
-            <param name="market">Market to get history for</param>
+            <param name="symbol">Market to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
@@ -1339,7 +1339,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -1348,7 +1348,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -1357,7 +1357,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -1366,7 +1366,7 @@
             <summary>
             Gets candle data for a market on a specific interval
             </summary>
-            <param name="market">Market to get candles for</param>
+            <param name="symbol">Market to get candles for</param>
             <param name="interval">The candle interval</param>
             <param name="ct">Cancellation token</param>
             <returns>List of candles</returns>
@@ -1376,7 +1376,7 @@
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="market">Market to place the order on</param>
+            <param name="symbol">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -1387,7 +1387,7 @@
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="market">Market to place the order on</param>
+            <param name="symbol">Market to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -1413,7 +1413,7 @@
             <summary>
             Gets a list of open orders
             </summary>
-            <param name="market">Filter list by market</param>
+            <param name="symbol">Filter list by symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
@@ -1421,7 +1421,7 @@
             <summary>
             Gets a list of open orders
             </summary>
-            <param name="market">Filter list by market</param>
+            <param name="symbol">Filter list by symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
@@ -1513,7 +1513,7 @@
             <summary>
             Gets the order history for the current account
             </summary>
-            <param name="market">Filter on market</param>
+            <param name="symbol">Filter on symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
@@ -1521,7 +1521,7 @@
             <summary>
             Gets the order history for the current account
             </summary>
-            <param name="market">Filter on market</param>
+            <param name="symbol">Filter on symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
@@ -1601,7 +1601,7 @@
             <summary>
             Gets information about a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of markets</returns>
         </member>
@@ -1609,7 +1609,7 @@
             <summary>
             Gets information about a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market info</returns>
         </member>
@@ -1631,7 +1631,7 @@
             <summary>
             Gets summary of a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
@@ -1639,7 +1639,7 @@
             <summary>
             Gets summary of a market
             </summary>
-            <param name="market">The market to get info for</param>
+            <param name="symbol">The market to get info for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market summary</returns>
         </member>
@@ -1647,7 +1647,7 @@
             <summary>
             Gets the order book of a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
@@ -1655,7 +1655,7 @@
             <summary>
             Gets the order book of a market
             </summary>
-            <param name="market">The market to get the order book for</param>
+            <param name="symbol">The market to get the order book for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market order book</returns>
         </member>
@@ -1663,7 +1663,7 @@
             <summary>
             Gets the trade history of a market
             </summary>
-            <param name="market">The market to get trades for</param>
+            <param name="symbol">The market to get trades for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
@@ -1671,7 +1671,7 @@
             <summary>
             Gets the trade history of a market
             </summary>
-            <param name="market">The market to get trades for</param>
+            <param name="symbol">The market to get trades for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market trade list</returns>
         </member>
@@ -1679,7 +1679,7 @@
             <summary>
             Gets the ticker of a market
             </summary>
-            <param name="market">The market to get ticker for</param>
+            <param name="symbol">The market to get ticker for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
@@ -1687,7 +1687,7 @@
             <summary>
             Gets the ticker of a market
             </summary>
-            <param name="market">The market to get ticker for</param>
+            <param name="symbol">The market to get ticker for</param>
             <param name="ct">Cancellation token</param>
             <returns>Market ticker</returns>
         </member>
@@ -1709,7 +1709,7 @@
             <summary>
             Gets the candles for a market
             </summary>
-            <param name="market">The market to get candles for</param>
+            <param name="symbol">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
             <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
@@ -1718,7 +1718,7 @@
             <summary>
             Gets the candles for a market
             </summary>
-            <param name="market">The market to get candles for</param>
+            <param name="symbol">The market to get candles for</param>
             <param name="interval">The interval of the candles</param>
             <param name="ct">Cancellation token</param>
             <returns>Market candles</returns>
@@ -2149,7 +2149,7 @@
             100 Fills
             500 Sells
             </summary>
-            <param name="marketName">The name of the market to query</param>
+            <param name="symbol">The name of the market to query</param>
             <returns>The current exchange state</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QueryExchangeStateAsync(System.String)">
@@ -2159,14 +2159,14 @@
             100 Fills
             500 Sells
             </summary>
-            <param name="marketName">The name of the market to query</param>
+            <param name="symbol">The name of the market to query</param>
             <returns>The current exchange state</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToExchangeStateUpdates(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamUpdateExchangeState})">
             <summary>
             Subscribes to order book and trade updates on a specific market
             </summary>
-            <param name="marketName">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the market to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
@@ -2174,7 +2174,7 @@
             <summary>
             Subscribes to order book and trade updates on a specific market
             </summary>
-            <param name="marketName">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the market to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>

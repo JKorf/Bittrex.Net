@@ -52,34 +52,34 @@ namespace Bittrex.Net.Interfaces
         /// <summary>
         /// Gets the price of a market
         /// </summary>
-        /// <param name="market">Market to get price for</param>
+        /// <param name="symbol">Market to get price for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The current ask, bid and last prices for the market</returns>
-        WebCallResult<BittrexPrice> GetTicker(string market, CancellationToken ct = default);
+        WebCallResult<BittrexPrice> GetTicker(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the price of a market
         /// </summary>
-        /// <param name="market">Market to get price for</param>
+        /// <param name="symbol">Market to get price for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The current ask, bid and last prices for the market</returns>
-        Task<WebCallResult<BittrexPrice>> GetTickerAsync(string market, CancellationToken ct = default);
+        Task<WebCallResult<BittrexPrice>> GetTickerAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a summary of the market
         /// </summary>
-        /// <param name="market">The market to get info for</param>
+        /// <param name="symbol">The market to get info for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List with single entry containing info for the market</returns>
-        WebCallResult<BittrexMarketSummary> GetMarketSummary(string market, CancellationToken ct = default);
+        WebCallResult<BittrexMarketSummary> GetMarketSummary(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a summary of the market
         /// </summary>
-        /// <param name="market">The market to get info for</param>
+        /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List with single entry containing info for the market</returns>
-        Task<WebCallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string market, CancellationToken ct = default);
+        Task<WebCallResult<BittrexMarketSummary>> GetMarketSummaryAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a summary for all markets
@@ -98,124 +98,124 @@ namespace Bittrex.Net.Interfaces
         /// <summary>
         /// Gets the order book with bids and asks for a market
         /// </summary>
-        /// <param name="market">The market to get the order book for</param>
+        /// <param name="symbol">The symbol to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order book for the market</returns>
-        WebCallResult<BittrexOrderBook> GetOrderBook(string market, CancellationToken ct = default);
+        WebCallResult<BittrexOrderBook> GetOrderBook(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book with bids and asks for a market
         /// </summary>
-        /// <param name="market">The market to get the order book for</param>
+        /// <param name="symbol">The symbol to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order book for the market</returns>
-        Task<WebCallResult<BittrexOrderBook>> GetOrderBookAsync(string market, CancellationToken ct = default);
+        Task<WebCallResult<BittrexOrderBook>> GetOrderBookAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book with asks for a market
         /// </summary>
-        /// <param name="market">Market to get the order book for</param>
+        /// <param name="symbol">Market to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order book for the market</returns>
-        WebCallResult<IEnumerable<BittrexOrderBookEntry>> GetBuyOrderBook(string market, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexOrderBookEntry>> GetBuyOrderBook(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book with asks for a market
         /// </summary>
-        /// <param name="market">Market to get the order book for</param>
+        /// <param name="symbol">Market to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order book for the market</returns>
-        Task<WebCallResult<IEnumerable<BittrexOrderBookEntry>>> GetBuyOrderBookAsync(string market, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexOrderBookEntry>>> GetBuyOrderBookAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book with bids for a market
         /// </summary>
-        /// <param name="market">Market to get the order book for</param>
+        /// <param name="symbol">Market to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order book for the market</returns>
-        WebCallResult<IEnumerable<BittrexOrderBookEntry>> GetSellOrderBook(string market, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexOrderBookEntry>> GetSellOrderBook(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book with bids for a market
         /// </summary>
-        /// <param name="market">Market to get the order book for</param>
+        /// <param name="symbol">Market to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order book for the market</returns>
-        Task<WebCallResult<IEnumerable<BittrexOrderBookEntry>>> GetSellOrderBookAsync(string market, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexOrderBookEntry>>> GetSellOrderBookAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the last trades on a market
         /// </summary>
-        /// <param name="market">Market to get history for</param>
+        /// <param name="symbol">Market to get history for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of trade aggregations</returns>
-        WebCallResult<IEnumerable<BittrexMarketHistory>> GetMarketHistory(string market, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexMarketHistory>> GetMarketHistory(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the last trades on a market
         /// </summary>
-        /// <param name="market">Market to get history for</param>
+        /// <param name="symbol">Market to get history for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of trade aggregations</returns>
-        Task<WebCallResult<IEnumerable<BittrexMarketHistory>>> GetMarketHistoryAsync(string market, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexMarketHistory>>> GetMarketHistoryAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
         /// </summary>
-        /// <param name="market">Market to get candles for</param>
+        /// <param name="symbol">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of candles</returns>
-        WebCallResult<IEnumerable<BittrexCandle>> GetCandles(string market, TickInterval interval, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexCandle>> GetCandles(string symbol, TickInterval interval, CancellationToken ct = default);
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
         /// </summary>
-        /// <param name="market">Market to get candles for</param>
+        /// <param name="symbol">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of candles</returns>
-        Task<WebCallResult<IEnumerable<BittrexCandle>>> GetCandlesAsync(string market, TickInterval interval, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexCandle>>> GetCandlesAsync(string symbol, TickInterval interval, CancellationToken ct = default);
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
         /// </summary>
-        /// <param name="market">Market to get candles for</param>
+        /// <param name="symbol">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of candles</returns>
-        WebCallResult<IEnumerable<BittrexCandle>> GetLatestCandle(string market, TickInterval interval, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexCandle>> GetLatestCandle(string symbol, TickInterval interval, CancellationToken ct = default);
 
         /// <summary>
         /// Gets candle data for a market on a specific interval
         /// </summary>
-        /// <param name="market">Market to get candles for</param>
+        /// <param name="symbol">Market to get candles for</param>
         /// <param name="interval">The candle interval</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of candles</returns>
-        Task<WebCallResult<IEnumerable<BittrexCandle>>> GetLatestCandleAsync(string market, TickInterval interval, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexCandle>>> GetLatestCandleAsync(string symbol, TickInterval interval, CancellationToken ct = default);
 
         /// <summary>
         /// Places an order
         /// </summary>
         /// <param name="side">Side of the order</param>
-        /// <param name="market">Market to place the order on</param>
+        /// <param name="symbol">Market to place the order on</param>
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        WebCallResult<BittrexGuid> PlaceOrder(OrderSide side, string market, decimal quantity, decimal rate, CancellationToken ct = default);
+        WebCallResult<BittrexGuid> PlaceOrder(OrderSide side, string symbol, decimal quantity, decimal rate, CancellationToken ct = default);
 
         /// <summary>
         /// Places an order
         /// </summary>
         /// <param name="side">Side of the order</param>
-        /// <param name="market">Market to place the order on</param>
+        /// <param name="symbol">Market to place the order on</param>
         /// <param name="quantity">The quantity of the order</param>
         /// <param name="rate">The rate per unit of the order</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string market, decimal quantity, decimal rate, CancellationToken ct = default);
+        Task<WebCallResult<BittrexGuid>> PlaceOrderAsync(OrderSide side, string symbol, decimal quantity, decimal rate, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels an open order
@@ -236,18 +236,18 @@ namespace Bittrex.Net.Interfaces
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
-        /// <param name="market">Filter list by market</param>
+        /// <param name="symbol">Filter list by symbol</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of open orders</returns>
-        WebCallResult<IEnumerable<BittrexOpenOrdersOrder>> GetOpenOrders(string? market = null, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexOpenOrdersOrder>> GetOpenOrders(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of open orders
         /// </summary>
-        /// <param name="market">Filter list by market</param>
+        /// <param name="symbol">Filter list by symbol</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of open orders</returns>
-        Task<WebCallResult<IEnumerable<BittrexOpenOrdersOrder>>> GetOpenOrdersAsync(string? market = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexOpenOrdersOrder>>> GetOpenOrdersAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the balance of a single currency
@@ -336,18 +336,18 @@ namespace Bittrex.Net.Interfaces
         /// <summary>
         /// Gets the order history for the current account
         /// </summary>
-        /// <param name="market">Filter on market</param>
+        /// <param name="symbol">Filter on symbol</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of orders</returns>
-        WebCallResult<IEnumerable<BittrexOrderHistoryOrder>> GetOrderHistory(string? market = null, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexOrderHistoryOrder>> GetOrderHistory(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order history for the current account
         /// </summary>
-        /// <param name="market">Filter on market</param>
+        /// <param name="symbol">Filter on symbol</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of orders</returns>
-        Task<WebCallResult<IEnumerable<BittrexOrderHistoryOrder>>> GetOrderHistoryAsync(string? market = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexOrderHistoryOrder>>> GetOrderHistoryAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the withdrawal history of the current account
