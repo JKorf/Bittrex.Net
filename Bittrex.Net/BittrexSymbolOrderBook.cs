@@ -49,10 +49,7 @@ namespace Bittrex.Net
 
         private void HandleUpdate(BittrexStreamUpdateExchangeState data)
         {
-            var updates = new List<ProcessEntry>();
-            updates.AddRange(data.Sells.Select(a => new ProcessEntry(OrderBookEntryType.Ask, a)));
-            updates.AddRange(data.Buys.Select(b => new ProcessEntry(OrderBookEntryType.Bid, b)));
-            UpdateOrderBook(data.Nonce, data.Nonce, updates);
+            UpdateOrderBook(data.Nonce, data.Nonce, data.Sells, data.Buys);
         }
 
         /// <inheritdoc />
