@@ -32,19 +32,19 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarkets(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbols(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketsAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolsAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
@@ -62,156 +62,156 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetTicker(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the price of a market
+            Gets the price of a symbol
             </summary>
-            <param name="symbol">Market to get price for</param>
+            <param name="symbol">Symbol to get price for</param>
             <param name="ct">Cancellation token</param>
-            <returns>The current ask, bid and last prices for the market</returns>
+            <returns>The current ask, bid and last prices for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the price of a market
+            Gets the price of a symbol
             </summary>
-            <param name="symbol">Market to get price for</param>
+            <param name="symbol">Symbol to get price for</param>
             <param name="ct">Cancellation token</param>
-            <returns>The current ask, bid and last prices for the market</returns>
+            <returns>The current ask, bid and last prices for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummary(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolSummary(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets a summary of the market
+            Gets a summary of the symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>List with single entry containing info for the market</returns>
+            <returns>List with single entry containing info for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets a summary of the market
+            Gets a summary of the symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>List with single entry containing info for the market</returns>
+            <returns>List with single entry containing info for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummaries(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolSummaries(System.Threading.CancellationToken)">
             <summary>
-            Gets a summary for all markets
+            Gets a summary for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of summaries for all markets</returns>
+            <returns>List of summaries for all symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketSummariesAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolSummariesAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets a summary for all markets
+            Gets a summary for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of summaries for all markets</returns>
+            <returns>List of summaries for all symbols</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids and asks for a market
+            Gets the order book with bids and asks for a symbol
             </summary>
-            <param name="symbol">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids and asks for a market
+            Gets the order book with bids and asks for a symbol
             </summary>
-            <param name="symbol">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetBuyOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with asks for a market
+            Gets the order book with bids for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetBuyOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with asks for a market
+            Gets the order book with bids for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetSellOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids for a market
+            Gets the order book with asks for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.GetSellOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids for a market
+            Gets the order book with asks for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketHistory(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolTrades(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the last trades on a market
+            Gets the last trades on a symbol
             </summary>
-            <param name="symbol">Market to get history for</param>
+            <param name="symbol">Symbol to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetMarketHistoryAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the last trades on a market
+            Gets the last trades on a symbol
             </summary>
-            <param name="symbol">Market to get history for</param>
+            <param name="symbol">Symbol to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetCandles(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetKlines(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get kline for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetCandlesAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetKlinesAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get kline for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetLatestCandle(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetLastKline(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get klines for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetLatestCandleAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetLastKlineAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get klines for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClient.PlaceOrder(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="symbol">Market to place the order on</param>
+            <param name="symbol">Symbol to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -222,7 +222,7 @@
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="symbol">Market to place the order on</param>
+            <param name="symbol">Symbol to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -248,7 +248,7 @@
             <summary>
             Gets a list of open orders
             </summary>
-            <param name="symbol">Filter list by market</param>
+            <param name="symbol">Filter list by symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
@@ -256,7 +256,7 @@
             <summary>
             Gets a list of open orders
             </summary>
-            <param name="symbol">Filter list by market</param>
+            <param name="symbol">Filter list by symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of open orders</returns>
         </member>
@@ -348,7 +348,7 @@
             <summary>
             Gets the order history for the current account
             </summary>
-            <param name="symbol">Filter on market</param>
+            <param name="symbol">Filter on symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
@@ -356,7 +356,7 @@
             <summary>
             Gets the order history for the current account
             </summary>
-            <param name="symbol">Filter on market</param>
+            <param name="symbol">Filter on symbol</param>
             <param name="ct">Cancellation token</param>
             <returns>List of orders</returns>
         </member>
@@ -449,145 +449,145 @@
             <param name="ct">Cancellation token</param>
             <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarkets(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbols(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketsAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolsAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarket(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbol(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets information about a market
+            Gets information about a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets information about a market
+            Gets information about a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market info</returns>
+            <returns>Symbol info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummaries(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolSummaries(System.Threading.CancellationToken)">
             <summary>
-            Gets summaries of all markets
+            Gets summaries of all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of market summaries</returns>
+            <returns>List of symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummariesAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolSummariesAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets summaries of all markets
+            Gets summaries of all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of market summaries</returns>
+            <returns>List of symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummary(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolSummary(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets summary of a market
+            Gets summary of a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market summary</returns>
+            <returns>Symbol summary</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets summary of a market
+            Gets summary of a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market summary</returns>
+            <returns>Symbol summary</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketOrderBook(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book of a market
+            Gets the order book of a symbol
             </summary>
-            <param name="symbol">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market order book</returns>
+            <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketOrderBookAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book of a market
+            Gets the order book of a symbol
             </summary>
-            <param name="symbol">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market order book</returns>
+            <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTrades(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolTrades(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the trade history of a market
+            Gets the trade history of a symbol
             </summary>
-            <param name="symbol">The market to get trades for</param>
+            <param name="symbol">The symbol to get trades for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market trade list</returns>
+            <returns>Symbol trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTradesAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the trade history of a market
+            Gets the trade history of a symbol
             </summary>
-            <param name="symbol">The market to get trades for</param>
+            <param name="symbol">The symbol to get trades for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market trade list</returns>
+            <returns>Symbol trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTicker(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetTicker(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the ticker of a market
+            Gets the ticker of a symbol
             </summary>
-            <param name="symbol">The market to get ticker for</param>
+            <param name="symbol">The symbol to get ticker for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market ticker</returns>
+            <returns>Symbol ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickerAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the ticker of a market
+            Gets the ticker of a symbol
             </summary>
-            <param name="symbol">The market to get ticker for</param>
+            <param name="symbol">The symbol to get ticker for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market ticker</returns>
+            <returns>Symbol ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickers(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetTickers(System.Threading.CancellationToken)">
             <summary>
-            Gets list of tickers for all market
+            Gets list of tickers for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>Market tickers</returns>
+            <returns>Symbol tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketTickersAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetTickersAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets list of tickers for all market
+            Gets list of tickers for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>Market tickers</returns>
+            <returns>Symbol tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets the candles for a market
+            Gets the klines for a symbol
             </summary>
-            <param name="symbol">The market to get candles for</param>
-            <param name="interval">The interval of the candles</param>
+            <param name="symbol">The symbol to get klines for</param>
+            <param name="interval">The interval of the klines</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market candles</returns>
+            <returns>Symbol kline</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets the candles for a market
+            Gets the klines for a symbol
             </summary>
-            <param name="symbol">The market to get candles for</param>
-            <param name="interval">The interval of the candles</param>
+            <param name="symbol">The symbol to get klines for</param>
+            <param name="interval">The interval of the klines</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market candles</returns>
+            <returns>Symbol klines</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
@@ -639,15 +639,15 @@
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Balance for market</returns>
+            <returns>Balance for currency</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetBalanceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets current balance for a market
+            Gets current balance for a currency
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Balance for market</returns>
+            <returns>Balance for currency</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetDepositAddresses(System.Threading.CancellationToken)">
             <summary>
@@ -1034,78 +1034,78 @@
             </summary>
             <param name="options">Options to use for new clients</param>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.QuerySummaryStates">
+        <member name="M:Bittrex.Net.BittrexSocketClient.GetSymbolSummaries">
             <summary>
-            Gets the current summaries for all markets
+            Gets the current summaries for all symbols
             </summary>
-            <returns>Market summaries</returns>
+            <returns>Symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.QuerySummaryStatesAsync">
+        <member name="M:Bittrex.Net.BittrexSocketClient.GetSymbolSummariesAsync">
             <summary>
-            Gets the current summaries for all markets
+            Gets the current summaries for all symbols
             </summary>
-            <returns>Market summaries</returns>
+            <returns>Symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.QueryExchangeState(System.String)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.GetOrderBook(System.String)">
             <summary>
-            Gets the state of a specific market
+            Gets the state of a specific symbol
             500 Buys
             100 Fills
             500 Sells
             </summary>
-            <param name="symbol">The name of the market to query</param>
+            <param name="symbol">The name of the symbol to query</param>
             <returns>The current exchange state</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.QueryExchangeStateAsync(System.String)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.GetOrderBookAsync(System.String)">
             <summary>
-            Gets the state of a specific market
+            Gets the state of a specific symbol
             500 Buys
             100 Fills
             500 Sells
             </summary>
-            <param name="symbol">The name of the market to query</param>
+            <param name="symbol">The name of the symbol to query</param>
             <returns>The current exchange state</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToExchangeStateUpdates(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamUpdateExchangeState})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderBookUpdates(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamOrderBookUpdate})">
             <summary>
-            Subscribes to order book and trade updates on a specific market
+            Subscribes to order book and trade updates on a specific symbol
             </summary>
-            <param name="symbol">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the symbol to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToExchangeStateUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamUpdateExchangeState})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamOrderBookUpdate})">
             <summary>
-            Subscribes to order book and trade updates on a specific market
+            Subscribes to order book and trade updates on a specific symbol
             </summary>
-            <param name="symbol">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the symbol to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummariesUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummary}})">
             <summary>
-            Subscribes to updates of summaries for all markets
-            </summary>
-            <param name="onUpdate">The update event handler</param>
-            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
-            <summary>
-            Subscribes to updates of summaries for all markets
+            Subscribes to updates of summaries for all symbols
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesLiteUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummariesUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummary}})">
             <summary>
-            Subscribes to lite summary updates for all markets
+            Subscribes to updates of summaries for all symbols
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToMarketSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummariesLiteUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite}})">
             <summary>
-            Subscribes to lite summary updates for all markets
+            Subscribes to lite summary updates for all symbols
+            </summary>
+            <param name="onUpdate">The update event handler</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite}})">
+            <summary>
+            Subscribes to lite summary updates for all symbols
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
@@ -1197,19 +1197,19 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarkets(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbols(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketsAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolsAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
@@ -1227,156 +1227,156 @@
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetTicker(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the price of a market
+            Gets the price of a symbol
             </summary>
-            <param name="symbol">Market to get price for</param>
+            <param name="symbol">Symbol to get price for</param>
             <param name="ct">Cancellation token</param>
-            <returns>The current ask, bid and last prices for the market</returns>
+            <returns>The current ask, bid and last prices for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the price of a market
+            Gets the price of a symbol
             </summary>
-            <param name="symbol">Market to get price for</param>
+            <param name="symbol">Symbol to get price for</param>
             <param name="ct">Cancellation token</param>
-            <returns>The current ask, bid and last prices for the market</returns>
+            <returns>The current ask, bid and last prices for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummary(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolSummary(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets a summary of the market
-            </summary>
-            <param name="symbol">The market to get info for</param>
-            <param name="ct">Cancellation token</param>
-            <returns>List with single entry containing info for the market</returns>
-        </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Gets a summary of the market
+            Gets a summary of the symbol
             </summary>
             <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>List with single entry containing info for the market</returns>
+            <returns>List with single entry containing info for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummaries(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets a summary for all markets
+            Gets a summary of the symbol
+            </summary>
+            <param name="symbol">The symbol to get info for</param>
+            <param name="ct">Cancellation token</param>
+            <returns>List with single entry containing info for the symbol</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolSummaries(System.Threading.CancellationToken)">
+            <summary>
+            Gets a summary for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of summaries for all markets</returns>
+            <returns>List of summaries for all symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketSummariesAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolSummariesAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets a summary for all markets
+            Gets a summary for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of summaries for all markets</returns>
+            <returns>List of summaries for all symbols</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids and asks for a market
+            Gets the order book with bids and asks for a symbol
             </summary>
             <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids and asks for a market
+            Gets the order book with bids and asks for a symbol
             </summary>
             <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBuyOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with asks for a market
+            Gets the order book with bids for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetBuyOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with asks for a market
+            Gets the order book with bids for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSellOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids for a market
+            Gets the order book with asks for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSellOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book with bids for a market
+            Gets the order book with asks for a symbol
             </summary>
-            <param name="symbol">Market to get the order book for</param>
+            <param name="symbol">Symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Order book for the market</returns>
+            <returns>Order book for the symbol</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketHistory(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolTrades(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the last trades on a market
+            Gets the last trades on a symbol
             </summary>
-            <param name="symbol">Market to get history for</param>
+            <param name="symbol">Symbol to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetMarketHistoryAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the last trades on a market
+            Gets the last trades on a symbol
             </summary>
-            <param name="symbol">Market to get history for</param>
+            <param name="symbol">Symbol to get history for</param>
             <param name="ct">Cancellation token</param>
             <returns>List of trade aggregations</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCandles(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetKlines(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get kline for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetCandlesAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetKlinesAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get kline for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLatestCandle(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLastKline(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get klines for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLatestCandleAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClient.GetLastKlineAsync(System.String,Bittrex.Net.Objects.TickInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets candle data for a market on a specific interval
+            Gets kline data for a symbol on a specific interval
             </summary>
-            <param name="symbol">Market to get candles for</param>
-            <param name="interval">The candle interval</param>
+            <param name="symbol">Symbol to get klines for</param>
+            <param name="interval">The kline interval</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of candles</returns>
+            <returns>List of klines</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClient.PlaceOrder(Bittrex.Net.Objects.OrderSide,System.String,System.Decimal,System.Decimal,System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="symbol">Market to place the order on</param>
+            <param name="symbol">Symbol to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -1387,7 +1387,7 @@
             Places an order
             </summary>
             <param name="side">Side of the order</param>
-            <param name="symbol">Market to place the order on</param>
+            <param name="symbol">Symbol to place the order on</param>
             <param name="quantity">The quantity of the order</param>
             <param name="rate">The rate per unit of the order</param>
             <param name="ct">Cancellation token</param>
@@ -1559,7 +1559,7 @@
         </member>
         <member name="T:Bittrex.Net.Interfaces.IBittrexClientV3">
             <summary>
-            Interface for the Bittrex v3 client
+            Interface for the Bittrex V3 API client
             </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.SetApiCredentials(System.String,System.String)">
@@ -1583,145 +1583,145 @@
             <param name="ct">Cancellation token</param>
             <returns>Time of the server</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarkets(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbols(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketsAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolsAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets information about all available markets
+            Gets information about all available symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarket(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbol(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets information about a market
+            Gets information about a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>List of markets</returns>
+            <returns>List of symbols</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets information about a market
+            Gets information about a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market info</returns>
+            <returns>Symbol info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaries(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolSummaries(System.Threading.CancellationToken)">
             <summary>
-            Gets summaries of all markets
+            Gets summaries of all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of market summaries</returns>
+            <returns>List of symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummariesAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolSummariesAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets summaries of all markets
+            Gets summaries of all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>List of market summaries</returns>
+            <returns>List of symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummary(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolSummary(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets summary of a market
+            Gets summary of a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market summary</returns>
+            <returns>Symbol summary</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketSummaryAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolSummaryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets summary of a market
+            Gets summary of a symbol
             </summary>
-            <param name="symbol">The market to get info for</param>
+            <param name="symbol">The symbol to get info for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market summary</returns>
+            <returns>Symbol summary</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBook(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderBook(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book of a market
+            Gets the order book of a symbol
             </summary>
-            <param name="symbol">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market order book</returns>
+            <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketOrderBookAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the order book of a market
+            Gets the order book of a symbol
             </summary>
-            <param name="symbol">The market to get the order book for</param>
+            <param name="symbol">The symbol to get the order book for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market order book</returns>
+            <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTrades(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolTrades(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the trade history of a market
+            Gets the trade history of a symbol
             </summary>
-            <param name="symbol">The market to get trades for</param>
+            <param name="symbol">The symbol to get trades for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market trade list</returns>
+            <returns>Symbol trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTradesAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the trade history of a market
+            Gets the trade history of a symbol
             </summary>
-            <param name="symbol">The market to get trades for</param>
+            <param name="symbol">The symbol to get trades for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market trade list</returns>
+            <returns>Symbol trade list</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTicker(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetTicker(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the ticker of a market
+            Gets the ticker of a symbol
             </summary>
-            <param name="symbol">The market to get ticker for</param>
+            <param name="symbol">The symbol to get ticker for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market ticker</returns>
+            <returns>Symbol ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickerAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetTickerAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the ticker of a market
+            Gets the ticker of a symbol
             </summary>
-            <param name="symbol">The market to get ticker for</param>
+            <param name="symbol">The symbol to get ticker for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market ticker</returns>
+            <returns>Symbol ticker</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickers(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetTickers(System.Threading.CancellationToken)">
             <summary>
-            Gets list of tickers for all market
+            Gets list of tickers for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>Market tickers</returns>
+            <returns>Symbol tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketTickersAsync(System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetTickersAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets list of tickers for all market
+            Gets list of tickers for all symbols
             </summary>
             <param name="ct">Cancellation token</param>
-            <returns>Market tickers</returns>
+            <returns>Symbol tickers</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandles(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets the candles for a market
+            Gets the klines for a symbol
             </summary>
-            <param name="symbol">The market to get candles for</param>
-            <param name="interval">The interval of the candles</param>
+            <param name="symbol">The symbol to get klines for</param>
+            <param name="interval">The interval of the klines</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market candles</returns>
+            <returns>Symbol kline</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetMarketCandlesAsync(System.String,Bittrex.Net.Objects.CandleInterval,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets the candles for a market
+            Gets the klines for a symbol
             </summary>
-            <param name="symbol">The market to get candles for</param>
-            <param name="interval">The interval of the candles</param>
+            <param name="symbol">The symbol to get klines for</param>
+            <param name="interval">The interval of the klines</param>
             <param name="ct">Cancellation token</param>
-            <returns>Market candles</returns>
+            <returns>Symbol klines</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
@@ -1773,15 +1773,15 @@
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Balance for market</returns>
+            <returns>Balance for currency</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetBalanceAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets current balance for a market
+            Gets current balance for a currency
             </summary>
             <param name="currency">The name of the currency to get balance for</param>
             <param name="ct">Cancellation token</param>
-            <returns>Balance for market</returns>
+            <returns>Balance for currency</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetDepositAddresses(System.Threading.CancellationToken)">
             <summary>
@@ -2127,81 +2127,81 @@
         </member>
         <member name="T:Bittrex.Net.Interfaces.IBittrexSocketClient">
             <summary>
-            Client for the Bittrex socket client
+            Interface for the Bittrex socket client
             </summary>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QuerySummaryStates">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.GetSymbolSummaries">
             <summary>
-            Gets the current summaries for all markets
+            Gets the current summaries for all symbols
             </summary>
-            <returns>Market summaries</returns>
+            <returns>Symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QuerySummaryStatesAsync">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.GetSymbolSummariesAsync">
             <summary>
-            Gets the current summaries for all markets
+            Gets the current summaries for all symbols
             </summary>
-            <returns>Market summaries</returns>
+            <returns>Symbol summaries</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QueryExchangeState(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.GetOrderBook(System.String)">
             <summary>
-            Gets the state of a specific market
+            Gets the state of a specific symbol
             500 Buys
             100 Fills
             500 Sells
             </summary>
-            <param name="symbol">The name of the market to query</param>
+            <param name="symbol">The name of the symbol to query</param>
             <returns>The current exchange state</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.QueryExchangeStateAsync(System.String)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.GetOrderBookAsync(System.String)">
             <summary>
-            Gets the state of a specific market
+            Gets the state of a specific symbol
             500 Buys
             100 Fills
             500 Sells
             </summary>
-            <param name="symbol">The name of the market to query</param>
+            <param name="symbol">The name of the symbol to query</param>
             <returns>The current exchange state</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToExchangeStateUpdates(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamUpdateExchangeState})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderBookUpdates(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamOrderBookUpdate})">
             <summary>
-            Subscribes to order book and trade updates on a specific market
+            Subscribes to order book and trade updates on a specific symbol
             </summary>
-            <param name="symbol">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the symbol to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToExchangeStateUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamUpdateExchangeState})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.BittrexStreamOrderBookUpdate})">
             <summary>
-            Subscribes to order book and trade updates on a specific market
+            Subscribes to order book and trade updates on a specific symbol
             </summary>
-            <param name="symbol">The name of the market to subscribe on</param>
+            <param name="symbol">The name of the symbol to subscribe on</param>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummariesUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummary}})">
             <summary>
-            Subscribes to updates of summaries for all markets
-            </summary>
-            <param name="onUpdate">The update event handler</param>
-            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummary}})">
-            <summary>
-            Subscribes to updates of summaries for all markets
+            Subscribes to updates of summaries for all symbols
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesLiteUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummariesUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummary}})">
             <summary>
-            Subscribes to lite summary updates for all markets
+            Subscribes to updates of summaries for all symbols
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToMarketSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamMarketSummaryLite}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummariesLiteUpdate(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite}})">
             <summary>
-            Subscribes to lite summary updates for all markets
+            Subscribes to lite summary updates for all symbols
+            </summary>
+            <param name="onUpdate">The update event handler</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummariesLiteUpdateAsync(System.Action{System.Collections.Generic.IEnumerable{Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite}})">
+            <summary>
+            Subscribes to lite summary updates for all symbols
             </summary>
             <param name="onUpdate">The update event handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
@@ -2239,7 +2239,7 @@
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexAccountOrder.Exchange">
             <summary>
-            The market the order is on
+            The symbol the order is on
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexAccountOrder.Type">
@@ -2388,46 +2388,6 @@
             The crypto address this balance is on
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.BittrexCandle">
-            <summary>
-            Bittrex market candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.Open">
-            <summary>
-            Open price of the candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.High">
-            <summary>
-            High price of the candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.Low">
-            <summary>
-            Low price of the candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.Close">
-            <summary>
-            Close price of the candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.Volume">
-            <summary>
-            Volume of the candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.BaseVolume">
-            <summary>
-            Base volume of the candle
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexCandle.Timestamp">
-            <summary>
-            Timestamp of the candle
-            </summary>
-        </member>
         <member name="T:Bittrex.Net.Objects.BittrexCurrency">
             <summary>
             Information about a currency
@@ -2570,7 +2530,7 @@
         </member>
         <member name="F:Bittrex.Net.Objects.OrderType.Market">
             <summary>
-            Market order; execute order at the best price available when placed
+            Symbol order; execute order at the best price available when placed
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.OrderSideExtended">
@@ -2600,7 +2560,7 @@
         </member>
         <member name="T:Bittrex.Net.Objects.TickInterval">
             <summary>
-            Interval for candles
+            Interval for klines
             </summary>
         </member>
         <member name="F:Bittrex.Net.Objects.TickInterval.OneMinute">
@@ -2740,7 +2700,7 @@
         </member>
         <member name="F:Bittrex.Net.Objects.OrderTypeV3.Market">
             <summary>
-            Market order; execute order at best price on placing
+            Symbol order; execute order at best price on placing
             </summary>
         </member>
         <member name="F:Bittrex.Net.Objects.OrderTypeV3.CeilingLimit">
@@ -2858,27 +2818,27 @@
             Cancelled
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.CandleInterval">
+        <member name="T:Bittrex.Net.Objects.KlineInterval">
             <summary>
-            Interval of candles
+            Interval of klines
             </summary>
         </member>
-        <member name="F:Bittrex.Net.Objects.CandleInterval.OneMinute">
+        <member name="F:Bittrex.Net.Objects.KlineInterval.OneMinute">
             <summary>
             1m
             </summary>
         </member>
-        <member name="F:Bittrex.Net.Objects.CandleInterval.FiveMinutes">
+        <member name="F:Bittrex.Net.Objects.KlineInterval.FiveMinutes">
             <summary>
             5m
             </summary>
         </member>
-        <member name="F:Bittrex.Net.Objects.CandleInterval.OneHour">
+        <member name="F:Bittrex.Net.Objects.KlineInterval.OneHour">
             <summary>
             1h
             </summary>
         </member>
-        <member name="F:Bittrex.Net.Objects.CandleInterval.OneDay">
+        <member name="F:Bittrex.Net.Objects.KlineInterval.OneDay">
             <summary>
             1d
             </summary>
@@ -2893,174 +2853,44 @@
             The Guid
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.BittrexMarket">
+        <member name="T:Bittrex.Net.Objects.BittrexKline">
             <summary>
-            Information about a market
+            Bittrex kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.MarketCurrency">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.Open">
             <summary>
-            The market currency
+            Open price of the kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.BaseCurrency">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.High">
             <summary>
-            The base currency
+            High price of the kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.MarketCurrencyLong">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.Low">
             <summary>
-            The long name of the market currency
+            Low price of the kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.BaseCurrencyLong">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.Close">
             <summary>
-            The long name of the base currency
+            Close price of the kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.MinTradeSize">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.Volume">
             <summary>
-            The minimun size of an order
+            Volume of the kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.MarketName">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.BaseVolume">
             <summary>
-            The name of the market
+            Base volume of the kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.IsActive">
+        <member name="P:Bittrex.Net.Objects.BittrexKline.Timestamp">
             <summary>
-            Whether the market is active
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.Created">
-            <summary>
-            Timestamp when the market was created
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.Notice">
-            <summary>
-            Additional information about the state of this market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.IsSponsored">
-            <summary>
-            Whether the market is sponsored by Bittrex
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarket.LogoUrl">
-            <summary>
-            Url of the logo
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.BittrexMarketHistory">
-            <summary>
-            Information about an order executed on a market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.Id">
-            <summary>
-            The order id
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.Timestamp">
-            <summary>
-            Timestamp of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.Quantity">
-            <summary>
-            Quantity of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.Price">
-            <summary>
-            Price of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.Total">
-            <summary>
-            Total price of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.FillType">
-            <summary>
-            Whether the order was fully filled
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketHistory.OrderType">
-            <summary>
-            The side of the order
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.BittrexMarketSummary">
-            <summary>
-            24 hour summary of a market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.MarketName">
-            <summary>
-            The name of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.High">
-            <summary>
-            The highest price in the last 24 hour
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.Low">
-            <summary>
-            The lowest price in the last 24 hour
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.Volume">
-            <summary>
-            The volume in the last 24 hour in the market currency 
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.Last">
-            <summary>
-            The latest price
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.BaseVolume">
-            <summary>
-            The base volume in the last 24 hour in the base currency
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.TimeStamp">
-            <summary>
-            Timestamp of the summary
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.Bid">
-            <summary>
-            The highest bid
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.Ask">
-            <summary>
-            The lowest ask
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.OpenBuyOrders">
-            <summary>
-            Current open buy orders
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.OpenSellOrders">
-            <summary>
-            Current open sell orders
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.PrevDay">
-            <summary>
-            Price 24 hours ago
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexMarketSummary.Created">
-            <summary>
-            Timestamp when created
+            Timestamp of the kline
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexOpenOrdersOrder">
@@ -3201,7 +3031,7 @@
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexOrderBook">
             <summary>
-            Order book for a market
+            Order book for a symbol
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexOrderBook.Buy">
@@ -3269,7 +3099,7 @@
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexOrderHistoryOrder.Exchange">
             <summary>
-            Market the order is on
+            Symbol the order is on
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexOrderHistoryOrder.TimeStamp">
@@ -3337,59 +3167,19 @@
             Timestamp when the order was closed
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.BittrexOrderResult">
-            <summary>
-            Order result
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.Side">
-            <summary>
-            The side of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.MarketCurrency">
-            <summary>
-            The market currency
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.MarketName">
-            <summary>
-            The market the order is on
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.OrderId">
-            <summary>
-            The order id of the currency
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.OrderType">
-            <summary>
-            The type of order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.Quantity">
-            <summary>
-            The quantity of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexOrderResult.Rate">
-            <summary>
-            The rate of the order
-            </summary>
-        </member>
         <member name="T:Bittrex.Net.Objects.BittrexPrice">
             <summary>
-            Price of a market
+            Price of a symbol
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexPrice.Bid">
             <summary>
-            The highest bid on this market
+            The highest bid on this symbol
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexPrice.Ask">
             <summary>
-            The lowest ask on this market
+            The lowest ask on this symbol
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexPrice.Last">
@@ -3467,64 +3257,64 @@
             
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState">
+        <member name="T:Bittrex.Net.Objects.BittrexStreamOrderBookUpdate">
             <summary>
             Stream exchange state update
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.Nonce">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdate.Nonce">
             <summary>
             Nonce
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.MarketName">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdate.Symbol">
             <summary>
-            Name of the market
+            Name of the symbol
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.Buys">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdate.Buys">
             <summary>
             Buys in the order book
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.Sells">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdate.Sells">
             <summary>
             Sells in the order book
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamUpdateExchangeState.Fills">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdate.Fills">
             <summary>
-            Market history
+            Symbol history
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.BittrexStreamQueryExchangeState">
+        <member name="T:Bittrex.Net.Objects.BittrexStreamOrderBook">
             <summary>
-            Stream query state
+            Stream order book state
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.Nonce">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBook.Nonce">
             <summary>
             Nonce
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.MarketName">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBook.Symbol">
             <summary>
-            Name of the market
+            Name of the symbol
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.Buys">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBook.Buys">
             <summary>
             Buys in the order book
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.Sells">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBook.Sells">
             <summary>
             Sells in the order book
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamQueryExchangeState.Fills">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBook.Fills">
             <summary>
-            Market history
+            Symbol history
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexStreamFill">
@@ -3557,49 +3347,9 @@
             The side of the order
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.BittrexStreamMarketHistory">
-            <summary>
-            Information about an order executed on a market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.Id">
-            <summary>
-            The order id
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.Timestamp">
-            <summary>
-            Timestamp of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.Quantity">
-            <summary>
-            Quantity of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.Price">
-            <summary>
-            Price of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.Total">
-            <summary>
-            Total price of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.FillType">
-            <summary>
-            Whether the order was fully filled
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketHistory.OrderType">
-            <summary>
-            The side of the order
-            </summary>
-        </member>
         <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummaryUpdate">
             <summary>
-            Stream market summary update
+            Stream symbol summary update
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryUpdate.Nonce">
@@ -3614,7 +3364,7 @@
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummariesQuery">
             <summary>
-            Stream summary query response
+            Stream symbol summary response
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummariesQuery.Nonce">
@@ -3625,96 +3375,6 @@
         <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummariesQuery.Deltas">
             <summary>
             The current market summaries
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummary">
-            <summary>
-            24 hour summary of a market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.MarketName">
-            <summary>
-            The name of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.High">
-            <summary>
-            The highest price in the last 24 hour
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.Low">
-            <summary>
-            The lowest price in the last 24 hour
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.Volume">
-            <summary>
-            The volume in the last 24 hour in the market currency 
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.Last">
-            <summary>
-            The latest price
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.BaseVolume">
-            <summary>
-            The base volume in the last 24 hour in the base currency
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.TimeStamp">
-            <summary>
-            Timestamp of the summary
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.Bid">
-            <summary>
-            The highest bid
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.Ask">
-            <summary>
-            The lowest ask
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.OpenBuyOrders">
-            <summary>
-            Current open buy orders
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.OpenSellOrders">
-            <summary>
-            Current open sell orders
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.PrevDay">
-            <summary>
-            Price 24 hours ago
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummary.Created">
-            <summary>
-            Timestamp when created
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.BittrexStreamMarketSummaryLite">
-            <summary>
-            Stream lite market symmary
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryLite.MarketName">
-            <summary>
-            Name of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryLite.Last">
-            <summary>
-            Price of last executed trade
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamMarketSummaryLite.BaseVolume">
-            <summary>
-            The base volume
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexStreamOrderData">
@@ -3762,9 +3422,9 @@
             The order id
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.BittrexStreamOrder.Market">
+        <member name="P:Bittrex.Net.Objects.BittrexStreamOrder.Symbol">
             <summary>
-            The market this order is for
+            The symbol this order is for
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrder.OrderType">
@@ -3870,6 +3530,306 @@
         <member name="P:Bittrex.Net.Objects.BittrexStreamOrderBookUpdateEntry.Type">
             <summary>
             how to handle data (used by stream)
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamSymbolSummary">
+            <summary>
+            24 hour summary of a symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Symbol">
+            <summary>
+            The name of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.High">
+            <summary>
+            The highest price in the last 24 hour
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Low">
+            <summary>
+            The lowest price in the last 24 hour
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Volume">
+            <summary>
+            The volume in the last 24 hour in the quote currency 
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Last">
+            <summary>
+            The latest price
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.BaseVolume">
+            <summary>
+            The base volume in the last 24 hour in the base currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.TimeStamp">
+            <summary>
+            Timestamp of the summary
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Bid">
+            <summary>
+            The highest bid
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Ask">
+            <summary>
+            The lowest ask
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.OpenBuyOrders">
+            <summary>
+            Current open buy orders
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.OpenSellOrders">
+            <summary>
+            Current open sell orders
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.PrevDay">
+            <summary>
+            Price 24 hours ago
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummary.Created">
+            <summary>
+            Timestamp when created
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite">
+            <summary>
+            Stream lite symbol summary
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite.Symbol">
+            <summary>
+            Name of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite.Last">
+            <summary>
+            Price of last executed trade
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolSummaryLite.BaseVolume">
+            <summary>
+            The base volume
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexStreamSymbolTrade">
+            <summary>
+            Information about an order executed on a symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.Id">
+            <summary>
+            The order id
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.Timestamp">
+            <summary>
+            Timestamp of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.Quantity">
+            <summary>
+            Quantity of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.Price">
+            <summary>
+            Price of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.Total">
+            <summary>
+            Total price of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.FillType">
+            <summary>
+            Whether the order was fully filled
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexStreamSymbolTrade.OrderType">
+            <summary>
+            The side of the order
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexSymbol">
+            <summary>
+            Information about a symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.QuoteCurrency">
+            <summary>
+            The quote currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.BaseCurrency">
+            <summary>
+            The base currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.QuoteCurrencyLong">
+            <summary>
+            The long name of the quote currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.BaseCurrencyLong">
+            <summary>
+            The long name of the base currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.MinTradeSize">
+            <summary>
+            The minimun size of an order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.Symbol">
+            <summary>
+            The name of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.IsActive">
+            <summary>
+            Whether the symbol is active
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.Created">
+            <summary>
+            Timestamp when the symbol was created
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.Notice">
+            <summary>
+            Additional information about the state of this symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.IsSponsored">
+            <summary>
+            Whether the symbol is sponsored by Bittrex
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbol.LogoUrl">
+            <summary>
+            Url of the logo
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexSymbolSummary">
+            <summary>
+            24 hour summary of a symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Symbol">
+            <summary>
+            The name of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.High">
+            <summary>
+            The highest price in the last 24 hour
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Low">
+            <summary>
+            The lowest price in the last 24 hour
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Volume">
+            <summary>
+            The volume in the last 24 hour in the quote currency 
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Last">
+            <summary>
+            The latest price
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.BaseVolume">
+            <summary>
+            The base volume in the last 24 hour in the base currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.TimeStamp">
+            <summary>
+            Timestamp of the summary
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Bid">
+            <summary>
+            The highest bid
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Ask">
+            <summary>
+            The lowest ask
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.OpenBuyOrders">
+            <summary>
+            Current open buy orders
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.OpenSellOrders">
+            <summary>
+            Current open sell orders
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.PrevDay">
+            <summary>
+            Price 24 hours ago
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolSummary.Created">
+            <summary>
+            Timestamp when created
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexSymbolTrade">
+            <summary>
+            Information about an order executed on a symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.Id">
+            <summary>
+            The order id
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.Timestamp">
+            <summary>
+            Timestamp of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.Quantity">
+            <summary>
+            Quantity of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.Price">
+            <summary>
+            Price of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.Total">
+            <summary>
+            Total price of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.FillType">
+            <summary>
+            Whether the order was fully filled
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexSymbolTrade.OrderType">
+            <summary>
+            The side of the order
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexWithdrawal">
@@ -4077,57 +4037,57 @@
             The status of the deposit
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketCandleV3">
+        <member name="T:Bittrex.Net.Objects.V3.BittrexKlineV3">
             <summary>
-            Market candle info
+            Symbol kline info
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.StartsAt">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.StartsAt">
             <summary>
-            The opening time of this candle
+            The opening time of this kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.Open">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.Open">
             <summary>
             The price at opening
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.Close">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.Close">
             <summary>
             The price at closing
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.High">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.High">
             <summary>
-            The highest price during this candle
+            The highest price during this kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.Low">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.Low">
             <summary>
-            The lowest price during this candle
+            The lowest price during this kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.Volume">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.Volume">
             <summary>
-            The volume during this candle
+            The volume during this kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketCandleV3.BaseVolume">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.BaseVolume">
             <summary>
             The volume of this candle in the base currency
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketOrderBookV3">
+        <member name="T:Bittrex.Net.Objects.V3.BittrexOrderBookV3">
             <summary>
             Order book
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketOrderBookV3.Bid">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookV3.Bid">
             <summary>
             The bids in this book
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketOrderBookV3.Ask">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookV3.Ask">
             <summary>
             The asks in this book
             </summary>
@@ -4147,124 +4107,14 @@
             The price of the entry
             </summary>
         </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketTradeV3">
+        <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolTradeV3">
             <summary>
             Trade entry
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTradeV3.ExecutedAt">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTradeV3.ExecutedAt">
             <summary>
             The timestamp of the trade execution
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3">
-            <summary>
-            Market summary info
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.Symbol">
-            <summary>
-            the symbol the summary is for
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.High">
-            <summary>
-            The high price for this symbol in the last 24 hours
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.Low">
-            <summary>
-            The low price for this symbol in the last 24 hours
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.Volume">
-            <summary>
-            The volume of this symbol during the last 24 hours
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.BaseVolume">
-            <summary>
-            The volume of this symbol in the base currency during the last 24 hours
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.PercentChange">
-            <summary>
-            The percentage change of this symbol for the last 24 hours
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketSummariesV3.UpdatedAt">
-            <summary>
-            The timestamp of when this summary was last updated
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketTickV3">
-            <summary>
-            Market tick
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.Symbol">
-            <summary>
-            Symbol of the ticker
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.LastTradeRate">
-            <summary>
-            The price of the last trade
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.BidRate">
-            <summary>
-            The highest bid price
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketTickV3.AskRate">
-            <summary>
-            The lowest ask price
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketV3">
-            <summary>
-            Market info
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Symbol">
-            <summary>
-            The symbol of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.BaseCurrency">
-            <summary>
-            The base currency of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.QuoteCurrency">
-            <summary>
-            The quote currency of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.MinTradeSize">
-            <summary>
-            The minimum trade size for this market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Precision">
-            <summary>
-            The max precision for this market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Status">
-            <summary>
-            The status of the market
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.CreatedAt">
-            <summary>
-            When the market was created
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketV3.Notice">
-            <summary>
-            Additional info
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexOrderV3">
@@ -4355,6 +4205,116 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.ClosedAt">
             <summary>
             When the order was closed
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3">
+            <summary>
+            Market summary info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.Symbol">
+            <summary>
+            the symbol the summary is for
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.High">
+            <summary>
+            The high price for this symbol in the last 24 hours
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.Low">
+            <summary>
+            The low price for this symbol in the last 24 hours
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.Volume">
+            <summary>
+            The volume of this symbol during the last 24 hours
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.BaseVolume">
+            <summary>
+            The volume of this symbol in the base currency during the last 24 hours
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.PercentChange">
+            <summary>
+            The percentage change of this symbol for the last 24 hours
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.UpdatedAt">
+            <summary>
+            The timestamp of when this summary was last updated
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolV3">
+            <summary>
+            Symbol info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.Symbol">
+            <summary>
+            The symbol of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.BaseCurrency">
+            <summary>
+            The base currency of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.QuoteCurrency">
+            <summary>
+            The quote currency of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.MinTradeSize">
+            <summary>
+            The minimum trade size for this symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.Precision">
+            <summary>
+            The max precision for this symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.Status">
+            <summary>
+            The status of the symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.CreatedAt">
+            <summary>
+            When the symbol was created
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.Notice">
+            <summary>
+            Additional info
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexTickV3">
+            <summary>
+            Market tick
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexTickV3.Symbol">
+            <summary>
+            Symbol of the ticker
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexTickV3.LastTradeRate">
+            <summary>
+            The price of the last trade
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexTickV3.BidRate">
+            <summary>
+            The highest bid price
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexTickV3.AskRate">
+            <summary>
+            The lowest ask price
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexWithdrawalV3">

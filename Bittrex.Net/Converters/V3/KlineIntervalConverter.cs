@@ -4,17 +4,17 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters.V3
 {
-    internal class CandleIntervalConverter : BaseConverter<CandleInterval>
+    internal class KlineIntervalConverter : BaseConverter<KlineInterval>
     {
-        public CandleIntervalConverter() : this(true) { }
-        public CandleIntervalConverter(bool quotes) : base(quotes) { }
+        public KlineIntervalConverter() : this(true) { }
+        public KlineIntervalConverter(bool quotes) : base(quotes) { }
 
-        protected override List<KeyValuePair<CandleInterval, string>> Mapping => new List<KeyValuePair<CandleInterval, string>>
+        protected override List<KeyValuePair<KlineInterval, string>> Mapping => new List<KeyValuePair<KlineInterval, string>>
         {
-            new KeyValuePair<CandleInterval, string>(CandleInterval.OneMinute, "MINUTE_1"),
-            new KeyValuePair<CandleInterval, string>(CandleInterval.FiveMinutes, "MINUTE_5"),
-            new KeyValuePair<CandleInterval, string>(CandleInterval.OneHour, "HOUR_1"),
-            new KeyValuePair<CandleInterval, string>(CandleInterval.OneDay, "DAY_1")
+            new KeyValuePair<KlineInterval, string>(KlineInterval.OneMinute, "MINUTE_1"),
+            new KeyValuePair<KlineInterval, string>(KlineInterval.FiveMinutes, "MINUTE_5"),
+            new KeyValuePair<KlineInterval, string>(KlineInterval.OneHour, "HOUR_1"),
+            new KeyValuePair<KlineInterval, string>(KlineInterval.OneDay, "DAY_1")
         };
     }
 }

@@ -4,7 +4,7 @@ namespace Bittrex.Net.Objects.V3
     /// <summary>
     /// Market tick
     /// </summary>
-    public class BittrexMarketTickV3
+    public class BittrexTickV3
     {
         /// <summary>
         /// Symbol of the ticker

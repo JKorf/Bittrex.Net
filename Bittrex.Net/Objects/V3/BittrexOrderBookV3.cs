@@ -6,7 +6,7 @@ namespace Bittrex.Net.Objects.V3
     /// <summary>
     /// Order book
     /// </summary>
-    public class BittrexMarketOrderBookV3
+    public class BittrexOrderBookV3
     {
         /// <summary>
         /// The bids in this book
@@ -36,7 +36,7 @@ namespace Bittrex.Net.Objects.V3
     /// <summary>
     /// Trade entry
     /// </summary>
-    public class BittrexMarketTradeV3 : BittrexOrderBookEntryV3
+    public class BittrexSymbolTradeV3 : BittrexOrderBookEntryV3
     {
         /// <summary>
         /// The timestamp of the trade execution

@@ -29,12 +29,12 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStart()
         {
-            var subResult = await socketClient.SubscribeToExchangeStateUpdatesAsync(Symbol, HandleUpdate).ConfigureAwait(false);
+            var subResult = await socketClient.SubscribeToOrderBookUpdatesAsync(Symbol, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
                 return new CallResult<UpdateSubscription>(null, subResult.Error);
 
             Status = OrderBookStatus.Syncing;
-            var queryResult = await socketClient.QueryExchangeStateAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await socketClient.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAll().ConfigureAwait(false);
@@ -45,7 +45,7 @@ namespace Bittrex.Net
             return new CallResult<UpdateSubscription>(subResult.Data, null);
         }
 
-        private void HandleUpdate(BittrexStreamUpdateExchangeState data)
+        private void HandleUpdate(BittrexStreamOrderBookUpdate data)
         {
             UpdateOrderBook(data.Nonce, data.Buys, data.Sells);
         }
@@ -53,7 +53,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResync()
         {
-            var queryResult = await socketClient.QueryExchangeStateAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await socketClient.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             

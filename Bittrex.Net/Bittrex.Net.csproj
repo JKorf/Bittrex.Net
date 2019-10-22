@@ -13,7 +13,7 @@
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
     <PackageProjectUrl>https://github.com/JKorf/Bittrex.Net</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIconUrl>https://raw.githubusercontent.com/JKorf/Bittrex.Net/master/Resources/icon.png</PackageIconUrl>
+    <PackageIcon>icon.png</PackageIcon>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>3.1.8 - Changed ask/bid in BittrexStreamMarketSummary to be nullable</PackageReleaseNotes>
@@ -27,5 +27,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CryptoExchange.Net\CryptoExchange.Net\CryptoExchange.Net.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon\icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>

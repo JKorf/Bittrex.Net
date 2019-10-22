@@ -18,31 +18,31 @@ namespace Bittrex.Net.UnitTests
         public void GetMarkets_Should_RespondWithMarketsList()
         {
             // arrange
-            var expected = new List<BittrexMarket>()
+            var expected = new List<BittrexSymbol>()
             {
-                new BittrexMarket()
+                new BittrexSymbol()
                 {
                     BaseCurrency = "Test1",
                     BaseCurrencyLong = "TestCurrency1",
                     Created = new DateTime(2017, 1, 1),
                     IsActive = true,
-                    MarketCurrency = "MarketTest1",
-                    MarketCurrencyLong = "MarketTestCurrency1",
-                    MarketName = "Test1-Test1",
+                    QuoteCurrency = "MarketTest1",
+                    QuoteCurrencyLong = "MarketTestCurrency1",
+                    Symbol = "Test1-Test1",
                     MinTradeSize = 0.0001m,
                     IsSponsored = null,
                     LogoUrl = null,
                     Notice = null
                 },
-                new BittrexMarket()
+                new BittrexSymbol()
                 {
                     BaseCurrency = "Test2",
                     BaseCurrencyLong = "TestCurrency2",
                     Created = new DateTime(2016, 1, 1),
                     IsActive = false,
-                    MarketCurrency = "MarketTest2",
-                    MarketCurrencyLong = "MarketTestCurrency2",
-                    MarketName = "Test2-Test2",
+                    QuoteCurrency = "MarketTest2",
+                    QuoteCurrencyLong = "MarketTestCurrency2",
+                    Symbol = "Test2-Test2",
                     MinTradeSize = 1,
                     IsSponsored = true,
                     LogoUrl = "https://testurl",
@@ -52,7 +52,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarkets();
+            var result = client.GetSymbols();
 
             // assert
             Assert.IsTrue(result.Success);
@@ -120,15 +120,15 @@ namespace Bittrex.Net.UnitTests
         public void GetMarketSummary_Should_RespondWithMarketSummary()
         {
             // arrange
-            var expected = new List<BittrexMarketSummary>
+            var expected = new List<BittrexSymbolSummary>
             {
-                new BittrexMarketSummary
+                new BittrexSymbolSummary
                 {
                     Ask = 0.001m,
                     Bid = 0.002m,
                     Last = 0.003m,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = 1.1m,
                     High = 2.2m,
                     Low = 3.3m,
@@ -142,7 +142,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketSummary("BTC-ETH");
+            var result = client.GetSymbolSummary("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -153,15 +153,15 @@ namespace Bittrex.Net.UnitTests
         public void GetMarketSummaries_Should_RespondWithMarketSummariesList()
         {
             // arrange
-            var expected = new List<BittrexMarketSummary>()
+            var expected = new List<BittrexSymbolSummary>()
             {
-                new BittrexMarketSummary()
+                new BittrexSymbolSummary()
                 {
                     Ask = 0.001m,
                     Bid = 0.002m,
                     Last = 0.003m,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = 1.1m,
                     High = 2.2m,
                     Low = 3.3m,
@@ -171,13 +171,13 @@ namespace Bittrex.Net.UnitTests
                     TimeStamp = new DateTime(2016, 1, 1),
                     Volume = 5.5m
                 },
-                new BittrexMarketSummary()
+                new BittrexSymbolSummary()
                 {
                     Ask = 0.006m,
                     Bid = 0.007m,
                     Last = 0.008m,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = 9.9m,
                     High = 10.10m,
                     Low = 11.11m,
@@ -187,13 +187,13 @@ namespace Bittrex.Net.UnitTests
                     TimeStamp = new DateTime(2016, 1, 1),
                     Volume = 13.13m
                 },
-                new BittrexMarketSummary()
+                new BittrexSymbolSummary()
                 {
                     Ask = 0.006m,
                     Bid = 0.007m,
                     Last = null,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = null,
                     High = null,
                     Low = null,
@@ -207,7 +207,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketSummaries();
+            var result = client.GetSymbolSummaries();
 
             // assert
             Assert.IsTrue(result.Success);
@@ -292,9 +292,9 @@ namespace Bittrex.Net.UnitTests
         public void GetMarketHistory_Should_ReturnMarketHistoryList()
         {
             // arrange
-            var expected = new List<BittrexMarketHistory>()
+            var expected = new List<BittrexSymbolTrade>()
             {
-                new BittrexMarketHistory()
+                new BittrexSymbolTrade()
                 {
                     Quantity = 1.1m,
                     OrderType = OrderSide.Buy,
@@ -304,7 +304,7 @@ namespace Bittrex.Net.UnitTests
                     Timestamp = new DateTime(2017, 1, 1),
                     Total = 3.3m
                 },
-                new BittrexMarketHistory()
+                new BittrexSymbolTrade()
                 {
                     Quantity = 4.4m,
                     OrderType = OrderSide.Sell,
@@ -318,7 +318,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketHistory("BTC-ETH");
+            var result = client.GetSymbolTrades("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
