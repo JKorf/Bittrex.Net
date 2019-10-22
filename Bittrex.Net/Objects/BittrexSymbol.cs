@@ -5,22 +5,24 @@ using Newtonsoft.Json;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about a market
+    /// Information about a symbol
     /// </summary>
-    public class BittrexMarket
+    public class BittrexSymbol
     {
         /// <summary>
-        /// The market currency
+        /// The quote currency
         /// </summary>
-        public string MarketCurrency { get; set; } = "";
+        [JsonProperty("marketCurrency")]
+        public string QuoteCurrency { get; set; } = "";
         /// <summary>
         /// The base currency
         /// </summary>
         public string BaseCurrency { get; set; } = "";
         /// <summary>
-        /// The long name of the market currency
+        /// The long name of the quote currency
         /// </summary>
-        public string MarketCurrencyLong { get; set; } = "";
+        [JsonProperty("marketCurrencyLong")]
+        public string QuoteCurrencyLong { get; set; } = "";
         /// <summary>
         /// The long name of the base currency
         /// </summary>
@@ -30,24 +32,25 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal MinTradeSize { get; set; }
         /// <summary>
-        /// The name of the market
+        /// The name of the symbol
         /// </summary>
-        public string MarketName { get; set; } = "";
+        [JsonProperty("marketName")]
+        public string Symbol { get; set; } = "";
         /// <summary>
-        /// Whether the market is active
+        /// Whether the symbol is active
         /// </summary>
         public bool IsActive { get; set; }
         /// <summary>
-        /// Timestamp when the market was created
+        /// Timestamp when the symbol was created
         /// </summary>
         [JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Created { get; set; }
         /// <summary>
-        /// Additional information about the state of this market
+        /// Additional information about the state of this symbol
         /// </summary>
         public string Notice { get; set; } = "";
         /// <summary>
-        /// Whether the market is sponsored by Bittrex
+        /// Whether the symbol is sponsored by Bittrex
         /// </summary>
         public bool? IsSponsored { get; set; }
         /// <summary>

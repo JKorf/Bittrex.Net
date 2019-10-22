@@ -19,7 +19,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public Guid OrderUuid { get; set; }
         /// <summary>
-        /// The market the order is on
+        /// The symbol the order is on
         /// </summary>
         public string Exchange { get; set; } = "";
         /// <summary>

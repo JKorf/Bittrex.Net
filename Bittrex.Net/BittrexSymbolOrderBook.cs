@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
-using OrderBookEntryType = CryptoExchange.Net.Objects.OrderBookEntryType;
 
 namespace Bittrex.Net
 {
@@ -43,13 +41,13 @@ namespace Bittrex.Net
                 return new CallResult<UpdateSubscription>(null, queryResult.Error);
             }
 
-            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Sells, queryResult.Data.Buys);
+            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Buys, queryResult.Data.Sells);
             return new CallResult<UpdateSubscription>(subResult.Data, null);
         }
 
         private void HandleUpdate(BittrexStreamUpdateExchangeState data)
         {
-            UpdateOrderBook(data.Nonce, data.Nonce, data.Sells, data.Buys);
+            UpdateOrderBook(data.Nonce, data.Buys, data.Sells);
         }
 
         /// <inheritdoc />
@@ -59,7 +57,7 @@ namespace Bittrex.Net
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             
-            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Sells, queryResult.Data.Buys);
+            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Buys, queryResult.Data.Sells);
             return new CallResult<bool>(true, null);
         }
 

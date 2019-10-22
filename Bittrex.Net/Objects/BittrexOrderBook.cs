@@ -3,7 +3,7 @@
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Order book for a market
+    /// Order book for a symbol
     /// </summary>
     public class BittrexOrderBook
     {

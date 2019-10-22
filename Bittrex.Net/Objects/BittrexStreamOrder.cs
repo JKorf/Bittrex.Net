@@ -54,10 +54,10 @@ namespace Bittrex.Net.Objects
         [JsonProperty("OU")]
         public Guid OrderId { get; set; }
         /// <summary>
-        /// The market this order is for
+        /// The symbol this order is for
         /// </summary>
         [JsonProperty("E")]
-        public string Market { get; set; } = "";
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The order type
         /// </summary>

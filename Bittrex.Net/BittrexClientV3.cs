@@ -86,184 +86,184 @@ namespace Bittrex.Net
 
 
         /// <summary>
-        /// Gets information about all available markets
+        /// Gets information about all available symbols
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>List of markets</returns>
-        public WebCallResult<IEnumerable<BittrexMarketV3>> GetMarkets(CancellationToken ct = default) => GetMarketsAsync(ct).Result;
+        /// <returns>List of symbols</returns>
+        public WebCallResult<IEnumerable<BittrexSymbolV3>> GetSymbols(CancellationToken ct = default) => GetSymbolsAsync(ct).Result;
 
         /// <summary>
-        /// Gets information about all available markets
+        /// Gets information about all available symbols
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>List of markets</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketV3>>> GetMarketsAsync(CancellationToken ct = default)
+        /// <returns>List of symbols</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexSymbolV3>>> GetSymbolsAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexMarketV3>>(GetUrl("markets"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexSymbolV3>>(GetUrl("markets"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets information about a market
+        /// Gets information about a symbol
         /// </summary>
-        /// <param name="symbol">The market to get info for</param>
+        /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>List of markets</returns>
-        public WebCallResult<BittrexMarketV3> GetMarket(string symbol, CancellationToken ct = default) => GetMarketAsync(symbol, ct).Result;
+        /// <returns>List of symbols</returns>
+        public WebCallResult<BittrexSymbolV3> GetSymbol(string symbol, CancellationToken ct = default) => GetSymbolAsync(symbol, ct).Result;
 
         /// <summary>
-        /// Gets information about a market
+        /// Gets information about a symbol
         /// </summary>
-        /// <param name="symbol">The market to get info for</param>
+        /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market info</returns>
-        public async Task<WebCallResult<BittrexMarketV3>> GetMarketAsync(string symbol, CancellationToken ct = default)
+        /// <returns>Symbol info</returns>
+        public async Task<WebCallResult<BittrexSymbolV3>> GetSymbolAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<BittrexMarketV3>(GetUrl("markets/" + symbol), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<BittrexSymbolV3>(GetUrl("markets/" + symbol), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets summaries of all markets
+        /// Gets summaries of all symbols
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>List of market summaries</returns>
-        public WebCallResult<IEnumerable<BittrexMarketSummariesV3>> GetMarketSummaries(CancellationToken ct = default) => GetMarketSummariesAsync(ct).Result;
+        /// <returns>List of symbol summaries</returns>
+        public WebCallResult<IEnumerable<BittrexSymbolSummaryV3>> GetSymbolSummaries(CancellationToken ct = default) => GetSymbolSummariesAsync(ct).Result;
 
         /// <summary>
-        /// Gets summaries of all markets
+        /// Gets summaries of all symbols
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>List of market summaries</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketSummariesV3>>> GetMarketSummariesAsync(CancellationToken ct = default)
+        /// <returns>List of symbol summaries</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexSymbolSummaryV3>>> GetSymbolSummariesAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexMarketSummariesV3>>(GetUrl("markets/summaries"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexSymbolSummaryV3>>(GetUrl("markets/summaries"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets summary of a market
+        /// Gets summary of a symbol
         /// </summary>
-        /// <param name="symbol">The market to get info for</param>
+        /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market summary</returns>
-        public WebCallResult<BittrexMarketSummariesV3> GetMarketSummary(string symbol, CancellationToken ct = default) => GetMarketSummaryAsync(symbol, ct).Result;
+        /// <returns>Symbol summary</returns>
+        public WebCallResult<BittrexSymbolSummaryV3> GetSymbolSummary(string symbol, CancellationToken ct = default) => GetSymbolSummaryAsync(symbol, ct).Result;
 
         /// <summary>
-        /// Gets summary of a market
+        /// Gets summary of a symbol
         /// </summary>
-        /// <param name="symbol">The market to get info for</param>
+        /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market summary</returns>
-        public async Task<WebCallResult<BittrexMarketSummariesV3>> GetMarketSummaryAsync(string symbol, CancellationToken ct = default)
-        {
-            symbol.ValidateBittrexSymbol();
-            return await SendRequest<BittrexMarketSummariesV3>(GetUrl($"markets/{symbol}/summary"), HttpMethod.Get, ct).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Gets the order book of a market
-        /// </summary>
-        /// <param name="symbol">The market to get the order book for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Market order book</returns>
-        public WebCallResult<BittrexMarketOrderBookV3> GetMarketOrderBook(string symbol, CancellationToken ct = default) => GetMarketOrderBookAsync(symbol, ct).Result;
-
-        /// <summary>
-        /// Gets the order book of a market
-        /// </summary>
-        /// <param name="symbol">The market to get the order book for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Market order book</returns>
-        public async Task<WebCallResult<BittrexMarketOrderBookV3>> GetMarketOrderBookAsync(string symbol, CancellationToken ct = default)
+        /// <returns>Symbol summary</returns>
+        public async Task<WebCallResult<BittrexSymbolSummaryV3>> GetSymbolSummaryAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<BittrexMarketOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<BittrexSymbolSummaryV3>(GetUrl($"markets/{symbol}/summary"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets the trade history of a market
+        /// Gets the order book of a symbol
         /// </summary>
-        /// <param name="symbol">The market to get trades for</param>
+        /// <param name="symbol">The symbol to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market trade list</returns>
-        public WebCallResult<IEnumerable<BittrexMarketTradeV3>> GetMarketTrades(string symbol, CancellationToken ct = default) => GetMarketTradesAsync(symbol, ct).Result;
+        /// <returns>Symbol order book</returns>
+        public WebCallResult<BittrexOrderBookV3> GetOrderBook(string symbol, CancellationToken ct = default) => GetOrderBookAsync(symbol, ct).Result;
 
         /// <summary>
-        /// Gets the trade history of a market
+        /// Gets the order book of a symbol
         /// </summary>
-        /// <param name="symbol">The market to get trades for</param>
+        /// <param name="symbol">The symbol to get the order book for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market trade list</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketTradeV3>>> GetMarketTradesAsync(string symbol, CancellationToken ct = default)
+        /// <returns>Symbol order book</returns>
+        public async Task<WebCallResult<BittrexOrderBookV3>> GetOrderBookAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<IEnumerable<BittrexMarketTradeV3>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<BittrexOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets the ticker of a market
+        /// Gets the trade history of a symbol
         /// </summary>
-        /// <param name="symbol">The market to get ticker for</param>
+        /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market ticker</returns>
-        public WebCallResult<BittrexMarketTickV3> GetMarketTicker(string symbol, CancellationToken ct = default) => GetMarketTickerAsync(symbol, ct).Result;
+        /// <returns>Symbol trade list</returns>
+        public WebCallResult<IEnumerable<BittrexSymbolTradeV3>> GetSymbolTrades(string symbol, CancellationToken ct = default) => GetSymbolTradesAsync(symbol, ct).Result;
 
         /// <summary>
-        /// Gets the ticker of a market
+        /// Gets the trade history of a symbol
         /// </summary>
-        /// <param name="symbol">The market to get ticker for</param>
+        /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market ticker</returns>
-        public async Task<WebCallResult<BittrexMarketTickV3>> GetMarketTickerAsync(string symbol, CancellationToken ct = default)
+        /// <returns>Symbol trade list</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexSymbolTradeV3>>> GetSymbolTradesAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            var result = await SendRequest<BittrexMarketTickV3>(GetUrl($"markets/{symbol}/ticker"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexSymbolTradeV3>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets the ticker of a symbol
+        /// </summary>
+        /// <param name="symbol">The symbol to get ticker for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Symbol ticker</returns>
+        public WebCallResult<BittrexTickV3> GetTicker(string symbol, CancellationToken ct = default) => GetTickerAsync(symbol, ct).Result;
+
+        /// <summary>
+        /// Gets the ticker of a symbol
+        /// </summary>
+        /// <param name="symbol">The symbol to get ticker for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Symbol ticker</returns>
+        public async Task<WebCallResult<BittrexTickV3>> GetTickerAsync(string symbol, CancellationToken ct = default)
+        {
+            symbol.ValidateBittrexSymbol();
+            var result = await SendRequest<BittrexTickV3>(GetUrl($"markets/{symbol}/ticker"), HttpMethod.Get, ct).ConfigureAwait(false);
             if (result.Success)
                 result.Data.Symbol = symbol;
             return result;
         }
 
         /// <summary>
-        /// Gets list of tickers for all market
+        /// Gets list of tickers for all symbols
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market tickers</returns>
-        public WebCallResult<IEnumerable<BittrexMarketTickV3>> GetMarketTickers(CancellationToken ct = default) => GetMarketTickersAsync(ct).Result;
+        /// <returns>Symbol tickers</returns>
+        public WebCallResult<IEnumerable<BittrexTickV3>> GetTickers(CancellationToken ct = default) => GetTickersAsync(ct).Result;
 
         /// <summary>
-        /// Gets list of tickers for all market
+        /// Gets list of tickers for all symbols
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market tickers</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketTickV3>>> GetMarketTickersAsync(CancellationToken ct = default)
+        /// <returns>Symbol tickers</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexTickV3>>> GetTickersAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexMarketTickV3>>(GetUrl("markets/tickers"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexTickV3>>(GetUrl("markets/tickers"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Gets the candles for a market
+        /// Gets the klines for a symbol
         /// </summary>
-        /// <param name="symbol">The market to get candles for</param>
-        /// <param name="interval">The interval of the candles</param>
+        /// <param name="symbol">The symbol to get klines for</param>
+        /// <param name="interval">The interval of the klines</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market candles</returns>
-        public WebCallResult<IEnumerable<BittrexMarketCandleV3>> GetMarketCandles(string symbol, CandleInterval interval, CancellationToken ct = default) => GetMarketCandlesAsync(symbol, interval, ct).Result;
+        /// <returns>Symbol kline</returns>
+        public WebCallResult<IEnumerable<BittrexKlineV3>> GetKlines(string symbol, KlineInterval interval, CancellationToken ct = default) => GetKlinesAsync(symbol, interval, ct).Result;
 
         /// <summary>
-        /// Gets the candles for a market
+        /// Gets the klines for a symbol
         /// </summary>
-        /// <param name="symbol">The market to get candles for</param>
-        /// <param name="interval">The interval of the candles</param>
+        /// <param name="symbol">The symbol to get klines for</param>
+        /// <param name="interval">The interval of the klines</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Market candles</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketCandleV3>>> GetMarketCandlesAsync(string symbol, CandleInterval interval, CancellationToken ct = default)
+        /// <returns>Symbol klines</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetKlinesAsync(string symbol, KlineInterval interval, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             var parameters = new Dictionary<string, object>()
             {
-                {"candleInterval", JsonConvert.SerializeObject(interval, new CandleIntervalConverter(false))}
+                {"candleInterval", JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}
             };
 
-            return await SendRequest<IEnumerable<BittrexMarketCandleV3>>(GetUrl($"markets/{symbol}/candles"), HttpMethod.Get, ct, parameters: parameters).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexKlineV3>>(GetUrl($"markets/{symbol}/candles"), HttpMethod.Get, ct, parameters: parameters).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -325,15 +325,15 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="currency">The name of the currency to get balance for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Balance for market</returns>
+        /// <returns>Balance for currency</returns>
         public WebCallResult<BittrexBalanceV3> GetBalance(string currency, CancellationToken ct = default) => GetBalanceAsync(currency, ct).Result;
 
         /// <summary>
-        /// Gets current balance for a market
+        /// Gets current balance for a currency
         /// </summary>
         /// <param name="currency">The name of the currency to get balance for</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Balance for market</returns>
+        /// <returns>Balance for currency</returns>
         public async Task<WebCallResult<BittrexBalanceV3>> GetBalanceAsync(string currency, CancellationToken ct = default)
         {
             currency.ValidateNotNull(nameof(currency));

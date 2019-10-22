@@ -30,7 +30,7 @@ namespace Bittrex.Net
         private const string SummaryDeltaSub = "SubscribeToSummaryDeltas";
         private const string SummaryLiteDeltaSub = "SubscribeToSummaryLiteDeltas";
         private const string ExchangeDeltaSub = "SubscribeToExchangeDeltas";
-        private const string QueryExchangeStateRequest = "QueryExchangeState";
+        private const string QueryExchangeStateRequest = "GetOrderBook";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
 
         private const string ExchangeStateUpdate = "uE";
@@ -72,61 +72,61 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets the current summaries for all markets
+        /// Gets the current summaries for all symbols
         /// </summary>
-        /// <returns>Market summaries</returns>
-        public CallResult<IEnumerable<BittrexStreamMarketSummary>> QuerySummaryStates() => QuerySummaryStatesAsync().Result;
+        /// <returns>Symbol summaries</returns>
+        public CallResult<IEnumerable<BittrexStreamSymbolSummary>> GetSymbolSummaries() => GetSymbolSummariesAsync().Result;
 
         /// <summary>
-        /// Gets the current summaries for all markets
+        /// Gets the current summaries for all symbols
         /// </summary>
-        /// <returns>Market summaries</returns>
-        public async Task<CallResult<IEnumerable<BittrexStreamMarketSummary>>> QuerySummaryStatesAsync()
+        /// <returns>Symbol summaries</returns>
+        public async Task<CallResult<IEnumerable<BittrexStreamSymbolSummary>>> GetSymbolSummariesAsync()
         {
             var result = await Query<BittrexStreamMarketSummariesQuery>(new ConnectionRequest(QuerySummaryStateRequest), false).ConfigureAwait(false);
-            return new CallResult<IEnumerable<BittrexStreamMarketSummary>>(result.Data?.Deltas, result.Error);
+            return new CallResult<IEnumerable<BittrexStreamSymbolSummary>>(result.Data?.Deltas, result.Error);
         }
 
         /// <summary>
-        /// Gets the state of a specific market
+        /// Gets the state of a specific symbol
         /// 500 Buys
         /// 100 Fills
         /// 500 Sells
         /// </summary>
-        /// <param name="symbol">The name of the market to query</param>
+        /// <param name="symbol">The name of the symbol to query</param>
         /// <returns>The current exchange state</returns>
-        public CallResult<BittrexStreamQueryExchangeState> QueryExchangeState(string symbol) => QueryExchangeStateAsync(symbol).Result;
+        public CallResult<BittrexStreamOrderBook> GetOrderBook(string symbol) => GetOrderBookAsync(symbol).Result;
 
         /// <summary>
-        /// Gets the state of a specific market
+        /// Gets the state of a specific symbol
         /// 500 Buys
         /// 100 Fills
         /// 500 Sells
         /// </summary>
-        /// <param name="symbol">The name of the market to query</param>
+        /// <param name="symbol">The name of the symbol to query</param>
         /// <returns>The current exchange state</returns>
-        public async Task<CallResult<BittrexStreamQueryExchangeState>> QueryExchangeStateAsync(string symbol)
+        public async Task<CallResult<BittrexStreamOrderBook>> GetOrderBookAsync(string symbol)
         {
             symbol.ValidateBittrexSymbol();
 
-            return await Query<BittrexStreamQueryExchangeState>(new ConnectionRequest(QueryExchangeStateRequest, symbol), false).ConfigureAwait(false);
+            return await Query<BittrexStreamOrderBook>(new ConnectionRequest(QueryExchangeStateRequest, symbol), false).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Subscribes to order book and trade updates on a specific market
+        /// Subscribes to order book and trade updates on a specific symbol
         /// </summary>
-        /// <param name="symbol">The name of the market to subscribe on</param>
+        /// <param name="symbol">The name of the symbol to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public CallResult<UpdateSubscription> SubscribeToExchangeStateUpdates(string symbol, Action<BittrexStreamUpdateExchangeState> onUpdate) => SubscribeToExchangeStateUpdatesAsync(symbol, onUpdate).Result;
+        public CallResult<UpdateSubscription> SubscribeToOrderBookUpdates(string symbol, Action<BittrexStreamOrderBookUpdate> onUpdate) => SubscribeToOrderBookUpdatesAsync(symbol, onUpdate).Result;
 
         /// <summary>
-        /// Subscribes to order book and trade updates on a specific market
+        /// Subscribes to order book and trade updates on a specific symbol
         /// </summary>
-        /// <param name="symbol">The name of the market to subscribe on</param>
+        /// <param name="symbol">The name of the symbol to subscribe on</param>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToExchangeStateUpdatesAsync(string symbol, Action<BittrexStreamUpdateExchangeState> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Action<BittrexStreamOrderBookUpdate> onUpdate)
         {
             symbol.ValidateBittrexSymbol();
 
@@ -134,36 +134,36 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Subscribes to updates of summaries for all markets
+        /// Subscribes to updates of summaries for all symbols
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public CallResult<UpdateSubscription> SubscribeToMarketSummariesUpdate(Action<IEnumerable<BittrexStreamMarketSummary>> onUpdate) => SubscribeToMarketSummariesUpdateAsync(onUpdate).Result;
+        public CallResult<UpdateSubscription> SubscribeToSymbolSummariesUpdate(Action<IEnumerable<BittrexStreamSymbolSummary>> onUpdate) => SubscribeToSymbolSummariesUpdateAsync(onUpdate).Result;
 
         /// <summary>
-        /// Subscribes to updates of summaries for all markets
+        /// Subscribes to updates of summaries for all symbols
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesUpdateAsync(Action<IEnumerable<BittrexStreamMarketSummary>> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummariesUpdateAsync(Action<IEnumerable<BittrexStreamSymbolSummary>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummaryUpdate>(data => onUpdate(data.Deltas));
             return await Subscribe<JToken>(new ConnectionRequest(SummaryDeltaSub), null, false, data => DecodeSignalRData(data, inner)).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Subscribes to lite summary updates for all markets
+        /// Subscribes to lite summary updates for all symbols
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public CallResult<UpdateSubscription> SubscribeToMarketSummariesLiteUpdate(Action<IEnumerable<BittrexStreamMarketSummaryLite>> onUpdate) => SubscribeToMarketSummariesLiteUpdateAsync(onUpdate).Result;
+        public CallResult<UpdateSubscription> SubscribeToSymbolSummariesLiteUpdate(Action<IEnumerable<BittrexStreamSymbolSummaryLite>> onUpdate) => SubscribeToSymbolSummariesLiteUpdateAsync(onUpdate).Result;
 
         /// <summary>
-        /// Subscribes to lite summary updates for all markets
+        /// Subscribes to lite summary updates for all symbols
         /// </summary>
         /// <param name="onUpdate">The update event handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToMarketSummariesLiteUpdateAsync(Action<IEnumerable<BittrexStreamMarketSummaryLite>> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummariesLiteUpdateAsync(Action<IEnumerable<BittrexStreamSymbolSummaryLite>> onUpdate)
         {
             var inner = new Action<BittrexStreamMarketSummariesLite>(data => onUpdate(data.Deltas));
             return await Subscribe<JToken>(new ConnectionRequest(SummaryLiteDeltaSub), null, false, data => DecodeSignalRData(data, inner)).ConfigureAwait(false);

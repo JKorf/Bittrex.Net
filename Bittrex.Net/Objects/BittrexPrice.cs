@@ -1,16 +1,16 @@
 ﻿namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Price of a market
+    /// Price of a symbol
     /// </summary>
     public class BittrexPrice
     {
         /// <summary>
-        /// The highest bid on this market
+        /// The highest bid on this symbol
         /// </summary>
         public decimal Bid { get; set; }
         /// <summary>
-        /// The lowest ask on this market
+        /// The lowest ask on this symbol
         /// </summary>
         public decimal Ask { get; set; }
         /// <summary>
