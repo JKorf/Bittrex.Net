@@ -2910,7 +2910,7 @@
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexOpenOrdersOrder.Exchange">
             <summary>
-            The market the order is on
+            The symbol the order is on
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexOpenOrdersOrder.OrderType">
@@ -4209,7 +4209,7 @@
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3">
             <summary>
-            Market summary info
+            Symbol summary info
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.Symbol">

@@ -3,7 +3,7 @@
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
-    /// Market summary info
+    /// Symbol summary info
     /// </summary>
     public class BittrexSymbolSummaryV3
     {

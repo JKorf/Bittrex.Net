@@ -684,7 +684,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("currencySymbol", currency);
             parameters.AddOptionalParameter("status", status);
 
-            return await SendRequest<IEnumerable<BittrexWithdrawalV3>>(GetUrl($"withdrawals/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexWithdrawalV3>>(GetUrl("withdrawals/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -730,7 +730,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequest<IEnumerable<BittrexWithdrawalV3>>(GetUrl($"withdrawals/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexWithdrawalV3>>(GetUrl("withdrawals/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>

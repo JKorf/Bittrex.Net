@@ -14,7 +14,6 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
-using CryptoExchange.Net.Requests;
 using Moq;
 using Newtonsoft.Json;
 

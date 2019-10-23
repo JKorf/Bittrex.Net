@@ -137,18 +137,15 @@ namespace Bittrex.Net.UnitTests
         {
             var stringData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
 
-            using (var compressedStream = new MemoryStream())
-            using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Compress))
-            {
-                deflateStream.Write(stringData, 0, stringData.Length);
-                deflateStream.Flush();
+            using var compressedStream = new MemoryStream();
+            using var deflateStream = new DeflateStream(compressedStream, CompressionMode.Compress);
+            deflateStream.Write(stringData, 0, stringData.Length);
+            deflateStream.Flush();
 
-                var result = new JObject();
-                result["M"] = method;
-                result["A"] = new JArray(Convert.ToBase64String(compressedStream.ToArray()));
-                return result;
-                
-            }
+            var result = new JObject();
+            result["M"] = method;
+            result["A"] = new JArray(Convert.ToBase64String(compressedStream.ToArray()));
+            return result;
         }
     }
 }

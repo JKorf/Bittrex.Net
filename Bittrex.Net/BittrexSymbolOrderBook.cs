@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Objects;

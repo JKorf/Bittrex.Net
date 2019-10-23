@@ -789,9 +789,9 @@ namespace Bittrex.Net.UnitTests
         public void CheckValidBittrexSymbol(string symbol, bool isValid)
         {
             if (isValid)
-                Assert.DoesNotThrow(() => symbol.ValidateBittrexSymbol());
+                Assert.DoesNotThrow(symbol.ValidateBittrexSymbol);
             else
-                Assert.Throws(typeof(ArgumentException), () => symbol.ValidateBittrexSymbol());
+                Assert.Throws(typeof(ArgumentException), symbol.ValidateBittrexSymbol);
         }
     }
 }
