@@ -6,9 +6,9 @@ using System;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about an order executed on a market
+    /// Information about an order executed on a symbol
     /// </summary>
-    public class BittrexStreamMarketHistory
+    public class BittrexStreamSymbolTrade
     {
         /// <summary>
         /// The order id

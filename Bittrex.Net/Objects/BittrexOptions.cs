@@ -11,9 +11,8 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// ctor
         /// </summary>
-        public BittrexClientOptions()
+        public BittrexClientOptions(): base("https://api.bittrex.com")
         {
-            BaseAddress = "https://api.bittrex.com";
         }
 
         /// <summary>
@@ -41,9 +40,8 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// ctor
         /// </summary>
-        public BittrexSocketClientOptions()
+        public BittrexSocketClientOptions(): base("https://socket.bittrex.com")
         {
-            BaseAddress = "https://socket.bittrex.com";
             SocketSubscriptionsCombineTarget = 10;
         }
     }
@@ -56,12 +54,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBittrexSocketClient SocketClient { get; }
+        public IBittrexSocketClient? SocketClient { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClient socketClient = null) : base("Bittrex", true)
+        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null) : base("Bittrex", true)
         {
             SocketClient = socketClient;
         }

@@ -20,7 +20,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The currency of the deposit
         /// </summary>
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The current number of confirmations the deposit has
         /// </summary>
@@ -34,10 +34,10 @@ namespace Bittrex.Net.Objects
         /// Transaction id of the deposit
         /// </summary>
         [JsonProperty("TxId")]
-        public string TransactionId { get; set; }
+        public string TransactionId { get; set; } = "";
         /// <summary>
         /// The address the deposit is to
         /// </summary>
-        public string CryptoAddress { get; set; }
+        public string CryptoAddress { get; set; } = "";
     }
 }

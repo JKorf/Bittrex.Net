@@ -13,15 +13,15 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Account id associated with the order
         /// </summary>
-        public string AccountId { get; set; }
+        public string AccountId { get; set; } = "";
         /// <summary>
         /// The order Guid
         /// </summary>
         public Guid OrderUuid { get; set; }
         /// <summary>
-        /// The market the order is on
+        /// The symbol the order is on
         /// </summary>
-        public string Exchange { get; set; }
+        public string Exchange { get; set; } = "";
         /// <summary>
         /// The order type
         /// </summary>

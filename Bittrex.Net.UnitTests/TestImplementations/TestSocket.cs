@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Authentication;
-using System.Text;
 using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using WebSocket4Net;
@@ -93,14 +90,14 @@ namespace Bittrex.Net.UnitTests.TestImplementations
         {
         }
 
+        public Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
+        {
+            return Task.FromResult(new CallResult<T>((T)proxyData, null));
+        }
+
         public void SetProxyResponse<T>(T data)
         {
             proxyData = data;
-        }
-
-        public Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
-        {
-            return Task.FromResult<CallResult<T>>(new CallResult<T>((T)proxyData, null));
         }
     }
 }

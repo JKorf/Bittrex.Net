@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
     /// Order book
     /// </summary>
-    public class BittrexMarketOrderBookV3
+    public class BittrexOrderBookV3
     {
         /// <summary>
         /// The bids in this book
         /// </summary>
-        public BittrexOrderBookEntryV3[] Bid { get; set; }
+        public IEnumerable<BittrexOrderBookEntryV3> Bid { get; set; } = new List<BittrexOrderBookEntryV3>();
         /// <summary>
         /// The asks in this book
         /// </summary>
-        public BittrexOrderBookEntryV3[] Ask { get; set; }
+        public IEnumerable<BittrexOrderBookEntryV3> Ask { get; set; } = new List<BittrexOrderBookEntryV3>();
     }
 
     /// <summary>
@@ -35,7 +36,7 @@ namespace Bittrex.Net.Objects.V3
     /// <summary>
     /// Trade entry
     /// </summary>
-    public class BittrexMarketTradeV3 : BittrexOrderBookEntryV3
+    public class BittrexSymbolTradeV3 : BittrexOrderBookEntryV3
     {
         /// <summary>
         /// The timestamp of the trade execution

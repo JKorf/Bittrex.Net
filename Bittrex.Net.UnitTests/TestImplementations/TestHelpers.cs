@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
@@ -12,7 +14,6 @@ using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
-using CryptoExchange.Net.Requests;
 using Moq;
 using Newtonsoft.Json;
 
@@ -84,10 +85,10 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             return client;
         }
 
-        public static IBittrexClient CreateResponseClient<T>(T response, BittrexClientOptions options = null)
+        public static IBittrexClient CreateResponseClient<T>(T response, BittrexClientOptions options = null, HttpStatusCode code = HttpStatusCode.OK)
         {
             var client = (BittrexClient)CreateClient(options);
-            SetResponse(client, JsonConvert.SerializeObject(response));
+            SetResponse(client, JsonConvert.SerializeObject(response), code);
             return client;
         }
 
@@ -98,7 +99,7 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             return client;
         }
 
-        public static void SetResponse(RestClient client, string responseData)
+        public static void SetResponse(RestClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();
@@ -106,37 +107,17 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             responseStream.Seek(0, SeekOrigin.Begin);
 
             var response = new Mock<IResponse>();
-            response.Setup(c => c.GetResponseStream()).Returns(responseStream);
+            response.Setup(c => c.IsSuccessStatusCode).Returns(code == HttpStatusCode.OK);
+            response.Setup(c => c.StatusCode).Returns(code);
+            response.Setup(c => c.GetResponseStream()).Returns(Task.FromResult((Stream)responseStream));
 
             var request = new Mock<IRequest>();
-            request.Setup(c => c.Headers).Returns(new WebHeaderCollection());
             request.Setup(c => c.Uri).Returns(new Uri("http://www.test.com"));
-            request.Setup(c => c.GetResponse()).Returns(Task.FromResult(response.Object));
+            request.Setup(c => c.GetResponse(It.IsAny<CancellationToken>())).Returns(Task.FromResult(response.Object));
 
             var factory = Mock.Get(client.RequestFactory);
-            factory.Setup(c => c.Create(It.IsAny<string>()))
+            factory.Setup(c => c.Create(It.IsAny<HttpMethod>(), It.IsAny<string>()))
                 .Returns(request.Object);
         }
-
-        public static void SetErrorWithResponse(IBittrexClient client, string responseData, HttpStatusCode code)
-        {
-            var expectedBytes = Encoding.UTF8.GetBytes(responseData);
-            var responseStream = new MemoryStream();
-            responseStream.Write(expectedBytes, 0, expectedBytes.Length);
-            responseStream.Seek(0, SeekOrigin.Begin);
-
-            var r = new Mock<HttpWebResponse>();
-            r.Setup(x => x.GetResponseStream()).Returns(responseStream);
-            var we = new WebException("", null, WebExceptionStatus.Success, r.Object);
-
-            var request = new Mock<IRequest>();
-            request.Setup(c => c.Headers).Returns(new WebHeaderCollection());
-            request.Setup(c => c.GetResponse()).Throws(we);
-
-            var factory = Mock.Get(client.RequestFactory);
-            factory.Setup(c => c.Create(It.IsAny<string>()))
-                .Returns(request.Object);
-        }
-
     }
 }

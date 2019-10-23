@@ -6,19 +6,19 @@ namespace Bittrex.Net.Objects
     internal class BittrexStreamMarketSummariesLite
     {
         [JsonProperty("D")]
-        public List<BittrexStreamMarketSummaryLite> Deltas { get; set; }
+        public IEnumerable<BittrexStreamSymbolSummaryLite> Deltas { get; set; } = new List<BittrexStreamSymbolSummaryLite>();
     }
 
     /// <summary>
-    /// Stream lite market symmary
+    /// Stream lite symbol summary
     /// </summary>
-    public class BittrexStreamMarketSummaryLite
+    public class BittrexStreamSymbolSummaryLite
     {
         /// <summary>
-        /// Name of the market
+        /// Name of the symbol
         /// </summary>
         [JsonProperty("M")]
-        public string MarketName { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// Price of last executed trade
         /// </summary>

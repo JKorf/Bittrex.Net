@@ -15,15 +15,15 @@ namespace Bittrex.Net.Sockets
 {
     internal class WebsocketCustomTransport : ClientTransportBase
     {
-        private IConnection connection;
-        private string connectionData;
-        private IWebsocket websocket;
+        private IConnection? connection;
+        private string? connectionData;
+        private IWebsocket? websocket;
         private readonly Log log;
-        private readonly Func<string, string> interpreter;
+        private readonly Func<string, string>? interpreter;
 
         public override bool SupportsKeepAlive => true;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client, Func<string, string> interpreter): base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client, Func<string, string>? interpreter): base(client, "webSockets")
         {
             this.log = log;
             this.interpreter = interpreter;
@@ -78,22 +78,22 @@ namespace Bittrex.Net.Sockets
 
         public override Task Send(IConnection con, string data, string conData)
         {
-            if (websocket.IsOpen)
+            if (websocket != null && websocket.IsOpen)
             {
                 websocket.Send(data);
                 return Task.FromResult(0);
             }
 
             var ex = new InvalidOperationException("Socket closed");
-            connection.OnError(ex);
+            connection?.OnError(ex);
 
             throw ex;
         }
 
         public override void LostConnection(IConnection con)
         {
-            connection.Trace(TraceLevels.Events, "WS: LostConnection");
-            connection.Stop();
+            connection?.Trace(TraceLevels.Events, "WS: LostConnection");
+            connection?.Stop();
         }
 
 
@@ -110,6 +110,9 @@ namespace Bittrex.Net.Sockets
 
         private void DisposeWebSocket()
         {
+            if (websocket == null)
+                return;
+
             websocket.OnError -= WebSocketOnError;
             websocket.OnClose -= WebSocketOnClosed;
             websocket.OnMessage -= WebSocketOnMessageReceived;
@@ -120,18 +123,18 @@ namespace Bittrex.Net.Sockets
 
         private void WebSocketOnClosed()
         {
-            connection.Trace(TraceLevels.Events, "WS: OnClose()");
-            connection.Stop();
+            connection?.Trace(TraceLevels.Events, "WS: OnClose()");
+            connection?.Stop();
         }
 
         private void WebSocketOnError(Exception e)
         {
-            connection.OnError(e);
+            connection?.OnError(e);
         }
 
         private void WebSocketOnMessageReceived(string data)
         {
-            connection.Trace(TraceLevels.Messages, "WS: OnMessage({0})", (object)data);
+            connection?.Trace(TraceLevels.Messages, "WS: OnMessage({0})", (object)data);
             ProcessResponse(connection, data);
         }
     }

@@ -12,12 +12,12 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// The id of the withdrawal
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = "";
         /// <summary>
         /// The currency of the withdrawal
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The quantity of the withdrawal
         /// </summary>
@@ -26,12 +26,12 @@ namespace Bittrex.Net.Objects.V3
         /// The address the withdrawal is to
         /// </summary>
         [JsonProperty("cryptoAddress")]
-        public string Address { get; set; }
+        public string Address { get; set; } = "";
         /// <summary>
         /// The tag of the address
         /// </summary>
         [JsonProperty("cryptoAddressTag")]
-        public string AddressTag { get; set; }
+        public string AddressTag { get; set; } = "";
         /// <summary>
         /// The transaction cost of the withdrawal
         /// </summary>
@@ -41,7 +41,7 @@ namespace Bittrex.Net.Objects.V3
         /// The transaction id
         /// </summary>
         [JsonProperty("txId")]
-        public string TransactionId { get; set; }
+        public string TransactionId { get; set; } = "";
         /// <summary>
         /// The status of the withdrawal
         /// </summary>

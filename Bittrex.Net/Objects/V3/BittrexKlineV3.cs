@@ -3,12 +3,12 @@
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
-    /// Market candle info
+    /// Symbol kline info
     /// </summary>
-    public class BittrexMarketCandleV3
+    public class BittrexKlineV3
     {
         /// <summary>
-        /// The opening time of this candle
+        /// The opening time of this kline
         /// </summary>
         public DateTime StartsAt { get; set; }
         /// <summary>
@@ -20,15 +20,15 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         public decimal Close { get; set; }
         /// <summary>
-        /// The highest price during this candle
+        /// The highest price during this kline
         /// </summary>
         public decimal High { get; set; }
         /// <summary>
-        /// The lowest price during this candle
+        /// The lowest price during this kline
         /// </summary>
         public decimal Low { get; set; }
         /// <summary>
-        /// The volume during this candle
+        /// The volume during this kline
         /// </summary>
         public decimal Volume { get; set; }
         /// <summary>

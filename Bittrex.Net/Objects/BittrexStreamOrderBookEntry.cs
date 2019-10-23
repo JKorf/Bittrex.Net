@@ -1,4 +1,4 @@
-﻿using CryptoExchange.Net.OrderBook;
+﻿using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects

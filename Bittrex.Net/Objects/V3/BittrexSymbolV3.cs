@@ -5,44 +5,44 @@ using Newtonsoft.Json;
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
-    /// Market info
+    /// Symbol info
     /// </summary>
-    public class BittrexMarketV3
+    public class BittrexSymbolV3
     {
         /// <summary>
-        /// The symbol of the market
+        /// The symbol of the symbol
         /// </summary>
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
-        /// The base currency of the market
+        /// The base currency of the symbol
         /// </summary>
         [JsonProperty("baseCurrencySymbol")]
-        public string BaseCurrency { get; set; }
+        public string BaseCurrency { get; set; } = "";
         /// <summary>
-        /// The quote currency of the market
+        /// The quote currency of the symbol
         /// </summary>
         [JsonProperty("quoteCurrencySymbol")]
-        public string QuoteCurrency { get; set; }
+        public string QuoteCurrency { get; set; } = "";
         /// <summary>
-        /// The minimum trade size for this market
+        /// The minimum trade size for this symbol
         /// </summary>
         public decimal MinTradeSize { get; set; }
         /// <summary>
-        /// The max pricision for this market
+        /// The max precision for this symbol
         /// </summary>
         public int Precision { get; set; }
         /// <summary>
-        /// The status of the market
+        /// The status of the symbol
         /// </summary>
         [JsonConverter(typeof(SymbolStatusConverter))]
         public SymbolStatus Status { get; set; }
         /// <summary>
-        /// When the market was created
+        /// When the symbol was created
         /// </summary>
         public DateTime CreatedAt { get; set; }
         /// <summary>
         /// Additional info
         /// </summary>
-        public string Notice { get; set; }
+        public string Notice { get; set; } = "";
     }
 }

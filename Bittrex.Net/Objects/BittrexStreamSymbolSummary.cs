@@ -5,15 +5,15 @@ using System;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// 24 hour summary of a market
+    /// 24 hour summary of a symbol
     /// </summary>
-    public class BittrexStreamMarketSummary
+    public class BittrexStreamSymbolSummary
     {
         /// <summary>
-        /// The name of the market
+        /// The name of the symbol
         /// </summary>
         [JsonProperty("M")]
-        public string MarketName { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The highest price in the last 24 hour
         /// </summary>
@@ -25,7 +25,7 @@ namespace Bittrex.Net.Objects
         [JsonProperty("L")]
         public decimal? Low { get; set; }
         /// <summary>
-        /// The volume in the last 24 hour in the market currency 
+        /// The volume in the last 24 hour in the quote currency 
         /// </summary>
         [JsonProperty("V")]
         public decimal? Volume { get; set; }

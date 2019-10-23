@@ -10,11 +10,11 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The abbreviation of the currency
         /// </summary>
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The full name of the currency
         /// </summary>
-        public string CurrencyLong { get; set; }
+        public string CurrencyLong { get; set; } = "";
         /// <summary>
         /// The minimum number of confirmations before a deposit is added to a account
         /// </summary>
@@ -31,14 +31,14 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The base coin type
         /// </summary>
-        public string CoinType { get; set; }
+        public string CoinType { get; set; } = "";
         /// <summary>
         /// The base address
         /// </summary>
-        public string BaseAddress { get; set; }
+        public string BaseAddress { get; set; } = "";
         /// <summary>
         /// Additional information about the state of this currency
         /// </summary>
-        public string Notice { get; set; }
+        public string Notice { get; set; } = "";
     }
 }

@@ -40,7 +40,7 @@
         /// </summary>
         Limit,
         /// <summary>
-        /// Market order; execute order at the best price available when placed
+        /// Symbol order; execute order at the best price available when placed
         /// </summary>
         Market
     }
@@ -69,7 +69,7 @@
     }
 
     /// <summary>
-    /// Interval for candles
+    /// Interval for klines
     /// </summary>
     public enum TickInterval
     {
@@ -197,7 +197,7 @@
         /// </summary>
         Limit,
         /// <summary>
-        /// Market order; execute order at best price on placing
+        /// Symbol order; execute order at best price on placing
         /// </summary>
         Market,
         /// <summary>
@@ -310,9 +310,9 @@
     }
 
     /// <summary>
-    /// Interval of candles
+    /// Interval of klines
     /// </summary>
-    public enum CandleInterval
+    public enum KlineInterval
     {
         /// <summary>
         /// 1m

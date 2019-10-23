@@ -11,7 +11,7 @@ namespace Bittrex.Net.Objects.V3
         /// The currency
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The total funds
         /// </summary>

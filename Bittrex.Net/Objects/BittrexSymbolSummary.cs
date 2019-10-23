@@ -5,14 +5,14 @@ using Newtonsoft.Json;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// 24 hour summary of a market
+    /// 24 hour summary of a symbol
     /// </summary>
-    public class BittrexMarketSummary
+    public class BittrexSymbolSummary
     {
         /// <summary>
-        /// The name of the market
+        /// The name of the symbol
         /// </summary>
-        public string MarketName { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The highest price in the last 24 hour
         /// </summary>
@@ -22,7 +22,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal? Low { get; set; }
         /// <summary>
-        /// The volume in the last 24 hour in the market currency 
+        /// The volume in the last 24 hour in the quote currency 
         /// </summary>
         public decimal? Volume { get; set; }
         /// <summary>

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Stream market summary update
+    /// Stream symbol summary update
     /// </summary>
-    public class BittrexStreamMarketSummaryUpdate
+    internal class BittrexStreamMarketSummaryUpdate
     {
         /// <summary>
         /// Nonce
@@ -18,13 +18,13 @@ namespace Bittrex.Net.Objects
         /// The current market summaries
         /// </summary>
         [JsonProperty("D")]
-        public List<BittrexStreamMarketSummary> Deltas { get; set; }
+        public IEnumerable<BittrexStreamSymbolSummary> Deltas { get; set; } = new List<BittrexStreamSymbolSummary>();
     }
 
     /// <summary>
-    /// Stream summary query response
+    /// Stream symbol summary response
     /// </summary>
-    public class BittrexStreamMarketSummariesQuery
+    internal class BittrexStreamMarketSummariesQuery
     {
         /// <summary>
         /// Nonce
@@ -36,6 +36,6 @@ namespace Bittrex.Net.Objects
         /// The current market summaries
         /// </summary>
         [JsonProperty("s")]
-        public List<BittrexStreamMarketSummary> Deltas { get; set; }
+        public IEnumerable<BittrexStreamSymbolSummary> Deltas { get; set; } = new List<BittrexStreamSymbolSummary>();
     }
 }

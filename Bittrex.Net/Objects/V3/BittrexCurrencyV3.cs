@@ -11,15 +11,15 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// The symbol for this currency
         /// </summary>
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The full name of the currency
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
         /// <summary>
         /// The type of the currency
         /// </summary>
-        public string CoinType { get; set; }
+        public string CoinType { get; set; } = "";
         /// <summary>
         /// The status of the currency
         /// </summary>
@@ -32,7 +32,7 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// Additional info
         /// </summary>
-        public string Notice { get; set; }
+        public string Notice { get; set; } = "";
         /// <summary>
         /// The transaction fee
         /// </summary>
@@ -41,6 +41,6 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// Url to the logo
         /// </summary>
-        public string LogoUrl { get; set; }
+        public string LogoUrl { get; set; } = "";
     }
 }

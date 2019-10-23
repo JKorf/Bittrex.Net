@@ -1,6 +1,5 @@
 ﻿using Bittrex.Net.Interfaces;
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
@@ -15,10 +14,10 @@ namespace Bittrex.Net.Sockets
     internal class BittrexHubConnection: BaseSocket, ISignalRSocket
     {
         private readonly HubConnection connection;
-        private IHubProxy hubProxy;
+        private IHubProxy? hubProxy;
         public new string Url { get; }
         
-        public BittrexHubConnection(Log log, HubConnection connection): base(null, connection.Url)
+        public BittrexHubConnection(Log log, HubConnection connection): base(null!, connection.Url)
         {
             Url = connection.Url;
             this.connection = connection;
@@ -55,8 +54,11 @@ namespace Bittrex.Net.Sockets
             connection.Proxy = new WebProxy(proxyHost, proxyPort);
         }
         
-        public async Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
+        public async Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
         {
+            if(hubProxy == null)
+                throw new InvalidOperationException("HubProxy not set");
+
             try
             {
                 log.Write(LogVerbosity.Debug, $"Sending data: {call}, [{string.Join(", ", pars)}]");
@@ -66,7 +68,7 @@ namespace Bittrex.Net.Sockets
             catch (Exception e)
             {
                 log.Write(LogVerbosity.Warning, "Failed to invoke proxy: " + e.Message);
-                return new CallResult<T>(default(T), new UnknownError("Failed to invoke proxy: " + e.Message));
+                return new CallResult<T>(default, new UnknownError("Failed to invoke proxy: " + e.Message));
             }
         }
 

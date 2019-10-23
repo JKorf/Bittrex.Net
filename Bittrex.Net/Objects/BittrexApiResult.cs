@@ -13,13 +13,14 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("success")]
         public bool Success { get; internal set; }
+
         /// <summary>
         /// The result of the Api call
         /// </summary>
         [JsonProperty("result")]
-        public T Result { get; internal set; }
+        public T Result { get; internal set; } = default!;
 
         [JsonProperty("message")]
-        public string Message { get; internal set; }
+        public string? Message { get; internal set; }
     }
 }

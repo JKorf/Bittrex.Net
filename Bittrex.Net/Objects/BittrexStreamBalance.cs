@@ -14,11 +14,12 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("N")]
         public int Nonce { get; set; }
+
         /// <summary>
         /// Deltas
         /// </summary>
         [JsonProperty("D")]
-        public BittrexStreamBalance Delta { get; set; }
+        public BittrexStreamBalance Delta { get; set; } = default!;
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace Bittrex.Net.Objects
         /// Currency the balance is for
         /// </summary>
         [JsonProperty("c")]
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The total balance
         /// </summary>
@@ -60,7 +61,7 @@ namespace Bittrex.Net.Objects
         /// The deposit address
         /// </summary>
         [JsonProperty("P")]
-        public string CryptoAddress { get; set; }
+        public string CryptoAddress { get; set; } = "";
         /// <summary>
         /// 
         /// </summary>

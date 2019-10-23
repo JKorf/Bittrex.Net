@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using Bittrex.Net.Objects;
 using Bittrex.Net.UnitTests.TestImplementations;
@@ -17,31 +18,31 @@ namespace Bittrex.Net.UnitTests
         public void GetMarkets_Should_RespondWithMarketsList()
         {
             // arrange
-            var expected = new List<BittrexMarket>()
+            var expected = new List<BittrexSymbol>()
             {
-                new BittrexMarket()
+                new BittrexSymbol()
                 {
                     BaseCurrency = "Test1",
                     BaseCurrencyLong = "TestCurrency1",
                     Created = new DateTime(2017, 1, 1),
                     IsActive = true,
-                    MarketCurrency = "MarketTest1",
-                    MarketCurrencyLong = "MarketTestCurrency1",
-                    MarketName = "Test1-Test1",
+                    QuoteCurrency = "MarketTest1",
+                    QuoteCurrencyLong = "MarketTestCurrency1",
+                    Symbol = "Test1-Test1",
                     MinTradeSize = 0.0001m,
                     IsSponsored = null,
                     LogoUrl = null,
                     Notice = null
                 },
-                new BittrexMarket()
+                new BittrexSymbol()
                 {
                     BaseCurrency = "Test2",
                     BaseCurrencyLong = "TestCurrency2",
                     Created = new DateTime(2016, 1, 1),
                     IsActive = false,
-                    MarketCurrency = "MarketTest2",
-                    MarketCurrencyLong = "MarketTestCurrency2",
-                    MarketName = "Test2-Test2",
+                    QuoteCurrency = "MarketTest2",
+                    QuoteCurrencyLong = "MarketTestCurrency2",
+                    Symbol = "Test2-Test2",
                     MinTradeSize = 1,
                     IsSponsored = true,
                     LogoUrl = "https://testurl",
@@ -51,12 +52,12 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarkets();
+            var result = client.GetSymbols();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -96,8 +97,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -108,7 +109,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetTicker("TestMarket");
+            var result = client.GetTicker("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -119,15 +120,15 @@ namespace Bittrex.Net.UnitTests
         public void GetMarketSummary_Should_RespondWithMarketSummary()
         {
             // arrange
-            var expected = new List<BittrexMarketSummary>
+            var expected = new List<BittrexSymbolSummary>
             {
-                new BittrexMarketSummary
+                new BittrexSymbolSummary
                 {
                     Ask = 0.001m,
                     Bid = 0.002m,
                     Last = 0.003m,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = 1.1m,
                     High = 2.2m,
                     Low = 3.3m,
@@ -141,7 +142,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketSummary("TestMarket");
+            var result = client.GetSymbolSummary("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
@@ -152,15 +153,15 @@ namespace Bittrex.Net.UnitTests
         public void GetMarketSummaries_Should_RespondWithMarketSummariesList()
         {
             // arrange
-            var expected = new List<BittrexMarketSummary>()
+            var expected = new List<BittrexSymbolSummary>()
             {
-                new BittrexMarketSummary()
+                new BittrexSymbolSummary()
                 {
                     Ask = 0.001m,
                     Bid = 0.002m,
                     Last = 0.003m,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = 1.1m,
                     High = 2.2m,
                     Low = 3.3m,
@@ -170,13 +171,13 @@ namespace Bittrex.Net.UnitTests
                     TimeStamp = new DateTime(2016, 1, 1),
                     Volume = 5.5m
                 },
-                new BittrexMarketSummary()
+                new BittrexSymbolSummary()
                 {
                     Ask = 0.006m,
                     Bid = 0.007m,
                     Last = 0.008m,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = 9.9m,
                     High = 10.10m,
                     Low = 11.11m,
@@ -186,13 +187,13 @@ namespace Bittrex.Net.UnitTests
                     TimeStamp = new DateTime(2016, 1, 1),
                     Volume = 13.13m
                 },
-                new BittrexMarketSummary()
+                new BittrexSymbolSummary()
                 {
                     Ask = 0.006m,
                     Bid = 0.007m,
                     Last = null,
                     Created = new DateTime(2017, 1, 1),
-                    MarketName = "TestMarket",
+                    Symbol = "TestMarket",
                     BaseVolume = null,
                     High = null,
                     Low = null,
@@ -206,13 +207,13 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketSummaries();
+            var result = client.GetSymbolSummaries();
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[2], expected[2]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[2], expected[2]));
         }
 
         [TestCase()]
@@ -235,14 +236,14 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetOrderBook("TestMarket");
+            var result = client.GetOrderBook("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy[0], expected.Buy[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy[1], expected.Buy[1]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell[0], expected.Sell[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell[1], expected.Sell[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy.ToList()[0], expected.Buy.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Buy.ToList()[1], expected.Buy.ToList()[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell.ToList()[0], expected.Sell.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.Sell.ToList()[1], expected.Sell.ToList()[1]));
         }
 
         [TestCase()]
@@ -258,12 +259,12 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetBuyOrderBook("TestMarket");
+            var result = client.GetBuyOrderBook("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -279,21 +280,21 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetSellOrderBook("TestMarket");
+            var result = client.GetSellOrderBook("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
         public void GetMarketHistory_Should_ReturnMarketHistoryList()
         {
             // arrange
-            var expected = new List<BittrexMarketHistory>()
+            var expected = new List<BittrexSymbolTrade>()
             {
-                new BittrexMarketHistory()
+                new BittrexSymbolTrade()
                 {
                     Quantity = 1.1m,
                     OrderType = OrderSide.Buy,
@@ -303,7 +304,7 @@ namespace Bittrex.Net.UnitTests
                     Timestamp = new DateTime(2017, 1, 1),
                     Total = 3.3m
                 },
-                new BittrexMarketHistory()
+                new BittrexSymbolTrade()
                 {
                     Quantity = 4.4m,
                     OrderType = OrderSide.Sell,
@@ -317,12 +318,12 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.GetMarketHistory("TestMarket");
+            var result = client.GetSymbolTrades("BTC-ETH");
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -333,7 +334,7 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateAuthenticatedResponseClient(WrapInResult(expected));
 
             // act
-            var result = client.PlaceOrder(OrderSide.Buy, "TestMarket", 1, 1);
+            var result = client.PlaceOrder(OrderSide.Buy, "BTC-ETH", 1, 1);
 
             // assert
             Assert.IsTrue(result.Success);
@@ -408,8 +409,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -464,8 +465,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -595,8 +596,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -641,8 +642,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -679,8 +680,8 @@ namespace Bittrex.Net.UnitTests
 
             // assert
             Assert.IsTrue(result.Success);
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[0], expected[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(result.Data[1], expected[1]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[0], expected[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(result.Data.ToList()[1], expected[1]));
         }
 
         [TestCase()]
@@ -691,14 +692,29 @@ namespace Bittrex.Net.UnitTests
             var client = TestHelpers.CreateResponseClient(WrapInResult<object>(null, false, errorMessage));
 
             // act
-            var result = client.GetTicker("TestMarket");
+            var result = client.GetTicker("BTC-ETH");
 
             // assert
             Assert.IsFalse(result.Success);
             Assert.AreNotEqual(0, result.Error.Code);
             Assert.IsTrue(result.Error.Message.Contains(errorMessage));
         }
-        
+
+        [TestCase()]
+        public void HttpErrorResponse_Should_GiveFailedResult()
+        {
+            // arrange
+            var errorMessage = "TestErrorMessage";
+            var client = TestHelpers.CreateResponseClient(errorMessage, null, System.Net.HttpStatusCode.BadRequest);
+
+            // act
+            var result = client.GetTicker("BTC-ETH");
+
+            // assert
+            Assert.IsFalse(result.Success);
+            Assert.IsTrue(result.Error.ToString().Contains(errorMessage));
+        }
+
         [Test]
         public void ProvidingApiCredentials_Should_SaveApiCredentials()
         {
@@ -731,7 +747,7 @@ namespace Bittrex.Net.UnitTests
             var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // act
-            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", "GET", new Dictionary<string, object>(),  true);
+            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", HttpMethod.Get, new Dictionary<string, object>(),  true);
 
             // assert
             Assert.IsTrue(sign.First().Key == "apiKey");
@@ -747,7 +763,7 @@ namespace Bittrex.Net.UnitTests
             var uri = new Uri("https://test.test-api.com");
 
             // act
-            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), "GET", new Dictionary<string, object>(), true);
+            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), HttpMethod.Get, new Dictionary<string, object>(), true);
 
             // assert
             Assert.IsTrue(sign.First().Value == "3A82874271C0B4BE0F5DE44CB2CE7B39645AC93B07FD5570A700DC14C7524269B373DAFFA3A9BF1A2B6A318915D2ACEEC905163E574F34FF39EC62A676D2FBC2");
@@ -760,6 +776,22 @@ namespace Bittrex.Net.UnitTests
             result.GetType().GetProperty("Success").SetValue(result, success);
             result.GetType().GetProperty("Message", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(result, message);
             return result;
+        }
+
+        [TestCase("BTC-USDT", true)]
+        [TestCase("NANO-USDT", true)]
+        [TestCase("NANO-BTC", true)]
+        [TestCase("ETH-BTC", true)]
+        [TestCase("BE-ETC", false)]
+        [TestCase("NANO-USDTD", false)]
+        [TestCase("BTCUSDT", false)]
+        [TestCase("BTCUSD", false)]
+        public void CheckValidBittrexSymbol(string symbol, bool isValid)
+        {
+            if (isValid)
+                Assert.DoesNotThrow(symbol.ValidateBittrexSymbol);
+            else
+                Assert.Throws(typeof(ArgumentException), symbol.ValidateBittrexSymbol);
         }
     }
 }

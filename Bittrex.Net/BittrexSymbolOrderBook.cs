@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
-using OrderBookEntryType = CryptoExchange.Net.Objects.OrderBookEntryType;
 
 namespace Bittrex.Net
 {
@@ -22,46 +19,44 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="symbol">The symbol the order book is for</param>
         /// <param name="options">Options for the order book</param>
-        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
+        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions? options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
         {
+            symbol.ValidateBittrexSymbol();
             socketClient = options?.SocketClient ?? new BittrexSocketClient();
         }
 
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStart()
         {
-            var subResult = await socketClient.SubscribeToExchangeStateUpdatesAsync(Symbol, HandleUpdate).ConfigureAwait(false);
+            var subResult = await socketClient.SubscribeToOrderBookUpdatesAsync(Symbol, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
                 return new CallResult<UpdateSubscription>(null, subResult.Error);
 
             Status = OrderBookStatus.Syncing;
-            var queryResult = await socketClient.QueryExchangeStateAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await socketClient.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAll().ConfigureAwait(false);
                 return new CallResult<UpdateSubscription>(null, queryResult.Error);
             }
 
-            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Sells, queryResult.Data.Buys);
+            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Buys, queryResult.Data.Sells);
             return new CallResult<UpdateSubscription>(subResult.Data, null);
         }
 
-        private void HandleUpdate(BittrexStreamUpdateExchangeState data)
+        private void HandleUpdate(BittrexStreamOrderBookUpdate data)
         {
-            var updates = new List<ProcessEntry>();
-            updates.AddRange(data.Sells.Select(a => new ProcessEntry(OrderBookEntryType.Ask, a)));
-            updates.AddRange(data.Buys.Select(b => new ProcessEntry(OrderBookEntryType.Bid, b)));
-            UpdateOrderBook(data.Nonce, data.Nonce, updates);
+            UpdateOrderBook(data.Nonce, data.Buys, data.Sells);
         }
 
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResync()
         {
-            var queryResult = await socketClient.QueryExchangeStateAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await socketClient.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             
-            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Sells, queryResult.Data.Buys);
+            SetInitialOrderBook(queryResult.Data.Nonce, queryResult.Data.Buys, queryResult.Data.Sells);
             return new CallResult<bool>(true, null);
         }
 
