@@ -17,7 +17,7 @@ namespace Bittrex.Net
             if (string.IsNullOrEmpty(symbolString))
                 throw new ArgumentException("Symbol is not provided");
 
-            if (!Regex.IsMatch(symbolString, "^(([A-Z]{3,4})[-]([A-Z]{3,4}))$"))
+            if (!Regex.IsMatch(symbolString, "^((([A-Z]|[0-9]){2,5})[-](([A-Z]|[0-9]){2,5}))$"))
                 throw new ArgumentException($"{symbolString} is not a valid Bittrex symbol. Should be [BaseCurrency]-[QuoteCurrency] for V1 API or other way around for V3 API, e.g. BTC-ETH");
         }
     }
