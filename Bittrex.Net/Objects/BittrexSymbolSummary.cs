@@ -12,6 +12,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The name of the symbol
         /// </summary>
+        [JsonProperty("marketName")]
         public string Symbol { get; set; } = "";
         /// <summary>
         /// The highest price in the last 24 hour
