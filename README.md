@@ -1,4 +1,4 @@
-# ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Resources/icon.png?raw=true) Bittrex.Net 
+# ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Bittrex.Net/Icon/icon.png?raw=true) Bittrex.Net 
 
 ![Build status](https://travis-ci.org/JKorf/Bittrex.Net.svg?branch=master)
 
