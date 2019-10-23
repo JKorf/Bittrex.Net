@@ -782,8 +782,9 @@ namespace Bittrex.Net.UnitTests
         [TestCase("NANO-USDT", true)]
         [TestCase("NANO-BTC", true)]
         [TestCase("ETH-BTC", true)]
-        [TestCase("BE-ETC", false)]
-        [TestCase("NANO-USDTD", false)]
+        [TestCase("BE-ETC", true)]
+        [TestCase("NANO-USDTD", true)]
+        [TestCase("NANO-USDTAD", false)]
         [TestCase("BTCUSDT", false)]
         [TestCase("BTCUSD", false)]
         public void CheckValidBittrexSymbol(string symbol, bool isValid)
