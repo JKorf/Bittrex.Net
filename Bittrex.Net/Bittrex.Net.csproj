@@ -18,7 +18,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>4.0.2 - Fixed summary symbol mapping</PackageReleaseNotes>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
