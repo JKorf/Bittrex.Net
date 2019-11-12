@@ -59,17 +59,23 @@ namespace Bittrex.Net.Sockets
             if(hubProxy == null)
                 throw new InvalidOperationException("HubProxy not set");
 
-            try
+            Error? error = null;
+            for (var i = 0; i < 3; i++)
             {
-                log.Write(LogVerbosity.Debug, $"Sending data: {call}, [{string.Join(", ", pars)}]");
-                var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
-                return new CallResult<T>(sub, null);
+                try
+                {
+                    log.Write(LogVerbosity.Debug, $"Sending data: {call}, [{string.Join(", ", pars)}]");
+                    var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
+                    return new CallResult<T>(sub, null);
+                }
+                catch (Exception e)
+                {
+                    log.Write(LogVerbosity.Warning, $"Failed to invoke proxy, try {i}: " + e.Message);
+                    error = new UnknownError("Failed to invoke proxy: " + e.Message);
+                }
             }
-            catch (Exception e)
-            {
-                log.Write(LogVerbosity.Warning, "Failed to invoke proxy: " + e.Message);
-                return new CallResult<T>(default, new UnknownError("Failed to invoke proxy: " + e.Message));
-            }
+
+            return new CallResult<T>(default, error);
         }
 
         public override async Task<bool> Connect()
