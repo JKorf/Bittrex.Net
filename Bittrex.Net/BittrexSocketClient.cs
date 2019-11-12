@@ -30,7 +30,7 @@ namespace Bittrex.Net
         private const string SummaryDeltaSub = "SubscribeToSummaryDeltas";
         private const string SummaryLiteDeltaSub = "SubscribeToSummaryLiteDeltas";
         private const string ExchangeDeltaSub = "SubscribeToExchangeDeltas";
-        private const string QueryExchangeStateRequest = "GetOrderBook";
+        private const string QueryExchangeStateRequest = "QueryExchangeState";
         private const string QuerySummaryStateRequest = "QuerySummaryState";
 
         private const string ExchangeStateUpdate = "uE";
