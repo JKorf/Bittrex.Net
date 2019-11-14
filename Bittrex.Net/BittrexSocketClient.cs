@@ -379,7 +379,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(true);
         }
 
         /// <inheritdoc />
