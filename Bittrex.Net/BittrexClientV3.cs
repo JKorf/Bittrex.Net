@@ -537,8 +537,10 @@ namespace Bittrex.Net
         /// <returns>List of closed orders</returns>
         public async Task<WebCallResult<IEnumerable<BittrexOrderV3>>> GetClosedOrdersAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
+            pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
+
             if (nextPageToken != null && previousPageToken != null) 
-                throw new ArgumentException("Can't specify startDate and endData simultaneously");
+                throw new ArgumentException("Can't specify nextPageToken and previousPageToken simultaneously");
 
             pageSize?.ValidateIntBetween("pageSize", 25, 100);
 
