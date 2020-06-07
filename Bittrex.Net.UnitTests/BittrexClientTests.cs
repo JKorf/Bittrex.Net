@@ -7,6 +7,7 @@ using Bittrex.Net.Objects;
 using Bittrex.Net.UnitTests.TestImplementations;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Objects;
 using NUnit.Framework;
 
 namespace Bittrex.Net.UnitTests
@@ -747,7 +748,7 @@ namespace Bittrex.Net.UnitTests
             var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // act
-            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", HttpMethod.Get, new Dictionary<string, object>(),  true);
+            var sign = authProvider.AddAuthenticationToParameters("https://test.test-api.com", HttpMethod.Get, new Dictionary<string, object>(), true, PostParameters.InBody, ArrayParametersSerialization.MultipleValues);
 
             // assert
             Assert.IsTrue(sign.First().Key == "apiKey");
@@ -763,7 +764,7 @@ namespace Bittrex.Net.UnitTests
             var uri = new Uri("https://test.test-api.com");
 
             // act
-            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), HttpMethod.Get, new Dictionary<string, object>(), true);
+            var sign = authProvider.AddAuthenticationToHeaders(uri.ToString(), HttpMethod.Get, new Dictionary<string, object>(), true, PostParameters.InBody, ArrayParametersSerialization.MultipleValues);
 
             // assert
             Assert.IsTrue(sign.First().Value == "3A82874271C0B4BE0F5DE44CB2CE7B39645AC93B07FD5570A700DC14C7524269B373DAFFA3A9BF1A2B6A318915D2ACEEC905163E574F34FF39EC62A676D2FBC2");
