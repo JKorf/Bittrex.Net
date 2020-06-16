@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net
@@ -27,7 +28,7 @@ namespace Bittrex.Net
             encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret.GetString()));
         }
 
-        public override Dictionary<string, object> AddAuthenticationToParameters(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed)
+        public override Dictionary<string, object> AddAuthenticationToParameters(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
         {
             if (!signed)
                 return parameters;
@@ -41,7 +42,7 @@ namespace Bittrex.Net
             return parameters;
         }
 
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed)
+        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
         {
             if (!signed)
                 return new Dictionary<string, string>();
@@ -75,7 +76,7 @@ namespace Bittrex.Net
             encryptor = SHA512.Create();
         }
 
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed)
+        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
         {
             if (!signed)
                 return new Dictionary<string, string>();
@@ -90,7 +91,7 @@ namespace Bittrex.Net
             var jsonContent = "";
             if(method != HttpMethod.Get && method != HttpMethod.Delete)
                 jsonContent = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
-            result.Add("Api-Content-Hash", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(jsonContent))).ToLower());
+            result.Add("Api-Content-Hash", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(jsonContent))).ToLower(CultureInfo.InvariantCulture));
 
             uri = WebUtility.UrlDecode(uri); // Sign needs the query parameters to not be encoded
             var sign = result["Api-Timestamp"] + uri + method + result["Api-Content-Hash"] + "";
