@@ -5,6 +5,9 @@ using System;
 
 namespace Bittrex.Net.Objects
 {
+    /// <summary>
+    /// Stream order data
+    /// </summary>
     public class BittrexStreamOrderData
     {
         /// <summary>
@@ -12,6 +15,9 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("w")]
         public Guid AccountId { get; set; }
+        /// <summary>
+        /// Nonce
+        /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
         /// <summary>
@@ -19,13 +25,17 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("TY"), JsonConverter(typeof(OrderUpdateTypeConverter))]
         public OrderUpdateType Type { get; set; }
+
         /// <summary>
         /// Order information
         /// </summary>
         [JsonProperty("o")]
-        public BittrexStreamOrder Order { get; set; }
+        public BittrexStreamOrder Order { get; set; } = default!;
     }
 
+    /// <summary>
+    /// Stream order
+    /// </summary>
     public class BittrexStreamOrder
     {
         /// <summary>
@@ -33,6 +43,9 @@ namespace Bittrex.Net.Objects
         /// </summary>
         [JsonProperty("U")]
         public Guid Uuid { get; set; }
+        /// <summary>
+        /// Id
+        /// </summary>
         [JsonProperty("I")]
         public long Id { get; set; }
         /// <summary>
@@ -41,10 +54,10 @@ namespace Bittrex.Net.Objects
         [JsonProperty("OU")]
         public Guid OrderId { get; set; }
         /// <summary>
-        /// The market this order is for
+        /// The symbol this order is for
         /// </summary>
         [JsonProperty("E")]
-        public string Market { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// The order type
         /// </summary>
@@ -64,7 +77,7 @@ namespace Bittrex.Net.Objects
         /// The order limit
         /// </summary>
         [JsonProperty("X")]
-        public decimal Limit { get; set; }
+        public decimal? Limit { get; set; }
         /// <summary>
         /// The amount of commission paid for this order
         /// </summary>
@@ -114,7 +127,7 @@ namespace Bittrex.Net.Objects
         /// The condition of the order
         /// </summary>
         [JsonProperty("J"), JsonConverter(typeof(ConditionTypeConverter))]
-        public ConditionType Condition { get; set; }
+        public ConditionType? Condition { get; set; }
         /// <summary>
         /// The condition target of the order
         /// </summary>

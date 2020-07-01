@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about an order executed on a market
+    /// Information about an order executed on a symbol
     /// </summary>
-    public class BittrexMarketHistory
+    public class BittrexSymbolTrade
     {
         /// <summary>
         /// The order id

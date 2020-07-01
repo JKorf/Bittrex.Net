@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
-    public class BittrexStreamMarketSummaryUpdate
+    /// <summary>
+    /// Stream symbol summary update
+    /// </summary>
+    internal class BittrexStreamMarketSummaryUpdate
     {
         /// <summary>
-        /// Nounce
+        /// Nonce
         /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
@@ -15,13 +18,16 @@ namespace Bittrex.Net.Objects
         /// The current market summaries
         /// </summary>
         [JsonProperty("D")]
-        public List<BittrexStreamMarketSummary> Deltas { get; set; }
+        public IEnumerable<BittrexStreamSymbolSummary> Deltas { get; set; } = new List<BittrexStreamSymbolSummary>();
     }
 
-    public class BittrexStreamMarketSummariesQuery
+    /// <summary>
+    /// Stream symbol summary response
+    /// </summary>
+    internal class BittrexStreamMarketSummariesQuery
     {
         /// <summary>
-        /// Nounce
+        /// Nonce
         /// </summary>
         [JsonProperty("N")]
         public long Nonce { get; set; }
@@ -30,6 +36,6 @@ namespace Bittrex.Net.Objects
         /// The current market summaries
         /// </summary>
         [JsonProperty("s")]
-        public List<BittrexStreamMarketSummary> Deltas { get; set; }
+        public IEnumerable<BittrexStreamSymbolSummary> Deltas { get; set; } = new List<BittrexStreamSymbolSummary>();
     }
 }

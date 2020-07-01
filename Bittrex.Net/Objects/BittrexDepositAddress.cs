@@ -8,10 +8,10 @@
         /// <summary>
         /// Currency the address is for
         /// </summary>
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "";
         /// <summary>
         /// The deposit address of the currency
         /// </summary>
-        public string Address { get; set; }
+        public string Address { get; set; } = "";
     }
 }

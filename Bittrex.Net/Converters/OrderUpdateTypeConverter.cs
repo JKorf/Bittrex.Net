@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Converters
 {
-    public class OrderUpdateTypeConverter : BaseConverter<OrderUpdateType>
+    internal class OrderUpdateTypeConverter : BaseConverter<OrderUpdateType>
     {
         public OrderUpdateTypeConverter() :this(true)
         {
@@ -14,12 +14,12 @@ namespace Bittrex.Net.Converters
         {
         }
 
-        protected override Dictionary<OrderUpdateType, string> Mapping => new Dictionary<OrderUpdateType, string>
+        protected override List<KeyValuePair<OrderUpdateType, string>> Mapping => new List<KeyValuePair<OrderUpdateType, string>>
         {
-            { OrderUpdateType.Open, "0" },
-            { OrderUpdateType.PartialFill, "1" },
-            { OrderUpdateType.Fill, "2" },
-            { OrderUpdateType.Cancel, "3" }
+            new KeyValuePair<OrderUpdateType, string>(OrderUpdateType.Open, "0"),
+            new KeyValuePair<OrderUpdateType, string>(OrderUpdateType.PartialFill, "1"),
+            new KeyValuePair<OrderUpdateType, string>(OrderUpdateType.Fill, "2"),
+            new KeyValuePair<OrderUpdateType, string>(OrderUpdateType.Cancel, "3")
         };
     }
 }

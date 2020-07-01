@@ -3,20 +3,23 @@
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Order book for a market
+    /// Order book for a symbol
     /// </summary>
     public class BittrexOrderBook
     {
         /// <summary>
         /// List of buy orders in the order book
         /// </summary>
-        public List<BittrexOrderBookEntry> Buy { get; set; }
+        public IEnumerable<BittrexOrderBookEntry> Buy { get; set; } = new List<BittrexOrderBookEntry>();
         /// <summary>
         /// List of sell orders in the order book
         /// </summary>
-        public List<BittrexOrderBookEntry> Sell { get; set; }
+        public IEnumerable<BittrexOrderBookEntry> Sell { get; set; } = new List<BittrexOrderBookEntry>();
     }
 
+    /// <summary>
+    /// Order book entry
+    /// </summary>
     public class BittrexOrderBookEntry
     {
         /// <summary>
@@ -42,8 +45,17 @@ namespace Bittrex.Net.Objects
     /// </summary>
     public enum OrderBookEntryType
     {
+        /// <summary>
+        /// A newly added entry
+        /// </summary>
         NewEntry = 0,
+        /// <summary>
+        /// A entry to remove
+        /// </summary>
         RemoveEntry = 1,
+        /// <summary>
+        /// An updated entry
+        /// </summary>
         UpdateEntry = 2
     }
 }

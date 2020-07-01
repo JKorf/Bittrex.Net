@@ -3,19 +3,22 @@ using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects
 {
-    public class BittrexStreamMarketSummariesLite
+    internal class BittrexStreamMarketSummariesLite
     {
         [JsonProperty("D")]
-        public List<BittrexStreamMarketSummaryLite> Deltas { get; set; }
+        public IEnumerable<BittrexStreamSymbolSummaryLite> Deltas { get; set; } = new List<BittrexStreamSymbolSummaryLite>();
     }
 
-    public class BittrexStreamMarketSummaryLite
+    /// <summary>
+    /// Stream lite symbol summary
+    /// </summary>
+    public class BittrexStreamSymbolSummaryLite
     {
         /// <summary>
-        /// Name of the market
+        /// Name of the symbol
         /// </summary>
         [JsonProperty("M")]
-        public string MarketName { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// Price of last executed trade
         /// </summary>

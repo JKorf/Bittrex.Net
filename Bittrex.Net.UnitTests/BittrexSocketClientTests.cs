@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Text;
 using Bittrex.Net.UnitTests.TestImplementations;
+using CryptoExchange.Net.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -22,15 +24,15 @@ namespace Bittrex.Net.UnitTests
             socket.CanConnect = true;
             var client = TestHelpers.CreateSocketClient(socket);
 
-            List<BittrexStreamMarketSummary> result = null;
-            var subResponse = client.SubscribeToMarketSummariesUpdate((test) => result = test);
+            List<BittrexStreamSymbolSummary> result = null;
+            var subResponse = client.SubscribeToSymbolSummariesUpdate((test) => result = test.ToList());
 
             var data =
                 new BittrexStreamMarketSummaryUpdate()
                 {
-                    Deltas = new List<BittrexStreamMarketSummary>
+                    Deltas = new List<BittrexStreamSymbolSummary>
                     {
-                        new BittrexStreamMarketSummary()
+                        new BittrexStreamSymbolSummary()
                         {
                             Ask = 0.1m,
                             BaseVolume = 0.2m,
@@ -39,7 +41,7 @@ namespace Bittrex.Net.UnitTests
                             High = 0.4m,
                             Last = 0.5m,
                             Low = 0.6m,
-                            MarketName = "TestMarket",
+                            Symbol = "TestMarket",
                             OpenBuyOrders = null,
                             OpenSellOrders = null,
                             PrevDay = null,
@@ -52,11 +54,11 @@ namespace Bittrex.Net.UnitTests
             
 
             // act
-            socket.InvokeMessage(WrapResult(data));
+            socket.InvokeMessage(WrapResult("uS", data));
 
             // assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas[0], result[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas.ToList()[0], result[0]));
         }
 
         [TestCase()]
@@ -68,30 +70,30 @@ namespace Bittrex.Net.UnitTests
             socket.CanConnect = true;
             var client = TestHelpers.CreateSocketClient(socket);
 
-            List<BittrexStreamMarketSummaryLite> result = null;
-            var subResponse = client.SubscribeToMarketSummariesLiteUpdate((test) => result = test);
+            List<BittrexStreamSymbolSummaryLite> result = null;
+            var subResponse = client.SubscribeToSymbolSummariesLiteUpdate((test) => result = test.ToList());
 
             var data =
                 new BittrexStreamMarketSummariesLite()
                 {
-                    Deltas = new List<BittrexStreamMarketSummaryLite>
+                    Deltas = new List<BittrexStreamSymbolSummaryLite>
                     {
-                        new BittrexStreamMarketSummaryLite()
+                        new BittrexStreamSymbolSummaryLite()
                         {
                             BaseVolume = 0.2m,
                             Last = 0.5m,
-                            MarketName = "TestMarket"
+                            Symbol = "TestMarket"
                         }
                     }
                 };
 
 
             // act
-            socket.InvokeMessage(WrapResult(data));
+            socket.InvokeMessage(WrapResult("uL", data));
 
             // assert
             Assert.IsNotNull(result);
-            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas[0], result[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Deltas.ToList()[0], result[0]));
         }
 
         [TestCase()]
@@ -101,48 +103,49 @@ namespace Bittrex.Net.UnitTests
             var socket = new TestSocket();
             socket.SetProxyResponse(true);
             socket.CanConnect = true;
-            var client = TestHelpers.CreateSocketClient(socket);
+            var client = TestHelpers.CreateSocketClient(socket, new BittrexSocketClientOptions()
+            {
+                LogVerbosity = LogVerbosity.Debug
+            });
 
-            BittrexStreamUpdateExchangeState result = null;
-            var subResponse = client.SubscribeToExchangeStateUpdates("market", (test) => result = test);
+            BittrexStreamOrderBookUpdate result = null;
+            var subResponse = client.SubscribeToOrderBookUpdates("BTC-ETH", (test) => result = test);
 
             var data =
-                new BittrexStreamUpdateExchangeState()
+                new BittrexStreamOrderBookUpdate()
                 {
                     Nonce = 1,
-                    MarketName = "market",
-                    Buys = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.1m, Rate = 0.2m, Type = OrderBookEntryType.NewEntry} },
-                    Sells = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.4m, Rate = 0.5m, Type = OrderBookEntryType.RemoveEntry } },
+                    Symbol = "BTC-ETH",
+                    Buys = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.1m, Price = 0.2m, Type = OrderBookEntryType.NewEntry} },
+                    Sells = new List<BittrexStreamOrderBookUpdateEntry> { new BittrexStreamOrderBookUpdateEntry() { Quantity = 0.4m, Price = 0.5m, Type = OrderBookEntryType.RemoveEntry } },
                     Fills = new List<BittrexStreamFill> { new BittrexStreamFill(){ Rate = 0.6m, Quantity = 0.7m, OrderType = OrderSide.Buy, Timestamp = new DateTime(2018, 1, 1)} }
                 };
 
 
             // act
-            socket.InvokeMessage(WrapResult(data));
+            socket.InvokeMessage(WrapResult("uE", data));
 
             // assert
             Assert.IsNotNull(result);
             Assert.IsTrue(TestHelpers.AreEqual(data, result, "Buys", "Sells", "Fills"));
-            Assert.IsTrue(TestHelpers.AreEqual(data.Buys[0], result.Buys[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(data.Sells[0], result.Sells[0]));
-            Assert.IsTrue(TestHelpers.AreEqual(data.Fills[0], result.Fills[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Buys.ToList()[0], result.Buys.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Sells.ToList()[0], result.Sells.ToList()[0]));
+            Assert.IsTrue(TestHelpers.AreEqual(data.Fills.ToList()[0], result.Fills.ToList()[0]));
         }
 
-        private JObject WrapResult<T>(T data)
+        private JObject WrapResult<T>(string method, T data)
         {
             var stringData = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
 
-            using (var compressedStream = new MemoryStream())
-            using (var deflateStream = new DeflateStream(compressedStream, CompressionMode.Compress))
-            {
-                deflateStream.Write(stringData, 0, stringData.Length);
-                deflateStream.Flush();
+            using var compressedStream = new MemoryStream();
+            using var deflateStream = new DeflateStream(compressedStream, CompressionMode.Compress);
+            deflateStream.Write(stringData, 0, stringData.Length);
+            deflateStream.Flush();
 
-                var result = new JObject();
-                result["A"] = new JArray(Convert.ToBase64String(compressedStream.ToArray()));
-                return result;
-                
-            }
+            var result = new JObject();
+            result["M"] = method;
+            result["A"] = new JArray(Convert.ToBase64String(compressedStream.ToArray()));
+            return result;
         }
     }
 }

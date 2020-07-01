@@ -11,13 +11,15 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
-    public class BittrexHubConnection: BaseSocket, ISignalRSocket
+    internal class BittrexHubConnection: BaseSocket, ISignalRSocket
     {
         private readonly HubConnection connection;
-        private IHubProxy proxy;
-
-        public BittrexHubConnection(Log log, HubConnection connection): base(null, connection.Url)
+        private IHubProxy? hubProxy;
+        public new string Url { get; }
+        
+        public BittrexHubConnection(Log log, HubConnection connection): base(null!, connection.Url)
         {
+            Url = connection.Url;
             this.connection = connection;
             this.log = log;
 
@@ -44,7 +46,7 @@ namespace Bittrex.Net.Sockets
 
         public void SetHub(string name)
         {
-            proxy = connection.CreateHubProxy(name);
+            hubProxy = connection.CreateHubProxy(name);
         }
 
         public override void SetProxy(string proxyHost, int proxyPort)
@@ -52,25 +54,35 @@ namespace Bittrex.Net.Sockets
             connection.Proxy = new WebProxy(proxyHost, proxyPort);
         }
         
-        public async Task<CallResult<T>> InvokeProxy<T>(string call, params string[] pars)
+        public async Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
         {
-            try
+            if(hubProxy == null)
+                throw new InvalidOperationException("HubProxy not set");
+
+            Error? error = null;
+            for (var i = 0; i < 3; i++)
             {
-                var sub = await proxy.Invoke<T>(call, pars).ConfigureAwait(false);
-                return new CallResult<T>(sub, null);
+                try
+                {
+                    log.Write(LogVerbosity.Debug, $"Sending data: {call}, [{string.Join(", ", pars)}]");
+                    var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
+                    return new CallResult<T>(sub, null);
+                }
+                catch (Exception e)
+                {
+                    log.Write(LogVerbosity.Warning, $"Failed to invoke proxy, try {i}: " + e.Message);
+                    error = new UnknownError("Failed to invoke proxy: " + e.Message);
+                }
             }
-            catch (Exception e)
-            {
-                log.Write(LogVerbosity.Warning, "Failed to invoke proxy: " + e.Message);
-                return new CallResult<T>(default(T), new UnknownError("Failed to invoke proxy: " + e.Message));
-            }
+
+            return new CallResult<T>(default, error);
         }
 
         public override async Task<bool> Connect()
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(log, client)
+                new WebsocketCustomTransport(log, client, DataInterpreterString)
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try
@@ -89,7 +101,7 @@ namespace Bittrex.Net.Sockets
             await Task.Run(() =>
             {
                 connection.Stop(TimeSpan.FromSeconds(1));
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

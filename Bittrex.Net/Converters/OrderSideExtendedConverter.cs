@@ -4,15 +4,17 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
 {
-    public class OrderSideExtendedConverter : BaseConverter<OrderSideExtended>
+    internal class OrderSideExtendedConverter : BaseConverter<OrderSideExtended>
     {
         public OrderSideExtendedConverter(): this(true) { }
         public OrderSideExtendedConverter(bool quotes) : base(quotes){ }
 
-        protected override Dictionary<OrderSideExtended, string> Mapping => new Dictionary<OrderSideExtended, string>
+        protected override List<KeyValuePair<OrderSideExtended, string>> Mapping => new List<KeyValuePair<OrderSideExtended, string>>
         {
-            { OrderSideExtended.LimitBuy, "LIMIT_BUY" },
-            { OrderSideExtended.LimitSell, "LIMIT_SELL" }
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitBuy, "LIMIT_BUY"),
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "LIMIT_SELL"),
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "MARKET_SELL"),
+            new KeyValuePair<OrderSideExtended, string>(OrderSideExtended.LimitSell, "MARKET_BUY")
         };
     }
 }

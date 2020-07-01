@@ -4,40 +4,43 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Objects
 {
-    public class BittrexCandle
+    /// <summary>
+    /// Bittrex kline
+    /// </summary>
+    public class BittrexKline
     {
         /// <summary>
-        /// Open price of the candle
+        /// Open price of the kline
         /// </summary>
         [JsonProperty("O")]
         public decimal Open { get; set; }
         /// <summary>
-        /// High price of the candle
+        /// High price of the kline
         /// </summary>
         [JsonProperty("H")]
         public decimal High { get; set; }
         /// <summary>
-        /// Low price of the candle
+        /// Low price of the kline
         /// </summary>
         [JsonProperty("L")]
         public decimal Low { get; set; }
         /// <summary>
-        /// Close price of the candle
+        /// Close price of the kline
         /// </summary>
         [JsonProperty("C")]
         public decimal Close { get; set; }
         /// <summary>
-        /// Volume of the candle
+        /// Volume of the kline
         /// </summary>
         [JsonProperty("V")]
         public decimal Volume { get; set; }
         /// <summary>
-        /// Base volume of the candle
+        /// Base volume of the kline
         /// </summary>
         [JsonProperty("BV")]
         public decimal BaseVolume { get; set; }
         /// <summary>
-        /// Timestamp of the candle
+        /// Timestamp of the kline
         /// </summary>
         [JsonProperty("T"), JsonConverter(typeof(UTCDateTimeConverter))]
         public DateTime Timestamp { get; set; }

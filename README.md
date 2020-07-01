@@ -1,4 +1,4 @@
-# ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Resources/icon.png?raw=true) Bittrex.Net 
+# ![Icon](https://github.com/JKorf/Bittrex.Net/blob/master/Bittrex.Net/Icon/icon.png?raw=true) Bittrex.Net 
 
 ![Build status](https://travis-ci.org/JKorf/Bittrex.Net.svg?branch=master)
 
@@ -14,42 +14,39 @@ Additionally it adds some convenience features like:
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Bittrex.Net/issues)**
 
----
-Also check out my other exchange API wrappers:
-<table>
-	<tr>
-	<td>
-		<a href="https://github.com/JKorf/Binance.Net">
-			<img src="https://github.com/JKorf/Binance.Net/blob/master/Resources/binance-coin.png?raw=true">
-		</a>
-		<br />
-		<a href="https://github.com/JKorf/Binance.Net">Binance</a>
-	</td>
-	<td>
-		<a href="https://github.com/JKorf/Bitfinex.Net">
-			<img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Resources/icon.png?raw=true">
-		</a>
-		<br />
-		<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a>
-	</td>
-	<td>
-		<a href="https://github.com/JKorf/CoinEx.Net">
-			<img src="https://github.com/JKorf/CoinEx.Net/blob/master/Resources/icon.png?raw=true">
-		</a>
-		<br />
-		<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
-	</td>
-	<td>
-		<a href="https://github.com/JKorf/Huobi.Net">
-			<img src="https://github.com/JKorf/Huobi.Net/blob/master/Resources/icon.png?raw=true">
-		</a>
-		<br />
-		<a href="https://github.com/JKorf/Huobi.Net">Huobi</a>
-	</td>
-	</tr>
-</table>
+## CryptoExchange.Net
+Implementation is build upon the CryptoExchange.Net library, make sure to also check out the documentation on that: [docs](https://github.com/JKorf/CryptoExchange.Net)
 
-And other API wrappers based on CryptoExchange.Net:
+Other CryptoExchange.Net implementations:
+<table>
+<tr>
+<td><a href="https://github.com/JKorf/Bitfinex.Net"><img src="https://github.com/JKorf/Bitfinex.Net/blob/master/Bitfinex.Net/Icon/icon.png?raw=true"></a>
+<br />
+<a href="https://github.com/JKorf/Bitfinex.Net">Bitfinex</a>
+</td>
+<td><a href="https://github.com/JKorf/Binance.Net"><img src="https://github.com/JKorf/Binance.Net/blob/master/Binance.Net/Icon/icon.png?raw=true"></a>
+<br />
+<a href="https://github.com/JKorf/Binance.Net">Binance</a>
+</td>
+<td><a href="https://github.com/JKorf/CoinEx.Net"><img src="https://github.com/JKorf/CoinEx.Net/blob/master/CoinEx.Net/Icon/icon.png?raw=true"></a>
+<br />
+<a href="https://github.com/JKorf/CoinEx.Net">CoinEx</a>
+</td>
+<td><a href="https://github.com/JKorf/Huobi.Net"><img src="https://github.com/JKorf/Huobi.Net/blob/master/Huobi.Net/Icon/icon.png?raw=true"></a>
+<br />
+<a href="https://github.com/JKorf/Huobi.Net">Huobi</a>
+</td>
+<td><a href="https://github.com/JKorf/Kucoin.Net"><img src="https://github.com/JKorf/Kucoin.Net/blob/master/Kucoin.Net/Icon/icon.png?raw=true"></a>
+<br />
+<a href="https://github.com/JKorf/Kucoin.Net">Kucoin</a>
+</td>
+<td><a href="https://github.com/JKorf/Kraken.Net"><img src="https://github.com/JKorf/Kraken.Net/blob/master/Kraken.Net/Icon/icon.png?raw=true"></a>
+<br />
+<a href="https://github.com/JKorf/Kraken.Net">Kraken</a>
+</td>
+</tr>
+</table>
+Implementations from third parties:
 <table>
 	<tr>
 		<td>
@@ -65,6 +62,10 @@ And other API wrappers based on CryptoExchange.Net:
 			</a>
 			<br />
 			<a href="https://github.com/ridicoulous/LiquidQuoine.Net">Liquid</a>
+		</td>
+		<td><a href="https://github.com/burakoner/OKEx.Net"><img src="https://raw.githubusercontent.com/burakoner/OKEx.Net/master/Okex.Net/Icon/icon.png"></a>
+		<br />
+		<a href="https://github.com/burakoner/OKEx.Net">OKEx</a>
 		</td>
 	</tr>
 	
@@ -98,114 +99,95 @@ After doing either of above steps you should now be ready to actually start usin
 ## Getting started
 To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
 
-Bittrex.Net provides two clients to interact with the Bittrex API. The  `BittrexClient`  provides all rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
-
-Most API methods are available in two flavors, sync and async:
-````C#
-public void NonAsyncMethod()
-{
-    using(var client = new BittrexClient())
-    {
-        var result = client.GetTicker("BTC-ETH");
-    }
-}
-
-public async Task AsyncMethod()
-{
-    using(var client = new BittrexClient())
-    {
-        var result2 = await client.GetTickerAsync("BTC-ETH");
-    }
-}
-````
-
-## Response handling
-All API requests will respond with a CallResult object. This object contains whether the call was successful, the data returned from the call and an error if the call wasn't successful. As such, one should always check the Success flag when processing a response.
-For example:
-````C#
-using(var client = new BittrexClient())
-{
-	var priceResult = client.GetTicker("BTC-ETH");
-	if (priceResult.Success)
-		Console.WriteLine($"BTC-ETH price: {priceResult.Data.Last}");
-	else
-		Console.WriteLine($"Error: {priceResult.Error.Message}");
-}
-````
-
-## Options & Authentication
-The default behavior of the clients can be changed by providing options to the constructor, or using the `SetDefaultOptions` before creating a new client. Api credentials can be provided in these options.
-
-## Websockets
-The Bittrex.Net socket client provides several socket endpoint to which can be subscribed and follow this function structure
-
-```C#
-var client = new BittrexSocketClient();
-
-var subscribeResult = client.SubscribeToMarketSummariesUpdate(data =>
-{
-	// handle data
-});
-```
-
-**Handling socket events**
-
-Subscribing to a socket stream returns a UpdateSubscription object. This object can be used to be notified when a socket is disconnected or reconnected:
-````C#
-var subscriptionResult = client.SubscribeToMarketSummariesUpdate(data =>
-{
-	Console.WriteLine("Received summaries update");
-});
-
-if(subscriptionResult.Success){
-	sub.Data.Disconnected += () =>
-	{
-		Console.WriteLine("Socket disconnected");
-	};
-
-	sub.Data.Reconnected += (e) =>
-	{
-		Console.WriteLine("Socket reconnected after " + e);
-	};
-}
-````
-
-**Unsubscribing from socket endpoints:**
-
-Sockets streams can be unsubscribed by using the `client.Unsubscribe` method in combination with the stream subscription received from subscribing:
-```C#
-var client = new BittrexSocketClient();
-
-var successSummaries = client.SubscribeToMarketSummariesUpdate((data) =>
-{
-	// handle data
-});
-
-client.Unsubscribe(successTicker.Data);
-```
-
-Additionaly, all sockets can be closed with the `UnsubscribeAll` method. Beware that when a client is disposed the sockets are automatically disposed. This means that if the code is no longer in the using statement the eventhandler won't fire anymore. To prevent this from happening make sure the code doesn't leave the using statement or don't use the socket client in a using statement:
-```C#
-// Doesn't leave the using block
-using(var client = new BittrexSocketClient())
-{
-	var successSummaries = client.SubscribeToMarketSummariesUpdate((data) =>
-	{
-		// handle data
-	});
-
-	Console.ReadLine();
-}
-
-// Without using block
-var client = new BittrexSocketClient();
-client.SubscribeToMarketSummariesUpdate((data) =>
-{
-	// handle data
-});
-```
+Bittrex.Net provides three clients to interact with the Bittrex API. The  `BittrexClient`  provides all V1.1 rest API calls, whereas the `BittrexClientV3` gives access to the V3 rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
 
 ## Release notes
+* Version 4.0.10 - 21 Jun 2020
+    * Updated CryptoExchange
+
+* Version 4.0.9 - 16 Jun 2020
+    * Updated CryptoExchange.Net
+
+* Version 4.0.8 - 074 Jun 2020
+    * Updated CryptoExchange
+
+* Version 4.0.7 - 03 Mar 2020
+    * Updated CryptoExchange
+
+* Version 4.0.6 - 27 Jan 2020
+    * Updated CryptoExchange.Net
+
+* Version 4.0.5 - 14 Nov 2019
+    * Fixed NotImplementedException sometimes being triggered when reconnecting
+
+* Version 4.0.4 - 12 Nov 2019
+    * Added retry on SignalR hub invoke for websockets
+
+* Version 4.0.3 - 27 oct 2019
+	* Fixed GetOrderBook in socket client
+
+* Version 4.0.2 - 23 Oct 2019
+	* Fixed summary symbol mapping
+
+* Version 4.0.1 - 23 Oct 2019
+	* Fixed symbol validation
+
+* Version 4.0.0 - 23 Oct 2019
+	* See CryptoExchange.Net 3.0 release notes
+	* Added input validation
+	* Added CancellationToken support to all requests
+	* Now using IEnumerable<> for collections
+	* Renamed Candle -> Kline
+	* Renamed Market -> Symbol
+	* Renamed ExchangeState -> OrderBook
+
+* Version 3.1.8 - 06 Oct 2019
+    * Changed ask/bid in BittrexStreamMarketSummary to be nullable
+
+* Version 3.1.7 - 15 Aug 2019
+    * Updated code docs
+    * Updated V3 client
+
+* Version 3.1.6 - 07 Aug 2019
+    * Updated CryptoExchange.Net
+
+* Version 3.1.5 - 05 Aug 2019
+    * Added xml file for code documentation
+
+* Version 3.1.4 - 09 jul 2019
+	* Updated BittrexSymbolOrderBook
+
+* Version 3.1.3 - 14 may 2019
+	* Added an order book implementation for easily keeping an updated order book
+	* Added additional constructor to ApiCredentials to be able to read from file
+
+* Version 3.1.2 - 06 may 2019
+	* Fixed limit being a nullable field on orders
+
+* Version 3.1.1 - 06 may 2019
+	* Fixed market order type parsing
+	* Added support for the V3 open beta API
+
+* Version 3.1.0 - 01 may 2019
+	* Updated to latest CryptoExchange.Net
+		* Adds response header to REST call result
+		* Added rate limiter per API key
+		* Unified socket client workings
+
+* Version 3.0.9 - 09 mar 2019
+	* Fixed stream order condition parsing
+
+* Version 3.0.8 - 08 mar 2019
+	* Fixed Bid/Ask being nullable in market summary
+
+* Version 3.0.7 - 07 mar 2019
+	* Fixed parsing of ConditionType
+	* Fixed linq exception on Query in socket client
+
+* Version 3.0.6 - 01 mar 2019
+	* Fixed nullable fields in orders
+	* CallResult to WebCallResult for BittrexClient
+
 * Version 3.0.5 - 01 feb 2019
 	* Updated CryptoExchange.Net
 

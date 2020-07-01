@@ -4,15 +4,15 @@ using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
 {
-    public class TimeInEffectConverter: BaseConverter<TimeInEffect>
+    internal class TimeInEffectConverter: BaseConverter<TimeInEffect>
     {
         public TimeInEffectConverter(): this(true) { }
         public TimeInEffectConverter(bool quotes) : base(quotes){ }
 
-        protected override Dictionary<TimeInEffect, string> Mapping => new Dictionary<TimeInEffect, string>
+        protected override List<KeyValuePair<TimeInEffect, string>> Mapping => new List<KeyValuePair<TimeInEffect, string>>
         {
-            { TimeInEffect.GoodTillCancelled, "GOOD_TIL_CANCELLED" },
-            { TimeInEffect.ImmediateOrCancel, "IMMEDIATE_OR_CANCEL" }
+            new KeyValuePair<TimeInEffect, string>(TimeInEffect.GoodTillCancelled, "GOOD_TIL_CANCELLED"),
+            new KeyValuePair<TimeInEffect, string>(TimeInEffect.ImmediateOrCancel, "IMMEDIATE_OR_CANCEL")
         };
     }
 }
