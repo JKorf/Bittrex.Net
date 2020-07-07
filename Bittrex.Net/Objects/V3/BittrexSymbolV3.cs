@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Bittrex.Net.Converters.V3;
 using Newtonsoft.Json;
 
@@ -44,5 +46,9 @@ namespace Bittrex.Net.Objects.V3
         /// Additional info
         /// </summary>
         public string Notice { get; set; } = "";
+        /// <summary>
+        /// List of prohibited regions. empty if its not restricted.
+        /// </summary>
+        public IEnumerable<string> ProhibitedIn { get; set; } = new List<string>();
     }
 }

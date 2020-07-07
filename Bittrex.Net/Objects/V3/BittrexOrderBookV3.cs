@@ -32,15 +32,4 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         public decimal Rate { get; set; }
     }
-
-    /// <summary>
-    /// Trade entry
-    /// </summary>
-    public class BittrexSymbolTradeV3 : BittrexOrderBookEntryV3
-    {
-        /// <summary>
-        /// The timestamp of the trade execution
-        /// </summary>
-        public DateTime ExecutedAt { get; set; }
-    }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Bittrex.Net.Objects.V3
 {
@@ -20,5 +21,9 @@ namespace Bittrex.Net.Objects.V3
         /// The available funds
         /// </summary>
         public decimal Available { get; set; }
+        /// <summary>
+        /// Update time
+        /// </summary>
+        public DateTime UpdatedAt { get; set; }
     }
 }

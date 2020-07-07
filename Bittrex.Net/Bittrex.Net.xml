@@ -589,6 +589,30 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol klines</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets historical klines for a symbol
+            </summary>
+            <param name="symbol">The symbol to get klines for</param>
+            <param name="interval">The interval of the klines</param>
+            <param name="year">The year to get klines for</param>
+            <param name="month">The month to get klines for</param>
+            <param name="day">The day to get klines for</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Symbol kline</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets historical klines for a symbol
+            </summary>
+            <param name="symbol">The symbol to get klines for</param>
+            <param name="interval">The interval of the klines</param>
+            <param name="year">The year to get klines for</param>
+            <param name="month">The month to get klines for</param>
+            <param name="day">The day to get klines for</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Symbol kline</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencies(System.Threading.CancellationToken)">
             <summary>
             Gets a list of all currencies
@@ -4077,9 +4101,9 @@
             The volume during this kline
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.BaseVolume">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexKlineV3.QuoteVolume">
             <summary>
-            The volume of this candle in the base currency
+            The quote volume of this candle
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexOrderBookV3">
@@ -4110,16 +4134,6 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookEntryV3.Rate">
             <summary>
             The price of the entry
-            </summary>
-        </member>
-        <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolTradeV3">
-            <summary>
-            Trade entry
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTradeV3.ExecutedAt">
-            <summary>
-            The timestamp of the trade execution
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexOrderV3">
@@ -4234,12 +4248,12 @@
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.Volume">
             <summary>
-            The volume of this symbol during the last 24 hours
+            Volume within the last 24 hours
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.BaseVolume">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.QuoteVolume">
             <summary>
-            The volume of this symbol in the base currency during the last 24 hours
+            Quote volume within the last 24 hours
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.PercentChange">
@@ -4250,6 +4264,36 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3.UpdatedAt">
             <summary>
             The timestamp of when this summary was last updated
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolTrade">
+            <summary>
+            Info on a trade
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTrade.Id">
+            <summary>
+            Unique id of the trade
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTrade.TakerSide">
+            <summary>
+            Side of the taker
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTrade.Quantity">
+            <summary>
+            The quantity of the entry
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTrade.Rate">
+            <summary>
+            The price of the entry
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolTrade.ExecutedAt">
+            <summary>
+            The timestamp of the trade execution
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolV3">
@@ -4295,6 +4339,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.Notice">
             <summary>
             Additional info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.ProhibitedIn">
+            <summary>
+            List of prohibited regions. empty if its not restricted.
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexTickV3">

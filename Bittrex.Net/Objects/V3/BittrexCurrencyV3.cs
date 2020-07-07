@@ -42,5 +42,9 @@ namespace Bittrex.Net.Objects.V3
         /// Url to the logo
         /// </summary>
         public string LogoUrl { get; set; } = "";
+        /// <summary>
+        /// List of prohibited regions. empty if its not restricted.
+        /// </summary>
+        public IEnumerable<string> ProhibitedIn { get; set; } = new List<string>();
     }
 }

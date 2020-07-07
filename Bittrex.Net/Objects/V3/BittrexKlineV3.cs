@@ -32,8 +32,8 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         public decimal Volume { get; set; }
         /// <summary>
-        /// The volume of this candle in the base currency
+        /// The quote volume of this candle
         /// </summary>
-        public decimal BaseVolume { get; set; }
+        public decimal QuoteVolume { get; set; }
     }
 }

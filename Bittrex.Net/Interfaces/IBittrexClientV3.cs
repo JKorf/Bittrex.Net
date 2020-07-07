@@ -117,7 +117,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol trade list</returns>
-        WebCallResult<IEnumerable<BittrexSymbolTradeV3>> GetSymbolTrades(string symbol, CancellationToken ct = default);
+        WebCallResult<IEnumerable<Objects.V3.BittrexSymbolTrade>> GetSymbolTrades(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the trade history of a symbol
@@ -125,7 +125,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol trade list</returns>
-        Task<WebCallResult<IEnumerable<BittrexSymbolTradeV3>>> GetSymbolTradesAsync(string symbol, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<Objects.V3.BittrexSymbolTrade>>> GetSymbolTradesAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the ticker of a symbol
