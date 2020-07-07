@@ -46,10 +46,7 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         [JsonConverter(typeof(TimeInForceConverter))]
         public TimeInForce TimeInForce { get; set; }
-        /// <summary>
-        /// When the order expires
-        /// </summary>
-        public DateTime? ExpiresAt { get; set; }
+
         /// <summary>
         /// Id to track the order by
         /// </summary>
@@ -84,5 +81,9 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         public DateTime? ClosedAt { get; set; }
 
+        /// <summary>
+        /// Conditional order to cancel if this order executes
+        /// </summary>
+        public BittrexLinkedOrder? OrderToCancel { get; set; }
     }
 }

@@ -54,5 +54,9 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         [JsonConverter(typeof(DepositStatusConverter))]
         public DepositStatus Status { get; set; }
+        /// <summary>
+        /// Source
+        /// </summary>
+        public string Source { get; set; }
     }
 }
