@@ -67,6 +67,11 @@ Implementations from third parties:
 		<br />
 		<a href="https://github.com/burakoner/OKEx.Net">OKEx</a>
 		</td>
+		</td>
+	<td><a href="https://github.com/ridicoulous/Bitmex.Net"><img src="https://github.com/ridicoulous/Bitmex.Net/blob/master/Bitmex.Net/Icon/icon.png"></a>
+<br />
+<a href="https://github.com/ridicoulous/Bitmex.Net">Bitmex</a>
+</td>
 	</tr>
 	
 </table>
