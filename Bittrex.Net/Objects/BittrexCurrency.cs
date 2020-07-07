@@ -40,5 +40,9 @@ namespace Bittrex.Net.Objects
         /// Additional information about the state of this currency
         /// </summary>
         public string Notice { get; set; } = "";
+        /// <summary>
+        /// Is restricted currency
+        /// </summary>
+        public bool IsRestricted { get; set; }
     }
 }

@@ -2433,6 +2433,11 @@
             Additional information about the state of this currency
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.BittrexCurrency.IsRestricted">
+            <summary>
+            Is restricted currency
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.BittrexDeposit">
             <summary>
             Information about a deposit
