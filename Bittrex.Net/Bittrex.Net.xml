@@ -643,6 +643,28 @@
             <param name="ct">Cancellation token</param>
             <returns>Currency info</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetAccount(System.Threading.CancellationToken)">
+            <summary>
+            Get account info
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account info</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Bittrex.Net.BittrexClientV3.GetAccountAsync(System.Threading.CancellationToken)" -->
+        <member name="M:Bittrex.Net.BittrexClientV3.GetAccountVolume(System.Threading.CancellationToken)">
+            <summary>
+            Get account volume
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account volume</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetAccountVolumeAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account volume
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account volume</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetBalances(System.Threading.CancellationToken)">
             <summary>
             Gets current balances
@@ -853,6 +875,22 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetExecutions(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets executions (trades) for a order
+            </summary>
+            <param name="orderId">The id of the order to retrieve executions for</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Executions</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetExecutionsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets executions (trades) for a order
+            </summary>
+            <param name="orderId">The id of the order to retrieve executions for</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Executions</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.CancelOrder(System.String,System.Threading.CancellationToken)">
             <summary>
             Cancels an order
@@ -869,7 +907,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,Bittrex.Net.Objects.TimeInForce,System.Decimal,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -884,7 +922,7 @@
             <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,System.Decimal,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrderAsync(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,Bittrex.Net.Objects.TimeInForce,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
             Places an order
             </summary>
@@ -1014,6 +1052,94 @@
             <param name="addressTag">A tag for the address</param>
             <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalWhitelistAddresses(System.Threading.CancellationToken)">
+            <summary>
+            Gets a list of whitelisted address for withdrawals
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>List withdrawal address</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetWithdrawalWhitelistAddressesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets a list of whitelisted address for withdrawals
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>List withdrawal address</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetConditionalOrder(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get details on a condtional order
+            </summary>
+            <param name="orderId">Id of the conditional order</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Conditional order</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetConditionalOrderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get details on a condtional order
+            </summary>
+            <param name="orderId">Id of the conditional order</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Conditional order</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelConditionalOrder(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Cancels a condtional order
+            </summary>
+            <param name="orderId">Id of the conditional order</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Conditional order</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelConditionalOrderAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Cancels a condtional order
+            </summary>
+            <param name="orderId">Id of the conditional order</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Conditional order</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedConditionalOrders(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a list of closed conditional orders
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
+            <param name="ct">Cancellation token</param>
+            <returns>List of closed conditional orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetClosedConditionalOrdersAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a list of closed conditional orders
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
+            <param name="ct">Cancellation token</param>
+            <returns>List of closed conditional orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenConditionalOrders(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get list op open conditional orders
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Conditional orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOpenConditionalOrdersAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get list op open conditional orders
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Conditional orders</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc />
@@ -3921,6 +4047,36 @@
             Whether the withdrawal is to an invalid address
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexAccount">
+            <summary>
+            Account info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexAccount.AccountId">
+            <summary>
+            Account id
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexAccount.SubAccountId">
+            <summary>
+            Sub account id
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexAccountVolume">
+            <summary>
+            Volume info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexAccountVolume.Updated">
+            <summary>
+            Update time of the volume
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexAccountVolume.Volume30Days">
+            <summary>
+            Volume 30 days
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexBalanceV3">
             <summary>
             Balance info
@@ -3939,6 +4095,86 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexBalanceV3.Available">
             <summary>
             The available funds
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexBalanceV3.UpdatedAt">
+            <summary>
+            Update time
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexConditionalOrder">
+            <summary>
+            Conditional order info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.Id">
+            <summary>
+            Id of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.Symbol">
+            <summary>
+            The symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.Operand">
+            <summary>
+            Operand type
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.TriggerPrice">
+            <summary>
+            Percent above the minimum price (GTE) or below the maximum price (LTE) at which to trigger
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.TrailingStopPercent">
+            <summary>
+            The stop price will automatically adjust relative to the most extreme trade value seen.
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.CreatedOrderId">
+            <summary>
+            Unique ID of the order that was created by this conditional, if there is one
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.OrderToCreate">
+            <summary>
+            Order to create if this conditional order is triggered
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.OrderToCancel">
+            <summary>
+            Order or conditional order to cancel if this conditional order triggers
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.ClientConditionalOrderId">
+            <summary>
+            Client-provided identifier for idempotency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.OrderCreationErrorCode">
+            <summary>
+            If a conditional order fails to create an order when triggered, the failure reason will appear here
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.CreatedAt">
+            <summary>
+            Order creation timestamp
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.UpdatedAt">
+            <summary>
+            Timestamp of last update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexConditionalOrder.ClosedAt">
+            <summary>
+            Timestamp order was closed
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexCurrencyV3">
@@ -3984,6 +4220,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyV3.LogoUrl">
             <summary>
             Url to the logo
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyV3.ProhibitedIn">
+            <summary>
+            List of prohibited regions. empty if its not restricted.
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexDepositAddressV3">
@@ -4066,6 +4307,56 @@
             The status of the deposit
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexDepositV3.Source">
+            <summary>
+            Source
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexExecution">
+            <summary>
+            Trade execution
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.Id">
+            <summary>
+            Id of the execution
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.Symbol">
+            <summary>
+            The symbol of the execution
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.ExecutedAt">
+            <summary>
+            Timeestamp of execution
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.Rate">
+            <summary>
+            Rate
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.OrderId">
+            <summary>
+            Id of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.Commission">
+            <summary>
+            Paid commission
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.IsTaker">
+            <summary>
+            Is taker
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexKlineV3">
             <summary>
             Symbol kline info
@@ -4106,6 +4397,21 @@
             The quote volume of this candle
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexLinkedOrder">
+            <summary>
+            Linked order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexLinkedOrder.Id">
+            <summary>
+            Id of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexLinkedOrder.Type">
+            <summary>
+            Type of the order
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexOrderBookV3">
             <summary>
             Order book
@@ -4136,6 +4442,51 @@
             The price of the entry
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexUnplacedOrder">
+            <summary>
+            Data on an unplaced order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.Symbol">
+            <summary>
+            The symbol of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.Direction">
+            <summary>
+            The direction of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.Type">
+            <summary>
+            The type of order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.Quantity">
+            <summary>
+            The quantity of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.Limit">
+            <summary>
+            The limit of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.Ceiling">
+            <summary>
+            The ceiling of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.TimeInForce">
+            <summary>
+            The time in force of the order
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexUnplacedOrder.ClientOrderId">
+            <summary>
+            Id to track the order by
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexOrderV3">
             <summary>
             Bittrex order info
@@ -4144,51 +4495,6 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Id">
             <summary>
             The id of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Symbol">
-            <summary>
-            The symbol of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Direction">
-            <summary>
-            The direction of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Type">
-            <summary>
-            The type of order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Quantity">
-            <summary>
-            The quantity of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Limit">
-            <summary>
-            The limit of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.Ceiling">
-            <summary>
-            The ceiling of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.TimeInForce">
-            <summary>
-            The time in force of the order
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.ExpiresAt">
-            <summary>
-            When the order expires
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.ClientOrderId">
-            <summary>
-            Id to track the order by
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.FillQuantity">
@@ -4224,6 +4530,11 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.ClosedAt">
             <summary>
             When the order was closed
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderV3.OrderToCancel">
+            <summary>
+            Conditional order to cancel if this order executes
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3">
@@ -4369,6 +4680,41 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexTickV3.AskRate">
             <summary>
             The lowest ask price
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexWhitelistAddress">
+            <summary>
+            Whitelist address
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWhitelistAddress.Currency">
+            <summary>
+            The currency of the address
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWhitelistAddress.CreatedAt">
+            <summary>
+            When the address was whitelisted
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWhitelistAddress.Status">
+            <summary>
+            Status of the address
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWhitelistAddress.ActiveAt">
+            <summary>
+            When it may be used for withdrawals
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWhitelistAddress.Address">
+            <summary>
+            Address
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWhitelistAddress.AddressTag">
+            <summary>
+            Tag for the address
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexWithdrawalV3">

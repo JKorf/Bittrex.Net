@@ -6,14 +6,10 @@ using Newtonsoft.Json;
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
-    /// Bittrex order info
+    /// Data on an unplaced order
     /// </summary>
-    public class BittrexOrderV3
+    public class BittrexUnplacedOrder
     {
-        /// <summary>
-        /// The id of the order
-        /// </summary>
-        public string Id { get; set; } = "";
         /// <summary>
         /// The symbol of the order
         /// </summary>
@@ -51,6 +47,18 @@ namespace Bittrex.Net.Objects.V3
         /// Id to track the order by
         /// </summary>
         public string ClientOrderId { get; set; } = "";
+    }
+
+    /// <summary>
+    /// Bittrex order info
+    /// </summary>
+    public class BittrexOrderV3: BittrexUnplacedOrder
+    {
+        /// <summary>
+        /// The id of the order
+        /// </summary>
+        public string Id { get; set; } = "";
+        
         /// <summary>
         /// The quantity that's been filled
         /// </summary>

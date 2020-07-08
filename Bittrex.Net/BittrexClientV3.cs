@@ -21,7 +21,7 @@ namespace Bittrex.Net
     /// Client for the V3 API
     /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
     /// </summary>
-    public class BittrexClientV3: RestClient, IBittrexClientV3
+    public class BittrexClientV3: RestClient//, IBittrexClientV3
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
@@ -332,6 +332,42 @@ namespace Bittrex.Net
         }
         #endregion
 
+        #region accounts
+        /// <summary>
+        /// Get account info
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account info</returns>
+        public WebCallResult<BittrexAccount> GetAccount(CancellationToken ct = default) => GetAccountAsync(ct).Result;
+
+        // <summary>
+        /// Get account info
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account info</returns>
+        public async Task<WebCallResult<BittrexAccount>> GetAccountAsync(CancellationToken ct = default)
+        {
+            return await SendRequest<BittrexAccount>(GetUrl("account"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get account volume
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account volume</returns>
+        public WebCallResult<BittrexAccountVolume> GetAccountVolume(CancellationToken ct = default) => GetAccountVolumeAsync(ct).Result;
+
+        /// <summary>
+        /// Get account volume
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account volume</returns>
+        public async Task<WebCallResult<BittrexAccountVolume>> GetAccountVolumeAsync(CancellationToken ct = default)
+        {
+            return await SendRequest<BittrexAccountVolume>(GetUrl("account/volume"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+        #endregion
+
         #region balances
 
         /// <summary>
@@ -636,6 +672,26 @@ namespace Bittrex.Net
         }
 
         /// <summary>
+        /// Gets executions (trades) for a order
+        /// </summary>
+        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        public WebCallResult<IEnumerable<BittrexExecution>> GetExecutions(string orderId, CancellationToken ct = default) => GetExecutionsAsync(orderId, ct).Result;
+
+        /// <summary>
+        /// Gets executions (trades) for a order
+        /// </summary>
+        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string orderId, CancellationToken ct = default)
+        {
+            orderId.ValidateNotNull(nameof(orderId));
+            return await SendRequest<IEnumerable<BittrexExecution>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Cancels an order
         /// </summary>
         /// <param name="orderId">The id of the order</param>
@@ -872,6 +928,128 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("cryptoAddressTag", addressTag);
 
             return await SendRequest<BittrexWithdrawalV3>(GetUrl("withdrawals"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets a list of whitelisted address for withdrawals
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List withdrawal address</returns>
+        public WebCallResult<IEnumerable<BittrexWhitelistAddress>> GetWithdrawalWhitelistAddresses(CancellationToken ct = default) => GetWithdrawalWhitelistAddressesAsync(ct).Result;
+
+        /// <summary>
+        /// Gets a list of whitelisted address for withdrawals
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List withdrawal address</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexWhitelistAddress>>> GetWithdrawalWhitelistAddressesAsync(CancellationToken ct = default)
+        {
+            return await SendRequest<IEnumerable<BittrexWhitelistAddress>>(GetUrl($"withdrawals/whitelistAddresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region conditional orders
+        /// <summary>
+        /// Get details on a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        public WebCallResult<BittrexConditionalOrder> GetConditionalOrder(string? orderId = null, CancellationToken ct = default) => GetConditionalOrderAsync(orderId, ct).Result;
+
+        /// <summary>
+        /// Get details on a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        public async Task<WebCallResult<BittrexConditionalOrder>> GetConditionalOrderAsync(string? orderId = null, CancellationToken ct = default)
+        {
+            return await SendRequest<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Cancels a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        public WebCallResult<BittrexConditionalOrder> CancelConditionalOrder(string? orderId = null, CancellationToken ct = default) => CancelConditionalOrderAsync(orderId, ct).Result;
+
+        /// <summary>
+        /// Cancels a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        public async Task<WebCallResult<BittrexConditionalOrder>> CancelConditionalOrderAsync(string? orderId = null, CancellationToken ct = default)
+        {
+            return await SendRequest<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets a list of closed conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List of closed conditional orders</returns>
+        public WebCallResult<IEnumerable<BittrexConditionalOrder>> GetClosedConditionalOrders(string? symbol = null, DateTime? startDate = null,
+            DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+            => GetClosedConditionalOrdersAsync(symbol, startDate, endDate, pageSize, nextPageToken, previousPageToken, ct).Result;
+
+        /// <summary>
+        /// Gets a list of closed conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List of closed conditional orders</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetClosedConditionalOrdersAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        {
+            if (nextPageToken != null && previousPageToken != null)
+                throw new ArgumentException("Can't specify nextPageToken and previousPageToken simultaneously");
+
+            pageSize?.ValidateIntBetween("pageSize", 1, 200);
+
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("marketSymbol", symbol);
+            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("pageSize", pageSize);
+            parameters.AddOptionalParameter("nextPageToken", nextPageToken);
+            parameters.AddOptionalParameter("previousPageToken", previousPageToken);
+
+            return await SendRequest<IEnumerable<BittrexConditionalOrder>>(GetUrl("conditional-orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get list op open conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional orders</returns>
+        public WebCallResult<IEnumerable<BittrexConditionalOrder>> GetOpenConditionalOrders(string? symbol = null, CancellationToken ct = default) => GetOpenConditionalOrdersAsync(symbol, ct).Result;
+
+        /// <summary>
+        /// Get list op open conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional orders</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetOpenConditionalOrdersAsync(string? symbol = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("symbol", symbol);
+            return await SendRequest<IEnumerable<BittrexConditionalOrder>>(GetUrl($"conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
         #endregion
 

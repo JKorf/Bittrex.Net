@@ -1,5 +1,6 @@
 ﻿using Bittrex.Net.Converters.V3;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Bittrex.Net.Objects.V3
 {
