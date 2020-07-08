@@ -21,7 +21,7 @@ namespace Bittrex.Net
     /// Client for the V3 API
     /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
     /// </summary>
-    public class BittrexClientV3: RestClient//, IBittrexClientV3
+    public class BittrexClientV3 : RestClient, IBittrexClientV3
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
@@ -507,7 +507,7 @@ namespace Bittrex.Net
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        public WebCallResult<IEnumerable<BittrexDepositV3>> GetClosedDeposits(string? currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default) => 
+        public WebCallResult<IEnumerable<BittrexDepositV3>> GetClosedDeposits(string? currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default) =>
             GetClosedDepositsAsync(currency, status, startDate, endDate, pageSize, nextPageToken, previousPageToken, ct).Result;
 
         /// <summary>
@@ -531,7 +531,7 @@ namespace Bittrex.Net
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currencySymbol", currency);
-            parameters.AddOptionalParameter("status", status.HasValue ? JsonConvert.SerializeObject(status, new DepositStatusConverter(false)): null);
+            parameters.AddOptionalParameter("status", status.HasValue ? JsonConvert.SerializeObject(status, new DepositStatusConverter(false)) : null);
             parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("pageSize", pageSize);
@@ -595,7 +595,7 @@ namespace Bittrex.Net
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of closed orders</returns>
-        public WebCallResult<IEnumerable<BittrexOrderV3>> GetClosedOrders(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default) => 
+        public WebCallResult<IEnumerable<BittrexOrderV3>> GetClosedOrders(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default) =>
             GetClosedOrdersAsync(symbol, startDate, endDate, pageSize, nextPageToken, previousPageToken, ct).Result;
 
         /// <summary>
@@ -613,7 +613,7 @@ namespace Bittrex.Net
         {
             pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
 
-            if (nextPageToken != null && previousPageToken != null) 
+            if (nextPageToken != null && previousPageToken != null)
                 throw new ArgumentException("Can't specify nextPageToken and previousPageToken simultaneously");
 
             pageSize?.ValidateIntBetween("pageSize", 25, 100);
@@ -648,7 +648,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
 
-            return await SendRequest< IEnumerable<BittrexOrderV3>>(GetUrl("orders/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexOrderV3>>(GetUrl("orders/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -724,7 +724,7 @@ namespace Bittrex.Net
         /// <param name="clientOrderId">Id to track the order by</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
-        public WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default) => 
+        public WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default) =>
             PlaceOrderAsync(symbol, direction, type, timeInForce, quantity, limit, ceiling, clientOrderId, useAwards, ct).Result;
 
         /// <summary>
@@ -818,7 +818,7 @@ namespace Bittrex.Net
         {
             if (nextPageToken != null && previousPageToken != null)
                 throw new ArgumentException("Can't specify startDate and endData simultaneously");
-            
+
             pageSize?.ValidateIntBetween("pageSize", 25, 100);
 
             var parameters = new Dictionary<string, object>();
@@ -1051,6 +1051,65 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("symbol", symbol);
             return await SendRequest<IEnumerable<BittrexConditionalOrder>>(GetUrl($"conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
+
+        /// <summary>
+        /// Place a new conditional order
+        /// </summary>
+        /// <param name="symbol">The symbol of the order</param>
+        /// <param name="operand">The operand of the order</param>
+        /// <param name="orderToCreate">Order to create when condition is triggered</param>
+        /// <param name="orderToCancel">Order to cancel when condition is triggered</param>
+        /// <param name="triggerPrice">Trigger price</param>
+        /// <param name="trailingStopPercent">Trailing stop percent</param>
+        /// <param name="clientConditionalOrderId">Client order id for conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Condition order</returns>
+        public WebCallResult<BittrexConditionalOrder> PlaceConditionalOrder(string symbol,
+            string operand,
+            BittrexUnplacedOrder? orderToCreate = null,
+            BittrexLinkedOrder? orderToCancel = null,
+            decimal? triggerPrice = null,
+            decimal? trailingStopPercent = null,
+            string? clientConditionalOrderId = null,
+            CancellationToken ct = default) =>
+            PlaceConditionalOrderAsync(symbol, operand, orderToCreate, orderToCancel, triggerPrice, trailingStopPercent, clientConditionalOrderId).Result;
+
+        /// <summary>
+        /// Place a new conditional order
+        /// </summary>
+        /// <param name="symbol">The symbol of the order</param>
+        /// <param name="operand">The operand of the order</param>
+        /// <param name="orderToCreate">Order to create when condition is triggered</param>
+        /// <param name="orderToCancel">Order to cancel when condition is triggered</param>
+        /// <param name="triggerPrice">Trigger price</param>
+        /// <param name="trailingStopPercent">Trailing stop percent</param>
+        /// <param name="clientConditionalOrderId">Client order id for conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Condition order</returns>
+        public async Task<WebCallResult<BittrexConditionalOrder>> PlaceConditionalOrderAsync(
+            string symbol,
+            string operand,
+            BittrexUnplacedOrder? orderToCreate = null,
+            BittrexLinkedOrder? orderToCancel = null,
+            decimal? triggerPrice = null,
+            decimal? trailingStopPercent = null,
+            string? clientConditionalOrderId = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "marketSymbol", symbol },
+                { "operand", operand }
+            };
+
+            parameters.AddOptionalParameter("triggerPrice", triggerPrice?.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("trailingStopPercent", trailingStopPercent?.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("clientConditionalOrderId", clientConditionalOrderId);
+            parameters.AddOptionalParameter("orderToCreate", orderToCreate);
+            parameters.AddOptionalParameter("orderToCancel", orderToCancel);
+
+            return await SendRequest<BittrexConditionalOrder>(GetUrl($"conditional-orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+        }
         #endregion
 
         /// <inheritdoc />
@@ -1061,7 +1120,7 @@ namespace Bittrex.Net
 
             var info = (string)data["code"];
             if (data["detail"] != null)
-                info += "; Details: " + (string) data["detail"];
+                info += "; Details: " + (string)data["detail"];
             if (data["data"] != null)
                 info += "; Data: " + data["data"];
 

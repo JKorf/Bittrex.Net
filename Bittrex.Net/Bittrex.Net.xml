@@ -1141,6 +1141,34 @@
             <param name="ct">Cancellation token</param>
             <returns>Conditional orders</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceConditionalOrder(System.String,System.String,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+            <summary>
+            Place a new conditional order
+            </summary>
+            <param name="symbol">The symbol of the order</param>
+            <param name="operand">The operand of the order</param>
+            <param name="orderToCreate">Order to create when condition is triggered</param>
+            <param name="orderToCancel">Order to cancel when condition is triggered</param>
+            <param name="triggerPrice">Trigger price</param>
+            <param name="trailingStopPercent">Trailing stop percent</param>
+            <param name="clientConditionalOrderId">Client order id for conditional order</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Condition order</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceConditionalOrderAsync(System.String,System.String,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+            <summary>
+            Place a new conditional order
+            </summary>
+            <param name="symbol">The symbol of the order</param>
+            <param name="operand">The operand of the order</param>
+            <param name="orderToCreate">Order to create when condition is triggered</param>
+            <param name="orderToCancel">Order to cancel when condition is triggered</param>
+            <param name="triggerPrice">Trigger price</param>
+            <param name="trailingStopPercent">Trailing stop percent</param>
+            <param name="clientConditionalOrderId">Client order id for conditional order</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Condition order</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc />
         </member>

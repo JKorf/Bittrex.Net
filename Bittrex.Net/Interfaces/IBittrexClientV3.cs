@@ -176,6 +176,30 @@ namespace Bittrex.Net.Interfaces
         Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetKlinesAsync(string symbol, KlineInterval interval, CancellationToken ct = default);
 
         /// <summary>
+        /// Gets historical klines for a symbol
+        /// </summary>
+        /// <param name="symbol">The symbol to get klines for</param>
+        /// <param name="interval">The interval of the klines</param>
+        /// <param name="year">The year to get klines for</param>
+        /// <param name="month">The month to get klines for</param>
+        /// <param name="day">The day to get klines for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Symbol kline</returns>
+        WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int month, int day, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets historical klines for a symbol
+        /// </summary>
+        /// <param name="symbol">The symbol to get klines for</param>
+        /// <param name="interval">The interval of the klines</param>
+        /// <param name="year">The year to get klines for</param>
+        /// <param name="month">The month to get klines for</param>
+        /// <param name="day">The day to get klines for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Symbol kline</returns>
+        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int month, int day, CancellationToken ct = default);
+
+        /// <summary>
         /// Gets a list of all currencies
         /// </summary>
         /// <param name="ct">Cancellation token</param>
@@ -204,6 +228,33 @@ namespace Bittrex.Net.Interfaces
         /// <param name="ct">Cancellation token</param>
         /// <returns>Currency info</returns>
         Task<WebCallResult<BittrexCurrencyV3>> GetCurrencyAsync(string currency, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get account info
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account info</returns>
+        WebCallResult<BittrexAccount> GetAccount(CancellationToken ct = default);
+
+        /// Get account info
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account info</returns>
+        Task<WebCallResult<BittrexAccount>> GetAccountAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Get account volume
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account volume</returns>
+        WebCallResult<BittrexAccountVolume> GetAccountVolume(CancellationToken ct = default);
+
+        /// <summary>
+        /// Get account volume
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account volume</returns>
+        Task<WebCallResult<BittrexAccountVolume>> GetAccountVolumeAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets current balances
@@ -416,6 +467,22 @@ namespace Bittrex.Net.Interfaces
         Task<WebCallResult<BittrexOrderV3>> GetOrderAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
+        /// Gets executions (trades) for a order
+        /// </summary>
+        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        WebCallResult<IEnumerable<BittrexExecution>> GetExecutions(string orderId, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets executions (trades) for a order
+        /// </summary>
+        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string orderId, CancellationToken ct = default);
+
+        /// <summary>
         /// Cancels an order
         /// </summary>
         /// <param name="orderId">The id of the order</param>
@@ -444,7 +511,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="clientOrderId">Id to track the order by</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
-        WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity,  TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, CancellationToken ct = default);
+        WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);
 
         /// <summary>
         /// Places an order
@@ -459,7 +526,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="clientOrderId">Id to track the order by</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
-        Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, decimal quantity, TimeInForce timeInForce, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, CancellationToken ct = default);
+        Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal? quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of open withdrawals
@@ -564,7 +631,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="addressTag">A tag for the address</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string addressTag, CancellationToken ct = default);
+        WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string? addressTag = null, CancellationToken ct = default);
 
         /// <summary>
         /// Withdraw from Bittrex
@@ -575,7 +642,138 @@ namespace Bittrex.Net.Interfaces
         /// <param name="addressTag">A tag for the address</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string addressTag, CancellationToken ct = default);
+        Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string? addressTag = null, CancellationToken ct = default);
 
+        /// <summary>
+        /// Gets a list of whitelisted address for withdrawals
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List withdrawal address</returns>
+        WebCallResult<IEnumerable<BittrexWhitelistAddress>> GetWithdrawalWhitelistAddresses(CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets a list of whitelisted address for withdrawals
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List withdrawal address</returns>
+        Task<WebCallResult<IEnumerable<BittrexWhitelistAddress>>> GetWithdrawalWhitelistAddressesAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Get details on a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        WebCallResult<BittrexConditionalOrder> GetConditionalOrder(string? orderId = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get details on a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        Task<WebCallResult<BittrexConditionalOrder>> GetConditionalOrderAsync(string? orderId = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Cancels a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        WebCallResult<BittrexConditionalOrder> CancelConditionalOrder(string? orderId = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Cancels a condtional order
+        /// </summary>
+        /// <param name="orderId">Id of the conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional order</returns>
+        Task<WebCallResult<BittrexConditionalOrder>> CancelConditionalOrderAsync(string? orderId = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets a list of closed conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List of closed conditional orders</returns>
+        WebCallResult<IEnumerable<BittrexConditionalOrder>> GetClosedConditionalOrders(string? symbol = null, DateTime? startDate = null,
+            DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets a list of closed conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>List of closed conditional orders</returns>
+        Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetClosedConditionalOrdersAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get list op open conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional orders</returns>
+        WebCallResult<IEnumerable<BittrexConditionalOrder>> GetOpenConditionalOrders(string? symbol = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get list op open conditional orders
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Conditional orders</returns>
+        Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetOpenConditionalOrdersAsync(string? symbol = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Place a new conditional order
+        /// </summary>
+        /// <param name="symbol">The symbol of the order</param>
+        /// <param name="operand">The operand of the order</param>
+        /// <param name="orderToCreate">Order to create when condition is triggered</param>
+        /// <param name="orderToCancel">Order to cancel when condition is triggered</param>
+        /// <param name="triggerPrice">Trigger price</param>
+        /// <param name="trailingStopPercent">Trailing stop percent</param>
+        /// <param name="clientConditionalOrderId">Client order id for conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Condition order</returns>
+        WebCallResult<BittrexConditionalOrder> PlaceConditionalOrder(string symbol,
+            string operand,
+            BittrexUnplacedOrder? orderToCreate = null,
+            BittrexLinkedOrder? orderToCancel = null,
+            decimal? triggerPrice = null,
+            decimal? trailingStopPercent = null,
+            string? clientConditionalOrderId = null,
+            CancellationToken ct = default);
+
+        /// <summary>
+        /// Place a new conditional order
+        /// </summary>
+        /// <param name="symbol">The symbol of the order</param>
+        /// <param name="operand">The operand of the order</param>
+        /// <param name="orderToCreate">Order to create when condition is triggered</param>
+        /// <param name="orderToCancel">Order to cancel when condition is triggered</param>
+        /// <param name="triggerPrice">Trigger price</param>
+        /// <param name="trailingStopPercent">Trailing stop percent</param>
+        /// <param name="clientConditionalOrderId">Client order id for conditional order</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Condition order</returns>
+        Task<WebCallResult<BittrexConditionalOrder>> PlaceConditionalOrderAsync(
+            string symbol,
+            string operand,
+            BittrexUnplacedOrder? orderToCreate = null,
+            BittrexLinkedOrder? orderToCancel = null,
+            decimal? triggerPrice = null,
+            decimal? trailingStopPercent = null,
+            string? clientConditionalOrderId = null,
+            CancellationToken ct = default);
     }
 }
