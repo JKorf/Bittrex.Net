@@ -47,6 +47,20 @@ namespace Bittrex.Net.Objects
     }
 
     /// <summary>
+    /// Options for the Bittrex socket client
+    /// </summary>
+    public class BittrexSocketClientV3Options : SocketClientOptions
+    {
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public BittrexSocketClientV3Options() : base("https://socket-v3.bittrex.com")
+        {
+            SocketSubscriptionsCombineTarget = 10;
+        }
+    }
+
+    /// <summary>
     /// Options for the Bittrex symbol order book
     /// </summary>
     public class BittrexOrderBookOptions : OrderBookOptions

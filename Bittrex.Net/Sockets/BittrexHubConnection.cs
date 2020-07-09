@@ -1,5 +1,6 @@
 ﻿using Bittrex.Net.Interfaces;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
@@ -46,6 +47,8 @@ namespace Bittrex.Net.Sockets
 
         public void SetHub(string name)
         {
+            connection.TraceWriter = new DebugTextWriter();
+            connection.TraceLevel = TraceLevels.All;
             hubProxy = connection.CreateHubProxy(name);
         }
 
@@ -70,8 +73,8 @@ namespace Bittrex.Net.Sockets
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogVerbosity.Warning, $"Failed to invoke proxy, try {i}: " + e.Message);
-                    error = new UnknownError("Failed to invoke proxy: " + e.Message);
+                    log.Write(LogVerbosity.Warning, $"Failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
+                    error = new UnknownError("Failed to invoke proxy: " + (e.InnerException?.Message ?? e.Message));
                 }
             }
 
