@@ -18,8 +18,7 @@ using Newtonsoft.Json.Linq;
 namespace Bittrex.Net
 {
     /// <summary>
-    /// Client for the V3 API
-    /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
+    /// Client for the Bittrex V3 API
     /// </summary>
     public class BittrexClientV3 : RestClient, IBittrexClientV3
     {
@@ -340,7 +339,7 @@ namespace Bittrex.Net
         /// <returns>Account info</returns>
         public WebCallResult<BittrexAccount> GetAccount(CancellationToken ct = default) => GetAccountAsync(ct).Result;
 
-        // <summary>
+        /// <summary>
         /// Get account info
         /// </summary>
         /// <param name="ct">Cancellation token</param>
@@ -722,6 +721,7 @@ namespace Bittrex.Net
         /// <param name="limit">The limit price of the order (limit orders only)</param>
         /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
         /// <param name="clientOrderId">Id to track the order by</param>
+        /// <param name="useAwards">Option to use Bittrex credits for the order</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
         public WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default) =>
@@ -738,6 +738,7 @@ namespace Bittrex.Net
         /// <param name="limit">The limit price of the order (limit orders only)</param>
         /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
         /// <param name="clientOrderId">Id to track the order by</param>
+        /// <param name="useAwards">Option to use Bittrex credits for the order</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
         public async Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal? quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default)

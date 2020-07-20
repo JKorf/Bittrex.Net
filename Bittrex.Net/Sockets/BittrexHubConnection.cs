@@ -47,8 +47,6 @@ namespace Bittrex.Net.Sockets
 
         public void SetHub(string name)
         {
-            connection.TraceWriter = new DebugTextWriter();
-            connection.TraceLevel = TraceLevels.All;
             hubProxy = connection.CreateHubProxy(name);
         }
 

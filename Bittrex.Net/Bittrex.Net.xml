@@ -1344,7 +1344,7 @@
         </member>
         <member name="T:Bittrex.Net.BittrexSocketClientV3">
             <summary>
-            Client for the Bittrex socket API
+            Client for the Bittrex socket API V3
             </summary>
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.#ctor">
@@ -5040,6 +5040,26 @@
             The time the withdrawal was completed
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexDepositUpdate">
+            <summary>
+            Deposit update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexDepositUpdate.AccountId">
+            <summary>
+            Account id for the deposit
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexDepositUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexDepositUpdate.Delta">
+            <summary>
+            Update data
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Sockets.BittrexKlineUpdate">
             <summary>
             Kline update data
@@ -5063,6 +5083,106 @@
         <member name="P:Bittrex.Net.Sockets.BittrexKlineUpdate.Delta">
             <summary>
             Kline data
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexOrderBookUpdate">
+            <summary>
+            Order book update data
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderBookUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderBookUpdate.Symbol">
+            <summary>
+            Symbol of the update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderBookUpdate.Depth">
+            <summary>
+            Depth
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderBookUpdate.BidDeltas">
+            <summary>
+            Bid changes
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderBookUpdate.AskDeltas">
+            <summary>
+            Ask changes
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexOrderUpdate">
+            <summary>
+            Order update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderUpdate.AccountId">
+            <summary>
+            Account id
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexOrderUpdate.Delta">
+            <summary>
+            Changed order
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexSummariesUpdate">
+            <summary>
+            Symbol summaries update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexSummariesUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexSummariesUpdate.Deltas">
+            <summary>
+            Summary per symbol
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexTickersUpdate">
+            <summary>
+            Symbol tickers update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexTickersUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexTickersUpdate.Deltas">
+            <summary>
+            Ticker per symbol
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexTradesUpdate">
+            <summary>
+            Symbol trade update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexTradesUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexTradesUpdate.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexTradesUpdate.Deltas">
+            <summary>
+            Trades
             </summary>
         </member>
     </members>
