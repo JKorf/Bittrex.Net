@@ -17,7 +17,7 @@ using CryptoExchange.Net.Interfaces;
 namespace Bittrex.Net
 {
     /// <summary>
-    /// Client for the Bittrex socket API
+    /// Client for the Bittrex socket API. Consider using the BittrexSocketClientV3 client as this client (V1 API) has end of life planned ib 9/30/2020
     /// </summary>
     public class BittrexSocketClient: SocketClient, IBittrexSocketClient
     {
