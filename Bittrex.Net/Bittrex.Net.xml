@@ -406,8 +406,7 @@
         </member>
         <member name="T:Bittrex.Net.BittrexClientV3">
             <summary>
-            Client for the V3 API
-            NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
+            Client for the Bittrex V3 API
             </summary>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.#ctor">
@@ -650,7 +649,13 @@
             <param name="ct">Cancellation token</param>
             <returns>Account info</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Bittrex.Net.BittrexClientV3.GetAccountAsync(System.Threading.CancellationToken)" -->
+        <member name="M:Bittrex.Net.BittrexClientV3.GetAccountAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account info
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account info</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetAccountVolume(System.Threading.CancellationToken)">
             <summary>
             Get account volume
@@ -919,6 +924,7 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="useAwards">Option to use Bittrex credits for the order</param>
             <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
@@ -934,6 +940,7 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="useAwards">Option to use Bittrex credits for the order</param>
             <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
@@ -1344,7 +1351,7 @@
         </member>
         <member name="T:Bittrex.Net.BittrexSocketClientV3">
             <summary>
-            Client for the Bittrex socket API V3
+            Client for the Bittrex V3 websocket API
             </summary>
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.#ctor">
@@ -1363,6 +1370,83 @@
             Set the default options for new clients
             </summary>
             <param name="options">Options to use for new clients</param>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Action{Bittrex.Net.Sockets.BittrexKlineUpdate})">
+            <summary>
+            Subscribe to kline(candle) updates for a symbol
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="interval">Interval of the candles</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexSummariesUpdate})">
+            <summary>
+            Subscribe to all symbol summary updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3})">
+            <summary>
+            Subscribe to symbol summary updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{Bittrex.Net.Sockets.BittrexOrderBookUpdate})">
+            <summary>
+            Subscribe to order book updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="depth">The depth of the oder book to receive update for</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolTickerUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexTickersUpdate})">
+            <summary>
+            Subscribe to all symbols ticker updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolTickerUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.V3.BittrexTickV3})">
+            <summary>
+            Subscribe to symbol ticker updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolTradeUpdatesAsync(System.String,System.Action{Bittrex.Net.Sockets.BittrexTradesUpdate})">
+            <summary>
+            Subscribe to symbol trade updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToOrderUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexOrderUpdate})">
+            <summary>
+            Subscribe to order updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToBalanceUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexBalanceUpdate})">
+            <summary>
+            Subscribe to balance updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToDepositUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexDepositUpdate})">
+            <summary>
+            Subscribe to deposit updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.GetWebsocket(System.String,System.Boolean)">
             <inheritdoc />
@@ -2629,6 +2713,88 @@
             <param name="onBalanceUpdate">The update event handler for balance updates</param>
             <param name="onOrderUpdate">The update event handler for order updates</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
+        <member name="T:Bittrex.Net.Interfaces.IBittrexSocketClientV3">
+            <summary>
+            Interface for the Bittrex V3 socket client
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Action{Bittrex.Net.Sockets.BittrexKlineUpdate})">
+            <summary>
+            Subscribe to kline(candle) updates for a symbol
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="interval">Interval of the candles</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexSummariesUpdate})">
+            <summary>
+            Subscribe to all symbol summary updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3})">
+            <summary>
+            Subscribe to symbol summary updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{Bittrex.Net.Sockets.BittrexOrderBookUpdate})">
+            <summary>
+            Subscribe to order book updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="depth">The depth of the oder book to receive update for</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolTickerUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexTickersUpdate})">
+            <summary>
+            Subscribe to all symbols ticker updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolTickerUpdatesAsync(System.String,System.Action{Bittrex.Net.Objects.V3.BittrexTickV3})">
+            <summary>
+            Subscribe to symbol ticker updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolTradeUpdatesAsync(System.String,System.Action{Bittrex.Net.Sockets.BittrexTradesUpdate})">
+            <summary>
+            Subscribe to symbol trade updates
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToOrderUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexOrderUpdate})">
+            <summary>
+            Subscribe to order updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToBalanceUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexBalanceUpdate})">
+            <summary>
+            Subscribe to balance updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToDepositUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexDepositUpdate})">
+            <summary>
+            Subscribe to deposit updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexAccountOrder">
             <summary>
@@ -5038,6 +5204,26 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexWithdrawalV3.CompletedAt">
             <summary>
             The time the withdrawal was completed
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexBalanceUpdate">
+            <summary>
+            Balance update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexBalanceUpdate.AccountId">
+            <summary>
+            Account id for the balance change
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexBalanceUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexBalanceUpdate.Delta">
+            <summary>
+            Update data
             </summary>
         </member>
         <member name="T:Bittrex.Net.Sockets.BittrexDepositUpdate">
