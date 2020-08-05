@@ -73,9 +73,20 @@ namespace Bittrex.Net
         /// <param name="interval">Interval of the candles</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate)
+        public Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
+            KlineInterval interval, Action<BittrexKlineUpdate> onUpdate)
+            => SubscribeToKlineUpdatesAsync(new[] {symbol}, interval, onUpdate);
+
+        /// <summary>
+        /// Subscribe to kline(candle) updates for a symbol
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="interval">Interval of the candles</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate)
         {
-            return await Subscribe($"candle_{symbol}_{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}", false, onUpdate).ConfigureAwait(false);
+            return await Subscribe(symbols.Select(s => $"candle_{s}_{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}").ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -94,9 +105,19 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol, Action<BittrexSymbolSummaryV3> onUpdate)
+        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
+            Action<BittrexSymbolSummaryV3> onUpdate)
+            => SubscribeToSymbolSummaryUpdatesAsync(new[] { symbol }, onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol summary updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<BittrexSymbolSummaryV3> onUpdate)
         {
-            return await Subscribe("market_summary_" + symbol, false, onUpdate).ConfigureAwait(false);
+            return await Subscribe(symbols.Select(s => "market_summary_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -106,10 +127,21 @@ namespace Bittrex.Net
         /// <param name="depth">The depth of the oder book to receive update for</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<BittrexOrderBookUpdate> onUpdate)
+        public  Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
+            Action<BittrexOrderBookUpdate> onUpdate)
+            => SubscribeToOrderBookUpdatesAsync(new[] {symbol}, depth, onUpdate);
+
+        /// <summary>
+        /// Subscribe to order book updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="depth">The depth of the oder book to receive update for</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<BittrexOrderBookUpdate> onUpdate)
         {
             depth.ValidateIntValues(nameof(depth), 1, 25, 100);
-            return await Subscribe($"orderbook_{symbol}_{depth}", false, onUpdate).ConfigureAwait(false);
+            return await Subscribe(symbols.Select(s => $"orderbook_{s}_{depth}").ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -128,9 +160,18 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol, Action<BittrexTickV3> onUpdate)
+        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
+            Action<BittrexTickV3> onUpdate) => SubscribeToSymbolTickerUpdatesAsync(new[] {symbol}, onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol ticker updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTickV3> onUpdate)
         {
-            return await Subscribe("ticker_" + symbol, false, onUpdate).ConfigureAwait(false);
+            return await Subscribe(symbols.Select(s => "ticker_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -139,9 +180,19 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol, Action<BittrexTradesUpdate> onUpdate)
+        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
+            Action<BittrexTradesUpdate> onUpdate)
+            => SubscribeToSymbolTradeUpdatesAsync(new[] {symbol}, onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol trade updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTradesUpdate> onUpdate)
         {
-            return await Subscribe("trade_" + symbol, false, onUpdate).ConfigureAwait(false);
+            return await Subscribe(symbols.Select(s => "trade_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -177,9 +228,13 @@ namespace Bittrex.Net
         #endregion
         #region private
 
-        private async Task<CallResult<UpdateSubscription>> Subscribe<T>(string channel, bool authenticated, Action<T> handler)
+        private Task<CallResult<UpdateSubscription>> Subscribe<T>(string channel, bool authenticated,
+            Action<T> handler)
+            => Subscribe(new[] {channel}, authenticated, handler);
+
+        private async Task<CallResult<UpdateSubscription>> Subscribe<T>(string[] channels, bool authenticated, Action<T> handler)
         {
-            return await Subscribe<JToken>(new ConnectionRequestV3("subscribe", channel), null, authenticated, data =>
+            return await Subscribe<JToken>(new ConnectionRequestV3("subscribe", channels), null, authenticated, data =>
             {
                 if (!data["A"].Any())
                     return;
@@ -284,18 +339,35 @@ namespace Bittrex.Net
                 return method == "heartbeat";
 
             var bRequest = (ConnectionRequestV3) request;
-            var str = (string[]) bRequest.Parameters[0];
-            if (str[0] == method)
-                return true;
 
-            if (str[0].StartsWith(method))
+            var m = method.Replace("order_book", "orderbook");
+
+            foreach (var parameter in bRequest.Parameters)
+            {
+                foreach (var channel in (string[]) parameter)
+                {
+
+                    if (Check(channel, m, data))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool Check(string channel, string method, string data)
+        {
+            if (channel == method)
+                return true;
+            
+            if (channel.StartsWith(method))
             {
                 var tokenData = JToken.Parse(data);
-                var symbol = (string) (tokenData["symbol"] ?? tokenData["marketSymbol"]);
-                if (str[0].Length < method.Length + symbol.Length + 1)
+                var symbol = (string)(tokenData["symbol"] ?? tokenData["marketSymbol"]);
+                if (channel.Length < method.Length + symbol.Length + 1)
                     return false;
 
-                if (str[0].Substring(method.Length + 1, symbol.Length) == symbol)
+                if (channel.Substring(method.Length + 1, symbol.Length) == symbol)
                     return true;
             }
             return false;

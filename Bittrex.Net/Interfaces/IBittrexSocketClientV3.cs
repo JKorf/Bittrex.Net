@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.V3;
@@ -21,7 +22,17 @@ namespace Bittrex.Net.Interfaces
         /// <param name="interval">Interval of the candles</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
+            KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to kline(candle) updates for a symbol
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="interval">Interval of the candles</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
 
         /// <summary>
         /// Subscribe to all symbol summary updates
@@ -36,7 +47,16 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol, Action<BittrexSymbolSummaryV3> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
+            Action<BittrexSymbolSummaryV3> onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol summary updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<BittrexSymbolSummaryV3> onUpdate);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -45,7 +65,17 @@ namespace Bittrex.Net.Interfaces
         /// <param name="depth">The depth of the oder book to receive update for</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth, Action<BittrexOrderBookUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
+            Action<BittrexOrderBookUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to order book updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="depth">The depth of the oder book to receive update for</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<BittrexOrderBookUpdate> onUpdate);
 
         /// <summary>
         /// Subscribe to all symbols ticker updates
@@ -60,7 +90,16 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol, Action<BittrexTickV3> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
+            Action<BittrexTickV3> onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol ticker updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTickV3> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol trade updates
@@ -68,7 +107,16 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol, Action<BittrexTradesUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
+            Action<BittrexTradesUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol trade updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTradesUpdate> onUpdate);
 
         /// <summary>
         /// Subscribe to order updates

@@ -1,6 +1,8 @@
 ﻿using Bittrex.Net.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
@@ -65,7 +67,7 @@ namespace Bittrex.Net.Sockets
             {
                 try
                 {
-                    log.Write(LogVerbosity.Debug, $"Sending data: {call}, [{string.Join(", ", pars)}]");
+                    log.Write(LogVerbosity.Debug, $"Sending data: {call}, {ArrayToString(pars)}");
                     var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub, null);
                 }
@@ -77,6 +79,22 @@ namespace Bittrex.Net.Sockets
             }
 
             return new CallResult<T>(default, error);
+        }
+
+        private string ArrayToString(object item)
+        {
+            if (!item.GetType().IsArray)
+                return item.ToString();
+
+            return $"[{ string.Join(", ", ItemToString((Array)item))}]";
+        }
+
+        private IEnumerable<string> ItemToString(Array item)
+        {
+            var result = new List<string>();
+            foreach (var subItem in item)
+                result.Add(ArrayToString(subItem));
+            return result;
         }
 
         public override async Task<bool> Connect()

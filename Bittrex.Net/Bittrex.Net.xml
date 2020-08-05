@@ -1380,6 +1380,15 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToKlineUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},Bittrex.Net.Objects.KlineInterval,System.Action{Bittrex.Net.Sockets.BittrexKlineUpdate})">
+            <summary>
+            Subscribe to kline(candle) updates for a symbol
+            </summary>
+            <param name="symbols">The symbols</param>
+            <param name="interval">Interval of the candles</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexSummariesUpdate})">
             <summary>
             Subscribe to all symbol summary updates
@@ -1395,11 +1404,28 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3})">
+            <summary>
+            Subscribe to symbol summary updates
+            </summary>
+            <param name="symbols">The symbols</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{Bittrex.Net.Sockets.BittrexOrderBookUpdate})">
             <summary>
             Subscribe to order book updates
             </summary>
             <param name="symbol">The symbol</param>
+            <param name="depth">The depth of the oder book to receive update for</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToOrderBookUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{Bittrex.Net.Sockets.BittrexOrderBookUpdate})">
+            <summary>
+            Subscribe to order book updates
+            </summary>
+            <param name="symbols">The symbols</param>
             <param name="depth">The depth of the oder book to receive update for</param>
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
@@ -1419,11 +1445,27 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{Bittrex.Net.Objects.V3.BittrexTickV3})">
+            <summary>
+            Subscribe to symbol ticker updates
+            </summary>
+            <param name="symbols">The symbols</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolTradeUpdatesAsync(System.String,System.Action{Bittrex.Net.Sockets.BittrexTradesUpdate})">
             <summary>
             Subscribe to symbol trade updates
             </summary>
             <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToSymbolTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{Bittrex.Net.Sockets.BittrexTradesUpdate})">
+            <summary>
+            Subscribe to symbol trade updates
+            </summary>
+            <param name="symbols">The symbols</param>
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
@@ -2728,6 +2770,15 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToKlineUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},Bittrex.Net.Objects.KlineInterval,System.Action{Bittrex.Net.Sockets.BittrexKlineUpdate})">
+            <summary>
+            Subscribe to kline(candle) updates for a symbol
+            </summary>
+            <param name="symbols">The symbols</param>
+            <param name="interval">Interval of the candles</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexSummariesUpdate})">
             <summary>
             Subscribe to all symbol summary updates
@@ -2743,11 +2794,28 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolSummaryUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{Bittrex.Net.Objects.V3.BittrexSymbolSummaryV3})">
+            <summary>
+            Subscribe to symbol summary updates
+            </summary>
+            <param name="symbols">The symbols</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{Bittrex.Net.Sockets.BittrexOrderBookUpdate})">
             <summary>
             Subscribe to order book updates
             </summary>
             <param name="symbol">The symbol</param>
+            <param name="depth">The depth of the oder book to receive update for</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToOrderBookUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{Bittrex.Net.Sockets.BittrexOrderBookUpdate})">
+            <summary>
+            Subscribe to order book updates
+            </summary>
+            <param name="symbols">The symbols</param>
             <param name="depth">The depth of the oder book to receive update for</param>
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
@@ -2767,11 +2835,27 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{Bittrex.Net.Objects.V3.BittrexTickV3})">
+            <summary>
+            Subscribe to symbol ticker updates
+            </summary>
+            <param name="symbols">The symbols</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolTradeUpdatesAsync(System.String,System.Action{Bittrex.Net.Sockets.BittrexTradesUpdate})">
             <summary>
             Subscribe to symbol trade updates
             </summary>
             <param name="symbol">The symbol</param>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToSymbolTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{Bittrex.Net.Sockets.BittrexTradesUpdate})">
+            <summary>
+            Subscribe to symbol trade updates
+            </summary>
+            <param name="symbols">The symbols</param>
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
