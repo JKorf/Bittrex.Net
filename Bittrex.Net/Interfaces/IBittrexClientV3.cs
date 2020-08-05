@@ -185,7 +185,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="day">The day to get klines for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int month, int day, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets historical klines for a symbol
@@ -197,7 +197,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="day">The day to get klines for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int month, int day, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of all currencies

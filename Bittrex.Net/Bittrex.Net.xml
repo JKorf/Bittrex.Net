@@ -588,7 +588,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol klines</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -600,7 +600,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol kline</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -2037,7 +2037,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol klines</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -2049,7 +2049,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol kline</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Int32,System.Int32,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>

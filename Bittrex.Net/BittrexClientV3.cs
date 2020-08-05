@@ -271,7 +271,7 @@ namespace Bittrex.Net
         /// <param name="day">The day to get klines for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        public WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int month, int day, CancellationToken ct = default) => GetHistoricalKlinesAsync(symbol, interval, year, month, day, ct).Result;
+        public WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default) => GetHistoricalKlinesAsync(symbol, interval, year, month, day, ct).Result;
 
         /// <summary>
         /// Gets historical klines for a symbol
@@ -283,12 +283,27 @@ namespace Bittrex.Net
         /// <param name="day">The day to get klines for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int month, int day, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<IEnumerable<BittrexKlineV3>>(GetUrl(
-                $"markets/{symbol}/candles/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/historical/{year}/{month}/{day}"
-                ), HttpMethod.Get, ct).ConfigureAwait(false);
+
+            if(interval == KlineInterval.OneDay && month.HasValue)
+                throw new ArgumentException("Can't specify month value when using day interval");
+
+            if (interval == KlineInterval.OneHour && day.HasValue)
+                throw new ArgumentException("Can't specify day value when using hour interval");
+
+            if (day.HasValue && !month.HasValue)
+                throw new ArgumentException("Can't specify day value without month value");
+
+            var url =
+                $"markets/{symbol}/candles/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/historical/{year}";
+            if (month.HasValue)
+                url += "/" + month;
+            if (day.HasValue)
+                url += "/" + day;
+
+            return await SendRequest<IEnumerable<BittrexKlineV3>>(GetUrl(url), HttpMethod.Get, ct).ConfigureAwait(false);
         }
         #endregion
 
