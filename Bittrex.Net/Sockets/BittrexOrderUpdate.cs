@@ -24,6 +24,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Changed order
         /// </summary>
-        public BittrexOrderV3 Delta { get; set; }
+        public BittrexOrderV3 Delta { get; set; } = default!;
     }
 }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Bittrex.Net.Sockets
+﻿namespace Bittrex.Net.Sockets
 {
-    public class ConnectionRequestV3
+    internal class ConnectionRequestV3
     {
         public string RequestName { get; set; }
         public object[] Parameters { get; set; }

@@ -13,7 +13,7 @@ namespace Bittrex.Net.Objects.V3
         /// <summary>
         /// Id of the order
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; set; } = "";
         /// <summary>
         /// The symbol
         /// </summary>

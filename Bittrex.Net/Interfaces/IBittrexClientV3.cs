@@ -236,6 +236,7 @@ namespace Bittrex.Net.Interfaces
         /// <returns>Account info</returns>
         WebCallResult<BittrexAccount> GetAccount(CancellationToken ct = default);
 
+        /// <summary>
         /// Get account info
         /// </summary>
         /// <param name="ct">Cancellation token</param>
@@ -509,6 +510,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="limit">The limit price of the order (limit orders only)</param>
         /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
         /// <param name="clientOrderId">Id to track the order by</param>
+        /// <param name="useAwards">Whether to use Bittrex awards</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
         WebCallResult<BittrexOrderV3> PlaceOrder(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);
@@ -524,6 +526,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="limit">The limit price of the order (limit orders only)</param>
         /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
         /// <param name="clientOrderId">Id to track the order by</param>
+        /// <param name="useAwards">Whether to use Bittrex awards</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
         Task<WebCallResult<BittrexOrderV3>> PlaceOrderAsync(string symbol, OrderSide direction, OrderTypeV3 type, TimeInForce timeInForce, decimal? quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);

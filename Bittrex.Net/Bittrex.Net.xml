@@ -2140,7 +2140,13 @@
             <param name="ct">Cancellation token</param>
             <returns>Account info</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Bittrex.Net.Interfaces.IBittrexClientV3.GetAccountAsync(System.Threading.CancellationToken)" -->
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetAccountAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account info
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account info</returns>
+        </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetAccountVolume(System.Threading.CancellationToken)">
             <summary>
             Get account volume
@@ -2409,6 +2415,7 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="useAwards">Whether to use Bittrex awards</param>
             <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>
@@ -2424,6 +2431,7 @@
             <param name="limit">The limit price of the order (limit orders only)</param>
             <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
             <param name="clientOrderId">Id to track the order by</param>
+            <param name="useAwards">Whether to use Bittrex awards</param>
             <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
         </member>

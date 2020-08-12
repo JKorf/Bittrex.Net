@@ -276,7 +276,7 @@ namespace Bittrex.Net
                 if (!subResult.Success || data?.Success == false)
                 {
                     _ = socket.Close(subscription);
-                    return new CallResult<bool>(false, subResult.Error ?? new ServerError(data?.ErrorCode));
+                    return new CallResult<bool>(false, subResult.Error ?? new ServerError(data?.ErrorCode!));
                 }
             }
 
@@ -412,8 +412,8 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override async Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
         {
-            var bRequest = (ConnectionRequestV3)s.Request;
-            var unsub = new ConnectionRequestV3("unsubscribe", ((string[])bRequest.Parameters[0])[0]);
+            var bRequest = (ConnectionRequestV3)s.Request!;
+            var unsub = new ConnectionRequestV3("unsubscribe", ((string[])bRequest!.Parameters[0])[0]);
             var queryResult = await ((ISignalRSocket)connection.Socket).InvokeProxy<ConnectionResponse[]>(unsub.RequestName, unsub.Parameters).ConfigureAwait(false);
             
             return queryResult.Success;

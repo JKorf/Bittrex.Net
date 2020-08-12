@@ -21,6 +21,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Update data
         /// </summary>
-        public BittrexDepositV3 Delta { get; set; }
+        public BittrexDepositV3 Delta { get; set; } = default!;
     }
 }

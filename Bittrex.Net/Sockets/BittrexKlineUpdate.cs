@@ -17,19 +17,21 @@ namespace Bittrex.Net.Sockets
         /// Sequence
         /// </summary>
         public int Sequence { get; set; }
+
         /// <summary>
         /// Symbol of the update
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = "";
         /// <summary>
         /// Interval
         /// </summary>
         [JsonConverter(typeof(KlineIntervalConverter))]
         public KlineInterval Interval { get; set; }
+
         /// <summary>
         /// Kline data
         /// </summary>
-        public BittrexKlineV3 Delta { get; set; }
+        public BittrexKlineV3 Delta { get; set; } = default!;
     }
 }
