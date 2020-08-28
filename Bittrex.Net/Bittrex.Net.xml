@@ -3661,8 +3661,21 @@
         </member>
         <member name="M:Bittrex.Net.Objects.BittrexClientOptions.#ctor">
             <summary>
-            ctor
+            Create new client options
             </summary>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexClientOptions.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Create new client options
+            </summary>
+            <param name="client">HttpClient to use for requests from this client</param>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexClientOptions.#ctor(System.Net.Http.HttpClient,System.String)">
+            <summary>
+            Create new client options
+            </summary>
+            <param name="apiAddress">Custom API address to use</param>
+            <param name="client">HttpClient to use for requests from this client</param>
         </member>
         <member name="P:Bittrex.Net.Objects.BittrexClientOptions.BaseAddressV2">
             <summary>

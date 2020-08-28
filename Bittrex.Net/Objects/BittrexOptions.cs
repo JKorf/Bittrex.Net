@@ -1,4 +1,5 @@
-﻿using Bittrex.Net.Interfaces;
+﻿using System.Net.Http;
+using Bittrex.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects
@@ -9,10 +10,28 @@ namespace Bittrex.Net.Objects
     public class BittrexClientOptions : RestClientOptions
     {
         /// <summary>
-        /// ctor
+        /// Create new client options
         /// </summary>
-        public BittrexClientOptions(): base("https://api.bittrex.com")
+        public BittrexClientOptions() : this(null, "https://api.bittrex.com")
         {
+        }
+
+        /// <summary>
+        /// Create new client options
+        /// </summary>
+        /// <param name="client">HttpClient to use for requests from this client</param>
+        public BittrexClientOptions(HttpClient client) : this(client, "https://api.bittrex.com")
+        {
+        }
+
+        /// <summary>
+        /// Create new client options
+        /// </summary>
+        /// <param name="apiAddress">Custom API address to use</param>
+        /// <param name="client">HttpClient to use for requests from this client</param>
+        public BittrexClientOptions(HttpClient client, string apiAddress) : base(apiAddress)
+        {
+            HttpClient = client;
         }
 
         /// <summary>
