@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -175,7 +176,10 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexOrderBookV3>> GetOrderBookAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<BittrexOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct).ConfigureAwait(false);
+            var result = await SendRequest<BittrexOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct).ConfigureAwait(false);
+            if(result.Data != null)
+                result.Data.Sequence = result.ResponseHeaders!.GetSequence();
+            return result;
         }
 
         /// <summary>

@@ -68,12 +68,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBittrexSocketClient? SocketClient { get; }
+        public IBittrexSocketClientV3? SocketClient { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null) : base("Bittrex", true, false)
+        public BittrexOrderBookOptions(IBittrexSocketClientV3? socketClient = null) : base("Bittrex", true, true)
         {
             SocketClient = socketClient;
         }

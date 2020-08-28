@@ -1525,7 +1525,7 @@
             Order book implementation
             </summary>
         </member>
-        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.#ctor(System.String,Bittrex.Net.Objects.BittrexOrderBookOptions)">
+        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.#ctor(System.String,System.Int32,Bittrex.Net.Objects.BittrexOrderBookOptions)">
             <summary>
             Create a new order book instance
             </summary>
@@ -3705,7 +3705,7 @@
             The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
             </summary>
         </member>
-        <member name="M:Bittrex.Net.Objects.BittrexOrderBookOptions.#ctor(Bittrex.Net.Interfaces.IBittrexSocketClient)">
+        <member name="M:Bittrex.Net.Objects.BittrexOrderBookOptions.#ctor(Bittrex.Net.Interfaces.IBittrexSocketClientV3)">
             <summary>
             </summary>
             <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
@@ -4943,6 +4943,11 @@
             Order book
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookV3.Sequence">
+            <summary>
+            The sequence number
+            </summary>
+        </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookV3.Bid">
             <summary>
             The bids in this book
@@ -4963,7 +4968,7 @@
             The quantity of the entry
             </summary>
         </member>
-        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookEntryV3.Rate">
+        <member name="P:Bittrex.Net.Objects.V3.BittrexOrderBookEntryV3.Price">
             <summary>
             The price of the entry
             </summary>
