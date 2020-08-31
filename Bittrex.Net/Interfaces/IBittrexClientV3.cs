@@ -99,17 +99,19 @@ namespace Bittrex.Net.Interfaces
         /// Gets the order book of a symbol
         /// </summary>
         /// <param name="symbol">The symbol to get the order book for</param>
+        /// <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol order book</returns>
-        WebCallResult<BittrexOrderBookV3> GetOrderBook(string symbol, CancellationToken ct = default);
+        WebCallResult<BittrexOrderBookV3> GetOrderBook(string symbol, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book of a symbol
         /// </summary>
         /// <param name="symbol">The symbol to get the order book for</param>
+        /// <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol order book</returns>
-        Task<WebCallResult<BittrexOrderBookV3>> GetOrderBookAsync(string symbol, CancellationToken ct = default);
+        Task<WebCallResult<BittrexOrderBookV3>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the trade history of a symbol

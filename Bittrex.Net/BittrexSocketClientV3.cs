@@ -140,7 +140,7 @@ namespace Bittrex.Net
         /// <returns>Subscription result</returns>
         public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<BittrexOrderBookUpdate> onUpdate)
         {
-            depth.ValidateIntValues(nameof(depth), 1, 25, 100);
+            depth.ValidateIntValues(nameof(depth), 1, 25, 500);
             return await Subscribe(symbols.Select(s => $"orderbook_{s}_{depth}").ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 

@@ -50,7 +50,7 @@ namespace Bittrex.Net
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
             await Task.Delay(300).ConfigureAwait(false);
-            var queryResult = await client.GetOrderBookAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await client.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAll().ConfigureAwait(false);

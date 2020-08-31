@@ -480,14 +480,14 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolSummaries(System.Threading.CancellationToken)">
             <summary>
-            Gets summaries of all symbols
+            Gets summaries of all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>List of symbol summaries</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolSummariesAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets summaries of all symbols
+            Gets summaries of all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>List of symbol summaries</returns>
@@ -508,25 +508,27 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol summary</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderBook(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderBook(System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a symbol
             </summary>
             <param name="symbol">The symbol to get the order book for</param>
+            <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
             <param name="ct">Cancellation token</param>
             <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderBookAsync(System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a symbol
             </summary>
             <param name="symbol">The symbol to get the order book for</param>
+            <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
             <param name="ct">Cancellation token</param>
             <returns>Symbol order book</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolTrades(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the trade history of a symbol
+            Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="symbol">The symbol to get trades for</param>
             <param name="ct">Cancellation token</param>
@@ -534,7 +536,7 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets the trade history of a symbol
+            Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="symbol">The symbol to get trades for</param>
             <param name="ct">Cancellation token</param>
@@ -558,21 +560,21 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetTickers(System.Threading.CancellationToken)">
             <summary>
-            Gets list of tickers for all symbols
+            Gets list of tickers for all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>Symbol tickers</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetTickersAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets list of tickers for all symbols
+            Gets list of tickers for all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>Symbol tickers</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets the klines for a symbol
+            Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="symbol">The symbol to get klines for</param>
             <param name="interval">The interval of the klines</param>
@@ -581,7 +583,7 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Threading.CancellationToken)">
             <summary>
-            Gets the klines for a symbol
+            Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="symbol">The symbol to get klines for</param>
             <param name="interval">The interval of the klines</param>
@@ -672,14 +674,14 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetBalances(System.Threading.CancellationToken)">
             <summary>
-            Gets current balances
+            Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetBalancesAsync(System.Threading.CancellationToken)">
             <summary>
-            Gets current balances
+            Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>List of balances</returns>
@@ -748,7 +750,7 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetOpenDeposits(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets list of open deposits
+            Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="currency">Filter the list by currency</param>
             <param name="ct">Cancellation token</param>
@@ -756,7 +758,7 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetOpenDepositsAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets list of open deposits
+            Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="currency">Filter the list by currency</param>
             <param name="ct">Cancellation token</param>
@@ -850,7 +852,7 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetOpenOrders(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets a list of open orders
+            Gets a list of open orders. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="symbol">The symbol to get open orders for</param>
             <param name="ct">Cancellation token</param>
@@ -858,7 +860,7 @@
         </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetOpenOrdersAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Gets a list of open orders
+            Gets a list of open orders. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
             <param name="symbol">The symbol to get open orders for</param>
             <param name="ct">Cancellation token</param>
@@ -1196,6 +1198,13 @@
             Validate the string is a valid Bittrex symbol.
             </summary>
             <param name="symbolString">string to validate</param>
+        </member>
+        <member name="M:Bittrex.Net.BittrexHelpers.GetSequence(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Collections.Generic.IEnumerable{System.String}}})">
+            <summary>
+            Get the sequence number from the response headers, or null if no sequence number is present
+            </summary>
+            <param name="headers"></param>
+            <returns></returns>
         </member>
         <member name="T:Bittrex.Net.BittrexSocketClient">
             <summary>
@@ -1999,19 +2008,21 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol summary</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderBook(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderBook(System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a symbol
             </summary>
             <param name="symbol">The symbol to get the order book for</param>
+            <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
             <param name="ct">Cancellation token</param>
             <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderBookAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderBookAsync(System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Gets the order book of a symbol
             </summary>
             <param name="symbol">The symbol to get the order book for</param>
+            <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
             <param name="ct">Cancellation token</param>
             <returns>Symbol order book</returns>
         </member>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Converters;
@@ -123,14 +124,14 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets summaries of all symbols
+        /// Gets summaries of all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of symbol summaries</returns>
         public WebCallResult<IEnumerable<BittrexSymbolSummaryV3>> GetSymbolSummaries(CancellationToken ct = default) => GetSymbolSummariesAsync(ct).Result;
 
         /// <summary>
-        /// Gets summaries of all symbols
+        /// Gets summaries of all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of symbol summaries</returns>
@@ -163,27 +164,34 @@ namespace Bittrex.Net
         /// Gets the order book of a symbol
         /// </summary>
         /// <param name="symbol">The symbol to get the order book for</param>
+        /// <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol order book</returns>
-        public WebCallResult<BittrexOrderBookV3> GetOrderBook(string symbol, CancellationToken ct = default) => GetOrderBookAsync(symbol, ct).Result;
+        public WebCallResult<BittrexOrderBookV3> GetOrderBook(string symbol, int? limit = null, CancellationToken ct = default) => GetOrderBookAsync(symbol, limit, ct).Result;
 
         /// <summary>
         /// Gets the order book of a symbol
         /// </summary>
         /// <param name="symbol">The symbol to get the order book for</param>
+        /// <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol order book</returns>
-        public async Task<WebCallResult<BittrexOrderBookV3>> GetOrderBookAsync(string symbol, CancellationToken ct = default)
+        public async Task<WebCallResult<BittrexOrderBookV3>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            var result = await SendRequest<BittrexOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct).ConfigureAwait(false);
+            limit?.ValidateIntValues(nameof(limit), 1, 25, 500);
+            
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
+
+            var result = await SendRequest<BittrexOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
             if(result.Data != null)
-                result.Data.Sequence = result.ResponseHeaders!.GetSequence();
+                result.Data.Sequence = result.ResponseHeaders!.GetSequence() ?? 0;
             return result;
         }
 
         /// <summary>
-        /// Gets the trade history of a symbol
+        /// Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
@@ -191,7 +199,7 @@ namespace Bittrex.Net
         public WebCallResult<IEnumerable<Objects.V3.BittrexSymbolTrade>> GetSymbolTrades(string symbol, CancellationToken ct = default) => GetSymbolTradesAsync(symbol, ct).Result;
 
         /// <summary>
-        /// Gets the trade history of a symbol
+        /// Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
@@ -226,14 +234,14 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets list of tickers for all symbols
+        /// Gets list of tickers for all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol tickers</returns>
         public WebCallResult<IEnumerable<BittrexTickV3>> GetTickers(CancellationToken ct = default) => GetTickersAsync(ct).Result;
 
         /// <summary>
-        /// Gets list of tickers for all symbols
+        /// Gets list of tickers for all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol tickers</returns>
@@ -243,7 +251,7 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets the klines for a symbol
+        /// Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get klines for</param>
         /// <param name="interval">The interval of the klines</param>
@@ -252,7 +260,7 @@ namespace Bittrex.Net
         public WebCallResult<IEnumerable<BittrexKlineV3>> GetKlines(string symbol, KlineInterval interval, CancellationToken ct = default) => GetKlinesAsync(symbol, interval, ct).Result;
 
         /// <summary>
-        /// Gets the klines for a symbol
+        /// Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get klines for</param>
         /// <param name="interval">The interval of the klines</param>
@@ -389,14 +397,14 @@ namespace Bittrex.Net
         #region balances
 
         /// <summary>
-        /// Gets current balances
+        /// Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of balances</returns>
         public WebCallResult<IEnumerable<BittrexBalanceV3>> GetBalances(CancellationToken ct = default) => GetBalancesAsync(ct).Result;
 
         /// <summary>
-        /// Gets current balances
+        /// Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of balances</returns>
@@ -492,7 +500,7 @@ namespace Bittrex.Net
 
         #region deposits
         /// <summary>
-        /// Gets list of open deposits
+        /// Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="currency">Filter the list by currency</param>
         /// <param name="ct">Cancellation token</param>
@@ -500,7 +508,7 @@ namespace Bittrex.Net
         public WebCallResult<IEnumerable<BittrexDepositV3>> GetOpenDeposits(string? currency = null, CancellationToken ct = default) => GetOpenDepositsAsync(currency, ct).Result;
 
         /// <summary>
-        /// Gets list of open deposits
+        /// Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="currency">Filter the list by currency</param>
         /// <param name="ct">Cancellation token</param>
@@ -648,7 +656,7 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets a list of open orders
+        /// Gets a list of open orders. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get open orders for</param>
         /// <param name="ct">Cancellation token</param>
@@ -656,7 +664,7 @@ namespace Bittrex.Net
         public WebCallResult<IEnumerable<BittrexOrderV3>> GetOpenOrders(string? symbol = null, CancellationToken ct = default) => GetOpenOrdersAsync(symbol, ct).Result;
 
         /// <summary>
-        /// Gets a list of open orders
+        /// Gets a list of open orders. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get open orders for</param>
         /// <param name="ct">Cancellation token</param>
