@@ -182,7 +182,7 @@ namespace Bittrex.Net
             limit?.ValidateIntValues(nameof(limit), 1, 25, 500);
             
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("depth", limit?.ToString(CultureInfo.InvariantCulture));
 
             var result = await SendRequest<BittrexOrderBookV3>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
             if(result.Data != null)
