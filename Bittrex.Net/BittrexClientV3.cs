@@ -1162,7 +1162,7 @@ namespace Bittrex.Net
         /// <returns></returns>
         protected Uri GetUrl(string endpoint)
         {
-            return new Uri($"{BaseAddress}/v3/{endpoint}");
+            return new Uri($"{BaseAddress}v3/{endpoint}");
         }
         #endregion
     }

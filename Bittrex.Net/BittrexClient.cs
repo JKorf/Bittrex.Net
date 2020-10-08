@@ -641,7 +641,7 @@ namespace Bittrex.Net
             if (version == ApiVersion2)
                 address = baseAddressV2;
 
-            var result = $"{address}/{api}/v{version}/{endpoint}";
+            var result = $"{address}{api}/v{version}/{endpoint}";
             return new Uri(result);
         }
 

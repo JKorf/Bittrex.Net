@@ -367,6 +367,12 @@ namespace Bittrex.Net
                 if (channel.Length < method.Length + symbol.Length + 1)
                     return false;
 
+                if (channel.StartsWith("candle") && method == "candle")
+                {
+                    var interval = (string)tokenData["interval"];
+                    return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(interval);
+                }
+
                 if (channel.Substring(method.Length + 1, symbol.Length) == symbol)
                     return true;
             }
