@@ -12,7 +12,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Create new client options
         /// </summary>
-        public BittrexClientOptions() : this(null, "https://api.bittrex.com")
+        public BittrexClientOptions() : base("https://api.bittrex.com")
         {
         }
 
@@ -20,7 +20,7 @@ namespace Bittrex.Net.Objects
         /// Create new client options
         /// </summary>
         /// <param name="client">HttpClient to use for requests from this client</param>
-        public BittrexClientOptions(HttpClient client) : this(client, "https://api.bittrex.com")
+        public BittrexClientOptions(HttpClient client) : base(client, "https://api.bittrex.com")
         {
         }
 
@@ -29,9 +29,8 @@ namespace Bittrex.Net.Objects
         /// </summary>
         /// <param name="apiAddress">Custom API address to use</param>
         /// <param name="client">HttpClient to use for requests from this client</param>
-        public BittrexClientOptions(HttpClient client, string apiAddress) : base(apiAddress)
+        public BittrexClientOptions(HttpClient client, string apiAddress) : base(client, apiAddress)
         {
-            HttpClient = client;
         }
 
         /// <summary>

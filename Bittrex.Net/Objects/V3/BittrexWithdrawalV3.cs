@@ -55,5 +55,10 @@ namespace Bittrex.Net.Objects.V3
         /// The time the withdrawal was completed
         /// </summary>
         public DateTime? CompletedAt { get; set; }
+
+        /// <summary>
+        /// Withdrawal id as specified by the client
+        /// </summary>
+        public string ClientWithdrawalId { get; set; } = "";
     }
 }

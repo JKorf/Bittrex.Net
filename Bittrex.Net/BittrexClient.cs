@@ -649,7 +649,7 @@ namespace Bittrex.Net
         protected override Error ParseErrorResponse(JToken data)
         {
             if(!data.HasValues || data["message"] == null)
-                return new UnknownError("Unknown response from server: " + data);
+                return new UnknownError("Unknown response from server", data);
 
             return new ServerError((string)data["message"]);
         }

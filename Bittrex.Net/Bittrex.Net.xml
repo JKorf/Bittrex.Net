@@ -914,6 +914,22 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelAllOpenOrders(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Cancels all open orders
+            </summary>
+            <param name="market">Only cancel open orders for a specific market</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.CancelAllOpenOrdersAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Cancels all open orders
+            </summary>
+            <param name="market">Only cancel open orders for a specific market</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Order info</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.PlaceOrder(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderTypeV3,Bittrex.Net.Objects.TimeInForce,System.Decimal,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
             Places an order
@@ -1040,7 +1056,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -1048,10 +1064,11 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="clientWithdrawId">Client id to identify the withdrawal</param>
             <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -1059,6 +1076,7 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="clientWithdrawId">Client id to identify the withdrawal</param>
             <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
@@ -1150,7 +1168,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Conditional orders</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.PlaceConditionalOrder(System.String,System.String,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceConditionalOrder(System.String,Bittrex.Net.Objects.BittrexConditionalOrderOperand,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new conditional order
             </summary>
@@ -1164,7 +1182,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Condition order</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.PlaceConditionalOrderAsync(System.String,System.String,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.PlaceConditionalOrderAsync(System.String,Bittrex.Net.Objects.BittrexConditionalOrderOperand,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new conditional order
             </summary>
@@ -1499,6 +1517,13 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToConditionalOrderUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexConditionalOrderUpdate})">
+            <summary>
+            Subscribe to conditional order updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.GetWebsocket(System.String,System.Boolean)">
             <inheritdoc />
         </member>
@@ -1539,6 +1564,7 @@
             Create a new order book instance
             </summary>
             <param name="symbol">The symbol the order book is for</param>
+            <param name="limit">The number of entries in the order book</param>
             <param name="options">Options for the order book</param>
         </member>
         <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoStart">
@@ -2540,7 +2566,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Withdrawal info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.Withdraw(System.String,System.Decimal,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -2548,10 +2574,11 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="clientWithdrawId">Client id to identify the withdrawal</param>
             <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.WithdrawAsync(System.String,System.Decimal,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Withdraw from Bittrex
             </summary>
@@ -2559,6 +2586,7 @@
             <param name="quantity">The quantity to withdraw</param>
             <param name="address">The address to withdraw to</param>
             <param name="addressTag">A tag for the address</param>
+            <param name="clientWithdrawId">Client id to identify the withdrawal</param>
             <param name="ct">Cancellation token</param>
             <returns>Info about the withdrawal</returns>
         </member>
@@ -2650,7 +2678,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Conditional orders</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceConditionalOrder(System.String,System.String,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceConditionalOrder(System.String,Bittrex.Net.Objects.BittrexConditionalOrderOperand,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new conditional order
             </summary>
@@ -2664,7 +2692,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Condition order</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceConditionalOrderAsync(System.String,System.String,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.PlaceConditionalOrderAsync(System.String,Bittrex.Net.Objects.BittrexConditionalOrderOperand,Bittrex.Net.Objects.V3.BittrexUnplacedOrder,Bittrex.Net.Objects.V3.BittrexLinkedOrder,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new conditional order
             </summary>
@@ -3523,6 +3551,21 @@
         <member name="F:Bittrex.Net.Objects.KlineInterval.OneDay">
             <summary>
             1d
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexConditionalOrderOperand">
+            <summary>
+            Condition order operand
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.BittrexConditionalOrderOperand.GreaterThan">
+            <summary>
+            Price above
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.BittrexConditionalOrderOperand.LesserThan">
+            <summary>
+            Price below
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexGuid">
@@ -4777,6 +4820,16 @@
             List of prohibited regions. empty if its not restricted.
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyV3.BaseAddress">
+            <summary>
+            Base address of the currency
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyV3.AssociatedTermsOfService">
+            <summary>
+            List of associated terms of service.
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexDepositAddressV3">
             <summary>
             Deposit address info
@@ -5212,6 +5265,11 @@
             List of prohibited regions. empty if its not restricted.
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexSymbolV3.AssociatedTermsOfService">
+            <summary>
+            List of associated terms of service.
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexTickV3">
             <summary>
             Market tick
@@ -5327,6 +5385,11 @@
             The time the withdrawal was completed
             </summary>
         </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexWithdrawalV3.ClientWithdrawalId">
+            <summary>
+            Withdrawal id as specified by the client
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Sockets.BittrexBalanceUpdate">
             <summary>
             Balance update
@@ -5343,6 +5406,26 @@
             </summary>
         </member>
         <member name="P:Bittrex.Net.Sockets.BittrexBalanceUpdate.Delta">
+            <summary>
+            Update data
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexConditionalOrderUpdate">
+            <summary>
+            Deposit update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexConditionalOrderUpdate.AccountId">
+            <summary>
+            Account id for the deposit
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexConditionalOrderUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexConditionalOrderUpdate.Delta">
             <summary>
             Update data
             </summary>

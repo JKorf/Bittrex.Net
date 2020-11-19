@@ -225,6 +225,16 @@ namespace Bittrex.Net
             return await Subscribe("deposit", true, onUpdate).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Subscribe to conditional order updates
+        /// </summary>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Action<BittrexConditionalOrderUpdate> onUpdate)
+        {
+            return await Subscribe("conditional_order", true, onUpdate).ConfigureAwait(false);
+        }
+
         #endregion
         #region private
 
@@ -297,7 +307,7 @@ namespace Bittrex.Net
             var decResult = DecodeData(queryResult.Data);
             if (decResult == null)
             {
-                return new CallResult<T>(default, new DeserializeError("Failed to decode data"));
+                return new CallResult<T>(default, new DeserializeError("Failed to decode data", queryResult.Data));
             }
 
             var desResult = Deserialize<T>(decResult);
@@ -408,7 +418,7 @@ namespace Bittrex.Net
             if (!result.Success)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api key/secret is probably invalid");
-                return new CallResult<bool>(false, result.Error ?? new ServerError("Api key/secret is probably invalid"));
+                return new CallResult<bool>(false, result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
             }
 
             log.Write(LogVerbosity.Info, "Authentication successful");

@@ -220,7 +220,7 @@ namespace Bittrex.Net
         {
 
             // Override because signalr puts `/signalr/` add the end of the url
-            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/" && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.HandlerCount).FirstOrDefault();
+            var socketResult = sockets.Where(s => s.Value.Socket.Url.TrimEnd('/') == address.TrimEnd('/') + "/signalr" && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.HandlerCount).FirstOrDefault();
             var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
             if (result != null)
             {
@@ -249,7 +249,7 @@ namespace Bittrex.Net
                 if (!subResult.Success || !subResult.Data)
                 {
                     _ = socket.Close(subscription);
-                    return new CallResult<bool>(false, subResult.Error ?? new ServerError("Subscribe returned false"));
+                    return new CallResult<bool>(false, subResult.Error ?? new ServerError("Subscription failed"));
                 }
             }
 
@@ -270,7 +270,7 @@ namespace Bittrex.Net
             var decResult = DecodeData(queryResult.Data);
             if (decResult == null)
             {
-                return new CallResult<T>(default, new DeserializeError("Failed to decode data"));
+                return new CallResult<T>(default, new DeserializeError("Failed to decode data", queryResult.Data));
             }
 
             var desResult = Deserialize<T>(decResult);
@@ -358,7 +358,7 @@ namespace Bittrex.Net
             if (!authResult.Success || !authResult.Data)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api secret is probably invalid");
-                return new CallResult<bool>(false, authResult.Error ?? new ServerError("Api secret is probably invalid"));
+                return new CallResult<bool>(false, authResult.Error ?? new ServerError("Authentication failed. Api secret is probably invalid"));
             }
 
             log.Write(LogVerbosity.Info, "Authentication successful");

@@ -50,5 +50,10 @@ namespace Bittrex.Net.Objects.V3
         /// List of prohibited regions. empty if its not restricted.
         /// </summary>
         public IEnumerable<string> ProhibitedIn { get; set; } = new List<string>();
+        /// <summary>
+        /// List of associated terms of service.
+        /// </summary>
+        public IEnumerable<string> AssociatedTermsOfService { get; set; } = new List<string>();
+
     }
 }

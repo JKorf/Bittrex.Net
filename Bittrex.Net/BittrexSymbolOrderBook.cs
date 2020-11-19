@@ -24,6 +24,7 @@ namespace Bittrex.Net
         /// Create a new order book instance
         /// </summary>
         /// <param name="symbol">The symbol the order book is for</param>
+        /// <param name="limit">The number of entries in the order book</param>
         /// <param name="options">Options for the order book</param>
         public BittrexSymbolOrderBook(string symbol, int limit, BittrexOrderBookOptions? options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
         {

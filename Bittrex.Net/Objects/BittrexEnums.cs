@@ -332,4 +332,19 @@
         OneDay
     }
 
+    /// <summary>
+    /// Condition order operand
+    /// </summary>
+    public enum BittrexConditionalOrderOperand
+    {
+        /// <summary>
+        /// Price above
+        /// </summary>
+        GreaterThan,
+        /// <summary>
+        /// Price below
+        /// </summary>
+        LesserThan
+    }
+
 }

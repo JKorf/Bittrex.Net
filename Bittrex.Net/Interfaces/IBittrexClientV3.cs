@@ -634,9 +634,10 @@ namespace Bittrex.Net.Interfaces
         /// <param name="quantity">The quantity to withdraw</param>
         /// <param name="address">The address to withdraw to</param>
         /// <param name="addressTag">A tag for the address</param>
+        /// <param name="clientWithdrawId">Client id to identify the withdrawal</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string? addressTag = null, CancellationToken ct = default);
+        WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string? addressTag = null, string? clientWithdrawId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Withdraw from Bittrex
@@ -645,9 +646,10 @@ namespace Bittrex.Net.Interfaces
         /// <param name="quantity">The quantity to withdraw</param>
         /// <param name="address">The address to withdraw to</param>
         /// <param name="addressTag">A tag for the address</param>
+        /// <param name="clientWithdrawId">Client id to identify the withdrawal</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string? addressTag = null, CancellationToken ct = default);
+        Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string? addressTag = null, string? clientWithdrawId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of whitelisted address for withdrawals
@@ -751,7 +753,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="ct">Cancellation token</param>
         /// <returns>Condition order</returns>
         WebCallResult<BittrexConditionalOrder> PlaceConditionalOrder(string symbol,
-            string operand,
+            BittrexConditionalOrderOperand operand,
             BittrexUnplacedOrder? orderToCreate = null,
             BittrexLinkedOrder? orderToCancel = null,
             decimal? triggerPrice = null,
@@ -773,7 +775,7 @@ namespace Bittrex.Net.Interfaces
         /// <returns>Condition order</returns>
         Task<WebCallResult<BittrexConditionalOrder>> PlaceConditionalOrderAsync(
             string symbol,
-            string operand,
+            BittrexConditionalOrderOperand operand,
             BittrexUnplacedOrder? orderToCreate = null,
             BittrexLinkedOrder? orderToCancel = null,
             decimal? triggerPrice = null,

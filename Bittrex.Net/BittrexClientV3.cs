@@ -674,7 +674,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
 
-            return await SendRequest<IEnumerable<BittrexOrderV3>>(GetUrl("orders/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexOrderV3>>(GetUrl("orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -724,7 +724,7 @@ namespace Bittrex.Net
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order info</returns>
         public WebCallResult<BittrexOrderV3> CancelOrder(string orderId, CancellationToken ct = default) => CancelOrderAsync(orderId, ct).Result;
-
+        
         /// <summary>
         /// Cancels an order
         /// </summary>
@@ -735,6 +735,28 @@ namespace Bittrex.Net
         {
             orderId.ValidateNotNull(nameof(orderId));
             return await SendRequest<BittrexOrderV3>(GetUrl($"orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+        }
+        
+        /// <summary>
+        /// Cancels all open orders
+        /// </summary>
+        /// <param name="market">Only cancel open orders for a specific market</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Order info</returns>
+        public WebCallResult<IEnumerable<BittrexOrderV3>> CancelAllOpenOrders(string? market = null,
+            CancellationToken ct = default) => CancelAllOpenOrdersAsync(market, ct).Result;
+
+        /// <summary>
+        /// Cancels all open orders
+        /// </summary>
+        /// <param name="market">Only cancel open orders for a specific market</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Order info</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexOrderV3>>> CancelAllOpenOrdersAsync(string? market = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("marketSymbol", market);
+            return await SendRequest<IEnumerable<BittrexOrderV3>>(GetUrl($"orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -928,10 +950,11 @@ namespace Bittrex.Net
         /// <param name="quantity">The quantity to withdraw</param>
         /// <param name="address">The address to withdraw to</param>
         /// <param name="addressTag">A tag for the address</param>
+        /// <param name="clientWithdrawId">Client id to identify the withdrawal</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        public WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string? addressTag = null, CancellationToken ct = default) =>
-            WithdrawAsync(currency, quantity, address, addressTag, ct).Result;
+        public WebCallResult<BittrexWithdrawalV3> Withdraw(string currency, decimal quantity, string address, string? addressTag = null, string? clientWithdrawId = null, CancellationToken ct = default) =>
+            WithdrawAsync(currency, quantity, address, addressTag, clientWithdrawId, ct).Result;
 
         /// <summary>
         /// Withdraw from Bittrex
@@ -940,9 +963,10 @@ namespace Bittrex.Net
         /// <param name="quantity">The quantity to withdraw</param>
         /// <param name="address">The address to withdraw to</param>
         /// <param name="addressTag">A tag for the address</param>
+        /// <param name="clientWithdrawId">Client id to identify the withdrawal</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Info about the withdrawal</returns>
-        public async Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string? addressTag = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BittrexWithdrawalV3>> WithdrawAsync(string currency, decimal quantity, string address, string? addressTag = null, string? clientWithdrawId = null, CancellationToken ct = default)
         {
             currency.ValidateNotNull(nameof(currency));
             address.ValidateNotNull(nameof(address));
@@ -954,6 +978,7 @@ namespace Bittrex.Net
             };
 
             parameters.AddOptionalParameter("cryptoAddressTag", addressTag);
+            parameters.AddOptionalParameter("clientWithdrawalId", clientWithdrawId);
 
             return await SendRequest<BittrexWithdrawalV3>(GetUrl("withdrawals"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
@@ -1093,7 +1118,7 @@ namespace Bittrex.Net
         /// <param name="ct">Cancellation token</param>
         /// <returns>Condition order</returns>
         public WebCallResult<BittrexConditionalOrder> PlaceConditionalOrder(string symbol,
-            string operand,
+            BittrexConditionalOrderOperand operand,
             BittrexUnplacedOrder? orderToCreate = null,
             BittrexLinkedOrder? orderToCancel = null,
             decimal? triggerPrice = null,
@@ -1116,7 +1141,7 @@ namespace Bittrex.Net
         /// <returns>Condition order</returns>
         public async Task<WebCallResult<BittrexConditionalOrder>> PlaceConditionalOrderAsync(
             string symbol,
-            string operand,
+            BittrexConditionalOrderOperand operand,
             BittrexUnplacedOrder? orderToCreate = null,
             BittrexLinkedOrder? orderToCancel = null,
             decimal? triggerPrice = null,
@@ -1127,7 +1152,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>()
             {
                 { "marketSymbol", symbol },
-                { "operand", operand }
+                { "operand", JsonConvert.SerializeObject(operand, new BittrexConditionalOrderOperandConverter(false)) }
             };
 
             parameters.AddOptionalParameter("triggerPrice", triggerPrice?.ToString(CultureInfo.InvariantCulture));
@@ -1144,7 +1169,7 @@ namespace Bittrex.Net
         protected override Error ParseErrorResponse(JToken data)
         {
             if (data["code"] == null)
-                return new UnknownError("Unknown response from server: " + data);
+                return new UnknownError("Unknown response from server", data);
 
             var info = (string)data["code"];
             if (data["detail"] != null)
