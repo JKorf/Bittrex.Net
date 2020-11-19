@@ -111,6 +111,12 @@ To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
 Bittrex.Net provides three clients to interact with the Bittrex API. The  `BittrexClient`  provides all V1.1 rest API calls, whereas the `BittrexClientV3` gives access to the V3 rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
 
 ## Release notes
+* Version 4.1.8 - 19 nov 2020
+    * Added conditional order subscription to socket client
+    * Changed operand on conditional order to an enum
+    * Added clientWithdrawalId to withdraw methods and models
+    * Updated v3 market/currency models
+
 * Version 4.1.7 - 08 Oct 2020
     * Fix for double events for kline subscriptions
     * Updated CryptoExchange.Net
