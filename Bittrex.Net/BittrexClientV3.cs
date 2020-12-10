@@ -13,6 +13,7 @@ using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.V3;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,7 +23,7 @@ namespace Bittrex.Net
     /// <summary>
     /// Client for the Bittrex V3 API
     /// </summary>
-    public class BittrexClientV3 : RestClient, IBittrexClientV3
+    public class BittrexClientV3 : RestClient, IBittrexClientV3, IExchangeClient
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
@@ -42,7 +43,7 @@ namespace Bittrex.Net
         /// Create a new instance of BittrexClient using the default options
         /// NOTE: The V3 API is in open beta. Errors might happen. If so, please report them on https://github.com/jkorf/bittrex.net
         /// </summary>
-        public BittrexClientV3(BittrexClientOptions options) : base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProviderV3(options.ApiCredentials))
+        public BittrexClientV3(BittrexClientOptions options) : base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProviderV3(options.ApiCredentials))
         {
         }
         #endregion
@@ -66,7 +67,7 @@ namespace Bittrex.Net
         {
             SetAuthenticationProvider(new BittrexAuthenticationProviderV3(new ApiCredentials(apiKey, apiSecret)));
         }
-
+        
         /// <summary>
         /// Gets the server time
         /// </summary>
@@ -86,6 +87,7 @@ namespace Bittrex.Net
         }
 
         #region symbols
+
         /// <summary>
         /// Gets information about all available symbols
         /// </summary>
@@ -758,7 +760,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("marketSymbol", market);
             return await SendRequest<IEnumerable<BittrexOrderV3>>(GetUrl($"orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
         }
-
+        
         /// <summary>
         /// Places an order
         /// </summary>
@@ -1165,15 +1167,84 @@ namespace Bittrex.Net
         }
         #endregion
 
+        #region common interface
+        async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
+        {
+            var symbols = await GetSymbolsAsync();
+            return WebCallResult<IEnumerable<ICommonSymbol>>.CreateFrom(symbols);
+        }
+
+        async Task<WebCallResult<ICommonOrderBook>> IExchangeClient.GetOrderBookAsync(string symbol)
+        {
+            var orderBookResult = await GetOrderBookAsync(symbol);
+            return WebCallResult<ICommonOrderBook>.CreateFrom(orderBookResult);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonTicker>>> IExchangeClient.GetTickersAsync()
+        {
+            var tradesResult = await GetSymbolSummariesAsync();
+            return WebCallResult<IEnumerable<ICommonTicker>>.CreateFrom(tradesResult);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonRecentTrade>>> IExchangeClient.GetRecentTradesAsync(string symbol)
+        {
+            var tradesResult = await GetSymbolTradesAsync(symbol);
+            return WebCallResult<IEnumerable<ICommonRecentTrade>>.CreateFrom(tradesResult);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan)
+        {
+            var klines = await GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan));
+            return WebCallResult<IEnumerable<ICommonKline>>.CreateFrom(klines);
+        }
+
+        async Task<WebCallResult<ICommonOrderId>> IExchangeClient.PlaceOrderAsync(string symbol, IExchangeClient.OrderSide side, IExchangeClient.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
+        {
+            var result = await PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), TimeInForce.GoodTillCancelled, quantity, limit: price);
+            return WebCallResult<ICommonOrderId>.CreateFrom(result);
+        }
+
+        async Task<WebCallResult<ICommonOrder>> IExchangeClient.GetOrderAsync(string orderId, string? symbol)
+        {
+            var result = await GetOrderAsync(orderId);
+            return WebCallResult<ICommonOrder>.CreateFrom(result);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonTrade>>> IExchangeClient.GetTradesAsync(string orderId, string? symbol = null)
+        {
+            var result = await GetExecutionsAsync(orderId);
+            return WebCallResult<IEnumerable<ICommonTrade>>.CreateFrom(result);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetOpenOrdersAsync(string? symbol)
+        {
+            var result = await GetOpenOrdersAsync();
+            return WebCallResult<IEnumerable<ICommonOrder>>.CreateFrom(result);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetClosedOrdersAsync(string? symbol)
+        {
+            var result = await GetClosedOrdersAsync(symbol);
+            return WebCallResult<IEnumerable<ICommonOrder>>.CreateFrom(result);
+        }
+
+        async Task<WebCallResult<ICommonOrderId>> IExchangeClient.CancelOrderAsync(string orderId, string? symbol)
+        {
+            var result = await CancelOrderAsync(orderId);
+            return WebCallResult<ICommonOrderId>.CreateFrom(result);
+        }
+
+        #endregion
+
         /// <inheritdoc />
         protected override Error ParseErrorResponse(JToken data)
         {
             if (data["code"] == null)
                 return new UnknownError("Unknown response from server", data);
 
-            var info = (string)data["code"];
+            var info = (string)data["code"]!;
             if (data["detail"] != null)
-                info += "; Details: " + (string)data["detail"];
+                info += "; Details: " + (string)data["detail"]!;
             if (data["data"] != null)
                 info += "; Data: " + data["data"];
 
@@ -1189,6 +1260,35 @@ namespace Bittrex.Net
         {
             return new Uri($"{BaseAddress}v3/{endpoint}");
         }
+
+        private static KlineInterval GetKlineIntervalFromTimespan(TimeSpan timeSpan)
+        {
+            if (timeSpan == TimeSpan.FromMinutes(1)) return KlineInterval.OneMinute;
+            if (timeSpan == TimeSpan.FromMinutes(5)) return KlineInterval.FiveMinutes;
+            if (timeSpan == TimeSpan.FromHours(1)) return KlineInterval.OneHour;
+            if (timeSpan == TimeSpan.FromDays(1)) return KlineInterval.OneDay;
+
+            throw new ArgumentException("Unsupported timespan for Bittrex Klines, check supported intervals using Bittrex.Net.Objects.KlineInterval");
+        }
+
+        private static OrderSide GetOrderSide(IExchangeClient.OrderSide side)
+        {
+            if (side == IExchangeClient.OrderSide.Sell) return OrderSide.Sell;
+            if (side == IExchangeClient.OrderSide.Buy) return OrderSide.Buy;
+
+            throw new ArgumentException("Unsupported order side for Bittrex order: " + side);
+        }
+
+        private static OrderTypeV3 GetOrderType(IExchangeClient.OrderType type)
+        {
+            if (type == IExchangeClient.OrderType.Limit) return OrderTypeV3.Limit;
+            if (type == IExchangeClient.OrderType.Market) return OrderTypeV3.Market;
+
+            throw new ArgumentException("Unsupported order type for Bittrex order: " + type);
+        }
+
         #endregion
+
+        public string GetSymbolName(string baseAsset, string quoteAsset) => $"{baseAsset}-{quoteAsset}".ToUpperInvariant();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Bittrex.Net.Converters;
 using Bittrex.Net.Converters.V3;
+using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.V3
@@ -52,7 +53,7 @@ namespace Bittrex.Net.Objects.V3
     /// <summary>
     /// Bittrex order info
     /// </summary>
-    public class BittrexOrderV3: BittrexUnplacedOrder
+    public class BittrexOrderV3: BittrexUnplacedOrder, ICommonOrder
     {
         /// <summary>
         /// The id of the order
@@ -93,5 +94,27 @@ namespace Bittrex.Net.Objects.V3
         /// Conditional order to cancel if this order executes
         /// </summary>
         public BittrexLinkedOrder? OrderToCancel { get; set; }
+
+        string ICommonOrderId.CommonId => Id;
+        string ICommonOrder.CommonSymbol => Symbol;
+        decimal ICommonOrder.CommonPrice => Limit ?? 0;
+        decimal ICommonOrder.CommonQuantity => Quantity ?? 0;
+        string ICommonOrder.CommonStatus => Status.ToString();
+        bool ICommonOrder.IsActive => Status == OrderStatus.Open;
+
+        IExchangeClient.OrderSide ICommonOrder.CommonSide => Direction == OrderSide.Sell
+            ? IExchangeClient.OrderSide.Sell
+            : IExchangeClient.OrderSide.Buy;
+
+        IExchangeClient.OrderType ICommonOrder.CommonType
+        {
+            get
+            {
+                if (Type == OrderTypeV3.CeilingLimit
+                    || Type == OrderTypeV3.Limit)
+                    return IExchangeClient.OrderType.Limit;
+                return IExchangeClient.OrderType.Market;
+            }
+        }
     }
 }

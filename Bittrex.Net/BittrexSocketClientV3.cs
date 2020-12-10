@@ -45,7 +45,7 @@ namespace Bittrex.Net
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClientV3(BittrexSocketClientV3Options options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
+        public BittrexSocketClientV3(BittrexSocketClientV3Options options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             SocketFactory = new ConnectionFactory();
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Bittrex.Net.Converters.V3;
+using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.V3
@@ -9,7 +10,7 @@ namespace Bittrex.Net.Objects.V3
     /// <summary>
     /// Symbol info
     /// </summary>
-    public class BittrexSymbolV3
+    public class BittrexSymbolV3: ICommonSymbol
     {
         /// <summary>
         /// The symbol of the symbol
@@ -55,5 +56,7 @@ namespace Bittrex.Net.Objects.V3
         /// </summary>
         public IEnumerable<string> AssociatedTermsOfService { get; set; } = new List<string>();
 
+        string ICommonSymbol.CommonName => Symbol;
+        decimal ICommonSymbol.CommonMinimumTradeSize => MinTradeSize;
     }
 }

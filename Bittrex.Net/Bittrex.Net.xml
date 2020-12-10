@@ -4932,7 +4932,7 @@
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.ExecutedAt">
             <summary>
-            Timeestamp of execution
+            Timestamp of execution
             </summary>
         </member>
         <member name="P:Bittrex.Net.Objects.V3.BittrexExecution.Quantity">

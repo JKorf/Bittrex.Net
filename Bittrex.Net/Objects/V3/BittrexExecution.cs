@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Linq;
+using CryptoExchange.Net.ExchangeInterfaces;
 
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
     /// Trade execution
     /// </summary>
-    public class BittrexExecution
+    public class BittrexExecution: ICommonTrade
     {
         /// <summary>
         /// Id of the execution
@@ -18,7 +20,7 @@ namespace Bittrex.Net.Objects.V3
         [JsonProperty("marketSymbol")]
         public string Symbol { get; set; } = "";
         /// <summary>
-        /// Timeestamp of execution
+        /// Timestamp of execution
         /// </summary>
         public DateTime ExecutedAt { get; set; }
         /// <summary>
@@ -41,5 +43,11 @@ namespace Bittrex.Net.Objects.V3
         /// Is taker
         /// </summary>
         public bool IsTaker { get; set; }
+
+        string ICommonTrade.CommonId => Id;
+        decimal ICommonTrade.CommonPrice => Rate;
+        decimal ICommonTrade.CommonQuantity => Quantity;
+        decimal ICommonTrade.CommonFee => Commission;
+        string ICommonTrade.CommonFeeAsset => Symbol.Split('-').Last();
     }
 }

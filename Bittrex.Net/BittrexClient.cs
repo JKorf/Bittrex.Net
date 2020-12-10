@@ -69,7 +69,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Create a new instance of the BittrexClient with the provided options
         /// </summary>
-        public BittrexClient(BittrexClientOptions options): base(options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
+        public BittrexClient(BittrexClientOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             baseAddressV2 = options.BaseAddressV2;
         }

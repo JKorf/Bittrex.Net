@@ -3,13 +3,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using CryptoExchange.Net.ExchangeInterfaces;
 
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
     /// Info on a trade
     /// </summary>
-    public class BittrexSymbolTrade
+    public class BittrexSymbolTrade: ICommonRecentTrade
     {
         /// <summary>
         /// Unique id of the trade
@@ -32,5 +33,9 @@ namespace Bittrex.Net.Objects.V3
         /// The timestamp of the trade execution
         /// </summary>
         public DateTime ExecutedAt { get; set; }
+
+        decimal ICommonRecentTrade.CommonPrice => Rate;
+        decimal ICommonRecentTrade.CommonQuantity => Quantity;
+        DateTime ICommonRecentTrade.CommonTradeTime => ExecutedAt;
     }
 }

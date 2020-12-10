@@ -1,11 +1,12 @@
 ﻿using System;
+using CryptoExchange.Net.ExchangeInterfaces;
 
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
     /// Symbol kline info
     /// </summary>
-    public class BittrexKlineV3
+    public class BittrexKlineV3: ICommonKline
     {
         /// <summary>
         /// The opening time of this kline
@@ -35,5 +36,10 @@ namespace Bittrex.Net.Objects.V3
         /// The quote volume of this candle
         /// </summary>
         public decimal QuoteVolume { get; set; }
+
+        decimal ICommonKline.CommonHigh => High;
+        decimal ICommonKline.CommonLow => Low;
+        decimal ICommonKline.CommonOpen => Open;
+        decimal ICommonKline.CommonClose => Close;
     }
 }
