@@ -20,51 +20,55 @@ namespace Examples
                 LogWriters = new List<TextWriter>() { Console.Out }
             });
 
-            using (var client = new BittrexClient())
-            {
-                // public
-                var markets = client.GetMarkets();
-                var currencies = client.GetCurrencies();
-                var price = client.GetTicker("BTC-ETH");
-                var marketSummary = client.GetMarketSummary("BTC-ETH");
-                var marketSummaries = client.GetMarketSummaries();
-                var orderbook = client.GetOrderBook("BTC-ETH");
-                var marketHistory = client.GetMarketHistory("BTC-ETH");
+            var client = new BittrexClientV3();
+            
+            // public
+            var markets = client.GetSymbols();
+            var currencies = client.GetCurrencies();
+            var price = client.GetTicker("BTC-ETH");
+            var marketSummary = client.GetSymbolSummary("BTC-ETH");
+            var marketSummaries = client.GetSymbolSummaries();
+            var orderbook = client.GetOrderBook("BTC-ETH");
+            var marketHistory = client.GetSymbolTrades("BTC-ETH");
 
-                // private
-                // Commented to prevent accidental order placement
-                //var placedOrder = client.PlaceOrder(OrderSide.Sell, "BTC-NEO", 1, 1);
-                //var orderInfo = client.GetOrder(placedOrder.Data.Uuid);
-                //var canceledOrder = client.CancelOrder(placedOrder.Data.Uuid);
-                var openOrders = client.GetOpenOrders("BTC-NEO");
-                var orderHistory = client.GetOrderHistory("BTC-NEO");
+            // private
+            // Commented to prevent accidental order placement
+            //var placedOrder = 
+            //    client.PlaceOrder("BTC-USDT", OrderSide.Sell, OrderTypeV3.Limit, TimeInForce.GoodTillCancelled, 1, 1);
+            //var orderInfo = client.GetOrder(placedOrder.Data.Id);
+            //var canceledOrder = client.CancelOrder(placedOrder.Data.Id);
+            var openOrders = client.GetOpenOrders("BTC-USDT");
+            var orderTrades = client.GetExecutions("BTC-NEO");
 
-                var balance = client.GetBalance("NEO");
-                var balances = client.GetBalances();
-                var depositAddress = client.GetDepositAddress("BTC");
-                var withdraw = client.Withdraw("TEST", 1, "TEST", "TEST");
-                var withdrawHistory = client.GetWithdrawalHistory();
-                var depositHistory = client.GetDepositHistory();
-            }
+            var balance = client.GetBalance("NEO");
+            var balances = client.GetBalances();
+            var depositAddress = client.GetDepositAddress("BTC");
+            var withdraw = client.Withdraw("TEST", 1, "TEST", "TEST");
+            var withdrawHistory = client.GetClosedWithdrawals();
+            var depositHistory = client.GetClosedDeposits();
+            
 
             // Websocket
             var socketClient = new BittrexSocketClient();
-            var subscription = socketClient.SubscribeToMarketSummariesUpdate(summaries =>
+            var subscription = socketClient.SubscribeToSymbolSummariesUpdate(summaries =>
             {
-                Console.WriteLine($"BTC-ETH: {summaries.SingleOrDefault(s => s.MarketName == "BTC-ETH")?.Last}");
+                Console.WriteLine($"BTC-USDT: {summaries.SingleOrDefault(s => s.Symbol == "BTC-USDT")?.Last}");
             });
 
-            var subscription2 = socketClient.SubscribeToExchangeStateUpdates("BTC-ETH", state =>
+            var subscription2 = socketClient.SubscribeToOrderBookUpdates("BTC-ETH", state =>
             {
             });
 
-            var subscription3 = socketClient.SubscribeToOrderUpdates(order =>
+            var subscription3 = socketClient.SubscribeToAccountUpdates(data =>
             {
+                // Balance update
+            }, data =>
+            {
+                // Order update
             });
 
             Console.ReadLine();
-            socketClient.UnsubscribeAllStreams();
-
+            socketClient.UnsubscribeAll();
         }
     }
 }

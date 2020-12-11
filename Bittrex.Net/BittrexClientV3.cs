@@ -1289,6 +1289,7 @@ namespace Bittrex.Net
 
         #endregion
 
+        /// <inheritdoc />
         public string GetSymbolName(string baseAsset, string quoteAsset) => $"{baseAsset}-{quoteAsset}".ToUpperInvariant();
     }
 }

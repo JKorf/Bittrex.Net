@@ -1206,6 +1206,9 @@
             <param name="endpoint"></param>
             <returns></returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolName(System.String,System.String)">
+            <inheritdoc />
+        </member>
         <member name="T:Bittrex.Net.BittrexHelpers">
             <summary>
             Helper functions
