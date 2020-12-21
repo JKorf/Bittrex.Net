@@ -67,6 +67,16 @@ namespace Bittrex.Net
         }
 
         /// <summary>
+        /// Subscribe to heartbeat updates
+        /// </summary>
+        /// <param name="onHeartbeat">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DateTime> onHeartbeat)
+        {
+            return await Subscribe("heartbeat", false, onHeartbeat).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Subscribe to kline(candle) updates for a symbol
         /// </summary>
         /// <param name="symbol">The symbol</param>
@@ -246,6 +256,12 @@ namespace Bittrex.Net
         {
             return await Subscribe<JToken>(new ConnectionRequestV3("subscribe", channels), null, authenticated, data =>
             {
+                if ((string) data["M"] == "heartbeat")
+                {
+                    handler((T) Convert.ChangeType(DateTime.UtcNow, typeof(T)));
+                    return;
+                }
+
                 if (!data["A"].Any())
                     return;
                 DecodeSignalRData(data, handler);
@@ -338,9 +354,12 @@ namespace Bittrex.Net
             if (msg == null)
                 return false;
 
-            var method = (string) message["M"];
+            var method = (string?) message["M"];
             method = string.Join("_", Regex.Split(method, @"(?<!^)(?=[A-Z])").Select(s => s.ToLower()));
-            var arguments = (string) message["A"].FirstOrDefault();
+            if (method == "heartbeat")
+                return true;
+
+            var arguments = (string?) message["A"].FirstOrDefault();
             if (arguments == null)
                 return false;
 

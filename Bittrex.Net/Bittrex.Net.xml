@@ -1401,6 +1401,13 @@
             </summary>
             <param name="options">Options to use for new clients</param>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToHeartbeatAsync(System.Action{System.DateTime})">
+            <summary>
+            Subscribe to heartbeat updates
+            </summary>
+            <param name="onHeartbeat">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Action{Bittrex.Net.Sockets.BittrexKlineUpdate})">
             <summary>
             Subscribe to kline(candle) updates for a symbol
@@ -2810,6 +2817,13 @@
             <summary>
             Interface for the Bittrex V3 socket client
             </summary>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToHeartbeatAsync(System.Action{System.DateTime})">
+            <summary>
+            Subscribe to heartbeat updates
+            </summary>
+            <param name="onHeartbeat">Data handler</param>
+            <returns>Subscription result</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClientV3.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Action{Bittrex.Net.Sockets.BittrexKlineUpdate})">
             <summary>

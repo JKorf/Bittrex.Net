@@ -16,6 +16,13 @@ namespace Bittrex.Net.Interfaces
     public interface IBittrexSocketClientV3: ISocketClient
     {
         /// <summary>
+        /// Subscribe to heartbeat updates
+        /// </summary>
+        /// <param name="onHeartbeat">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DateTime> onHeartbeat);
+
+        /// <summary>
         /// Subscribe to kline(candle) updates for a symbol
         /// </summary>
         /// <param name="symbol">The symbol</param>

@@ -555,7 +555,7 @@ namespace Bittrex.Net
             if (nextPageToken != null && previousPageToken != null)
                 throw new ArgumentException("Can't specify startDate and endData simultaneously");
 
-            pageSize?.ValidateIntBetween("pageSize", 25, 100);
+            pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currencySymbol", currency);
@@ -643,8 +643,6 @@ namespace Bittrex.Net
 
             if (nextPageToken != null && previousPageToken != null)
                 throw new ArgumentException("Can't specify nextPageToken and previousPageToken simultaneously");
-
-            pageSize?.ValidateIntBetween("pageSize", 25, 100);
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
@@ -871,7 +869,7 @@ namespace Bittrex.Net
             if (nextPageToken != null && previousPageToken != null)
                 throw new ArgumentException("Can't specify startDate and endData simultaneously");
 
-            pageSize?.ValidateIntBetween("pageSize", 25, 100);
+            pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currencySymbol", currency);
@@ -1127,7 +1125,7 @@ namespace Bittrex.Net
             decimal? trailingStopPercent = null,
             string? clientConditionalOrderId = null,
             CancellationToken ct = default) =>
-            PlaceConditionalOrderAsync(symbol, operand, orderToCreate, orderToCancel, triggerPrice, trailingStopPercent, clientConditionalOrderId).Result;
+            PlaceConditionalOrderAsync(symbol, operand, orderToCreate, orderToCancel, triggerPrice, trailingStopPercent, clientConditionalOrderId, ct).Result;
 
         /// <summary>
         /// Place a new conditional order
@@ -1180,6 +1178,12 @@ namespace Bittrex.Net
             return WebCallResult<ICommonOrderBook>.CreateFrom(orderBookResult);
         }
 
+        async Task<WebCallResult<ICommonTicker>> IExchangeClient.GetTickerAsync(string symbol)
+        {
+            var ticker = await GetSymbolSummaryAsync(symbol);
+            return WebCallResult<ICommonTicker>.CreateFrom(ticker);
+        }
+
         async Task<WebCallResult<IEnumerable<ICommonTicker>>> IExchangeClient.GetTickersAsync()
         {
             var tradesResult = await GetSymbolSummariesAsync();
@@ -1192,10 +1196,22 @@ namespace Bittrex.Net
             return WebCallResult<IEnumerable<ICommonRecentTrade>>.CreateFrom(tradesResult);
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan)
+        async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
         {
-            var klines = await GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan));
-            return WebCallResult<IEnumerable<ICommonKline>>.CreateFrom(klines);
+            if (startTime.HasValue)
+            {
+                var interval = GetKlineIntervalFromTimespan(timespan);
+                var klines = await GetHistoricalKlinesAsync(symbol, interval, 
+                    startTime.Value.Year,
+                    interval == KlineInterval.OneDay ? null: (int?)startTime.Value.Month, 
+                    interval == KlineInterval.OneDay || interval == KlineInterval.OneHour ? null : (int?)startTime.Value.Day);
+                return WebCallResult<IEnumerable<ICommonKline>>.CreateFrom(klines);
+            }
+            else
+            {
+                var klines = await GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan));
+                return WebCallResult<IEnumerable<ICommonKline>>.CreateFrom(klines);
+            }
         }
 
         async Task<WebCallResult<ICommonOrderId>> IExchangeClient.PlaceOrderAsync(string symbol, IExchangeClient.OrderSide side, IExchangeClient.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
@@ -1232,6 +1248,12 @@ namespace Bittrex.Net
         {
             var result = await CancelOrderAsync(orderId);
             return WebCallResult<ICommonOrderId>.CreateFrom(result);
+        }
+
+        async Task<WebCallResult<IEnumerable<ICommonBalance>>> IExchangeClient.GetBalancesAsync(string? accountId = null)
+        {
+            var result = await GetBalancesAsync();
+            return WebCallResult<IEnumerable<ICommonBalance>>.CreateFrom(result);
         }
 
         #endregion

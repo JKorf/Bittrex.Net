@@ -1,12 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
+using CryptoExchange.Net.ExchangeInterfaces;
 
 namespace Bittrex.Net.Objects.V3
 {
     /// <summary>
     /// Balance info
     /// </summary>
-    public class BittrexBalanceV3
+    public class BittrexBalanceV3: ICommonBalance
     {
         /// <summary>
         /// The currency
@@ -25,5 +26,9 @@ namespace Bittrex.Net.Objects.V3
         /// Update time
         /// </summary>
         public DateTime UpdatedAt { get; set; }
+
+        string ICommonBalance.CommonAsset => Currency;
+        decimal ICommonBalance.CommonAvailable => Available;
+        decimal ICommonBalance.CommonTotal => Total;
     }
 }
