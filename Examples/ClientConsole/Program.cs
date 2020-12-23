@@ -13,7 +13,7 @@ namespace Examples
     {
         static void Main(string[] args)
         {
-            BittrexClient.SetDefaultOptions(new BittrexClientOptions()
+            BittrexClientV3.SetDefaultOptions(new BittrexClientOptions()
             {
                 ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
                 LogVerbosity = LogVerbosity.Info,
