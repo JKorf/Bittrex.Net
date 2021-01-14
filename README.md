@@ -126,6 +126,9 @@ To get started we have to add the Bittrex.Net namespace:  `using Bittrex.Net;`.
 Bittrex.Net provides three clients to interact with the Bittrex API. The  `BittrexClient`  provides all V1.1 rest API calls, whereas the `BittrexClientV3` gives access to the V3 rest API calls. The  `BittrexSocketClient`  provides functions to interact with the SignalR websocket provided by the Bittrex API. Both clients are disposable and as such can be used in a  `using`statement.
 
 ## Release notes
+* Version 4.2.1 - 14 jan 2021
+    * Updated CryptoExchange.Net
+
 * Version 4.2.0 - 21 dec 2020
     * Fix for pageSizes being limited to 100 while max is 200
     * Added SubscribeToHeartbeatAsync on BittrexSocketClientV3
