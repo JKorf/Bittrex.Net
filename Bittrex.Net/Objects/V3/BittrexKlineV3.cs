@@ -41,5 +41,7 @@ namespace Bittrex.Net.Objects.V3
         decimal ICommonKline.CommonLow => Low;
         decimal ICommonKline.CommonOpen => Open;
         decimal ICommonKline.CommonClose => Close;
+        decimal ICommonKline.CommonVolume => Volume;
+        DateTime ICommonKline.CommonOpenTime => StartsAt;
     }
 }
