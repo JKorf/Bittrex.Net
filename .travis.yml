@@ -1,7 +1,7 @@
 language: csharp
 mono: none
 solution: Bittrex.Net.sln
-dotnet: 5.0
+dotnet: 5.0.103
 script:
  - dotnet build Bittrex.Net/Bittrex.Net.csproj --framework "netstandard2.1"
  - dotnet test Bittrex.Net.UnitTests/Bittrex.Net.UnitTests.csproj
