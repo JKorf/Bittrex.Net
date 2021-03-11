@@ -106,6 +106,90 @@ namespace Bittrex.Net
         }
 
         /// <summary>
+        /// Get permissions for a specific currency
+        /// </summary>
+        /// <param name="currency">Currency</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<BittrexCurrencyPermission>> GetCurrencyPermission(string currency,
+            CancellationToken ct = default)
+            => GetCurrencyPermissionAsync(currency, ct).Result;
+
+        /// <summary>
+        /// Get permissions for a specific currency
+        /// </summary>
+        /// <param name="currency">Currency</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<BittrexCurrencyPermission>>> GetCurrencyPermissionAsync(string currency, CancellationToken ct = default)
+        {
+            currency.ValidateNotNull(nameof(currency));
+
+            return await SendRequest<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies/" + currency), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get permissions for all currencies
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<BittrexCurrencyPermission>> GetCurrencyPermissions(
+            CancellationToken ct = default)
+            => GetCurrencyPermissionsAsync(ct).Result;
+
+        /// <summary>
+        /// Get permissions for all currencies
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<BittrexCurrencyPermission>>> GetCurrencyPermissionsAsync(CancellationToken ct = default)
+        {
+            return await SendRequest<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get permissions for a specific symbol
+        /// </summary>
+        /// <param name="symbol">Symbol</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<BittrexMarketPermission>> GetSymbolPermission(string symbol,
+            CancellationToken ct = default)
+            => GetSymbolPermissionAsync(symbol, ct).Result;
+
+        /// <summary>
+        /// Get permissions for a specific symbol
+        /// </summary>
+        /// <param name="symbol">Symbol</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<BittrexMarketPermission>>> GetSymbolPermissionAsync(string symbol, CancellationToken ct = default)
+        {
+            symbol.ValidateNotNull(nameof(symbol));
+            symbol.ValidateBittrexSymbol();
+
+            return await SendRequest<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets/" + symbol), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get permissions for all symbols
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public WebCallResult<IEnumerable<BittrexMarketPermission>> GetSymbolPermissions(CancellationToken ct = default) 
+            => GetSymbolPermissionsAsync(ct).Result;
+
+        /// <summary>
+        /// Get permissions for all symbols
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<BittrexMarketPermission>>> GetSymbolPermissionsAsync(CancellationToken ct = default)
+        {
+            return await SendRequest<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Gets information about a symbol
         /// </summary>
         /// <param name="symbol">The symbol to get info for</param>
@@ -257,22 +341,24 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="symbol">The symbol to get klines for</param>
         /// <param name="interval">The interval of the klines</param>
+        /// <param name="type">The type of klines</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        public WebCallResult<IEnumerable<BittrexKlineV3>> GetKlines(string symbol, KlineInterval interval, CancellationToken ct = default) => GetKlinesAsync(symbol, interval, ct).Result;
+        public WebCallResult<IEnumerable<BittrexKlineV3>> GetKlines(string symbol, KlineInterval interval, KlineType? type = null, CancellationToken ct = default) => GetKlinesAsync(symbol, interval, type, ct).Result;
 
         /// <summary>
         /// Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
         /// </summary>
         /// <param name="symbol">The symbol to get klines for</param>
         /// <param name="interval">The interval of the klines</param>
+        /// <param name="type">The type of klines</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol klines</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetKlinesAsync(string symbol, KlineInterval interval, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetKlinesAsync(string symbol, KlineInterval interval, KlineType? type = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
 
-            return await SendRequest<IEnumerable<BittrexKlineV3>>(GetUrl($"markets/{symbol}/candles/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/recent"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequest<IEnumerable<BittrexKlineV3>>(GetUrl($"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant() : "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/recent"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -283,9 +369,10 @@ namespace Bittrex.Net
         /// <param name="year">The year to get klines for</param>
         /// <param name="month">The month to get klines for</param>
         /// <param name="day">The day to get klines for</param>
+        /// <param name="type">The type of klines</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        public WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default) => GetHistoricalKlinesAsync(symbol, interval, year, month, day, ct).Result;
+        public WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, KlineType? type = null, CancellationToken ct = default) => GetHistoricalKlinesAsync(symbol, interval, year, month, day, type, ct).Result;
 
         /// <summary>
         /// Gets historical klines for a symbol
@@ -295,9 +382,10 @@ namespace Bittrex.Net
         /// <param name="year">The year to get klines for</param>
         /// <param name="month">The month to get klines for</param>
         /// <param name="day">The day to get klines for</param>
+        /// <param name="type">The type of klines</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, KlineType? type = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
 
@@ -311,7 +399,7 @@ namespace Bittrex.Net
                 throw new ArgumentException("Can't specify day value without month value");
 
             var url =
-                $"markets/{symbol}/candles/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/historical/{year}";
+                $"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant(): "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/historical/{year}";
             if (month.HasValue)
                 url += "/" + month;
             if (day.HasValue)
@@ -698,12 +786,43 @@ namespace Bittrex.Net
         }
 
         /// <summary>
-        /// Gets executions (trades) for a order
+        /// Gets executions (trades)
         /// </summary>
-        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        public WebCallResult<IEnumerable<BittrexExecution>> GetExecutions(string orderId, CancellationToken ct = default) => GetExecutionsAsync(orderId, ct).Result;
+        public WebCallResult<IEnumerable<BittrexExecution>> GetExecutions(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default) => GetExecutionsAsync(symbol, startDate, endDate, pageSize, nextPageToken, previousPageToken, ct).Result;
+
+        /// <summary>
+        /// Gets executions (trades)
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        {
+            symbol?.ValidateBittrexSymbol();
+
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("marketSymbol", symbol);
+            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("pageSize", pageSize);
+            parameters.AddOptionalParameter("nextPageToken", nextPageToken);
+            parameters.AddOptionalParameter("previousPageToken", previousPageToken);
+
+            return await SendRequest<IEnumerable<BittrexExecution>>(GetUrl($"executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
 
         /// <summary>
         /// Gets executions (trades) for a order
@@ -711,7 +830,15 @@ namespace Bittrex.Net
         /// <param name="orderId">The id of the order to retrieve executions for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string orderId, CancellationToken ct = default)
+        public WebCallResult<IEnumerable<BittrexExecution>> GetOrderExecutions(string orderId, CancellationToken ct = default) => GetOrderExecutionsAsync(orderId, ct).Result;
+
+        /// <summary>
+        /// Gets executions (trades) for a order
+        /// </summary>
+        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderExecutionsAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
             return await SendRequest<IEnumerable<BittrexExecution>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);

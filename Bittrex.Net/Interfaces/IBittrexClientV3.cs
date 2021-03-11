@@ -166,7 +166,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="interval">The interval of the klines</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        WebCallResult<IEnumerable<BittrexKlineV3>> GetKlines(string symbol, KlineInterval interval, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexKlineV3>> GetKlines(string symbol, KlineInterval interval, KlineType? type = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the klines for a symbol
@@ -175,7 +175,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="interval">The interval of the klines</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol klines</returns>
-        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetKlinesAsync(string symbol, KlineInterval interval, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetKlinesAsync(string symbol, KlineInterval interval, KlineType? type = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets historical klines for a symbol
@@ -187,7 +187,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="day">The day to get klines for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexKlineV3>> GetHistoricalKlines(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, KlineType? type = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets historical klines for a symbol
@@ -199,7 +199,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="day">The day to get klines for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol kline</returns>
-        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexKlineV3>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, KlineType? type = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of all currencies
@@ -470,12 +470,34 @@ namespace Bittrex.Net.Interfaces
         Task<WebCallResult<BittrexOrderV3>> GetOrderAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
-        /// Gets executions (trades) for a order
+        /// Gets executions (trades)
         /// </summary>
-        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        WebCallResult<IEnumerable<BittrexExecution>> GetExecutions(string orderId, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexExecution>> GetExecutions(string? symbol = null,
+            DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null,
+            string? previousPageToken = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets executions (trades)
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="startDate">Filter by date</param>
+        /// <param name="endDate">Filter by date</param>
+        /// <param name="pageSize">The max amount of results to return</param>
+        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string? symbol = null,
+            DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null,
+            string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets executions (trades) for a order
@@ -483,7 +505,15 @@ namespace Bittrex.Net.Interfaces
         /// <param name="orderId">The id of the order to retrieve executions for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string orderId, CancellationToken ct = default);
+        WebCallResult<IEnumerable<BittrexExecution>> GetOrderExecutions(string orderId, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets executions (trades) for a order
+        /// </summary>
+        /// <param name="orderId">The id of the order to retrieve executions for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Executions</returns>
+        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderExecutionsAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels an order

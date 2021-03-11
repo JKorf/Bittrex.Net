@@ -462,6 +462,66 @@
             <param name="ct">Cancellation token</param>
             <returns>List of symbols</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencyPermission(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for a specific currency
+            </summary>
+            <param name="currency">Currency</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencyPermissionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for a specific currency
+            </summary>
+            <param name="currency">Currency</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencyPermissions(System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for all currencies
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetCurrencyPermissionsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for all currencies
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolPermission(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for a specific symbol
+            </summary>
+            <param name="symbol">Symbol</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolPermissionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for a specific symbol
+            </summary>
+            <param name="symbol">Symbol</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolPermissions(System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for all symbols
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetSymbolPermissionsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get permissions for all symbols
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClientV3.GetSymbol(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets information about a symbol
@@ -590,7 +650,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol klines</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Bittrex.Net.Objects.KlineType},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -599,10 +659,11 @@
             <param name="year">The year to get klines for</param>
             <param name="month">The month to get klines for</param>
             <param name="day">The day to get klines for</param>
+            <param name="type">The type of klines</param>
             <param name="ct">Cancellation token</param>
             <returns>Symbol kline</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Bittrex.Net.Objects.KlineType},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -611,6 +672,7 @@
             <param name="year">The year to get klines for</param>
             <param name="month">The month to get klines for</param>
             <param name="day">The day to get klines for</param>
+            <param name="type">The type of klines</param>
             <param name="ct">Cancellation token</param>
             <returns>Symbol kline</returns>
         </member>
@@ -882,7 +944,33 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetExecutions(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetExecutions(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets executions (trades)
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Executions</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetExecutionsAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets executions (trades)
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Executions</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderExecutions(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades) for a order
             </summary>
@@ -890,7 +978,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Executions</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClientV3.GetExecutionsAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClientV3.GetOrderExecutionsAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades) for a order
             </summary>
@@ -1520,6 +1608,13 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToExecutionUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexExecutionUpdate})">
+            <summary>
+            Subscribe to execution updates
+            </summary>
+            <param name="onUpdate">Data handler</param>
+            <returns>Subscription result</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClientV3.SubscribeToDepositUpdatesAsync(System.Action{Bittrex.Net.Sockets.BittrexDepositUpdate})">
             <summary>
             Subscribe to deposit updates
@@ -2126,7 +2221,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol klines</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlines(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Bittrex.Net.Objects.KlineType},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -2138,7 +2233,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol kline</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetHistoricalKlinesAsync(System.String,Bittrex.Net.Objects.KlineInterval,System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Bittrex.Net.Objects.KlineType},System.Threading.CancellationToken)">
             <summary>
             Gets historical klines for a symbol
             </summary>
@@ -2418,7 +2513,33 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetExecutions(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetExecutions(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets executions (trades)
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Executions</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetExecutionsAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets executions (trades)
+            </summary>
+            <param name="symbol">Filter by symbol</param>
+            <param name="startDate">Filter by date</param>
+            <param name="endDate">Filter by date</param>
+            <param name="pageSize">The max amount of results to return</param>
+            <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
+            <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Executions</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderExecutions(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades) for a order
             </summary>
@@ -2426,7 +2547,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Executions</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetExecutionsAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexClientV3.GetOrderExecutionsAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades) for a order
             </summary>
@@ -3568,6 +3689,21 @@
         <member name="F:Bittrex.Net.Objects.KlineInterval.OneDay">
             <summary>
             1d
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.KlineType">
+            <summary>
+            Type of klines
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.KlineType.Trade">
+            <summary>
+            Trade
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Objects.KlineType.Midpoint">
+            <summary>
+            Mid point
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexConditionalOrderOperand">
@@ -4787,6 +4923,66 @@
             Timestamp order was closed
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexCurrencyPermission">
+            <summary>
+            Currency permission
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyPermission.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyPermission.View">
+            <summary>
+            Allowed to view
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyPermission.Deposit">
+            <summary>
+            Allowed to buy
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyPermission.Withdraw">
+            <summary>
+            Allowed to sell
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexCurrencyDepositPermission">
+            <summary>
+            Deposit permission
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyDepositPermission.BlockChain">
+            <summary>
+            Allow to deposit via blockchain
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyDepositPermission.CreditCard">
+            <summary>
+            Allowed to deposit via credit card
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyDepositPermission.WireTransfer">
+            <summary>
+            Allowed to deposit via wire transfer
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexCurrencyWithdrawPermission">
+            <summary>
+            Withdraw permission
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyWithdrawPermission.BlockChain">
+            <summary>
+            Allowed to withdraw via blockchain
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexCurrencyWithdrawPermission.WireTransfer">
+            <summary>
+            Allowed to withdraw via wire transfer
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexCurrencyV3">
             <summary>
             Bittrex currency info
@@ -5030,6 +5226,31 @@
         <member name="P:Bittrex.Net.Objects.V3.BittrexLinkedOrder.Type">
             <summary>
             Type of the order
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.V3.BittrexMarketPermission">
+            <summary>
+            Market permission
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketPermission.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketPermission.View">
+            <summary>
+            Allowed to view
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketPermission.Buy">
+            <summary>
+            Allowed to buy
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.V3.BittrexMarketPermission.Sell">
+            <summary>
+            Allowed to sell
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.V3.BittrexOrderBookV3">
@@ -5463,6 +5684,26 @@
             </summary>
         </member>
         <member name="P:Bittrex.Net.Sockets.BittrexDepositUpdate.Delta">
+            <summary>
+            Update data
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Sockets.BittrexExecutionUpdate">
+            <summary>
+            Execution update
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexExecutionUpdate.AccountId">
+            <summary>
+            Account id for the balance change
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexExecutionUpdate.Sequence">
+            <summary>
+            Sequence
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Sockets.BittrexExecutionUpdate.Deltas">
             <summary>
             Update data
             </summary>

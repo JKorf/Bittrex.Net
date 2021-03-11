@@ -226,6 +226,16 @@ namespace Bittrex.Net
         }
 
         /// <summary>
+        /// Subscribe to execution updates
+        /// </summary>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToExecutionUpdatesAsync(Action<BittrexExecutionUpdate> onUpdate)
+        {
+            return await Subscribe("execution", true, onUpdate).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Subscribe to deposit updates
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
