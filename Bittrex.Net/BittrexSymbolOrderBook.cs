@@ -16,8 +16,8 @@ namespace Bittrex.Net
     /// </summary>
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
-        private readonly IBittrexSocketClientV3 socketClient;
-        private readonly IBittrexClientV3 client;
+        private readonly IBittrexSocketClient socketClient;
+        private readonly IBittrexClient client;
         private readonly int _limit;
 
         /// <summary>
@@ -31,11 +31,11 @@ namespace Bittrex.Net
             symbol.ValidateBittrexSymbol();
             limit.ValidateIntValues(nameof(limit), 1, 25, 500);
             _limit = limit;
-            socketClient = options?.SocketClient ?? new BittrexSocketClientV3(new BittrexSocketClientV3Options()
+            socketClient = options?.SocketClient ?? new BittrexSocketClient(new BittrexSocketClientOptions()
             {
                 LogVerbosity = options?.LogVerbosity ?? LogVerbosity.Info
             });
-            client = new BittrexClientV3(new BittrexClientOptions()
+            client = new BittrexClient(new BittrexClientOptions()
             {
                 LogVerbosity = options?.LogVerbosity ?? LogVerbosity.Info
             });

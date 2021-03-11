@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bittrex.Net.Converters.V3;
+using Bittrex.Net.Converters;
 using Bittrex.Net.Objects;
-using Bittrex.Net.Objects.V3;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Sockets
@@ -32,6 +31,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Kline data
         /// </summary>
-        public BittrexKlineV3 Delta { get; set; } = default!;
+        public BittrexKline Delta { get; set; } = default!;
     }
 }

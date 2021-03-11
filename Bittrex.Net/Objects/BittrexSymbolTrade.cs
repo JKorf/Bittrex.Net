@@ -1,45 +1,39 @@
 ﻿using System;
 using Bittrex.Net.Converters;
-using CryptoExchange.Net.Converters;
+using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about an order executed on a symbol
+    /// Info on a trade
     /// </summary>
-    public class BittrexSymbolTrade
+    public class BittrexSymbolTrade: ICommonRecentTrade
     {
         /// <summary>
-        /// The order id
+        /// Unique id of the trade
         /// </summary>
-        public long Id { get; set; }
+        public string Id { get; set; } = "";
         /// <summary>
-        /// Timestamp of the order
+        /// Side of the taker
         /// </summary>
-        [JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime Timestamp { get; set; }
+        [JsonConverter(typeof(OrderSideConverter))]
+        public OrderSide TakerSide { get; set; }
         /// <summary>
-        /// Quantity of the order
+        /// The quantity of the entry
         /// </summary>
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Price of the order
+        /// The price of the entry
         /// </summary>
-        public decimal Price { get; set; }
+        public decimal Rate { get; set; }
         /// <summary>
-        /// Total price of the order
+        /// The timestamp of the trade execution
         /// </summary>
-        public decimal Total { get; set; }
-        /// <summary>
-        /// Whether the order was fully filled
-        /// </summary>
-        [JsonConverter(typeof(FillTypeConverter))]
-        public FillType FillType { get; set; }
-        /// <summary>
-        /// The side of the order
-        /// </summary>
-        [JsonConverter(typeof(OrderSideConverter))]
-        public OrderSide OrderType { get; set; }
+        public DateTime ExecutedAt { get; set; }
+
+        decimal ICommonRecentTrade.CommonPrice => Rate;
+        decimal ICommonRecentTrade.CommonQuantity => Quantity;
+        DateTime ICommonRecentTrade.CommonTradeTime => ExecutedAt;
     }
 }

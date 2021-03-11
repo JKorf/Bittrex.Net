@@ -1,16 +1,17 @@
-﻿
-namespace Bittrex.Net.Sockets
+﻿namespace Bittrex.Net.Sockets
 {
     internal class ConnectionRequest
     {
         public string RequestName { get; set; }
         public object[] Parameters { get; set; }
-
-
-        public ConnectionRequest(string name, params object[] parameters)
+        
+        public ConnectionRequest(string name, params string[] channels)
         {
             RequestName = name;
-            Parameters = parameters;
+            Parameters = new object[]
+            {
+                channels
+            };
         }
     }
 }

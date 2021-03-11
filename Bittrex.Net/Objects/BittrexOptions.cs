@@ -49,7 +49,7 @@ namespace Bittrex.Net.Objects
             return copy;
         }
     }
-
+    
     /// <summary>
     /// Options for the Bittrex socket client
     /// </summary>
@@ -58,21 +58,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// ctor
         /// </summary>
-        public BittrexSocketClientOptions(): base("https://socket.bittrex.com")
-        {
-            SocketSubscriptionsCombineTarget = 10;
-        }
-    }
-
-    /// <summary>
-    /// Options for the Bittrex socket client
-    /// </summary>
-    public class BittrexSocketClientV3Options : SocketClientOptions
-    {
-        /// <summary>
-        /// ctor
-        /// </summary>
-        public BittrexSocketClientV3Options() : base("https://socket-v3.bittrex.com")
+        public BittrexSocketClientOptions() : base("https://socket-v3.bittrex.com")
         {
             SocketSubscriptionsCombineTarget = 10;
         }
@@ -86,12 +72,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBittrexSocketClientV3? SocketClient { get; }
+        public IBittrexSocketClient? SocketClient { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClientV3? socketClient = null) : base("Bittrex", true, true)
+        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null) : base("Bittrex", true, true)
         {
             SocketClient = socketClient;
         }

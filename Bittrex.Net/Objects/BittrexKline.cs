@@ -1,48 +1,47 @@
-﻿using Newtonsoft.Json;
-using System;
-using CryptoExchange.Net.Converters;
+﻿using System;
+using CryptoExchange.Net.ExchangeInterfaces;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Bittrex kline
+    /// Symbol kline info
     /// </summary>
-    public class BittrexKline
+    public class BittrexKline: ICommonKline
     {
         /// <summary>
-        /// Open price of the kline
+        /// The opening time of this kline
         /// </summary>
-        [JsonProperty("O")]
+        public DateTime StartsAt { get; set; }
+        /// <summary>
+        /// The price at opening
+        /// </summary>
         public decimal Open { get; set; }
         /// <summary>
-        /// High price of the kline
+        /// The price at closing
         /// </summary>
-        [JsonProperty("H")]
-        public decimal High { get; set; }
-        /// <summary>
-        /// Low price of the kline
-        /// </summary>
-        [JsonProperty("L")]
-        public decimal Low { get; set; }
-        /// <summary>
-        /// Close price of the kline
-        /// </summary>
-        [JsonProperty("C")]
         public decimal Close { get; set; }
         /// <summary>
-        /// Volume of the kline
+        /// The highest price during this kline
         /// </summary>
-        [JsonProperty("V")]
+        public decimal High { get; set; }
+        /// <summary>
+        /// The lowest price during this kline
+        /// </summary>
+        public decimal Low { get; set; }
+        /// <summary>
+        /// The volume during this kline
+        /// </summary>
         public decimal Volume { get; set; }
         /// <summary>
-        /// Base volume of the kline
+        /// The quote volume of this candle
         /// </summary>
-        [JsonProperty("BV")]
-        public decimal BaseVolume { get; set; }
-        /// <summary>
-        /// Timestamp of the kline
-        /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime Timestamp { get; set; }
+        public decimal QuoteVolume { get; set; }
+
+        decimal ICommonKline.CommonHigh => High;
+        decimal ICommonKline.CommonLow => Low;
+        decimal ICommonKline.CommonOpen => Open;
+        decimal ICommonKline.CommonClose => Close;
+        decimal ICommonKline.CommonVolume => Volume;
+        DateTime ICommonKline.CommonOpenTime => StartsAt;
     }
 }

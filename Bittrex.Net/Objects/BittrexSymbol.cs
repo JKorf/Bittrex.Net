@@ -1,61 +1,61 @@
 ﻿using System;
-using CryptoExchange.Net.Converters;
+using System.Collections.Generic;
+using Bittrex.Net.Converters;
+using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about a symbol
+    /// Symbol info
     /// </summary>
-    public class BittrexSymbol
+    public class BittrexSymbol: ICommonSymbol
     {
         /// <summary>
-        /// The quote currency
+        /// The symbol of the symbol
         /// </summary>
-        [JsonProperty("marketCurrency")]
-        public string QuoteCurrency { get; set; } = "";
+        public string Symbol { get; set; } = "";
         /// <summary>
-        /// The base currency
+        /// The base currency of the symbol
         /// </summary>
+        [JsonProperty("baseCurrencySymbol")]
         public string BaseCurrency { get; set; } = "";
         /// <summary>
-        /// The long name of the quote currency
+        /// The quote currency of the symbol
         /// </summary>
-        [JsonProperty("marketCurrencyLong")]
-        public string QuoteCurrencyLong { get; set; } = "";
+        [JsonProperty("quoteCurrencySymbol")]
+        public string QuoteCurrency { get; set; } = "";
         /// <summary>
-        /// The long name of the base currency
-        /// </summary>
-        public string BaseCurrencyLong { get; set; } = "";
-        /// <summary>
-        /// The minimun size of an order
+        /// The minimum trade size for this symbol
         /// </summary>
         public decimal MinTradeSize { get; set; }
         /// <summary>
-        /// The name of the symbol
+        /// The max precision for this symbol
         /// </summary>
-        [JsonProperty("marketName")]
-        public string Symbol { get; set; } = "";
+        public int Precision { get; set; }
         /// <summary>
-        /// Whether the symbol is active
+        /// The status of the symbol
         /// </summary>
-        public bool IsActive { get; set; }
+        [JsonConverter(typeof(SymbolStatusConverter))]
+        public SymbolStatus Status { get; set; }
         /// <summary>
-        /// Timestamp when the symbol was created
+        /// When the symbol was created
         /// </summary>
-        [JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; }
         /// <summary>
-        /// Additional information about the state of this symbol
+        /// Additional info
         /// </summary>
         public string Notice { get; set; } = "";
         /// <summary>
-        /// Whether the symbol is sponsored by Bittrex
+        /// List of prohibited regions. empty if its not restricted.
         /// </summary>
-        public bool? IsSponsored { get; set; }
+        public IEnumerable<string> ProhibitedIn { get; set; } = new List<string>();
         /// <summary>
-        /// Url of the logo
+        /// List of associated terms of service.
         /// </summary>
-        public string LogoUrl { get; set; } = "";
+        public IEnumerable<string> AssociatedTermsOfService { get; set; } = new List<string>();
+
+        string ICommonSymbol.CommonName => Symbol;
+        decimal ICommonSymbol.CommonMinimumTradeSize => MinTradeSize;
     }
 }

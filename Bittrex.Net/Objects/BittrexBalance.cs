@@ -1,29 +1,34 @@
-﻿namespace Bittrex.Net.Objects
+﻿using System;
+using CryptoExchange.Net.ExchangeInterfaces;
+using Newtonsoft.Json;
+
+namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about a balance
+    /// Balance info
     /// </summary>
-    public class BittrexBalance
+    public class BittrexBalance: ICommonBalance
     {
         /// <summary>
-        /// The currency for which the balance is
+        /// The currency
         /// </summary>
+        [JsonProperty("currencySymbol")]
         public string Currency { get; set; } = "";
         /// <summary>
-        /// The total balance
+        /// The total funds
         /// </summary>
-        public decimal? Balance { get; set; }
+        public decimal Total { get; set; }
         /// <summary>
-        /// The available balance
+        /// The available funds
         /// </summary>
-        public decimal? Available { get; set; }
+        public decimal Available { get; set; }
         /// <summary>
-        /// The pending balance
+        /// Update time
         /// </summary>
-        public decimal? Pending { get; set; }
-        /// <summary>
-        /// The crypto address this balance is on
-        /// </summary>
-        public string CryptoAddress { get; set; } = "";
+        public DateTime UpdatedAt { get; set; }
+
+        string ICommonBalance.CommonAsset => Currency;
+        decimal ICommonBalance.CommonAvailable => Available;
+        decimal ICommonBalance.CommonTotal => Total;
     }
 }

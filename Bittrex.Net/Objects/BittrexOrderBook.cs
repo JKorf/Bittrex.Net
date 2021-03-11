@@ -1,61 +1,45 @@
 ﻿using System.Collections.Generic;
+using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.Interfaces;
+using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Order book for a symbol
+    /// Order book
     /// </summary>
-    public class BittrexOrderBook
+    public class BittrexOrderBook: ICommonOrderBook
     {
         /// <summary>
-        /// List of buy orders in the order book
+        /// The sequence number
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> Buy { get; set; } = new List<BittrexOrderBookEntry>();
+        public long Sequence { get; set; }
         /// <summary>
-        /// List of sell orders in the order book
+        /// The bids in this book
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> Sell { get; set; } = new List<BittrexOrderBookEntry>();
+        public IEnumerable<BittrexOrderBookEntry> Bid { get; set; } = new List<BittrexOrderBookEntry>();
+        /// <summary>
+        /// The asks in this book
+        /// </summary>
+        public IEnumerable<BittrexOrderBookEntry> Ask { get; set; } = new List<BittrexOrderBookEntry>();
+
+        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonBids => Bid;
+        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonAsks => Ask;
     }
 
     /// <summary>
-    /// Order book entry
+    /// Entry for the order book
     /// </summary>
-    public class BittrexOrderBookEntry
+    public class BittrexOrderBookEntry: ISymbolOrderBookEntry
     {
         /// <summary>
-        /// Total quantity of order at this price
+        /// The quantity of the entry
         /// </summary>
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Price of the orders
+        /// The price of the entry
         /// </summary>
-        public decimal Rate { get; set; }
-
-        /// <summary>
-        /// how to handle data (used by stream)
-        /// </summary>
-        public OrderBookEntryType Type { get; set; }
-    }
-
-    /// <summary>
-    /// https://github.com/JKorf/Bittrex.Net/pull/42#discussion_r160122966
-    /// Type 0 – you need to add this entry into your orderbook. There were no orders at matching price before.
-    /// Type 1 – you need to delete this entry from your orderbook.This entry no longer exists (no orders at matching price)
-    /// Type 2 – you need to edit this entry.There are different number of orders at this price.
-    /// </summary>
-    public enum OrderBookEntryType
-    {
-        /// <summary>
-        /// A newly added entry
-        /// </summary>
-        NewEntry = 0,
-        /// <summary>
-        /// A entry to remove
-        /// </summary>
-        RemoveEntry = 1,
-        /// <summary>
-        /// An updated entry
-        /// </summary>
-        UpdateEntry = 2
+        [JsonProperty("Rate")]
+        public decimal Price { get; set; }
     }
 }

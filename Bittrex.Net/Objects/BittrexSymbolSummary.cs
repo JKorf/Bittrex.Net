@@ -1,68 +1,45 @@
 ﻿using System;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
+using CryptoExchange.Net.ExchangeInterfaces;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// 24 hour summary of a symbol
+    /// Symbol summary info
     /// </summary>
-    public class BittrexSymbolSummary
+    public class BittrexSymbolSummary: ICommonTicker
     {
         /// <summary>
-        /// The name of the symbol
+        /// the symbol the summary is for
         /// </summary>
-        [JsonProperty("marketName")]
         public string Symbol { get; set; } = "";
         /// <summary>
-        /// The highest price in the last 24 hour
+        /// The high price for this symbol in the last 24 hours
         /// </summary>
-        public decimal? High { get; set; }
+        public decimal High { get; set; }
         /// <summary>
-        /// The lowest price in the last 24 hour
+        /// The low price for this symbol in the last 24 hours
         /// </summary>
-        public decimal? Low { get; set; }
+        public decimal Low { get; set; }
         /// <summary>
-        /// The volume in the last 24 hour in the quote currency 
+        /// Volume within the last 24 hours
         /// </summary>
-        public decimal? Volume { get; set; }
+        public decimal Volume { get; set; }
         /// <summary>
-        /// The latest price
+        /// Quote volume within the last 24 hours
         /// </summary>
-        public decimal? Last { get; set; }
+        public decimal QuoteVolume { get; set; }
         /// <summary>
-        /// The base volume in the last 24 hour in the base currency
+        /// The percentage change of this symbol for the last 24 hours
         /// </summary>
-        public decimal? BaseVolume { get; set; }
+        public decimal PercentChange { get; set; }
         /// <summary>
-        /// Timestamp of the summary
+        /// The timestamp of when this summary was last updated
         /// </summary>
-        [JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime TimeStamp { get; set; }
-        /// <summary>
-        /// The highest bid
-        /// </summary>
-        public decimal? Bid { get; set; }
-        /// <summary>
-        /// The lowest ask
-        /// </summary>
-        public decimal? Ask { get; set; }
-        /// <summary>
-        /// Current open buy orders
-        /// </summary>
-        public int? OpenBuyOrders { get; set; }
-        /// <summary>
-        /// Current open sell orders
-        /// </summary>
-        public int? OpenSellOrders { get; set; }
-        /// <summary>
-        /// Price 24 hours ago
-        /// </summary>
-        public decimal? PrevDay { get; set; }
-        /// <summary>
-        /// Timestamp when created
-        /// </summary>
-        [JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime Created { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
+        string ICommonTicker.CommonSymbol => Symbol;
+        decimal ICommonTicker.CommonHigh => High;
+        decimal ICommonTicker.CommonLow => Low;
+        decimal ICommonTicker.CommonVolume => Volume;
     }
 }

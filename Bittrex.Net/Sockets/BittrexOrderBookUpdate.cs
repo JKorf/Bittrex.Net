@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bittrex.Net.Converters.V3;
 using Bittrex.Net.Objects;
-using Bittrex.Net.Objects.V3;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Sockets
@@ -30,10 +28,10 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Bid changes
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntryV3> BidDeltas { get; set; } = new List<BittrexOrderBookEntryV3>();
+        public IEnumerable<BittrexOrderBookEntry> BidDeltas { get; set; } = new List<BittrexOrderBookEntry>();
         /// <summary>
         /// Ask changes
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntryV3> AskDeltas { get; set; } = new List<BittrexOrderBookEntryV3>();
+        public IEnumerable<BittrexOrderBookEntry> AskDeltas { get; set; } = new List<BittrexOrderBookEntry>();
     }
 }

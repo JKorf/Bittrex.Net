@@ -13,60 +13,13 @@ using Newtonsoft.Json;
 
 namespace Bittrex.Net
 {
-    internal class BittrexAuthenticationProvider: AuthenticationProvider
-    {
-        private static long nonce => DateTime.UtcNow.Ticks;
-        private readonly HMACSHA512 encryptor;
-        private readonly object locker;
-
-        public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
-        {
-            if(credentials.Secret == null)
-                throw new ArgumentException("ApiKey/Secret needed");
-
-            locker = new object();
-            encryptor = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret.GetString()));
-        }
-
-        public override Dictionary<string, object> AddAuthenticationToParameters(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
-        {
-            if (!signed)
-                return parameters;
-
-            if (Credentials.Key == null)
-                throw new ArgumentException("ApiKey/Secret needed");
-
-            lock (locker)
-                parameters.Add("apiKey", Credentials.Key.GetString());
-            parameters.Add("nonce", nonce);
-            return parameters;
-        }
-
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
-        {
-            if (!signed)
-                return new Dictionary<string, string>();
-
-            var result = new Dictionary<string, string>();
-            lock (locker)
-                result.Add("apisign", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(uri))));
-            return result;
-        }
-
-        public override string Sign(string toSign)
-        {
-            lock(locker)
-                return BitConverter.ToString(encryptor.ComputeHash(Encoding.ASCII.GetBytes(toSign))).Replace("-", string.Empty);
-        }
-    }
-
-    internal class BittrexAuthenticationProviderV3 : AuthenticationProvider
+    internal class BittrexAuthenticationProvider : AuthenticationProvider
     {
         private readonly HMACSHA512 encryptorHmac;
         private readonly SHA512 encryptor;
         private readonly object locker;
 
-        public BittrexAuthenticationProviderV3(ApiCredentials credentials) : base(credentials)
+        public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
             if (credentials.Secret == null)
                 throw new ArgumentException("ApiKey/Secret needed");

@@ -1,21 +1,6 @@
 ﻿namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Whether the order is partially or fully filled
-    /// </summary>
-    public enum FillType
-    {
-        /// <summary>
-        /// Filled
-        /// </summary>
-        Fill,
-        /// <summary>
-        /// Partially filled
-        /// </summary>
-        PartialFill
-    }
-
-    /// <summary>
     /// Side of an order
     /// </summary>
     public enum OrderSide
@@ -29,137 +14,7 @@
         /// </summary>
         Sell
     }
-
-    /// <summary>
-    /// The type of order
-    /// </summary>
-    public enum OrderType
-    {
-        /// <summary>
-        /// Limit order; place an order for a specific price
-        /// </summary>
-        Limit,
-        /// <summary>
-        /// Symbol order; execute order at the best price available when placed
-        /// </summary>
-        Market
-    }
-
-    /// <summary>
-    /// Order type and side
-    /// </summary>
-    public enum OrderSideExtended
-    {
-        /// <summary>
-        /// Buy limit order
-        /// </summary>
-        LimitBuy,
-        /// <summary>
-        /// Sell limit order
-        /// </summary>
-        LimitSell,
-        /// <summary>
-        /// Buy market order
-        /// </summary>
-        MarketBuy,
-        /// <summary>
-        /// Sell market order
-        /// </summary>
-        MarketSell
-    }
-
-    /// <summary>
-    /// Interval for klines
-    /// </summary>
-    public enum TickInterval
-    {
-        /// <summary>
-        /// 1m
-        /// </summary>
-        OneMinute,
-        /// <summary>
-        /// 5m
-        /// </summary>
-        FiveMinutes,
-        /// <summary>
-        /// 30m
-        /// </summary>
-        HalfHour,
-        /// <summary>
-        /// 1h
-        /// </summary>
-        OneHour,
-        /// <summary>
-        /// 1d
-        /// </summary>
-        OneDay
-    }
-
-    /// <summary>
-    /// The time an order is active
-    /// </summary>
-    public enum TimeInEffect
-    {
-        /// <summary>
-        /// Order will be active until cancelled
-        /// </summary>
-        GoodTillCancelled,
-        /// <summary>
-        /// Order has to be at least partially filled or it will be canceled on placing
-        /// </summary>
-        ImmediateOrCancel
-    }
-
-    /// <summary>
-    /// Type of condition
-    /// </summary>
-    public enum ConditionType
-    {
-        /// <summary>
-        /// No condition
-        /// </summary>
-        None,
-        /// <summary>
-        /// Greater than
-        /// </summary>
-        GreaterThan,
-        /// <summary>
-        /// Lesser than
-        /// </summary>
-        LessThan,
-        /// <summary>
-        /// Stop loss fixed
-        /// </summary>
-        StopLossFixed,
-        /// <summary>
-        /// Stop loss percentage
-        /// </summary>
-        StopLossPercentage
-    }
-
-    /// <summary>
-    /// Update type for an order
-    /// </summary>
-    public enum OrderUpdateType
-    {
-        /// <summary>
-        /// Open
-        /// </summary>
-        Open,
-        /// <summary>
-        /// Partially filled
-        /// </summary>
-        PartialFill,
-        /// <summary>
-        /// Fully filled
-        /// </summary>
-        Fill,
-        /// <summary>
-        /// Cancelled
-        /// </summary>
-        Cancel
-    }
-
+    
     /// <summary>
     /// Time an order is active
     /// </summary>
@@ -190,7 +45,7 @@
     /// <summary>
     /// Type of order
     /// </summary>
-    public enum OrderTypeV3
+    public enum OrderType
     {
         /// <summary>
         /// Limit order; place at specific price

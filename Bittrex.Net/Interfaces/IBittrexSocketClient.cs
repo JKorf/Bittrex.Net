@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
+using Bittrex.Net.Sockets;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
@@ -9,100 +10,139 @@ using CryptoExchange.Net.Sockets;
 namespace Bittrex.Net.Interfaces
 {
     /// <summary>
-    /// Interface for the Bittrex socket client
+    /// Interface for the Bittrex V3 socket client
     /// </summary>
     public interface IBittrexSocketClient: ISocketClient
     {
         /// <summary>
-        /// Gets the current summaries for all symbols
+        /// Subscribe to heartbeat updates
         /// </summary>
-        /// <returns>Symbol summaries</returns>
-        CallResult<IEnumerable<BittrexStreamSymbolSummary>> GetSymbolSummaries();
+        /// <param name="onHeartbeat">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DateTime> onHeartbeat);
 
         /// <summary>
-        /// Gets the current summaries for all symbols
+        /// Subscribe to kline(candle) updates for a symbol
         /// </summary>
-        /// <returns>Symbol summaries</returns>
-        Task<CallResult<IEnumerable<BittrexStreamSymbolSummary>>> GetSymbolSummariesAsync();
+        /// <param name="symbol">The symbol</param>
+        /// <param name="interval">Interval of the candles</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
+            KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
 
         /// <summary>
-        /// Gets the state of a specific symbol
-        /// 500 Buys
-        /// 100 Fills
-        /// 500 Sells
+        /// Subscribe to kline(candle) updates for a symbol
         /// </summary>
-        /// <param name="symbol">The name of the symbol to query</param>
-        /// <returns>The current exchange state</returns>
-        CallResult<BittrexStreamOrderBook> GetOrderBook(string symbol);
+        /// <param name="symbols">The symbols</param>
+        /// <param name="interval">Interval of the candles</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
 
         /// <summary>
-        /// Gets the state of a specific symbol
-        /// 500 Buys
-        /// 100 Fills
-        /// 500 Sells
+        /// Subscribe to all symbol summary updates
         /// </summary>
-        /// <param name="symbol">The name of the symbol to query</param>
-        /// <returns>The current exchange state</returns>
-        Task<CallResult<BittrexStreamOrderBook>> GetOrderBookAsync(string symbol);
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<BittrexSummariesUpdate> onUpdate);
 
         /// <summary>
-        /// Subscribes to order book and trade updates on a specific symbol
+        /// Subscribe to symbol summary updates
         /// </summary>
-        /// <param name="symbol">The name of the symbol to subscribe on</param>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        CallResult<UpdateSubscription> SubscribeToOrderBookUpdates(string symbol, Action<BittrexStreamOrderBookUpdate> onUpdate);
+        /// <param name="symbol">The symbol</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
+            Action<BittrexSymbolSummary> onUpdate);
 
         /// <summary>
-        /// Subscribes to order book and trade updates on a specific symbol
+        /// Subscribe to symbol summary updates
         /// </summary>
-        /// <param name="symbol">The name of the symbol to subscribe on</param>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, Action<BittrexStreamOrderBookUpdate> onUpdate);
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<BittrexSymbolSummary> onUpdate);
 
         /// <summary>
-        /// Subscribes to updates of summaries for all symbols
+        /// Subscribe to order book updates
         /// </summary>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        CallResult<UpdateSubscription> SubscribeToSymbolSummariesUpdate(Action<IEnumerable<BittrexStreamSymbolSummary>> onUpdate);
+        /// <param name="symbol">The symbol</param>
+        /// <param name="depth">The depth of the oder book to receive update for</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
+            Action<BittrexOrderBookUpdate> onUpdate);
 
         /// <summary>
-        /// Subscribes to updates of summaries for all symbols
+        /// Subscribe to order book updates
         /// </summary>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummariesUpdateAsync(Action<IEnumerable<BittrexStreamSymbolSummary>> onUpdate);
+        /// <param name="symbols">The symbols</param>
+        /// <param name="depth">The depth of the oder book to receive update for</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<BittrexOrderBookUpdate> onUpdate);
 
         /// <summary>
-        /// Subscribes to lite summary updates for all symbols
+        /// Subscribe to all symbols ticker updates
         /// </summary>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        CallResult<UpdateSubscription> SubscribeToSymbolSummariesLiteUpdate(Action<IEnumerable<BittrexStreamSymbolSummaryLite>> onUpdate);
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<BittrexTickersUpdate> onUpdate);
 
         /// <summary>
-        /// Subscribes to lite summary updates for all symbols
+        /// Subscribe to symbol ticker updates
         /// </summary>
-        /// <param name="onUpdate">The update event handler</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummariesLiteUpdateAsync(Action<IEnumerable<BittrexStreamSymbolSummaryLite>> onUpdate);
+        /// <param name="symbol">The symbol</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
+            Action<BittrexTick> onUpdate);
 
         /// <summary>
-        /// Subscribes to balance updates
+        /// Subscribe to symbol ticker updates
         /// </summary>
-        /// <param name="onBalanceUpdate">The update event handler for balance updates</param>
-        /// <param name="onOrderUpdate">The update event handler for order updates</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        CallResult<UpdateSubscription> SubscribeToAccountUpdates(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate);
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTick> onUpdate);
 
         /// <summary>
-        /// Subscribes to balance updates
+        /// Subscribe to symbol trade updates
         /// </summary>
-        /// <param name="onBalanceUpdate">The update event handler for balance updates</param>
-        /// <param name="onOrderUpdate">The update event handler for order updates</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAccountUpdatesAsync(Action<BittrexStreamBalanceData> onBalanceUpdate, Action<BittrexStreamOrderData> onOrderUpdate);
+        /// <param name="symbol">The symbol</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
+            Action<BittrexTradesUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to symbol trade updates
+        /// </summary>
+        /// <param name="symbols">The symbols</param>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTradesUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to order updates
+        /// </summary>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<BittrexOrderUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to balance updates
+        /// </summary>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<BittrexBalanceUpdate> onUpdate);
+
+        /// <summary>
+        /// Subscribe to deposit updates
+        /// </summary>
+        /// <param name="onUpdate">Data handler</param>
+        /// <returns>Subscription result</returns>
+        Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<BittrexDepositUpdate> onUpdate);
     }
 }

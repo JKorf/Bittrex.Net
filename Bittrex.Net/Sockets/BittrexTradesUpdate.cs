@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bittrex.Net.Objects.V3;
+using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Sockets

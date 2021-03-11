@@ -1,43 +1,63 @@
 ﻿using System;
-using CryptoExchange.Net.Converters;
+using Bittrex.Net.Converters;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about a deposit
+    /// Deposit info
     /// </summary>
     public class BittrexDeposit
     {
         /// <summary>
         /// The id of the deposit
         /// </summary>
-        public long Id { get; set; }
-        /// <summary>
-        /// The amount of the deposit
-        /// </summary>
-        public decimal Amount { get; set; }
+        public string Id { get; set; } = "";
         /// <summary>
         /// The currency of the deposit
         /// </summary>
+        [JsonProperty("currencySymbol")]
         public string Currency { get; set; } = "";
         /// <summary>
-        /// The current number of confirmations the deposit has
+        /// The quantity of the deposit
+        /// </summary>
+        public decimal Quantity { get; set; }
+        /// <summary>
+        /// The address of the deposit
+        /// </summary>
+        [JsonProperty("cryptoAddress")]
+        public string Address { get; set; } = "";
+        /// <summary>
+        /// The tag of the address
+        /// </summary>
+        [JsonProperty("cryptoAddressTag")]
+        public string AddressTag { get; set; } = "";
+        /// <summary>
+        /// The transaction id of the deposit
+        /// </summary>
+        [JsonProperty("txId")]
+        public string TransactionId { get; set; } = "";
+        /// <summary>
+        /// The current amount of confirmations
         /// </summary>
         public int Confirmations { get; set; }
         /// <summary>
-        /// Timestamp of the last update
+        /// The timestamp of the last update
         /// </summary>
-        [JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime LastUpdated { get; set; }
+        public DateTime UpdatedAt { get; set; }
         /// <summary>
-        /// Transaction id of the deposit
+        /// The timestamp of when this deposit was completed
         /// </summary>
-        [JsonProperty("TxId")]
-        public string TransactionId { get; set; } = "";
+        public DateTime? CompletedAt { get; set; }
         /// <summary>
-        /// The address the deposit is to
+        /// The status of the deposit
         /// </summary>
-        public string CryptoAddress { get; set; } = "";
+        [JsonConverter(typeof(DepositStatusConverter))]
+        public DepositStatus Status { get; set; }
+
+        /// <summary>
+        /// Source
+        /// </summary>
+        public string Source { get; set; } = "";
     }
 }

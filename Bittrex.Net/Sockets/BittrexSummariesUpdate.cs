@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bittrex.Net.Objects.V3;
+using Bittrex.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
@@ -18,6 +18,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Summary per symbol
         /// </summary>
-        public IEnumerable<BittrexSymbolSummaryV3> Deltas { get; set; } = new List<BittrexSymbolSummaryV3>();
+        public IEnumerable<BittrexSymbolSummary> Deltas { get; set; } = new List<BittrexSymbolSummary>();
     }
 }

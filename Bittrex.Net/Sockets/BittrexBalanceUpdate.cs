@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bittrex.Net.Objects.V3;
+using Bittrex.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
@@ -21,6 +21,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Update data
         /// </summary>
-        public BittrexBalanceV3 Delta { get; set; } = default!;
+        public BittrexBalance Delta { get; set; } = default!;
     }
 }

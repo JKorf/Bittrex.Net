@@ -1,60 +1,64 @@
 ﻿using System;
-using CryptoExchange.Net.Converters;
+using Bittrex.Net.Converters;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Information about a withdrawal
+    /// Withdrawal info
     /// </summary>
     public class BittrexWithdrawal
     {
         /// <summary>
-        /// Guid of the payment
+        /// The id of the withdrawal
         /// </summary>
-        public Guid PaymentUuid { get; set; }
+        public string Id { get; set; } = "";
         /// <summary>
-        /// Currency of the withdrawal
+        /// The currency of the withdrawal
         /// </summary>
+        [JsonProperty("currencySymbol")]
         public string Currency { get; set; } = "";
         /// <summary>
-        /// Amount of the withdrawal
+        /// The quantity of the withdrawal
         /// </summary>
-        public decimal Amount { get; set; }
+        public decimal Quantity { get; set; }
         /// <summary>
-        /// Address the withdrawal is to
+        /// The address the withdrawal is to
         /// </summary>
+        [JsonProperty("cryptoAddress")]
         public string Address { get; set; } = "";
         /// <summary>
-        /// Timestamp when withdrawal was opened
+        /// The tag of the address
         /// </summary>
-        [JsonConverter(typeof(UTCDateTimeConverter))]
-        public DateTime Opened { get; set; }
+        [JsonProperty("cryptoAddressTag")]
+        public string AddressTag { get; set; } = "";
         /// <summary>
-        /// Whether the withdrawal is authorized
+        /// The transaction cost of the withdrawal
         /// </summary>
-        public bool Authorized { get; set; }
-        /// <summary>
-        /// Whether there is pending payment
-        /// </summary>
-        public bool PendingPayment { get; set; }
-        /// <summary>
-        /// Cost of the transaction
-        /// </summary>
-        [JsonProperty("TxCost")]
+        [JsonProperty("txCost")]
         public decimal TransactionCost { get; set; }
         /// <summary>
-        /// Id of the transaction
+        /// The transaction id
         /// </summary>
-        [JsonProperty("TxId")]
+        [JsonProperty("txId")]
         public string TransactionId { get; set; } = "";
         /// <summary>
-        /// Whether the withdrawal is canceled
+        /// The status of the withdrawal
         /// </summary>
-        public bool Canceled { get; set; }
+        [JsonConverter(typeof(WithdrawalStatusConverter))]
+        public WithdrawalStatus Status { get; set; }
         /// <summary>
-        /// Whether the withdrawal is to an invalid address
+        /// The time the withdrawal was created
         /// </summary>
-        public bool InvalidAddress { get; set; }
+        public DateTime CreatedAt { get; set; }
+        /// <summary>
+        /// The time the withdrawal was completed
+        /// </summary>
+        public DateTime? CompletedAt { get; set; }
+
+        /// <summary>
+        /// Withdrawal id as specified by the client
+        /// </summary>
+        public string ClientWithdrawalId { get; set; } = "";
     }
 }
