@@ -13,14 +13,14 @@ namespace Examples
     {
         static void Main(string[] args)
         {
-            BittrexClientV3.SetDefaultOptions(new BittrexClientOptions()
+            BittrexClient.SetDefaultOptions(new BittrexClientOptions()
             {
                 ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
                 LogVerbosity = LogVerbosity.Info,
                 LogWriters = new List<TextWriter>() { Console.Out }
             });
 
-            var client = new BittrexClientV3();
+            var client = new BittrexClient();
             
             // public
             var markets = client.GetSymbols();
@@ -50,21 +50,19 @@ namespace Examples
 
             // Websocket
             var socketClient = new BittrexSocketClient();
-            var subscription = socketClient.SubscribeToSymbolSummariesUpdate(summaries =>
+            var subscription = socketClient.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC", ticker =>
             {
-                Console.WriteLine($"BTC-USDT: {summaries.SingleOrDefault(s => s.Symbol == "BTC-USDT")?.Last}");
+                Console.WriteLine($"ETH-BTC: {ticker.LastTradeRate}");
             });
 
-            var subscription2 = socketClient.SubscribeToOrderBookUpdates("BTC-ETH", state =>
+            var subscription2 = socketClient.SubscribeToOrderBookUpdatesAsync("ETH-BTC", 25, state =>
             {
+                // Order book update
             });
 
-            var subscription3 = socketClient.SubscribeToAccountUpdates(data =>
+            var subscription3 = socketClient.SubscribeToBalanceUpdatesAsync(data =>
             {
                 // Balance update
-            }, data =>
-            {
-                // Order update
             });
 
             Console.ReadLine();

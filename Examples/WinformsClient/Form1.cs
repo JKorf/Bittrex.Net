@@ -9,7 +9,7 @@ namespace WinformsClient
 {
     public partial class Form1 : Form
     {
-        private BittrexSocketClientV3 socketClient;
+        private BittrexSocketClient socketClient;
         
         public Form1()
         {
@@ -20,13 +20,13 @@ namespace WinformsClient
 
         private void LoadDone(object sender, EventArgs e)
         {
-            socketClient = new BittrexSocketClientV3();
+            socketClient = new BittrexSocketClient();
             socketClient.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC",  data =>
             {
                 UpdateLastPrice(data.LastTradeRate);
             });
             
-            using(var client = new BittrexClientV3())
+            using(var client = new BittrexClient())
             {
                 var result = client.GetTicker("ETH-BTC");
                 UpdateLastPrice(result.Data.LastTradeRate);
