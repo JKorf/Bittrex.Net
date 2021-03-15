@@ -443,7 +443,7 @@ namespace Bittrex.Net
             var socket = (ISignalRSocket)s.Socket;
 
             var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", authProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
-            if (!result.Success)
+            if (!result.Success || !result.Data.Success)
             {
                 log.Write(LogVerbosity.Error, "Authentication failed, api key/secret is probably invalid");
                 return new CallResult<bool>(false, result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
