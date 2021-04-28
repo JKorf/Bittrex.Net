@@ -42,8 +42,14 @@ namespace Bittrex.Net
                 result.Add("Api-Key", Credentials.Key.GetString());
             result.Add("Api-Timestamp", Math.Round((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
             var jsonContent = "";
-            if(method != HttpMethod.Get && method != HttpMethod.Delete)
-                jsonContent = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+            if (method != HttpMethod.Get && method != HttpMethod.Delete)
+            {
+                if(parameters.First().Key == string.Empty)
+                    jsonContent = JsonConvert.SerializeObject(parameters.First().Value);
+                else
+                    jsonContent = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+
+            }
             result.Add("Api-Content-Hash", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(jsonContent))).ToLower(CultureInfo.InvariantCulture));
 
             uri = WebUtility.UrlDecode(uri); // Sign needs the query parameters to not be encoded

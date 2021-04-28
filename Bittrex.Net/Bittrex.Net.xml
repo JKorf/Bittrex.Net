@@ -884,6 +884,38 @@
             <param name="ct">Cancellation token</param>
             <returns>Condition order</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClient.PlaceMultipleOrders(Bittrex.Net.Objects.BittrexNewBatchOrder[],System.Threading.CancellationToken)">
+            <summary>
+            Place multiple orders in a single call
+            </summary>
+            <param name="orders">Orders to place</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.PlaceMultipleOrdersAsync(Bittrex.Net.Objects.BittrexNewBatchOrder[],System.Threading.CancellationToken)">
+            <summary>
+            Place multiple orders in a single call
+            </summary>
+            <param name="orders">Orders to place</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.CancelMultipleOrders(System.String[],System.Threading.CancellationToken)">
+            <summary>
+            Cancel multiple orders in a single call
+            </summary>
+            <param name="ordersToCancel">Orders to cancel</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.CancelMultipleOrdersAsync(System.String[],System.Threading.CancellationToken)">
+            <summary>
+            Cancel multiple orders in a single call
+            </summary>
+            <param name="ordersToCancel">Orders to cancel</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClient.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc />
         </member>
@@ -1758,6 +1790,38 @@
             <param name="useAwards">Option to use Bittrex credits for the order</param>
             <param name="ct">Cancellation token</param>
             <returns>The order info</returns>
+        </member>
+        <member name="M:Bittrex.Net.IBittrexClient.PlaceMultipleOrders(Bittrex.Net.Objects.BittrexNewBatchOrder[],System.Threading.CancellationToken)">
+            <summary>
+            Place multiple orders in a single call
+            </summary>
+            <param name="orders">Orders to place</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.IBittrexClient.PlaceMultipleOrdersAsync(Bittrex.Net.Objects.BittrexNewBatchOrder[],System.Threading.CancellationToken)">
+            <summary>
+            Place multiple orders in a single call
+            </summary>
+            <param name="orders">Orders to place</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.IBittrexClient.CancelMultipleOrders(System.String[],System.Threading.CancellationToken)">
+            <summary>
+            Cancel multiple orders in a single call
+            </summary>
+            <param name="ordersToCancel">Orders to cancel</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        </member>
+        <member name="M:Bittrex.Net.IBittrexClient.CancelMultipleOrdersAsync(System.String[],System.Threading.CancellationToken)">
+            <summary>
+            Cancel multiple orders in a single call
+            </summary>
+            <param name="ordersToCancel">Orders to cancel</param>
+            <param name="ct">Cancellation token</param>
+            <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
         </member>
         <member name="M:Bittrex.Net.IBittrexClient.GetOpenWithdrawals(System.String,System.Nullable{Bittrex.Net.Objects.WithdrawalStatus},System.Threading.CancellationToken)">
             <summary>
@@ -2813,6 +2877,65 @@
             <summary>
             Allowed to sell
             </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexNewBatchOrder">
+            <summary>
+            New batch order info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.Symbol">
+            <summary>
+            Symbol the order is for
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.Direction">
+            <summary>
+            Order direction
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.Type">
+            <summary>
+            Order type
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.TimeInForce">
+            <summary>
+            Time in force
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.Quantity">
+            <summary>
+            Quantity
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.Limit">
+            <summary>
+            Limit price
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.Ceiling">
+            <summary>
+            Ceiling price
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.ClientOrderId">
+            <summary>
+            Client order id
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexNewBatchOrder.UseAwards">
+            <summary>
+            Use awards
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexNewBatchOrder.#ctor(System.String,Bittrex.Net.Objects.OrderSide,Bittrex.Net.Objects.OrderType,Bittrex.Net.Objects.TimeInForce)">
+            <summary>
+            Create a new batch order
+            </summary>
+            <param name="symbol">Symbol of the order</param>
+            <param name="direction">Direction of the order</param>
+            <param name="type">Type of the order</param>
+            <param name="timeInForce">Time in force</param>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexClientOptions">
             <summary>

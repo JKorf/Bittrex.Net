@@ -644,6 +644,38 @@ namespace Bittrex.Net
         Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide direction, OrderType type, TimeInForce timeInForce, decimal? quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);
 
         /// <summary>
+        /// Place multiple orders in a single call
+        /// </summary>
+        /// <param name="orders">Orders to place</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        WebCallResult<IEnumerable<CallResult<BittrexOrder>>> PlaceMultipleOrders(BittrexNewBatchOrder[] orders, CancellationToken ct = default);
+
+        /// <summary>
+        /// Place multiple orders in a single call
+        /// </summary>
+        /// <param name="orders">Orders to place</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> PlaceMultipleOrdersAsync(BittrexNewBatchOrder[] orders, CancellationToken ct = default);
+
+        /// <summary>
+        /// Cancel multiple orders in a single call
+        /// </summary>
+        /// <param name="ordersToCancel">Orders to cancel</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        WebCallResult<IEnumerable<CallResult<BittrexOrder>>> CancelMultipleOrders(string[] ordersToCancel, CancellationToken ct = default);
+
+        /// <summary>
+        /// Cancel multiple orders in a single call
+        /// </summary>
+        /// <param name="ordersToCancel">Orders to cancel</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> CancelMultipleOrdersAsync(string[] ordersToCancel, CancellationToken ct = default);
+
+        /// <summary>
         /// Gets a list of open withdrawals
         /// </summary>
         /// <param name="currency">Filter by currency</param>

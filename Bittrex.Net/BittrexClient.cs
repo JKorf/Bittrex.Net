@@ -12,6 +12,7 @@ using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -1288,6 +1289,114 @@ namespace Bittrex.Net
         }
         #endregion
 
+        #region batch
+        /// <summary>
+        /// Place multiple orders in a single call
+        /// </summary>
+        /// <param name="orders">Orders to place</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        public WebCallResult<IEnumerable<CallResult<BittrexOrder>>> PlaceMultipleOrders(BittrexNewBatchOrder[] orders, CancellationToken ct = default) => PlaceMultipleOrdersAsync(orders, ct).Result;
+
+        /// <summary>
+        /// Place multiple orders in a single call
+        /// </summary>
+        /// <param name="orders">Orders to place</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+        public async Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> PlaceMultipleOrdersAsync(BittrexNewBatchOrder[] orders, CancellationToken ct = default)
+        {
+            orders?.ValidateNotNull(nameof(orders));
+            if (!orders.Any())
+                throw new ArgumentException("No orders provided");
+
+            var wrapper = new Dictionary<string, object>();            
+            var orderParameters = new Dictionary<string, object>[orders.Length];
+            int i = 0;
+            foreach(var order in orders)
+            {
+                var parameters = new Dictionary<string, object>();
+                parameters.Add("resource", "ORDER");
+                parameters.Add("operation", "POST");
+                var orderParameter = new Dictionary<string, object>()
+                {
+                    {"marketSymbol", order.Symbol},
+                    {"direction", JsonConvert.SerializeObject(order.Direction, new OrderSideConverter(false))},
+                    {"type", JsonConvert.SerializeObject(order.Type, new OrderTypeConverter(false)) },
+                    {"timeInForce",  JsonConvert.SerializeObject(order.TimeInForce, new TimeInForceConverter(false)) }
+                };
+                orderParameter.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture));;
+                orderParameter.AddOptionalParameter("limit", order.Limit?.ToString(CultureInfo.InvariantCulture));
+                orderParameter.AddOptionalParameter("clientOrderId", order.ClientOrderId);
+                orderParameter.AddOptionalParameter("ceiling", order.Ceiling?.ToString(CultureInfo.InvariantCulture));
+                orderParameter.AddOptionalParameter("useAwards", order.UseAwards);
+                parameters.Add("payload", orderParameter);
+                orderParameters[i] = parameters;
+                i++;
+            }
+            wrapper.Add(string.Empty, orderParameters);
+
+            var serializer = JsonSerializer.Create(new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter> 
+                { 
+                    new BatchResultConverter<BittrexOrder>()
+                }
+            });
+
+            return await SendRequest<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Cancel multiple orders in a single call
+        /// </summary>
+        /// <param name="ordersToCancel">Orders to cancel</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        public WebCallResult<IEnumerable<CallResult<BittrexOrder>>> CancelMultipleOrders(string[] ordersToCancel, CancellationToken ct = default) => CancelMultipleOrdersAsync(ordersToCancel, ct).Result;
+
+        /// <summary>
+        /// Cancel multiple orders in a single call
+        /// </summary>
+        /// <param name="ordersToCancel">Orders to cancel</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+        public async Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> CancelMultipleOrdersAsync(string[] ordersToCancel, CancellationToken ct = default)
+        {
+            ordersToCancel?.ValidateNotNull(nameof(ordersToCancel));
+            if (!ordersToCancel.Any())
+                throw new ArgumentException("No orders provided");
+
+            var wrapper = new Dictionary<string, object>();
+            var orderParameters = new Dictionary<string, object>[ordersToCancel.Length];
+            int i = 0;
+            foreach (var order in ordersToCancel)
+            {
+                var parameters = new Dictionary<string, object>();
+                parameters.Add("resource", "ORDER");
+                parameters.Add("operation", "DELETE");
+                var orderParameter = new Dictionary<string, object>()
+                {
+                    {"id", order},                    
+                };
+                parameters.Add("payload", orderParameter);
+                orderParameters[i] = parameters;
+                i++;
+            }
+            wrapper.Add(string.Empty, orderParameters);
+
+            var serializer = JsonSerializer.Create(new JsonSerializerSettings
+            {
+                Converters = new List<JsonConverter>
+                {
+                    new BatchResultConverter<BittrexOrder>()
+                }
+            });
+
+            return await SendRequest<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
+        }
+        #endregion
+
         #region common interface
         async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
         {
@@ -1394,6 +1503,20 @@ namespace Bittrex.Net
                 info += "; Data: " + data["data"];
 
             return new ServerError(info);
+        }
+
+        protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
+        {
+            if(parameters.First().Key == string.Empty)
+            {
+                var stringData = JsonConvert.SerializeObject(parameters.First().Value);
+                request.SetContent(stringData, contentType);
+            }
+            else
+            {
+                var stringData = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+                request.SetContent(stringData, contentType);
+            }
         }
 
         /// <summary>
