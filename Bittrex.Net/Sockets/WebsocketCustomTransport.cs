@@ -55,7 +55,7 @@ namespace Bittrex.Net.Sockets
                     cookies.Add(cookie.Name, cookie.Value);
             }
 
-            websocket = new BaseSocket(log, connectUrl, cookies, connection.Headers);
+            websocket = new CryptoExchangeWebSocketClient(log, connectUrl, cookies, connection.Headers);
             websocket.OnError += WebSocketOnError;
             websocket.OnClose += WebSocketOnClosed;
             websocket.OnMessage += WebSocketOnMessageReceived;
@@ -64,7 +64,7 @@ namespace Bittrex.Net.Sockets
             if (connection.Proxy != null)
             {
                 var proxy = connection.Proxy.GetProxy(new Uri(connectUrl));
-                websocket.SetProxy(proxy.Host, proxy.Port);
+                // websocket.SetProxy(proxy.Host, proxy.Port); TODO
             }
 
             if(!websocket.Connect().Result)

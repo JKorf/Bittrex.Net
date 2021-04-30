@@ -1109,7 +1109,7 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.GetWebsocket(System.String,System.Boolean)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.GetSocketConnection(System.String,System.Boolean)">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeAndWait(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">

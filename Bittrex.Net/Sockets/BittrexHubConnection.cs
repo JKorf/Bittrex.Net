@@ -14,7 +14,7 @@ using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
-    internal class BittrexHubConnection: BaseSocket, ISignalRSocket
+    internal class BittrexHubConnection: CryptoExchangeWebSocketClient, ISignalRSocket
     {
         private readonly HubConnection connection;
         private IHubProxy? hubProxy;
@@ -52,9 +52,11 @@ namespace Bittrex.Net.Sockets
             hubProxy = connection.CreateHubProxy(name);
         }
 
-        public override void SetProxy(string proxyHost, int proxyPort)
+        public override void SetProxy(ApiProxy proxy)
         {
-            connection.Proxy = new WebProxy(proxyHost, proxyPort);
+            connection.Proxy = new WebProxy(proxy.Host, proxy.Port);
+            if (!string.IsNullOrEmpty(proxy.Login))
+                connection.Proxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
         }
         
         public async Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
