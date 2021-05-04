@@ -41,7 +41,7 @@ namespace Bittrex.Net.Objects
         /// The time in force of the order
         /// </summary>
         [JsonConverter(typeof(TimeInForceConverter))]
-        public TimeInForce TimeInForce { get; set; }
+        public TimeInForce? TimeInForce { get; set; }
 
         /// <summary>
         /// Id to track the order by
