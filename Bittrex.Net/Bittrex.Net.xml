@@ -544,6 +544,22 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClient.GetExecutionById(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets info on an execution
+            </summary>
+            <param name="executionId">The id of the exeuction to retrieve</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Exceution info</returns>
+        </member>
+        <member name="M:Bittrex.Net.BittrexClient.GetExecutionByIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets info on an execution
+            </summary>
+            <param name="executionId">The id of the exeuction to retrieve</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Exceution info</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClient.GetExecutions(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades)

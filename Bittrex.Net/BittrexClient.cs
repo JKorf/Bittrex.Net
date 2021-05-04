@@ -783,6 +783,26 @@ namespace Bittrex.Net
         }
 
         /// <summary>
+        /// Gets info on an execution
+        /// </summary>
+        /// <param name="executionId">The id of the exeuction to retrieve</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Exceution info</returns>
+        public WebCallResult<BittrexExecution> GetExecutionById(string executionId, CancellationToken ct = default) => GetExecutionByIdAsync(executionId, ct).Result;
+
+        /// <summary>
+        /// Gets info on an execution
+        /// </summary>
+        /// <param name="executionId">The id of the exeuction to retrieve</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Exceution info</returns>
+        public async Task<WebCallResult<BittrexExecution>> GetExecutionByIdAsync(string executionId, CancellationToken ct = default)
+        {
+            executionId.ValidateNotNull(nameof(executionId));
+            return await SendRequest<BittrexExecution>(GetUrl($"executions/{executionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Gets executions (trades)
         /// </summary>
         /// <param name="symbol">Filter by symbol</param>

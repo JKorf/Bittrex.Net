@@ -537,6 +537,22 @@ namespace Bittrex.Net
         Task<WebCallResult<BittrexOrder>> GetOrderAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
+        /// Gets info on an execution
+        /// </summary>
+        /// <param name="executionId">The id of the exeuction to retrieve</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Exceution info</returns>
+        WebCallResult<BittrexExecution> GetExecutionById(string executionId, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets info on an execution
+        /// </summary>
+        /// <param name="executionId">The id of the exeuction to retrieve</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Exceution info</returns>
+        Task<WebCallResult<BittrexExecution>> GetExecutionByIdAsync(string executionId, CancellationToken ct = default);
+
+        /// <summary>
         /// Gets executions (trades)
         /// </summary>
         /// <param name="symbol">Filter by symbol</param>
