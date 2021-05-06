@@ -7,9 +7,9 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
     <Authors>JKorf</Authors>
-    <PackageVersion>5.2.0-beta1</PackageVersion>
+    <PackageVersion>5.2.0-beta2</PackageVersion>
     <AssemblyVersion>5.2.0</AssemblyVersion>
-    <FileVersion>5.2.0-beta1</FileVersion>
+    <FileVersion>5.2.0-beta2</FileVersion>
     <Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -20,7 +20,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>5.2.0-beta1 - Updated to CryptoExchange.Net 4.0.0-beta1, new websocket implementation</PackageReleaseNotes>
+    <PackageReleaseNotes>5.2.0-beta2 - Updated CryptoExchange.Net</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
@@ -39,18 +39,17 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CryptoExchange.Net" Version="4.0.0-beta1" />
+    <PackageReference Include="CryptoExchange.Net" Version="4.0.0-beta4" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-
-	  <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
-	  <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-	  </PackageReference>
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon\icon.png" Pack="true" PackagePath="\" />
