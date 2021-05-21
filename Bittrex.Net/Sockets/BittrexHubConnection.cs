@@ -67,13 +67,13 @@ namespace Bittrex.Net.Sockets
             {
                 try
                 {
-                    log.Write(LogVerbosity.Debug, $"Sending data: {call}, {ArrayToString(pars)}");
+                    log.Write(LogVerbosity.Debug, $"Socket {Id} sending data: {call}, {ArrayToString(pars)}");
                     var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub, null);
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogVerbosity.Warning, $"Failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
+                    log.Write(LogVerbosity.Warning, $"Socket {Id} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
                     error = new UnknownError("Failed to invoke proxy: " + (e.InnerException?.Message ?? e.Message));
                 }
             }
