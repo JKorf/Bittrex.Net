@@ -11,6 +11,7 @@ using Microsoft.AspNet.SignalR.Client.Http;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Objects;
+using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net.Sockets
 {
@@ -69,13 +70,13 @@ namespace Bittrex.Net.Sockets
             {
                 try
                 {
-                    log.Write(LogVerbosity.Debug, $"Sending data: {call}, {ArrayToString(pars)}");
+                    log.Write(LogLevel.Debug, $"Sending data: {call}, {ArrayToString(pars)}");
                     var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub, null);
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogVerbosity.Warning, $"Failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
+                    log.Write(LogLevel.Warning, $"Failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
                     error = new UnknownError("Failed to invoke proxy: " + (e.InnerException?.Message ?? e.Message));
                 }
             }

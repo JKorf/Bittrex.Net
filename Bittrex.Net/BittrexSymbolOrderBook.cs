@@ -8,6 +8,7 @@ using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
+using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net
 {
@@ -33,11 +34,11 @@ namespace Bittrex.Net
             _limit = limit;
             socketClient = options?.SocketClient ?? new BittrexSocketClient(new BittrexSocketClientOptions()
             {
-                LogVerbosity = options?.LogVerbosity ?? LogVerbosity.Info
+                LogLevel = options?.LogLevel ?? LogLevel.Information
             });
             client = new BittrexClient(new BittrexClientOptions()
             {
-                LogVerbosity = options?.LogVerbosity ?? LogVerbosity.Info
+                LogLevel = options?.LogLevel ?? LogLevel.Information
             });
         }
 
@@ -62,9 +63,9 @@ namespace Bittrex.Net
             return new CallResult<UpdateSubscription>(subResult.Data, null);
         }
 
-        private void HandleUpdate(BittrexOrderBookUpdate data)
+        private void HandleUpdate(DataEvent<BittrexOrderBookUpdate> data)
         {
-            UpdateOrderBook(data.Sequence, data.BidDeltas, data.AskDeltas);
+            UpdateOrderBook(data.Data.Sequence, data.Data.BidDeltas, data.Data.AskDeltas);
         }
 
         /// <inheritdoc />
