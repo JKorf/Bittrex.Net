@@ -488,12 +488,12 @@ namespace Bittrex.Net
             string? symbol = null;
             if (token["marketSymbol"] != null)
                 symbol = (string)token["marketSymbol"];
-            if (token["symbol"] != null)
+            else if (token["symbol"] != null)
                 symbol = (string)token["symbol"];
-            if (token["deltas"] != null && token["deltas"]["marketSymbol"] != null)
-                symbol = (string)token["deltas"]["marketSymbol"];
-            if (token["deltas"] != null && token["deltas"]["symbol"] != null)
-                symbol = (string)token["deltas"]["symbol"];
+            else if (token["deltas"] != null && token["deltas"][0]["marketSymbol"] != null)
+                symbol = (string)token["deltas"][0]["marketSymbol"];
+            else if (token["deltas"] != null && token["deltas"][0]["symbol"] != null)
+                symbol = (string)token["deltas"][0]["symbol"];
 
 
             var decodeResult = Deserialize<T>(token);
