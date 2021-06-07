@@ -49,5 +49,6 @@ namespace Bittrex.Net.Objects
         decimal ICommonTrade.CommonQuantity => Quantity;
         decimal ICommonTrade.CommonFee => Commission;
         string ICommonTrade.CommonFeeAsset => Symbol.Split('-').Last();
+        DateTime ICommonTrade.CommonTradeTime => ExecutedAt;
     }
 }

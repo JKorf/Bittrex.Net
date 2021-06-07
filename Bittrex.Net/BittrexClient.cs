@@ -26,8 +26,18 @@ namespace Bittrex.Net
     {
         #region fields
         private static BittrexClientOptions defaultOptions = new BittrexClientOptions();
+
         private static BittrexClientOptions DefaultOptions => defaultOptions.Copy();
         #endregion
+
+        /// <summary>
+        /// Event triggered when an order is placed via this client
+        /// </summary>
+        public event Action<ICommonOrderId> OnOrderPlaced;
+        /// <summary>
+        /// Event triggered when an order is cancelled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
+        /// </summary>
+        public event Action<ICommonOrderId> OnOrderCanceled;
 
         #region ctor
         /// <summary>
@@ -571,7 +581,10 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexOrder>> CancelOrderAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
-            return await SendRequest<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+            var result = await SendRequest<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+            if (result)
+                OnOrderCanceled?.Invoke(result.Data);
+            return result;
         }
         
         /// <summary>
@@ -617,7 +630,10 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("ceiling", ceiling?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("useAwards", useAwards);
 
-            return await SendRequest<BittrexOrder>(GetUrl("orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            var result = await SendRequest<BittrexOrder>(GetUrl("orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            if (result)
+                OnOrderPlaced?.Invoke(result.Data);
+            return result;
         }
 
         #endregion

@@ -9,6 +9,16 @@
             Client for the Bittrex V3 API
             </summary>
         </member>
+        <member name="E:Bittrex.Net.BittrexClient.OnOrderPlaced">
+            <summary>
+            Event triggered when an order is placed via this client
+            </summary>
+        </member>
+        <member name="E:Bittrex.Net.BittrexClient.OnOrderCanceled">
+            <summary>
+            Event triggered when an order is cancelled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
+            </summary>
+        </member>
         <member name="M:Bittrex.Net.BittrexClient.#ctor">
             <summary>
             Create a new instance of BittrexClient using the default options
