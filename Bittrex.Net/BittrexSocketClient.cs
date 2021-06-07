@@ -47,7 +47,7 @@ namespace Bittrex.Net
         /// <param name="options">Options to use for this client</param>
         public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
-            SocketFactory = new ConnectionFactory();
+            SocketFactory = new ConnectionFactory(options.Proxy);
 
             SocketCombineTarget = 10;
 

@@ -19,13 +19,16 @@ namespace Bittrex.Net.Sockets
     {
         private readonly HubConnection connection;
         private IHubProxy? hubProxy;
+        private ApiProxy? proxy;
+
         public new string Url { get; }
         
-        public BittrexHubConnection(Log log, HubConnection connection): base(null!, connection.Url)
+        public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection): base(null!, connection.Url)
         {
             Url = connection.Url;
             this.connection = connection;
             this.log = log;
+            this.proxy = proxy;
 
             connection.StateChanged += StateChangeHandler;
             connection.Error += s => Handle(errorHandlers, s);
@@ -104,7 +107,7 @@ namespace Bittrex.Net.Sockets
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(log, client, DataInterpreterString)
+                new WebsocketCustomTransport(log, client, proxy, DataInterpreterString)
             });
             connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try
