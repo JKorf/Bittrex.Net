@@ -81,6 +81,10 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 6.0.0-beta1 - 09 Jul 2021
+    * Added Async postfix for async methods
+    * Updated CryptoExchange.Net
+
 * Version 5.2.0-beta5 - 07 Jun 2021
     * Fixed BittrexSocketClient Proxy option
     * Updated SignalR client package version

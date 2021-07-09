@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
@@ -7,9 +7,9 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
     <Authors>JKorf</Authors>
-    <PackageVersion>5.2.0-beta5</PackageVersion>
-    <AssemblyVersion>5.2.0</AssemblyVersion>
-    <FileVersion>5.2.0-beta5</FileVersion>
+    <PackageVersion>6.0.0-beta1</PackageVersion>
+    <AssemblyVersion>6.0.0</AssemblyVersion>
+    <FileVersion>6.0.0-beta1</FileVersion>
     <Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -20,7 +20,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>5.2.0-beta5 - Fixed BittrexSocketClient Proxy option, Updated SignalR client package version, Updated CryptoExchange.Net</PackageReleaseNotes>
+    <PackageReleaseNotes>6.0.0-beta1 - Added Async postfix for async methods, Updated CryptoExchange.Net</PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
