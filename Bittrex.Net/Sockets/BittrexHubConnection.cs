@@ -103,7 +103,7 @@ namespace Bittrex.Net.Sockets
             return result;
         }
 
-        public override async Task<bool> Connect()
+        public override async Task<bool> ConnectAsync()
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
@@ -121,7 +121,7 @@ namespace Bittrex.Net.Sockets
             }
         }
 
-        public override async Task Close()
+        public override async Task CloseAsync()
         {
             await Task.Run(() =>
             {

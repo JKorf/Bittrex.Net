@@ -82,7 +82,7 @@ namespace Bittrex.Net
         /// <returns>Time of the server</returns>
         public async Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
         {
-            var result = await SendRequest<BittrexServerTime>(GetUrl("ping"), HttpMethod.Get, ct).ConfigureAwait(false);
+            var result = await SendRequestAsync<BittrexServerTime>(GetUrl("ping"), HttpMethod.Get, ct).ConfigureAwait(false);
             return result.As<DateTime>(result.Data?.ServerTime ?? default);
         }
 
@@ -95,7 +95,7 @@ namespace Bittrex.Net
         /// <returns>List of symbols</returns>
         public async Task<WebCallResult<IEnumerable<BittrexSymbol>>> GetSymbolsAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexSymbol>>(GetUrl("markets"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexSymbol>>(GetUrl("markets"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Bittrex.Net
         {
             currency.ValidateNotNull(nameof(currency));
 
-            return await SendRequest<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies/" + currency), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies/" + currency), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<WebCallResult<IEnumerable<BittrexCurrencyPermission>>> GetCurrencyPermissionsAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Bittrex.Net
             symbol.ValidateNotNull(nameof(symbol));
             symbol.ValidateBittrexSymbol();
 
-            return await SendRequest<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets/" + symbol), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets/" + symbol), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Bittrex.Net
         /// <returns></returns>
         public async Task<WebCallResult<IEnumerable<BittrexMarketPermission>>> GetSymbolPermissionsAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexSymbol>> GetSymbolAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<BittrexSymbol>(GetUrl("markets/" + symbol), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexSymbol>(GetUrl("markets/" + symbol), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Bittrex.Net
         /// <returns>List of symbol summaries</returns>
         public async Task<WebCallResult<IEnumerable<BittrexSymbolSummary>>> GetSymbolSummariesAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexSymbolSummary>>(GetUrl("markets/summaries"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexSymbolSummary>>(GetUrl("markets/summaries"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexSymbolSummary>> GetSymbolSummaryAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<BittrexSymbolSummary>(GetUrl($"markets/{symbol}/summary"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexSymbolSummary>(GetUrl($"markets/{symbol}/summary"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("depth", limit?.ToString(CultureInfo.InvariantCulture));
 
-            var result = await SendRequest<BittrexOrderBook>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
+            var result = await SendRequestAsync<BittrexOrderBook>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
             if(result.Data != null)
                 result.Data.Sequence = result.ResponseHeaders!.GetSequence() ?? 0;
             return result;
@@ -209,7 +209,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<IEnumerable<BittrexSymbolTrade>>> GetSymbolTradesAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequest<IEnumerable<BittrexSymbolTrade>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexSymbolTrade>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexTick>> GetTickerAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            var result = await SendRequest<BittrexTick>(GetUrl($"markets/{symbol}/ticker"), HttpMethod.Get, ct).ConfigureAwait(false);
+            var result = await SendRequestAsync<BittrexTick>(GetUrl($"markets/{symbol}/ticker"), HttpMethod.Get, ct).ConfigureAwait(false);
             if (result.Success)
                 result.Data.Symbol = symbol;
             return result;
@@ -234,7 +234,7 @@ namespace Bittrex.Net
         /// <returns>Symbol tickers</returns>
         public async Task<WebCallResult<IEnumerable<BittrexTick>>> GetTickersAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexTick>>(GetUrl("markets/tickers"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexTick>>(GetUrl("markets/tickers"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace Bittrex.Net
         {
             symbol.ValidateBittrexSymbol();
 
-            return await SendRequest<IEnumerable<BittrexKline>>(GetUrl($"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant() : "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/recent"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexKline>>(GetUrl($"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant() : "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/recent"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace Bittrex.Net
             if (day.HasValue)
                 url += "/" + day;
 
-            return await SendRequest<IEnumerable<BittrexKline>>(GetUrl(url), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexKline>>(GetUrl(url), HttpMethod.Get, ct).ConfigureAwait(false);
         }
         #endregion
 
@@ -296,7 +296,7 @@ namespace Bittrex.Net
         /// <returns>List of currencies</returns>
         public async Task<WebCallResult<IEnumerable<BittrexCurrency>>> GetCurrenciesAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexCurrency>>(GetUrl("currencies"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexCurrency>>(GetUrl("currencies"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexCurrency>> GetCurrencyAsync(string currency, CancellationToken ct = default)
         {
             currency.ValidateNotNull(nameof(currency));
-            return await SendRequest<BittrexCurrency>(GetUrl($"currencies/{currency}"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexCurrency>(GetUrl($"currencies/{currency}"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
         #endregion
 
@@ -321,7 +321,7 @@ namespace Bittrex.Net
         /// <returns>Account info</returns>
         public async Task<WebCallResult<BittrexAccount>> GetAccountAsync(CancellationToken ct = default)
         {
-            return await SendRequest<BittrexAccount>(GetUrl("account"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexAccount>(GetUrl("account"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
        
@@ -332,7 +332,7 @@ namespace Bittrex.Net
         /// <returns>Account volume</returns>
         public async Task<WebCallResult<BittrexAccountVolume>> GetAccountVolumeAsync(CancellationToken ct = default)
         {
-            return await SendRequest<BittrexAccountVolume>(GetUrl("account/volume"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexAccountVolume>(GetUrl("account/volume"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
         #endregion
 
@@ -346,7 +346,7 @@ namespace Bittrex.Net
         /// <returns>List of balances</returns>
         public async Task<WebCallResult<IEnumerable<BittrexBalance>>> GetBalancesAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexBalance>>(GetUrl("balances"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexBalance>>(GetUrl("balances"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
               
         /// <summary>
@@ -358,7 +358,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexBalance>> GetBalanceAsync(string currency, CancellationToken ct = default)
         {
             currency.ValidateNotNull(nameof(currency));
-            return await SendRequest<BittrexBalance>(GetUrl($"balances/{currency}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexBalance>(GetUrl($"balances/{currency}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
         #endregion
 
@@ -371,7 +371,7 @@ namespace Bittrex.Net
         /// <returns>List of deposit addresses</returns>
         public async Task<WebCallResult<IEnumerable<BittrexDepositAddress>>> GetDepositAddressesAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexDepositAddress>>(GetUrl("addresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexDepositAddress>>(GetUrl("addresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency, CancellationToken ct = default)
         {
             currency.ValidateNotNull(nameof(currency));
-            return await SendRequest<BittrexDepositAddress>(GetUrl($"addresses/{currency}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexDepositAddress>(GetUrl($"addresses/{currency}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -400,7 +400,7 @@ namespace Bittrex.Net
                 { "currencySymbol", currency }
             };
 
-            return await SendRequest<BittrexDepositAddress>(GetUrl("addresses"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexDepositAddress>(GetUrl("addresses"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
         #endregion
 
@@ -417,7 +417,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("currencySymbol", currency);
 
-            return await SendRequest<IEnumerable<BittrexDeposit>>(GetUrl("deposits/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexDeposit>>(GetUrl("deposits/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequest<IEnumerable<BittrexDeposit>>(GetUrl("deposits/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexDeposit>>(GetUrl("deposits/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -460,7 +460,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetDepositsByTransactionIdAsync(string transactionId, CancellationToken ct = default)
         {
             transactionId.ValidateNotNull(nameof(transactionId));
-            return await SendRequest<IEnumerable<BittrexDeposit>>(GetUrl($"deposits/ByTxId/{transactionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexDeposit>>(GetUrl($"deposits/ByTxId/{transactionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -472,7 +472,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexDeposit>> GetDepositAsync(string depositId, CancellationToken ct = default)
         {
             depositId.ValidateNotNull(nameof(depositId));
-            return await SendRequest<BittrexDeposit>(GetUrl($"deposits/{depositId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexDeposit>(GetUrl($"deposits/{depositId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         #endregion
@@ -505,7 +505,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequest<IEnumerable<BittrexOrder>>(GetUrl("orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexOrder>>(GetUrl("orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
                 
         /// <summary>
@@ -519,7 +519,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
 
-            return await SendRequest<IEnumerable<BittrexOrder>>(GetUrl("orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexOrder>>(GetUrl("orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -531,7 +531,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexOrder>> GetOrderAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
-            return await SendRequest<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -557,7 +557,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequest<IEnumerable<BittrexExecution>>(GetUrl($"executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexExecution>>(GetUrl($"executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -569,7 +569,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderExecutionsAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
-            return await SendRequest<IEnumerable<BittrexExecution>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexExecution>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -581,7 +581,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexOrder>> CancelOrderAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
-            var result = await SendRequest<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+            var result = await SendRequestAsync<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
             if (result)
                 OnOrderCanceled?.Invoke(result.Data);
             return result;
@@ -597,7 +597,7 @@ namespace Bittrex.Net
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", market);
-            return await SendRequest<IEnumerable<BittrexOrder>>(GetUrl($"orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexOrder>>(GetUrl($"orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
         }
         
         /// <summary>
@@ -630,7 +630,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("ceiling", ceiling?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("useAwards", useAwards);
 
-            var result = await SendRequest<BittrexOrder>(GetUrl("orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            var result = await SendRequestAsync<BittrexOrder>(GetUrl("orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
             if (result)
                 OnOrderPlaced?.Invoke(result.Data);
             return result;
@@ -653,7 +653,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("currencySymbol", currency);
             parameters.AddOptionalParameter("status", status);
 
-            return await SendRequest<IEnumerable<BittrexWithdrawal>>(GetUrl("withdrawals/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexWithdrawal>>(GetUrl("withdrawals/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -684,7 +684,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequest<IEnumerable<BittrexWithdrawal>>(GetUrl("withdrawals/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexWithdrawal>>(GetUrl("withdrawals/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -696,7 +696,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetWithdrawalsByTransactionIdAsync(string transactionId, CancellationToken ct = default)
         {
             transactionId.ValidateNotNull(nameof(transactionId));
-            return await SendRequest<IEnumerable<BittrexWithdrawal>>(GetUrl($"withdrawals/ByTxId/{transactionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexWithdrawal>>(GetUrl($"withdrawals/ByTxId/{transactionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -708,7 +708,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexWithdrawal>> GetWithdrawalAsync(string id, CancellationToken ct = default)
         {
             id.ValidateNotNull(nameof(id));
-            return await SendRequest<BittrexWithdrawal>(GetUrl($"withdrawals/{id}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexWithdrawal>(GetUrl($"withdrawals/{id}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -720,7 +720,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexWithdrawal>> CancelWithdrawalAsync(string id, CancellationToken ct = default)
         {
             id.ValidateNotNull(nameof(id));
-            return await SendRequest<BittrexWithdrawal>(GetUrl($"withdrawals/{id}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexWithdrawal>(GetUrl($"withdrawals/{id}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -747,7 +747,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("cryptoAddressTag", addressTag);
             parameters.AddOptionalParameter("clientWithdrawalId", clientWithdrawId);
 
-            return await SendRequest<BittrexWithdrawal>(GetUrl("withdrawals"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexWithdrawal>(GetUrl("withdrawals"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -757,7 +757,7 @@ namespace Bittrex.Net
         /// <returns>List withdrawal address</returns>
         public async Task<WebCallResult<IEnumerable<BittrexWhitelistAddress>>> GetWithdrawalWhitelistAddressesAsync(CancellationToken ct = default)
         {
-            return await SendRequest<IEnumerable<BittrexWhitelistAddress>>(GetUrl($"withdrawals/whitelistAddresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexWhitelistAddress>>(GetUrl($"withdrawals/whitelistAddresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
         #endregion
 
@@ -771,7 +771,7 @@ namespace Bittrex.Net
         /// <returns>Conditional order</returns>
         public async Task<WebCallResult<BittrexConditionalOrder>> GetConditionalOrderAsync(string? orderId = null, CancellationToken ct = default)
         {
-            return await SendRequest<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -782,7 +782,7 @@ namespace Bittrex.Net
         /// <returns>Conditional order</returns>
         public async Task<WebCallResult<BittrexConditionalOrder>> CancelConditionalOrderAsync(string? orderId = null, CancellationToken ct = default)
         {
-            return await SendRequest<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -811,7 +811,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequest<IEnumerable<BittrexConditionalOrder>>(GetUrl("conditional-orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexConditionalOrder>>(GetUrl("conditional-orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -824,7 +824,7 @@ namespace Bittrex.Net
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("symbol", symbol);
-            return await SendRequest<IEnumerable<BittrexConditionalOrder>>(GetUrl($"conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexConditionalOrder>>(GetUrl($"conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -861,7 +861,7 @@ namespace Bittrex.Net
             parameters.AddOptionalParameter("orderToCreate", orderToCreate);
             parameters.AddOptionalParameter("orderToCancel", orderToCancel);
 
-            return await SendRequest<BittrexConditionalOrder>(GetUrl($"conditional-orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexConditionalOrder>(GetUrl($"conditional-orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
         #endregion
 
@@ -913,7 +913,7 @@ namespace Bittrex.Net
                 }
             });
 
-            return await SendRequest<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
         }
                 
         /// <summary>
@@ -954,7 +954,7 @@ namespace Bittrex.Net
                 }
             });
 
-            return await SendRequest<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
         }
         #endregion
 

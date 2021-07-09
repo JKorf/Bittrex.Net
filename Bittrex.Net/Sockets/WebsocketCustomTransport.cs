@@ -67,7 +67,7 @@ namespace Bittrex.Net.Sockets
             if (proxy != null)            
                 websocket.SetProxy(proxy);
 
-            if (!websocket.Connect().Result)
+            if (!websocket.ConnectAsync().Result)
                 OnStartFailed();
         }
 

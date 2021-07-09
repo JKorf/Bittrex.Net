@@ -680,10 +680,10 @@
         <member name="M:Bittrex.Net.BittrexSocketClient.GetSocketConnection(System.String,System.Boolean)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeAndWait(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeAndWaitAsync(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.QueryAndWait``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.QueryAndWaitAsync``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object)">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.HandleQueryResponse``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{``0}@)">
@@ -698,10 +698,10 @@
         <member name="M:Bittrex.Net.BittrexSocketClient.MessageMatchesHandler(Newtonsoft.Json.Linq.JToken,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.AuthenticateSocket(CryptoExchange.Net.Sockets.SocketConnection)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.AuthenticateSocketAsync(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.Unsubscribe(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription)">
+        <member name="M:Bittrex.Net.BittrexSocketClient.UnsubscribeAsync(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription)">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.CreateSocket(System.String)">
@@ -720,10 +720,10 @@
             <param name="limit">The number of entries in the order book</param>
             <param name="options">Options for the order book</param>
         </member>
-        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoStart">
+        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoStartAsync">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoResync">
+        <member name="M:Bittrex.Net.BittrexSymbolOrderBook.DoResyncAsync">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.BittrexSymbolOrderBook.Dispose">

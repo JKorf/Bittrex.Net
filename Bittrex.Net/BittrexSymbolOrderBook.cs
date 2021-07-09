@@ -43,7 +43,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<UpdateSubscription>> DoStart()
+        protected override async Task<CallResult<UpdateSubscription>> DoStartAsync()
         {
             var subResult = await socketClient.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
@@ -55,7 +55,7 @@ namespace Bittrex.Net
             var queryResult = await client.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
-                await socketClient.UnsubscribeAll().ConfigureAwait(false);
+                await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
                 return new CallResult<UpdateSubscription>(null, queryResult.Error);
             }
 
@@ -69,7 +69,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> DoResync()
+        protected override async Task<CallResult<bool>> DoResyncAsync()
         {
             var queryResult = await client.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)

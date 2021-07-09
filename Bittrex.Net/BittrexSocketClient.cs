@@ -51,7 +51,7 @@ namespace Bittrex.Net
 
             SocketCombineTarget = 10;
 
-            AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocket(messageEvent.Connection).ConfigureAwait(false));
+            AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
         #endregion
 
@@ -264,7 +264,7 @@ namespace Bittrex.Net
 
         private async Task<CallResult<UpdateSubscription>> Subscribe<T>(string[] channels, bool authenticated, Action<DataEvent<T>> handler)
         {
-            return await base.Subscribe<JToken>(new ConnectionRequest("subscribe", channels), null, authenticated, data =>
+            return await base.SubscribeAsync<JToken>(new ConnectionRequest("subscribe", channels), null, authenticated, data =>
             {
                 if ((string) data.Data["M"] == "heartbeat")
                 {
@@ -302,7 +302,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> SubscribeAndWait(SocketConnection socket, object request, SocketSubscription subscription)
+        protected override async Task<CallResult<bool>> SubscribeAndWaitAsync(SocketConnection socket, object request, SocketSubscription subscription)
         {
             var btRequest = (ConnectionRequest) request;
             if (btRequest.RequestName != null)
@@ -311,7 +311,7 @@ namespace Bittrex.Net
                 var data = subResult.Data?.First();
                 if (!subResult.Success || data?.Success == false)
                 {
-                    _ = socket.Close(subscription);
+                    _ = socket.CloseAsync(subscription);
                     return new CallResult<bool>(false, subResult.Error ?? new ServerError(data?.ErrorCode!));
                 }
             }
@@ -321,7 +321,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<T>> QueryAndWait<T>(SocketConnection socket, object request)
+        protected override async Task<CallResult<T>> QueryAndWaitAsync<T>(SocketConnection socket, object request)
         {
             var btRequest = (ConnectionRequest) request;
             var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
@@ -432,7 +432,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> AuthenticateSocket(SocketConnection s)
+        protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
             if (authProvider == null || authProvider.Credentials?.Key == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
@@ -455,7 +455,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
+        protected override async Task<bool> UnsubscribeAsync(SocketConnection connection, SocketSubscription s)
         {
             var bRequest = (ConnectionRequest)s.Request!;
             var unsub = new ConnectionRequest("unsubscribe", ((string[])bRequest!.Parameters[0])[0]);
