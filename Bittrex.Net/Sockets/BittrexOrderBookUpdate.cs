@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 
@@ -20,7 +19,7 @@ namespace Bittrex.Net.Sockets
         /// Symbol of the update
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Depth
         /// </summary>
@@ -28,10 +27,10 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Bid changes
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> BidDeltas { get; set; } = new List<BittrexOrderBookEntry>();
+        public IEnumerable<BittrexOrderBookEntry> BidDeltas { get; set; } = Array.Empty<BittrexOrderBookEntry>();
         /// <summary>
         /// Ask changes
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> AskDeltas { get; set; } = new List<BittrexOrderBookEntry>();
+        public IEnumerable<BittrexOrderBookEntry> AskDeltas { get; set; } = Array.Empty<BittrexOrderBookEntry>();
     }
 }

@@ -11,7 +11,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// the symbol the summary is for
         /// </summary>
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// The high price for this symbol in the last 24 hours
         /// </summary>

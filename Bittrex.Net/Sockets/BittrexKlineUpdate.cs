@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Bittrex.Net.Converters;
+﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 
@@ -21,7 +18,7 @@ namespace Bittrex.Net.Sockets
         /// Symbol of the update
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Interval
         /// </summary>

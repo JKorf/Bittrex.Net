@@ -11,16 +11,16 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Id of the order
         /// </summary>
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
         /// <summary>
         /// The symbol
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Operand type
         /// </summary>
-        public string Operand { get; set; } = "";
+        public string Operand { get; set; } = string.Empty;
         /// <summary>
         /// Percent above the minimum price (GTE) or below the maximum price (LTE) at which to trigger
         /// </summary>
@@ -48,7 +48,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Status
         /// </summary>
-        public string Status { get; set; } = "";
+        public string Status { get; set; } = string.Empty;
         /// <summary>
         /// If a conditional order fails to create an order when triggered, the failure reason will appear here
         /// </summary>

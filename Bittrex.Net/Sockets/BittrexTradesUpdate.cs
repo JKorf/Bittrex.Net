@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 
@@ -20,11 +19,11 @@ namespace Bittrex.Net.Sockets
         /// Symbol
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
         /// Trades
         /// </summary>
-        public IEnumerable<BittrexSymbolTrade> Deltas { get; set; } = new List<BittrexSymbolTrade>();
+        public IEnumerable<BittrexSymbolTrade> Deltas { get; set; } = Array.Empty<BittrexSymbolTrade>();
     }
 }

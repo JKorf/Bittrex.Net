@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Converters;
-using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -33,11 +31,11 @@ namespace Bittrex.Net
         /// <summary>
         /// Event triggered when an order is placed via this client
         /// </summary>
-        public event Action<ICommonOrderId> OnOrderPlaced;
+        public event Action<ICommonOrderId>? OnOrderPlaced;
         /// <summary>
         /// Event triggered when an order is cancelled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
         /// </summary>
-        public event Action<ICommonOrderId> OnOrderCanceled;
+        public event Action<ICommonOrderId>? OnOrderCanceled;
 
         #region ctor
         /// <summary>
@@ -1066,6 +1064,7 @@ namespace Bittrex.Net
             return new ServerError(info);
         }
 
+        /// <inheritdoc />
         protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
         {
             if(parameters.First().Key == string.Empty)

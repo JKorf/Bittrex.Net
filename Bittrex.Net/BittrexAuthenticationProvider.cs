@@ -41,7 +41,7 @@ namespace Bittrex.Net
             lock (locker)
                 result.Add("Api-Key", Credentials.Key.GetString());
             result.Add("Api-Timestamp", Math.Round((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
-            var jsonContent = "";
+            var jsonContent = string.Empty;
             if (method != HttpMethod.Get && method != HttpMethod.Delete)
             {
                 if(parameters.First().Key == string.Empty)

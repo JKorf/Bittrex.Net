@@ -13,7 +13,7 @@ namespace Bittrex.Net.Objects
         /// The currency
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = "";
+        public string Currency { get; set; } = string.Empty;
         /// <summary>
         /// The total funds
         /// </summary>

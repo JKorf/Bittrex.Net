@@ -1,11 +1,9 @@
-﻿using Bittrex.Net.Objects;
-using CryptoExchange.Net.Objects;
+﻿using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace Bittrex.Net.Converters
 {

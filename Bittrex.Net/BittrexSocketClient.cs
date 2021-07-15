@@ -5,7 +5,6 @@ using Bittrex.Net.Objects;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Sockets;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Logging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -394,7 +393,7 @@ namespace Bittrex.Net
             return false;
         }
 
-        private bool Check(string channel, string method, string data)
+        private static bool Check(string channel, string method, string data)
         {
             if (channel == method)
                 return true;

@@ -14,17 +14,17 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The symbol of the symbol
         /// </summary>
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// The base currency of the symbol
         /// </summary>
         [JsonProperty("baseCurrencySymbol")]
-        public string BaseCurrency { get; set; } = "";
+        public string BaseCurrency { get; set; } = string.Empty;
         /// <summary>
         /// The quote currency of the symbol
         /// </summary>
         [JsonProperty("quoteCurrencySymbol")]
-        public string QuoteCurrency { get; set; } = "";
+        public string QuoteCurrency { get; set; } = string.Empty;
         /// <summary>
         /// The minimum trade size for this symbol
         /// </summary>
@@ -45,15 +45,15 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Additional info
         /// </summary>
-        public string Notice { get; set; } = "";
+        public string Notice { get; set; } = string.Empty;
         /// <summary>
         /// List of prohibited regions. empty if its not restricted.
         /// </summary>
-        public IEnumerable<string> ProhibitedIn { get; set; } = new List<string>();
+        public IEnumerable<string> ProhibitedIn { get; set; } = Array.Empty<string>();
         /// <summary>
         /// List of associated terms of service.
         /// </summary>
-        public IEnumerable<string> AssociatedTermsOfService { get; set; } = new List<string>();
+        public IEnumerable<string> AssociatedTermsOfService { get; set; } = Array.Empty<string>();
 
         string ICommonSymbol.CommonName => Symbol;
         decimal ICommonSymbol.CommonMinimumTradeSize => MinTradeSize;

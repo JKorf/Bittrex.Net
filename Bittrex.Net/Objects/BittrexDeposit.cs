@@ -12,12 +12,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The id of the deposit
         /// </summary>
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
         /// <summary>
         /// The currency of the deposit
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = "";
+        public string Currency { get; set; } = string.Empty;
         /// <summary>
         /// The quantity of the deposit
         /// </summary>
@@ -26,17 +26,17 @@ namespace Bittrex.Net.Objects
         /// The address of the deposit
         /// </summary>
         [JsonProperty("cryptoAddress")]
-        public string Address { get; set; } = "";
+        public string Address { get; set; } = string.Empty;
         /// <summary>
         /// The tag of the address
         /// </summary>
         [JsonProperty("cryptoAddressTag")]
-        public string AddressTag { get; set; } = "";
+        public string AddressTag { get; set; } = string.Empty;
         /// <summary>
         /// The transaction id of the deposit
         /// </summary>
         [JsonProperty("txId")]
-        public string TransactionId { get; set; } = "";
+        public string TransactionId { get; set; } = string.Empty;
         /// <summary>
         /// The current amount of confirmations
         /// </summary>
@@ -58,6 +58,6 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Source
         /// </summary>
-        public string Source { get; set; } = "";
+        public string Source { get; set; } = string.Empty;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
@@ -17,11 +18,11 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The bids in this book
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> Bid { get; set; } = new List<BittrexOrderBookEntry>();
+        public IEnumerable<BittrexOrderBookEntry> Bid { get; set; } = Array.Empty<BittrexOrderBookEntry>();
         /// <summary>
         /// The asks in this book
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> Ask { get; set; } = new List<BittrexOrderBookEntry>();
+        public IEnumerable<BittrexOrderBookEntry> Ask { get; set; } = Array.Empty<BittrexOrderBookEntry>();
 
         IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonBids => Bid;
         IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonAsks => Ask;

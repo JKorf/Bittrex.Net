@@ -13,7 +13,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Unique id of the trade
         /// </summary>
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
         /// <summary>
         /// Side of the taker
         /// </summary>

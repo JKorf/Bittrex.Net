@@ -487,6 +487,9 @@
         <member name="M:Bittrex.Net.BittrexClient.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc />
         </member>
+        <member name="M:Bittrex.Net.BittrexClient.WriteParamBody(CryptoExchange.Net.Interfaces.IRequest,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <inheritdoc />
+        </member>
         <member name="M:Bittrex.Net.BittrexClient.GetUrl(System.String)">
             <summary>
             Get url for an endpoint

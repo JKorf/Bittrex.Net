@@ -8,16 +8,16 @@ namespace Bittrex.Net.Sockets
 {
     internal class ConnectionFactory : IWebsocketFactory
     {
-        private ApiProxy? proxy;
+        private readonly ApiProxy? _proxy;
 
         public ConnectionFactory(ApiProxy? proxy)
         {
-            proxy = proxy;
+            _proxy = proxy;
         }
 
         public IWebsocket CreateWebsocket(Log log, string url)
         {
-            return new BittrexHubConnection(log, proxy, new HubConnection(url));
+            return new BittrexHubConnection(log, _proxy, new HubConnection(url));
         }
 
         public IWebsocket CreateWebsocket(Log log, string url, IDictionary<string, string> cookies, IDictionary<string, string> headers)

@@ -12,7 +12,7 @@ namespace Bittrex.Net.Objects
         /// The currency of the address
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = "";
+        public string Currency { get; set; } = string.Empty;
         /// <summary>
         /// When the address was whitelisted
         /// </summary>
@@ -20,7 +20,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Status of the address
         /// </summary>
-        public string Status { get; set; } = "";
+        public string Status { get; set; } = string.Empty;
         /// <summary>
         /// When it may be used for withdrawals
         /// </summary>
@@ -29,11 +29,11 @@ namespace Bittrex.Net.Objects
         /// Address
         /// </summary>
         [JsonProperty("cryptoAddress")]
-        public string Address { get; set; } = "";
+        public string Address { get; set; } = string.Empty;
         /// <summary>
         /// Tag for the address
         /// </summary>
         [JsonProperty("cryptoAddressTag")]
-        public string AddressTag { get; set; } = "";
+        public string AddressTag { get; set; } = string.Empty;
     }
 }

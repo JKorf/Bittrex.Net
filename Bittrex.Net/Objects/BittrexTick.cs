@@ -9,7 +9,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Symbol of the ticker
         /// </summary>
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// The price of the last trade
         /// </summary>
