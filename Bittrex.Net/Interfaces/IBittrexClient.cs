@@ -103,7 +103,7 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol trade list</returns>
-        Task<WebCallResult<IEnumerable<BittrexSymbolTrade>>> GetSymbolTradesAsync(string symbol, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexSymbolTrade>>> GetTradeHistoryAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the ticker of a symbol
@@ -288,7 +288,7 @@ namespace Bittrex.Net
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradeHistoryAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets executions (trades) for a order
@@ -296,7 +296,7 @@ namespace Bittrex.Net
         /// <param name="orderId">The id of the order to retrieve executions for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderExecutionsAsync(string orderId, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderTradesAsync(string orderId, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels an order

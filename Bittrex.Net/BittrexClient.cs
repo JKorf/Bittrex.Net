@@ -204,7 +204,7 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol trade list</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexSymbolTrade>>> GetSymbolTradesAsync(string symbol, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexSymbolTrade>>> GetTradeHistoryAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             return await SendRequestAsync<IEnumerable<BittrexSymbolTrade>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
@@ -543,7 +543,7 @@ namespace Bittrex.Net
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetExecutionsAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradeHistoryAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             symbol?.ValidateBittrexSymbol();
 
@@ -564,7 +564,7 @@ namespace Bittrex.Net
         /// <param name="orderId">The id of the order to retrieve executions for</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderExecutionsAsync(string orderId, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderTradesAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
             return await SendRequestAsync<IEnumerable<BittrexExecution>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
@@ -983,7 +983,7 @@ namespace Bittrex.Net
 
         async Task<WebCallResult<IEnumerable<ICommonRecentTrade>>> IExchangeClient.GetRecentTradesAsync(string symbol)
         {
-            var tradesResult = await GetSymbolTradesAsync(symbol).ConfigureAwait(false);
+            var tradesResult = await GetTradeHistoryAsync(symbol).ConfigureAwait(false);
             return tradesResult.As<IEnumerable<ICommonRecentTrade>>(tradesResult.Data);
         }
 
@@ -1019,7 +1019,7 @@ namespace Bittrex.Net
 
         async Task<WebCallResult<IEnumerable<ICommonTrade>>> IExchangeClient.GetTradesAsync(string orderId, string? symbol = null)
         {
-            var result = await GetExecutionsAsync(orderId).ConfigureAwait(false);
+            var result = await GetUserTradeHistoryAsync(orderId).ConfigureAwait(false);
             return result.As<IEnumerable<ICommonTrade>>(result.Data);
         }
 

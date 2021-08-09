@@ -189,9 +189,9 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
+        public Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
             Action<DataEvent<BittrexTradesUpdate>> onUpdate)
-            => SubscribeToSymbolTradeUpdatesAsync(new[] {symbol}, onUpdate);
+            => SubscribeToTradeUpdatesAsync(new[] {symbol}, onUpdate);
 
         /// <summary>
         /// Subscribe to symbol trade updates
@@ -199,7 +199,7 @@ namespace Bittrex.Net
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "trade_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
@@ -229,7 +229,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToExecutionUpdatesAsync(Action<DataEvent<BittrexExecutionUpdate>> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(Action<DataEvent<BittrexExecutionUpdate>> onUpdate)
         {
             return await Subscribe("execution", true, onUpdate).ConfigureAwait(false);
         }

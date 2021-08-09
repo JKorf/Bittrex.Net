@@ -113,7 +113,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
+        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
             Action<DataEvent<BittrexTradesUpdate>> onUpdate);
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to order updates
