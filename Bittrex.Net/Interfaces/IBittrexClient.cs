@@ -288,7 +288,7 @@ namespace Bittrex.Net
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradeHistoryAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradesAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets executions (trades) for a order

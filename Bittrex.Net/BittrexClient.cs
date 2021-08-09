@@ -543,7 +543,7 @@ namespace Bittrex.Net
         /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Executions</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradeHistoryAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradesAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             symbol?.ValidateBittrexSymbol();
 
@@ -1019,7 +1019,7 @@ namespace Bittrex.Net
 
         async Task<WebCallResult<IEnumerable<ICommonTrade>>> IExchangeClient.GetTradesAsync(string orderId, string? symbol = null)
         {
-            var result = await GetUserTradeHistoryAsync(orderId).ConfigureAwait(false);
+            var result = await GetUserTradesAsync(orderId).ConfigureAwait(false);
             return result.As<IEnumerable<ICommonTrade>>(result.Data);
         }
 

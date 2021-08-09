@@ -118,7 +118,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetTradeHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
@@ -298,7 +298,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetExecutionsAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetUserTradesAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades)
             </summary>
@@ -311,7 +311,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Executions</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexClient.GetOrderExecutionsAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.BittrexClient.GetOrderTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades) for a order
             </summary>
@@ -629,7 +629,7 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
             <summary>
             Subscribe to symbol trade updates
             </summary>
@@ -637,7 +637,7 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
             <summary>
             Subscribe to symbol trade updates
             </summary>
@@ -659,7 +659,7 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToExecutionUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexExecutionUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToUserTradeUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexExecutionUpdate}})">
             <summary>
             Subscribe to execution updates
             </summary>
@@ -820,7 +820,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Symbol order book</returns>
         </member>
-        <member name="M:Bittrex.Net.IBittrexClient.GetSymbolTradesAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.IBittrexClient.GetTradeHistoryAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
             </summary>
@@ -1000,7 +1000,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Order info</returns>
         </member>
-        <member name="M:Bittrex.Net.IBittrexClient.GetExecutionsAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.IBittrexClient.GetUserTradesAsync(System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades)
             </summary>
@@ -1013,7 +1013,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Executions</returns>
         </member>
-        <member name="M:Bittrex.Net.IBittrexClient.GetOrderExecutionsAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Bittrex.Net.IBittrexClient.GetOrderTradesAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets executions (trades) for a order
             </summary>
@@ -1280,7 +1280,7 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
             <summary>
             Subscribe to symbol trade updates
             </summary>
@@ -1288,7 +1288,7 @@
             <param name="onUpdate">Data handler</param>
             <returns>Subscription result</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
             <summary>
             Subscribe to symbol trade updates
             </summary>
