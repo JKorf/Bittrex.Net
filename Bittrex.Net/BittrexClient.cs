@@ -549,7 +549,7 @@ namespace Bittrex.Net
         public async Task<WebCallResult<BittrexExecution>> GetExecutionByIdAsync(string executionId, CancellationToken ct = default)
         {
             executionId.ValidateNotNull(nameof(executionId));
-            return await SendRequest<BittrexExecution>(GetUrl($"executions/{executionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<BittrexExecution>(GetUrl($"executions/{executionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <summary>
