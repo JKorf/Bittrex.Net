@@ -5,7 +5,6 @@ using Bittrex.Net.Objects;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Sockets;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Logging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -16,6 +15,7 @@ using CryptoExchange.Net.Sockets;
 using Newtonsoft.Json.Linq;
 using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net
 {
@@ -46,11 +46,11 @@ namespace Bittrex.Net
         /// <param name="options">Options to use for this client</param>
         public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
-            SocketFactory = new ConnectionFactory();
+            SocketFactory = new ConnectionFactory(options.Proxy);
 
             SocketCombineTarget = 10;
 
-            AddGenericHandler("Reauthenticate", async (connection, data) => await AuthenticateSocket(connection).ConfigureAwait(false));
+            AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
         #endregion
 
@@ -70,7 +70,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onHeartbeat">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DateTime> onHeartbeat)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DataEvent<DateTime>> onHeartbeat)
         {
             return await Subscribe("heartbeat", false, onHeartbeat).ConfigureAwait(false);
         }
@@ -83,7 +83,7 @@ namespace Bittrex.Net
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         public Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
-            KlineInterval interval, Action<BittrexKlineUpdate> onUpdate)
+            KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate)
             => SubscribeToKlineUpdatesAsync(new[] {symbol}, interval, onUpdate);
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Bittrex.Net
         /// <param name="interval">Interval of the candles</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => $"candle_{s}_{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}").ToArray(), false, onUpdate).ConfigureAwait(false);
         }
@@ -103,7 +103,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<BittrexSummariesUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<DataEvent<BittrexSummariesUpdate>> onUpdate)
         {
             return await Subscribe("market_summaries", false, onUpdate).ConfigureAwait(false);
         }
@@ -115,7 +115,7 @@ namespace Bittrex.Net
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         public Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
-            Action<BittrexSymbolSummary> onUpdate)
+            Action<DataEvent<BittrexSymbolSummary>> onUpdate)
             => SubscribeToSymbolSummaryUpdatesAsync(new[] { symbol }, onUpdate);
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Bittrex.Net
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<BittrexSymbolSummary> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexSymbolSummary>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "market_summary_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
@@ -137,7 +137,7 @@ namespace Bittrex.Net
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         public  Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
-            Action<BittrexOrderBookUpdate> onUpdate)
+            Action<DataEvent<BittrexOrderBookUpdate>> onUpdate)
             => SubscribeToOrderBookUpdatesAsync(new[] {symbol}, depth, onUpdate);
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Bittrex.Net
         /// <param name="depth">The depth of the oder book to receive update for</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<BittrexOrderBookUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<DataEvent<BittrexOrderBookUpdate>> onUpdate)
         {
             depth.ValidateIntValues(nameof(depth), 1, 25, 500);
             return await Subscribe(symbols.Select(s => $"orderbook_{s}_{depth}").ToArray(), false, onUpdate).ConfigureAwait(false);
@@ -158,7 +158,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<BittrexTickersUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate)
         {
             return await Subscribe("tickers", false, onUpdate).ConfigureAwait(false);
         }
@@ -170,7 +170,7 @@ namespace Bittrex.Net
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         public Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
-            Action<BittrexTick> onUpdate) => SubscribeToSymbolTickerUpdatesAsync(new[] {symbol}, onUpdate);
+            Action<DataEvent<BittrexTick>> onUpdate) => SubscribeToSymbolTickerUpdatesAsync(new[] {symbol}, onUpdate);
 
         /// <summary>
         /// Subscribe to symbol ticker updates
@@ -178,7 +178,7 @@ namespace Bittrex.Net
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTick> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "ticker_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
@@ -189,9 +189,9 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
-            Action<BittrexTradesUpdate> onUpdate)
-            => SubscribeToSymbolTradeUpdatesAsync(new[] {symbol}, onUpdate);
+        public Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
+            Action<DataEvent<BittrexTradesUpdate>> onUpdate)
+            => SubscribeToTradeUpdatesAsync(new[] {symbol}, onUpdate);
 
         /// <summary>
         /// Subscribe to symbol trade updates
@@ -199,7 +199,7 @@ namespace Bittrex.Net
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTradesUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "trade_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
@@ -209,7 +209,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<BittrexOrderUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<DataEvent<BittrexOrderUpdate>> onUpdate)
         {
             return await Subscribe("order", true, onUpdate).ConfigureAwait(false);
         }
@@ -219,7 +219,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<BittrexBalanceUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BittrexBalanceUpdate>> onUpdate)
         {
             return await Subscribe("balance", true, onUpdate).ConfigureAwait(false);
         }
@@ -229,7 +229,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToExecutionUpdatesAsync(Action<BittrexExecutionUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(Action<DataEvent<BittrexExecutionUpdate>> onUpdate)
         {
             return await Subscribe("execution", true, onUpdate).ConfigureAwait(false);
         }
@@ -239,7 +239,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<BittrexDepositUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<DataEvent<BittrexDepositUpdate>> onUpdate)
         {
             return await Subscribe("deposit", true, onUpdate).ConfigureAwait(false);
         }
@@ -249,7 +249,7 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Action<BittrexConditionalOrderUpdate> onUpdate)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Action<DataEvent<BittrexConditionalOrderUpdate>> onUpdate)
         {
             return await Subscribe("conditional_order", true, onUpdate).ConfigureAwait(false);
         }
@@ -258,34 +258,34 @@ namespace Bittrex.Net
         #region private
 
         private Task<CallResult<UpdateSubscription>> Subscribe<T>(string channel, bool authenticated,
-            Action<T> handler)
+            Action<DataEvent<T>> handler)
             => Subscribe(new[] {channel}, authenticated, handler);
 
-        private async Task<CallResult<UpdateSubscription>> Subscribe<T>(string[] channels, bool authenticated, Action<T> handler)
+        private async Task<CallResult<UpdateSubscription>> Subscribe<T>(string[] channels, bool authenticated, Action<DataEvent<T>> handler)
         {
-            return await Subscribe<JToken>(new ConnectionRequest("subscribe", channels), null, authenticated, data =>
+            return await base.SubscribeAsync<JToken>(new ConnectionRequest("subscribe", channels), null, authenticated, data =>
             {
-                if ((string) data["M"] == "heartbeat")
+                if ((string) data.Data["M"] == "heartbeat")
                 {
-                    handler((T) Convert.ChangeType(DateTime.UtcNow, typeof(T)));
+                    handler(data.As((T) Convert.ChangeType(DateTime.UtcNow, typeof(T))));
                     return;
                 }
 
-                if (!data["A"].Any())
+                if (!data.Data["A"].Any())
                     return;
                 DecodeSignalRData(data, handler);
             }).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        protected override SocketConnection GetWebsocket(string address, bool authenticated)
+        protected override SocketConnection GetSocketConnection(string address, bool authenticated)
         {
             // Override because signalr puts `/signalr/` add the end of the url
-            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/" && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.HandlerCount).FirstOrDefault();
+            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/" && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
             var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
             if (result != null)
             {
-                if (result.HandlerCount < SocketCombineTarget || (sockets.Count >= MaxSocketConnections && sockets.All(s => s.Value.HandlerCount >= SocketCombineTarget)))
+                if (result.SubscriptionCount < SocketCombineTarget || (sockets.Count >= MaxSocketConnections && sockets.All(s => s.Value.SubscriptionCount >= SocketCombineTarget)))
                 {
                     // Use existing socket if it has less than target connections OR it has the least connections and we can't make new
                     return result;
@@ -296,12 +296,12 @@ namespace Bittrex.Net
             var socket = CreateSocket(address);
             var socketWrapper = new SocketConnection(this, socket);
             foreach (var kvp in genericHandlers)
-                socketWrapper.AddHandler(SocketSubscription.CreateForIdentifier(kvp.Key, false, kvp.Value));
+                socketWrapper.AddSubscription(SocketSubscription.CreateForIdentifier(kvp.Key, false, kvp.Value));
             return socketWrapper;
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> SubscribeAndWait(SocketConnection socket, object request, SocketSubscription subscription)
+        protected override async Task<CallResult<bool>> SubscribeAndWaitAsync(SocketConnection socket, object request, SocketSubscription subscription)
         {
             var btRequest = (ConnectionRequest) request;
             if (btRequest.RequestName != null)
@@ -310,7 +310,7 @@ namespace Bittrex.Net
                 var data = subResult.Data?.First();
                 if (!subResult.Success || data?.Success == false)
                 {
-                    _ = socket.Close(subscription);
+                    _ = socket.CloseAsync(subscription);
                     return new CallResult<bool>(false, subResult.Error ?? new ServerError(data?.ErrorCode!));
                 }
             }
@@ -320,7 +320,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<T>> QueryAndWait<T>(SocketConnection socket, object request)
+        protected override async Task<CallResult<T>> QueryAndWaitAsync<T>(SocketConnection socket, object request)
         {
             var btRequest = (ConnectionRequest) request;
             var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
@@ -393,7 +393,7 @@ namespace Bittrex.Net
             return false;
         }
 
-        private bool Check(string channel, string method, string data)
+        private static bool Check(string channel, string method, string data)
         {
             if (channel == method)
                 return true;
@@ -431,7 +431,7 @@ namespace Bittrex.Net
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> AuthenticateSocket(SocketConnection s)
+        protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
             if (authProvider == null || authProvider.Credentials?.Key == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
@@ -445,16 +445,16 @@ namespace Bittrex.Net
             var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", authProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {
-                log.Write(LogVerbosity.Error, "Authentication failed, api key/secret is probably invalid");
+                log.Write(LogLevel.Error, "Authentication failed, api key/secret is probably invalid");
                 return new CallResult<bool>(false, result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
             }
 
-            log.Write(LogVerbosity.Info, "Authentication successful");
+            log.Write(LogLevel.Information, "Authentication successful");
             return new CallResult<bool>(true, null);
         }
 
         /// <inheritdoc />
-        protected override async Task<bool> Unsubscribe(SocketConnection connection, SocketSubscription s)
+        protected override async Task<bool> UnsubscribeAsync(SocketConnection connection, SocketSubscription s)
         {
             var bRequest = (ConnectionRequest)s.Request!;
             var unsub = new ConnectionRequest("unsubscribe", ((string[])bRequest!.Parameters[0])[0]);
@@ -471,20 +471,35 @@ namespace Bittrex.Net
             return socket;
         }
 
-        private void DecodeSignalRData<T>(JToken data, Action<T> handler)
+        private void DecodeSignalRData<T>(DataEvent<JToken> data, Action<DataEvent<T>> handler)
         {
-            var actualData = (string)data["A"][0];
+            var actualData = (string)data.Data["A"][0];
             var result = DecodeData(actualData);
             if (result == null)
                 return;
 
-            log.Write(LogVerbosity.Debug, "Socket received data: " + result);
+            log.Write(LogLevel.Debug, "Socket received data: " + result);
 
-            var decodeResult = Deserialize<T>(result);
+            var token = result.ToJToken(log);
+            if (token == null)
+                return;
+
+            string? symbol = null;
+            if (token["marketSymbol"] != null)
+                symbol = (string)token["marketSymbol"];
+            else if (token["symbol"] != null)
+                symbol = (string)token["symbol"];
+            else if (token["deltas"] != null && token["deltas"][0]["marketSymbol"] != null)
+                symbol = (string)token["deltas"][0]["marketSymbol"];
+            else if (token["deltas"] != null && token["deltas"][0]["symbol"] != null)
+                symbol = (string)token["deltas"][0]["symbol"];
+
+
+            var decodeResult = Deserialize<T>(token);
             if (!decodeResult.Success)
-                log.Write(LogVerbosity.Debug, "Failed to decode data: " + decodeResult.Error);
+                log.Write(LogLevel.Debug, "Failed to decode data: " + decodeResult.Error);
 
-            handler(decodeResult.Data);
+            handler(data.As(decodeResult.Data, symbol));
         }
 
         private string? DecodeData(string rawData)
@@ -507,7 +522,7 @@ namespace Bittrex.Net
             }
             catch (Exception e)
             {
-                log.Write(LogVerbosity.Info, "Exception in decode data: " + e.Message);
+                log.Write(LogLevel.Warning, "Exception in decode data: " + e.ToLogString());
                 return null;
             }
         }

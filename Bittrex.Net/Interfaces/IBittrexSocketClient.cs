@@ -19,7 +19,7 @@ namespace Bittrex.Net.Interfaces
         /// </summary>
         /// <param name="onHeartbeat">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DateTime> onHeartbeat);
+        Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DataEvent<DateTime>> onHeartbeat);
 
         /// <summary>
         /// Subscribe to kline(candle) updates for a symbol
@@ -29,7 +29,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
-            KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
+            KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to kline(candle) updates for a symbol
@@ -38,14 +38,14 @@ namespace Bittrex.Net.Interfaces
         /// <param name="interval">Interval of the candles</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<BittrexKlineUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to all symbol summary updates
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<BittrexSummariesUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<DataEvent<BittrexSummariesUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol summary updates
@@ -54,7 +54,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
-            Action<BittrexSymbolSummary> onUpdate);
+            Action<DataEvent<BittrexSymbolSummary>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol summary updates
@@ -62,7 +62,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<BittrexSymbolSummary> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexSymbolSummary>> onUpdate);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -72,7 +72,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
-            Action<BittrexOrderBookUpdate> onUpdate);
+            Action<DataEvent<BittrexOrderBookUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to order book updates
@@ -81,14 +81,14 @@ namespace Bittrex.Net.Interfaces
         /// <param name="depth">The depth of the oder book to receive update for</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<BittrexOrderBookUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<DataEvent<BittrexOrderBookUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to all symbols ticker updates
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<BittrexTickersUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol ticker updates
@@ -97,7 +97,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
-            Action<BittrexTick> onUpdate);
+            Action<DataEvent<BittrexTick>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol ticker updates
@@ -105,7 +105,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTick> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol trade updates
@@ -113,8 +113,8 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(string symbol,
-            Action<BittrexTradesUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
+            Action<DataEvent<BittrexTradesUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol trade updates
@@ -122,27 +122,27 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTradeUpdatesAsync(IEnumerable<string> symbols, Action<BittrexTradesUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to order updates
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<BittrexOrderUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<DataEvent<BittrexOrderUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to balance updates
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<BittrexBalanceUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BittrexBalanceUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to deposit updates
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<BittrexDepositUpdate> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<DataEvent<BittrexDepositUpdate>> onUpdate);
     }
 }

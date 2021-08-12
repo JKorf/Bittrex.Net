@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -109,11 +108,11 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             var response = new Mock<IResponse>();
             response.Setup(c => c.IsSuccessStatusCode).Returns(code == HttpStatusCode.OK);
             response.Setup(c => c.StatusCode).Returns(code);
-            response.Setup(c => c.GetResponseStream()).Returns(Task.FromResult((Stream)responseStream));
+            response.Setup(c => c.GetResponseStreamAsync()).Returns(Task.FromResult((Stream)responseStream));
 
             var request = new Mock<IRequest>();
             request.Setup(c => c.Uri).Returns(new Uri("http://www.test.com"));
-            request.Setup(c => c.GetResponse(It.IsAny<CancellationToken>())).Returns(Task.FromResult(response.Object));
+            request.Setup(c => c.GetResponseAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(response.Object));
 
             var factory = Mock.Get(client.RequestFactory);
             factory.Setup(c => c.Create(It.IsAny<HttpMethod>(), It.IsAny<string>(), It.IsAny<int>()))

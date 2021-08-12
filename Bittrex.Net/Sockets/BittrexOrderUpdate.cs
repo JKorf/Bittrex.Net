@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Bittrex.Net.Objects;
-using Newtonsoft.Json;
+﻿using Bittrex.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
@@ -19,7 +15,7 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Account id
         /// </summary>
-        public string AccountId { get; set; } = "";
+        public string AccountId { get; set; } = string.Empty;
 
         /// <summary>
         /// Changed order

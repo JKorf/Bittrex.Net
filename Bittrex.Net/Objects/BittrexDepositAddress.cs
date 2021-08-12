@@ -17,16 +17,16 @@ namespace Bittrex.Net.Objects
         /// The currency of the deposit address
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = "";
+        public string Currency { get; set; } = string.Empty;
         /// <summary>
         /// the address
         /// </summary>
         [JsonProperty("cryptoAddress")]
-        public string Address { get; set; } = "";
+        public string Address { get; set; } = string.Empty;
         /// <summary>
         /// The tag of the address
         /// </summary>
         [JsonProperty("cryptoAddressTag")]
-        public string AddressTag { get; set; } = "";
+        public string AddressTag { get; set; } = string.Empty;
     }
 }

@@ -1,13 +1,12 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Sockets;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
+using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net
 {
@@ -33,16 +32,16 @@ namespace Bittrex.Net
             _limit = limit;
             socketClient = options?.SocketClient ?? new BittrexSocketClient(new BittrexSocketClientOptions()
             {
-                LogVerbosity = options?.LogVerbosity ?? LogVerbosity.Info
+                LogLevel = options?.LogLevel ?? LogLevel.Information
             });
             client = new BittrexClient(new BittrexClientOptions()
             {
-                LogVerbosity = options?.LogVerbosity ?? LogVerbosity.Info
+                LogLevel = options?.LogLevel ?? LogLevel.Information
             });
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<UpdateSubscription>> DoStart()
+        protected override async Task<CallResult<UpdateSubscription>> DoStartAsync()
         {
             var subResult = await socketClient.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
@@ -54,7 +53,7 @@ namespace Bittrex.Net
             var queryResult = await client.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
-                await socketClient.UnsubscribeAll().ConfigureAwait(false);
+                await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
                 return new CallResult<UpdateSubscription>(null, queryResult.Error);
             }
 
@@ -62,13 +61,13 @@ namespace Bittrex.Net
             return new CallResult<UpdateSubscription>(subResult.Data, null);
         }
 
-        private void HandleUpdate(BittrexOrderBookUpdate data)
+        private void HandleUpdate(DataEvent<BittrexOrderBookUpdate> data)
         {
-            UpdateOrderBook(data.Sequence, data.BidDeltas, data.AskDeltas);
+            UpdateOrderBook(data.Data.Sequence, data.Data.BidDeltas, data.Data.AskDeltas);
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> DoResync()
+        protected override async Task<CallResult<bool>> DoResyncAsync()
         {
             var queryResult = await client.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)

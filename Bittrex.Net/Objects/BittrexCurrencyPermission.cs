@@ -8,7 +8,7 @@
         /// <summary>
         /// Symbol
         /// </summary>
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Allowed to view
         /// </summary>
@@ -16,11 +16,11 @@
         /// <summary>
         /// Allowed to buy
         /// </summary>
-        public BittrexCurrencyDepositPermission Deposit { get; set; }
+        public BittrexCurrencyDepositPermission Deposit { get; set; } = default!;
         /// <summary>
         /// Allowed to sell
         /// </summary>
-        public BittrexCurrencyWithdrawPermission Withdraw { get; set; }
+        public BittrexCurrencyWithdrawPermission Withdraw { get; set; } = default!;
     }
 
     /// <summary>

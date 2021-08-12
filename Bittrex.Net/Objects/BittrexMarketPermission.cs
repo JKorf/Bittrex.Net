@@ -8,7 +8,7 @@
         /// <summary>
         /// Symbol
         /// </summary>
-        public string Symbol { get; set; }
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Allowed to view
         /// </summary>

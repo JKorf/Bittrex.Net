@@ -1,13 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Reflection;
-using Bittrex.Net.Objects;
-using Bittrex.Net.UnitTests.TestImplementations;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Objects;
 using NUnit.Framework;
 
 namespace Bittrex.Net.UnitTests

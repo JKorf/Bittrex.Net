@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Bittrex.Net.Objects;
+﻿using Bittrex.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
@@ -13,7 +10,7 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Account id for the balance change
         /// </summary>
-        public string AccountId { get; set; } = "";
+        public string AccountId { get; set; } = string.Empty;
         /// <summary>
         /// Sequence
         /// </summary>

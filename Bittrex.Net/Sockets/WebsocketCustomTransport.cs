@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Sockets
 {
@@ -18,14 +19,16 @@ namespace Bittrex.Net.Sockets
         private IConnection? connection;
         private string? connectionData;
         private IWebsocket? websocket;
+        private ApiProxy? proxy;
         private readonly Log log;
         private readonly Func<string, string>? interpreter;
 
         public override bool SupportsKeepAlive => true;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client, Func<string, string>? interpreter): base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client, ApiProxy? proxy, Func<string, string>? interpreter): base(client, "webSockets")
         {
             this.log = log;
+            this.proxy = proxy;
             this.interpreter = interpreter;
         }
 
@@ -55,20 +58,17 @@ namespace Bittrex.Net.Sockets
                     cookies.Add(cookie.Name, cookie.Value);
             }
 
-            websocket = new BaseSocket(log, connectUrl, cookies, connection.Headers);
+            websocket = new CryptoExchangeWebSocketClient(log, connectUrl, cookies, connection.Headers);
             websocket.OnError += WebSocketOnError;
             websocket.OnClose += WebSocketOnClosed;
             websocket.OnMessage += WebSocketOnMessageReceived;
             websocket.DataInterpreterString = interpreter;
 
-            if (connection.Proxy != null)
-            {
-                var proxy = connection.Proxy.GetProxy(new Uri(connectUrl));
-                websocket.SetProxy(proxy.Host, proxy.Port);
-            }
+            if (proxy != null)            
+                websocket.SetProxy(proxy);
 
-            if(!websocket.Connect().Result)
-                TransportFailed(new Exception("Can't connect"));
+            if (!websocket.ConnectAsync().Result)
+                OnStartFailed();
         }
 
         protected override void OnStartFailed()

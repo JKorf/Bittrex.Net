@@ -8,10 +8,10 @@
         /// <summary>
         /// Account id
         /// </summary>
-        public string AccountId { get; set; } = "";
+        public string AccountId { get; set; } = string.Empty;
         /// <summary>
         /// Sub account id
         /// </summary>
-        public string SubAccountId { get; set; } = "";
+        public string SubAccountId { get; set; } = string.Empty;
     }
 }

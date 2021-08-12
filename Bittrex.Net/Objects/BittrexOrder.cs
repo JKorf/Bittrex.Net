@@ -14,7 +14,7 @@ namespace Bittrex.Net.Objects
         /// The symbol of the order
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// The direction of the order
         /// </summary>
@@ -46,7 +46,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Id to track the order by
         /// </summary>
-        public string ClientOrderId { get; set; } = "";
+        public string ClientOrderId { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The id of the order
         /// </summary>
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
         
         /// <summary>
         /// The quantity that's been filled
@@ -98,8 +98,12 @@ namespace Bittrex.Net.Objects
         string ICommonOrder.CommonSymbol => Symbol;
         decimal ICommonOrder.CommonPrice => Limit ?? 0;
         decimal ICommonOrder.CommonQuantity => Quantity ?? 0;
-        string ICommonOrder.CommonStatus => Status.ToString();
+        IExchangeClient.OrderStatus ICommonOrder.CommonStatus =>
+            Status == OrderStatus.Open ? IExchangeClient.OrderStatus.Active :
+            FillQuantity < Quantity ? IExchangeClient.OrderStatus.Canceled :
+            IExchangeClient.OrderStatus.Filled;
         bool ICommonOrder.IsActive => Status == OrderStatus.Open;
+        DateTime ICommonOrder.CommonOrderTime => CreatedAt;
 
         IExchangeClient.OrderSide ICommonOrder.CommonSide => Direction == OrderSide.Sell
             ? IExchangeClient.OrderSide.Sell

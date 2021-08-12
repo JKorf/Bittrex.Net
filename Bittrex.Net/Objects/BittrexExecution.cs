@@ -13,12 +13,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Id of the execution
         /// </summary>
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
         /// <summary>
         /// The symbol of the execution
         /// </summary>
         [JsonProperty("marketSymbol")]
-        public string Symbol { get; set; } = "";
+        public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Timestamp of execution
         /// </summary>
@@ -34,7 +34,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Id of the order
         /// </summary>
-        public string OrderId { get; set; } = "";
+        public string OrderId { get; set; } = string.Empty;
         /// <summary>
         /// Paid commission
         /// </summary>
@@ -49,5 +49,6 @@ namespace Bittrex.Net.Objects
         decimal ICommonTrade.CommonQuantity => Quantity;
         decimal ICommonTrade.CommonFee => Commission;
         string ICommonTrade.CommonFeeAsset => Symbol.Split('-').Last();
+        DateTime ICommonTrade.CommonTradeTime => ExecutedAt;
     }
 }
