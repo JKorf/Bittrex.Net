@@ -81,6 +81,10 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 4.0.0 - 12 Aug 2021
+	* Release version with new CryptoExchange.Net version 4.0.0
+		* Multiple changes regarding logging and socket connection, see [CryptoExchange.Net release notes](https://github.com/JKorf/CryptoExchange.Net#release-notes)
+
 * Version 6.0.0-beta3 - 09 Aug 2021
     * Renamed GetSymbolTradesAsync to GetTradeHistoryAsync
     * Renamed GetExecutionsAsync to GetUserTradesAsync
