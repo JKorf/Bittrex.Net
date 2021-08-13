@@ -20,6 +20,7 @@ namespace Bittrex.Net.Sockets
         private ApiProxy? proxy;
 
         public new string Url { get; }
+        public new bool IsOpen => connection.State == ConnectionState.Connected;
         
         public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection): base(null!, connection.Url)
         {
