@@ -1,5 +1,5 @@
 # Bittrex.Net
-![Build status](https://travis-ci.org/JKorf/Bittrex.Net.svg?branch=master) ![Nuget version](https://img.shields.io/nuget/v/Bittrex.net.svg)  ![Nuget downloads](https://img.shields.io/nuget/dt/Bittrex.Net.svg)
+![Build status](https://travis-ci.com/JKorf/Bittrex.Net.svg?branch=master) ![Nuget version](https://img.shields.io/nuget/v/Bittrex.net.svg)  ![Nuget downloads](https://img.shields.io/nuget/dt/Bittrex.Net.svg)
 
 Bittrex.Net is a wrapper around the Bittrex API as described on [Bittrex](https://bittrex.com/Home/Api), including all features the API provides using clear and readable objects, both for the REST  as the websocket API's.
 
