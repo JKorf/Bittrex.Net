@@ -322,7 +322,16 @@ namespace Bittrex.Net
             return await SendRequestAsync<BittrexAccount>(GetUrl("account"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-       
+        /// <summary>
+        /// Get account trading fees
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account trading fee</returns>
+        public async Task<WebCallResult<IEnumerable<BittrexTradingFee>>> GetTradingFeesAsync(CancellationToken ct = default)
+        {
+            return await SendRequestAsync<IEnumerable<BittrexTradingFee>>(GetUrl("account/fees/trading"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
         /// <summary>
         /// Get account volume
         /// </summary>

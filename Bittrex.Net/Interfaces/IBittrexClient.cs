@@ -166,6 +166,13 @@ namespace Bittrex.Net
         Task<WebCallResult<BittrexAccount>> GetAccountAsync(CancellationToken ct = default);
 
         /// <summary>
+        /// Get account trading fees
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account trading fee</returns>
+        Task<WebCallResult<IEnumerable<BittrexTradingFee>>> GetTradingFeesAsync(CancellationToken ct = default);
+
+        /// <summary>
         /// Get account volume
         /// </summary>
         /// <param name="ct">Cancellation token</param>

@@ -186,6 +186,13 @@
             <param name="ct">Cancellation token</param>
             <returns>Account info</returns>
         </member>
+        <member name="M:Bittrex.Net.BittrexClient.GetTradingFeesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account trading fees
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account trading fee</returns>
+        </member>
         <member name="M:Bittrex.Net.BittrexClient.GetAccountVolumeAsync(System.Threading.CancellationToken)">
             <summary>
             Get account volume
@@ -2435,6 +2442,26 @@
         <member name="P:Bittrex.Net.Objects.BittrexTick.AskRate">
             <summary>
             The lowest ask price
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.BittrexTradingFee">
+            <summary>
+            Trading fee info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexTradingFee.Symbol">
+            <summary>
+            Symbol
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexTradingFee.MakerRate">
+            <summary>
+            Maker rate
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.BittrexTradingFee.TakerRate">
+            <summary>
+            Taker rate
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexWhitelistAddress">
