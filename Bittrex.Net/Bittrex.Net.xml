@@ -911,6 +911,13 @@
             <param name="ct">Cancellation token</param>
             <returns>Account info</returns>
         </member>
+        <member name="M:Bittrex.Net.IBittrexClient.GetTradingFeesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account trading fees
+            </summary>
+            <param name="ct">Cancellation token</param>
+            <returns>Account trading fee</returns>
+        </member>
         <member name="M:Bittrex.Net.IBittrexClient.GetAccountVolumeAsync(System.Threading.CancellationToken)">
             <summary>
             Get account volume

@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 6.0.2 - 19 Aug 2021
+    * Added GetTradingFeesAsync endpoint
+
 * Version 6.0.1 - 13 Aug 2021
     * Fix for OperationCancelledException being thrown when closing a socket from a .net framework project
     * Fixed unsubscribing not working
