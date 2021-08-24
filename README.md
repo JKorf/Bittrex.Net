@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 6.0.3 - 24 Aug 2021
+    * Updated CryptoExchange.Net, improving websocket and SymbolOrderBook performance
+
 * Version 6.0.2 - 19 Aug 2021
     * Added GetTradingFeesAsync endpoint
 
