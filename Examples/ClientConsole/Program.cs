@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Bittrex.Net;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Authentication;
@@ -12,7 +13,7 @@ namespace Examples
 {
     class Program
     {
-        static async void Main(string[] args)
+        static async Task Main(string[] args)
         {
             BittrexClient.SetDefaultOptions(new BittrexClientOptions()
             {
