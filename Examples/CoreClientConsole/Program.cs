@@ -7,6 +7,7 @@ using Bittrex.Net;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace CoreClientConsole
 {
@@ -18,8 +19,8 @@ namespace CoreClientConsole
             BittrexClient.SetDefaultOptions(new BittrexClientOptions()
             {
                 ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
-                LogVerbosity = LogVerbosity.Info,
-                LogWriters = new List<TextWriter>() { Console.Out }
+                LogLevel = LogLevel.Information,
+                LogWriters = new List<ILogger>() { new ConsoleLogger() }
             });
 
             using (var client = new BittrexClient())
@@ -31,7 +32,7 @@ namespace CoreClientConsole
                 var marketSummary = await client.GetSymbolSummaryAsync("BTC-USDT");
                 var marketSummaries = await client.GetSymbolSummariesAsync();
                 var orderbook = await client.GetOrderBookAsync("BTC-USDT");
-                var marketHistory = await client.GetSymbolTradesAsync("BTC-USDT");
+                var marketHistory = await client.GetTradeHistoryAsync("BTC-USDT");
 
                 // private
                 // Commented to prevent accidental order placement
@@ -54,7 +55,7 @@ namespace CoreClientConsole
             var socketClient = new BittrexSocketClient();
             var subscription = socketClient.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC", ticker =>
             {
-                Console.WriteLine($"ETH-BTC: {ticker.LastTradeRate}");
+                Console.WriteLine($"ETH-BTC: {ticker.Data.LastTradeRate}");
             });
 
             var subscription2 = socketClient.SubscribeToOrderBookUpdatesAsync("ETH-BTC", 25, state =>
@@ -67,7 +68,7 @@ namespace CoreClientConsole
                 // Balance update
             });
             Console.ReadLine();
-            await socketClient.UnsubscribeAll();
+            await socketClient.UnsubscribeAllAsync();
         }
     }
 }

@@ -6,30 +6,31 @@ using Bittrex.Net;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Examples
 {
     class Program
     {
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
             BittrexClient.SetDefaultOptions(new BittrexClientOptions()
             {
                 ApiCredentials = new ApiCredentials("APIKEY", "APISECRET"),
-                LogVerbosity = LogVerbosity.Info,
-                LogWriters = new List<TextWriter>() { Console.Out }
+                LogLevel = LogLevel.Information,
+                LogWriters = new List<ILogger>() { new ConsoleLogger() }
             });
 
             var client = new BittrexClient();
             
             // public
-            var markets = client.GetSymbols();
-            var currencies = client.GetCurrencies();
-            var price = client.GetTicker("BTC-ETH");
-            var marketSummary = client.GetSymbolSummary("BTC-ETH");
-            var marketSummaries = client.GetSymbolSummaries();
-            var orderbook = client.GetOrderBook("BTC-ETH");
-            var marketHistory = client.GetSymbolTrades("BTC-ETH");
+            var markets = await client.GetSymbolsAsync();
+            var currencies = await client.GetCurrenciesAsync();
+            var price = await client.GetTickerAsync("BTC-ETH");
+            var marketSummary = await client.GetSymbolSummaryAsync("BTC-ETH");
+            var marketSummaries = await client.GetSymbolSummariesAsync();
+            var orderbook = await client.GetOrderBookAsync("BTC-ETH");
+            var marketHistory = await client.GetTradeHistoryAsync("BTC-ETH");
 
             // private
             // Commented to prevent accidental order placement
@@ -37,22 +38,22 @@ namespace Examples
             //    client.PlaceOrder("BTC-USDT", OrderSide.Sell, OrderTypeV3.Limit, TimeInForce.GoodTillCancelled, 1, 1);
             //var orderInfo = client.GetOrder(placedOrder.Data.Id);
             //var canceledOrder = client.CancelOrder(placedOrder.Data.Id);
-            var openOrders = client.GetOpenOrders("BTC-USDT");
-            var orderTrades = client.GetExecutions("BTC-NEO");
+            var openOrders = await client.GetOpenOrdersAsync("BTC-USDT");
+            var orderTrades = await client.GetUserTradesAsync("BTC-NEO");
 
-            var balance = client.GetBalance("NEO");
-            var balances = client.GetBalances();
-            var depositAddress = client.GetDepositAddress("BTC");
-            var withdraw = client.Withdraw("TEST", 1, "TEST", "TEST");
-            var withdrawHistory = client.GetClosedWithdrawals();
-            var depositHistory = client.GetClosedDeposits();
+            var balance = await client.GetBalanceAsync("NEO");
+            var balances = await client.GetBalancesAsync();
+            var depositAddress = await client.GetDepositAddressAsync("BTC");
+            var withdraw = await client.WithdrawAsync("TEST", 1, "TEST", "TEST");
+            var withdrawHistory = await client.GetClosedWithdrawalsAsync();
+            var depositHistory = await client.GetClosedDepositsAsync();
             
 
             // Websocket
             var socketClient = new BittrexSocketClient();
             var subscription = socketClient.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC", ticker =>
             {
-                Console.WriteLine($"ETH-BTC: {ticker.LastTradeRate}");
+                Console.WriteLine($"ETH-BTC: {ticker.Data.LastTradeRate}");
             });
 
             var subscription2 = socketClient.SubscribeToOrderBookUpdatesAsync("ETH-BTC", 25, state =>
@@ -66,7 +67,7 @@ namespace Examples
             });
 
             Console.ReadLine();
-            socketClient.UnsubscribeAll();
+            await socketClient.UnsubscribeAllAsync();
         }
     }
 }

@@ -23,14 +23,17 @@ namespace WinformsClient
             socketClient = new BittrexSocketClient();
             socketClient.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC",  data =>
             {
-                UpdateLastPrice(data.LastTradeRate);
+                UpdateLastPrice(data.Data.LastTradeRate);
             });
-            
-            using(var client = new BittrexClient())
+
+            Task.Run(async () =>
             {
-                var result = client.GetTicker("ETH-BTC");
-                UpdateLastPrice(result.Data.LastTradeRate);
-            }
+                using (var client = new BittrexClient())
+                {
+                    var result = await client.GetTickerAsync("ETH-BTC");
+                    UpdateLastPrice(result.Data.LastTradeRate);
+                }
+            });
         }
 
         private void UpdateLastPrice(decimal? price)
