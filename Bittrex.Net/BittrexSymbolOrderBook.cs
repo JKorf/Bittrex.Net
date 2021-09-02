@@ -16,8 +16,10 @@ namespace Bittrex.Net
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
         private readonly IBittrexSocketClient socketClient;
-        private readonly IBittrexClient client;
+        private readonly IBittrexClient restClient;
         private readonly int _limit;
+        private readonly bool _socketOwner;
+        private readonly bool _restOwner;
 
         /// <summary>
         /// Create a new order book instance
@@ -34,10 +36,12 @@ namespace Bittrex.Net
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });
-            client = new BittrexClient(new BittrexClientOptions()
+            restClient = options?.RestClient ?? new BittrexClient(new BittrexClientOptions()
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });
+            _socketOwner = options?.SocketClient == null;
+            _restOwner = options?.RestClient == null;
         }
 
         /// <inheritdoc />
@@ -50,7 +54,7 @@ namespace Bittrex.Net
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
             await Task.Delay(300).ConfigureAwait(false);
-            var queryResult = await client.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
+            var queryResult = await restClient.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
@@ -69,7 +73,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResyncAsync()
         {
-            var queryResult = await client.GetOrderBookAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await restClient.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             
@@ -84,7 +88,10 @@ namespace Bittrex.Net
             asks.Clear();
             bids.Clear();
 
-            socketClient?.Dispose();
+            if(_restOwner)
+                restClient?.Dispose();
+            if (_socketOwner)
+                socketClient?.Dispose();
         }
     }
 }

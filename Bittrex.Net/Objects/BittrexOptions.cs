@@ -75,11 +75,17 @@ namespace Bittrex.Net.Objects
         public IBittrexSocketClient? SocketClient { get; }
 
         /// <summary>
+        /// The rest client to use for requesting the initial order book
+        /// </summary>
+        public IBittrexClient? RestClient { get; }
+
+        /// <summary>
         /// </summary>
         /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null) : base("Bittrex", true, true)
+        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null, IBittrexClient? restClient = null) : base("Bittrex", true, true)
         {
             SocketClient = socketClient;
+            RestClient = restClient;
         }
     }
 }
