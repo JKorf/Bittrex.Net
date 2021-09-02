@@ -2166,7 +2166,12 @@
             The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
             </summary>
         </member>
-        <member name="M:Bittrex.Net.Objects.BittrexOrderBookOptions.#ctor(Bittrex.Net.Interfaces.IBittrexSocketClient)">
+        <member name="P:Bittrex.Net.Objects.BittrexOrderBookOptions.RestClient">
+            <summary>
+            The rest client to use for requesting the initial order book
+            </summary>
+        </member>
+        <member name="M:Bittrex.Net.Objects.BittrexOrderBookOptions.#ctor(Bittrex.Net.Interfaces.IBittrexSocketClient,Bittrex.Net.IBittrexClient)">
             <summary>
             </summary>
             <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
