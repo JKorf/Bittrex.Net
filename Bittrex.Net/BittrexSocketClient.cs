@@ -296,7 +296,7 @@ namespace Bittrex.Net
             var socket = CreateSocket(address);
             var socketWrapper = new SocketConnection(this, socket);
             foreach (var kvp in genericHandlers)
-                socketWrapper.AddSubscription(SocketSubscription.CreateForIdentifier(kvp.Key, false, kvp.Value));
+                socketWrapper.AddSubscription(SocketSubscription.CreateForIdentifier(NextId(), kvp.Key, false, kvp.Value));
             return socketWrapper;
         }
 

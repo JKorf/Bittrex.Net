@@ -29,7 +29,7 @@ namespace Bittrex.Net
             encryptor = SHA512.Create();
         }
 
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, PostParameters postParameterPosition, ArrayParametersSerialization arraySerialization)
+        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition parameterPosition, ArrayParametersSerialization arraySerialization)
         {
             if (!signed)
                 return new Dictionary<string, string>();
@@ -42,7 +42,7 @@ namespace Bittrex.Net
                 result.Add("Api-Key", Credentials.Key.GetString());
             result.Add("Api-Timestamp", Math.Round((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
             var jsonContent = string.Empty;
-            if (method != HttpMethod.Get && method != HttpMethod.Delete)
+            if (parameterPosition == HttpMethodParameterPosition.InBody)
             {
                 if(parameters.First().Key == string.Empty)
                     jsonContent = JsonConvert.SerializeObject(parameters.First().Value);
