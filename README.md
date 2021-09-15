@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 6.0.6 - 15 Sep 2021
+    * Updated CryptoExchange.Net
+
 * Version 6.0.5 - 02 Sep 2021
     * Fix for disposing order book closing socket even if there are other connections
 
