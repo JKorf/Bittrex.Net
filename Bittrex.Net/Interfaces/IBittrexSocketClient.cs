@@ -15,6 +15,13 @@ namespace Bittrex.Net.Interfaces
     public interface IBittrexSocketClient: ISocketClient
     {
         /// <summary>
+        /// Set the API key and secret
+        /// </summary>
+        /// <param name="apiKey">The api key</param>
+        /// <param name="apiSecret">The api secret</param>
+        void SetApiCredentials(string apiKey, string apiSecret);
+
+        /// <summary>
         /// Subscribe to heartbeat updates
         /// </summary>
         /// <param name="onHeartbeat">Data handler</param>

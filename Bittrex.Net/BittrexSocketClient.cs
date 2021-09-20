@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
+using CryptoExchange.Net.Authentication;
 
 namespace Bittrex.Net
 {
@@ -56,6 +57,16 @@ namespace Bittrex.Net
 
         #region methods
         #region public
+        /// <summary>
+        /// Set the API key and secret
+        /// </summary>
+        /// <param name="apiKey">The api key</param>
+        /// <param name="apiSecret">The api secret</param>
+        public void SetApiCredentials(string apiKey, string apiSecret)
+        {
+            SetAuthenticationProvider(new BittrexAuthenticationProvider(new ApiCredentials(apiKey, apiSecret)));
+        }
+
         /// <summary>
         /// Set the default options for new clients
         /// </summary>

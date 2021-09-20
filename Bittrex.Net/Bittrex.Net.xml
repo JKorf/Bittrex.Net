@@ -557,6 +557,13 @@
             </summary>
             <param name="options">Options to use for this client</param>
         </member>
+        <member name="M:Bittrex.Net.BittrexSocketClient.SetApiCredentials(System.String,System.String)">
+            <summary>
+            Set the API key and secret
+            </summary>
+            <param name="apiKey">The api key</param>
+            <param name="apiSecret">The api secret</param>
+        </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.SetDefaultOptions(Bittrex.Net.Objects.BittrexSocketClientOptions)">
             <summary>
             Set the default options for new clients
@@ -1236,6 +1243,13 @@
             <summary>
             Interface for the Bittrex V3 socket client
             </summary>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SetApiCredentials(System.String,System.String)">
+            <summary>
+            Set the API key and secret
+            </summary>
+            <param name="apiKey">The api key</param>
+            <param name="apiSecret">The api secret</param>
         </member>
         <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}})">
             <summary>
