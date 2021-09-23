@@ -1096,7 +1096,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
         {
-            if(parameters.First().Key == string.Empty)
+            if(parameters.Any() && parameters.First().Key == string.Empty)
             {
                 var stringData = JsonConvert.SerializeObject(parameters.First().Value);
                 request.SetContent(stringData, contentType);

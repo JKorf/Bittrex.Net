@@ -44,7 +44,7 @@ namespace Bittrex.Net
             var jsonContent = string.Empty;
             if (parameterPosition == HttpMethodParameterPosition.InBody)
             {
-                if(parameters.First().Key == string.Empty)
+                if(parameters.Any() && parameters.First().Key == string.Empty)
                     jsonContent = JsonConvert.SerializeObject(parameters.First().Value);
                 else
                     jsonContent = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
