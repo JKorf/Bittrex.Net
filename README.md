@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 6.1.1 - 23 Sep 2021
+    * Fixed exception for post requests without parameters
+
 * Version 6.1.0 - 20 Sep 2021
     * Added missing SetApiCredentials method
     * Updated CryptoExchange.Net
