@@ -907,7 +907,7 @@ namespace Bittrex.Net
                 throw new ArgumentException("No orders provided");
 
             var wrapper = new Dictionary<string, object>();            
-            var orderParameters = new Dictionary<string, object>[orders.Length];
+            var orderParameters = new Dictionary<string, object>[orders!.Length];
             int i = 0;
             foreach(var order in orders)
             {
@@ -956,7 +956,7 @@ namespace Bittrex.Net
                 throw new ArgumentException("No orders provided");
 
             var wrapper = new Dictionary<string, object>();
-            var orderParameters = new Dictionary<string, object>[ordersToCancel.Length];
+            var orderParameters = new Dictionary<string, object>[ordersToCancel!.Length];
             int i = 0;
             foreach (var order in ordersToCancel)
             {
@@ -986,6 +986,7 @@ namespace Bittrex.Net
         #endregion
 
         #region common interface
+#pragma warning disable 1066
         async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
         {
             var symbols = await GetSymbolsAsync().ConfigureAwait(false);
@@ -1075,6 +1076,7 @@ namespace Bittrex.Net
             var result = await GetBalancesAsync().ConfigureAwait(false);
             return result.As<IEnumerable<ICommonBalance>>(result.Data);
         }
+#pragma warning restore 1066
 
         #endregion
 

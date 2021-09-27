@@ -27,18 +27,36 @@ namespace Bittrex.Net.Converters
 
             foreach(JObject item in array)
             {
-                var status = int.Parse(item["status"].ToString());
-                if(status == 200)
+                var statusToken = item["status"];
+                if(statusToken == null || statusToken.Type == JTokenType.Null)
+                {
+                    Debug.WriteLine($"Failed to deserialize batch result, no status property. Data: " + result.ToString());
+                    return default;
+                }
+
+                var status = statusToken.Value<int>();
+                if (status == 200)
                 {
                     var data = item["payload"];
+                    if (data == null || data.Type == JTokenType.Null)
+                    {
+                        Debug.WriteLine($"Failed to deserialize batch result, no payload property. Data: " + result.ToString());
+                        return default;
+                    }
+
                     var converted = (T)data.ToObject(typeof(T));
                     result.Add(new CallResult<T>(converted, null));
                 }
                 else
                 {
                     var error = item["payload"];
-                    var msg = error["code"].ToString();
-                    result.Add(new CallResult<T>(default, new ServerError(status, msg)));
+                    if (error == null)
+                        result.Add(new CallResult<T>(default, new UnknownError("Unknown payload structure")));
+                    else
+                    {
+                        var msg = error["code"]?.ToString();
+                        result.Add(new CallResult<T>(default, new ServerError(status, msg ?? "Unknown error")));
+                    }
                 }
             }
 

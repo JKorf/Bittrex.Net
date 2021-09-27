@@ -276,7 +276,7 @@ namespace Bittrex.Net
         {
             return await base.SubscribeAsync<JToken>(new ConnectionRequest("subscribe", channels), null, authenticated, data =>
             {
-                if ((string) data.Data["M"] == "heartbeat")
+                if (data.Data["M"]?.ToString() == "heartbeat")
                 {
                     handler(data.As((T) Convert.ChangeType(DateTime.UtcNow, typeof(T))));
                     return;
@@ -412,13 +412,13 @@ namespace Bittrex.Net
             if (channel.StartsWith(method))
             {
                 var tokenData = JToken.Parse(data);
-                var symbol = (string)(tokenData["symbol"] ?? tokenData["marketSymbol"]);
+                var symbol = (tokenData["symbol"] ?? tokenData["marketSymbol"])!.ToString();
                 if (channel.Length < method.Length + symbol.Length + 1)
                     return false;
 
                 if (channel.StartsWith("candle") && method == "candle")
                 {
-                    var interval = (string)tokenData["interval"];
+                    var interval = tokenData["interval"]?.ToString();
                     return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(interval);
                 }
 
@@ -435,7 +435,7 @@ namespace Bittrex.Net
             if (msg == null)
                 return false;
 
-            var method = (string)message["M"];
+            var method = message["M"]?.ToString();
             if (method == "authenticationExpiring" && identifier == "Reauthenticate")
                 return true;
             return false;
@@ -484,7 +484,20 @@ namespace Bittrex.Net
 
         private void DecodeSignalRData<T>(DataEvent<JToken> data, Action<DataEvent<T>> handler)
         {
-            var actualData = (string)data.Data["A"][0];
+            var internalData = data.Data["A"];
+            if(internalData == null || !internalData.Any())
+            {
+                log.Write(LogLevel.Warning, "Received update without data? " + data.Data);
+                return;
+            }
+
+            var actualData = internalData[0]?.ToString();
+            if(actualData == null)
+            {
+                log.Write(LogLevel.Warning, "Received update without actual data? " + data.Data);
+                return;
+            }
+
             var result = DecodeData(actualData);
             if (result == null)
                 return;
@@ -497,13 +510,13 @@ namespace Bittrex.Net
 
             string? symbol = null;
             if (token["marketSymbol"] != null)
-                symbol = (string)token["marketSymbol"];
+                symbol = token["marketSymbol"]?.ToString();
             else if (token["symbol"] != null)
-                symbol = (string)token["symbol"];
-            else if (token["deltas"] != null && token["deltas"][0]["marketSymbol"] != null)
-                symbol = (string)token["deltas"][0]["marketSymbol"];
-            else if (token["deltas"] != null && token["deltas"][0]["symbol"] != null)
-                symbol = (string)token["deltas"][0]["symbol"];
+                symbol = token["symbol"]?.ToString(); 
+            else if (token["deltas"]?.Count() > 0 && token["deltas"]![0]!["marketSymbol"] != null)
+                symbol = token["deltas"]![0]!["marketSymbol"]?.ToString(); 
+            else if (token["deltas"]?.Count() > 0 && token["deltas"]![0]!["symbol"] != null)
+                symbol = token["deltas"]![0]!["symbol"]?.ToString();
 
 
             var decodeResult = Deserialize<T>(token);
