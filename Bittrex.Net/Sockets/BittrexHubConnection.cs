@@ -31,7 +31,13 @@ namespace Bittrex.Net.Sockets
 
             connection.StateChanged += StateChangeHandler;
             connection.Error += s => Handle(errorHandlers, s);
-            connection.Received += str => Handle(messageHandlers, str);
+            connection.Received += str =>
+            {
+                UpdateReceivedMessages();
+                lock (_receivedMessagesLock)
+                    _receivedMessages.Add(DateTime.UtcNow, str.Length);
+                Handle(messageHandlers, str);
+            };
         }
 
         private void StateChangeHandler(StateChange change)
