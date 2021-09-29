@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 6.1.2 - 29 Sep 2021
+    * Updated CryptoExchange.Net
+
 * Version 6.1.1 - 23 Sep 2021
     * Fixed exception for post requests without parameters
 
