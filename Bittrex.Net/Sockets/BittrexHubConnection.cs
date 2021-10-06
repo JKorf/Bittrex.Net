@@ -33,9 +33,11 @@ namespace Bittrex.Net.Sockets
             connection.Error += s => Handle(errorHandlers, s);
             connection.Received += str =>
             {
-                UpdateReceivedMessages();
                 lock (_receivedMessagesLock)
-                    _receivedMessages.Add(DateTime.UtcNow, str.Length);
+                {
+                    UpdateReceivedMessages();
+                    _receivedMessages.Add(new ReceiveItem(DateTime.UtcNow, str.Length));
+                }
                 Handle(messageHandlers, str);
             };
         }
