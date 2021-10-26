@@ -1,0 +1,8 @@
+[
+  {
+    "symbol": "string",
+    "lastTradeRate": "1.1",
+    "bidRate": "1.2",
+    "askRate": "1.3"
+  }
+]

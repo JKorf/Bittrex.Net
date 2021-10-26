@@ -1,5 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -14,14 +15,18 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// The currency of the withdrawal
+        /// The asset of the withdrawal
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The quantity of the withdrawal
         /// </summary>
-        public decimal Quantity { get; set; }
+        public decimal Quantity { get; set; }        
+        /// <summary>
+        /// Payment method id
+        /// </summary>
+        public string FundsTransferMethodId { get; set; } = string.Empty;
         /// <summary>
         /// The address the withdrawal is to
         /// </summary>
@@ -36,7 +41,7 @@ namespace Bittrex.Net.Objects
         /// The transaction cost of the withdrawal
         /// </summary>
         [JsonProperty("txCost")]
-        public decimal TransactionCost { get; set; }
+        public decimal TransactionFee { get; set; }
         /// <summary>
         /// The transaction id
         /// </summary>
@@ -50,15 +55,29 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The time the withdrawal was created
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        [JsonProperty("createdAt")]
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// The time the withdrawal was completed
         /// </summary>
-        public DateTime? CompletedAt { get; set; }
+        [JsonProperty("completedAt")]
+        public DateTime? CompleteTime { get; set; }
 
         /// <summary>
         /// Withdrawal id as specified by the client
         /// </summary>
         public string ClientWithdrawalId { get; set; } = string.Empty;
+        /// <summary>
+        /// Withdrawal target
+        /// </summary>
+        public string Target { get; set; } = string.Empty;
+        /// <summary>
+        /// Account id
+        /// </summary>
+        public string AccountId { get; set; } = string.Empty;
+        /// <summary>
+        /// Error info
+        /// </summary>
+        public BittrexError? Error { get; set; }
     }
 }

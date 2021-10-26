@@ -1,4 +1,5 @@
 ﻿using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -14,10 +15,10 @@ namespace Bittrex.Net.Objects
         [JsonConverter(typeof(DepositAddressStatusConverter))]
         public DepositAddressStatus Status { get; set; }
         /// <summary>
-        /// The currency of the deposit address
+        /// The asset of the deposit address
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// the address
         /// </summary>

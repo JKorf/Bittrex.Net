@@ -19,6 +19,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Update data
         /// </summary>
-        public IEnumerable<BittrexExecution> Deltas { get; set; } = default!;
+        public IEnumerable<BittrexUserTrade> Deltas { get; set; } = default!;
     }
 }

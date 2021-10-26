@@ -1,0 +1,21 @@
+[
+  {
+    "symbol": "string",
+    "baseCurrencySymbol": "string",
+    "quoteCurrencySymbol": "string",
+    "minTradeSize": "1.1",
+    "precision": "1",
+    "status": "ONLINE",
+    "createdAt": "2021-04-23T18:25:43.511Z",
+    "notice": "string",
+    "prohibitedIn": [
+      "string"
+    ],
+    "associatedTermsOfService": [
+      "string"
+    ],
+    "tags": [
+      "string"
+    ]
+  }
+]

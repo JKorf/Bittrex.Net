@@ -10,10 +10,10 @@ namespace Bittrex.Net.Objects
     public class BittrexBalance: ICommonBalance
     {
         /// <summary>
-        /// The currency
+        /// The asset
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The total funds
         /// </summary>
@@ -25,9 +25,10 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Update time
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        [JsonProperty("updatedAt")]
+        public DateTime UpdateTime { get; set; }
 
-        string ICommonBalance.CommonAsset => Currency;
+        string ICommonBalance.CommonAsset => Asset;
         decimal ICommonBalance.CommonAvailable => Available;
         decimal ICommonBalance.CommonTotal => Total;
     }

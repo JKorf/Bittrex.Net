@@ -9,14 +9,15 @@ namespace Bittrex.Net.Objects
     public class BittrexWhitelistAddress
     {
         /// <summary>
-        /// The currency of the address
+        /// The asset of the address
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// When the address was whitelisted
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        [JsonProperty("createdAt")]
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// Status of the address
         /// </summary>
@@ -24,7 +25,8 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// When it may be used for withdrawals
         /// </summary>
-        public DateTime ActiveAt { get; set; }
+        [JsonProperty("activeAt")]
+        public DateTime ActiveTime { get; set; }
         /// <summary>
         /// Address
         /// </summary>

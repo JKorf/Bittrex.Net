@@ -1,0 +1,8 @@
+[{
+  "currencySymbol": "string",
+  "createdAt": "2021-04-23T18:25:43.511Z",
+  "status": "string",
+  "activeAt": "2021-04-23T18:25:43.511Z",
+  "cryptoAddress": "string",
+  "cryptoAddressTag": "string"
+}]

@@ -1,5 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
@@ -18,8 +19,8 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The direction of the order
         /// </summary>
-        [JsonConverter(typeof(OrderSideConverter))]
-        public OrderSide Direction { get; set; }
+        [JsonProperty("direction"), JsonConverter(typeof(OrderSideConverter))]
+        public OrderSide Side { get; set; }
         /// <summary>
         /// The type of order
         /// </summary>
@@ -30,9 +31,10 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal? Quantity { get; set; }
         /// <summary>
-        /// The limit of the order
+        /// The price of the order
         /// </summary>
-        public decimal? Limit { get; set; }
+        [JsonProperty("limit")]
+        public decimal? Price { get; set; }
         /// <summary>
         /// The ceiling of the order
         /// </summary>
@@ -47,6 +49,10 @@ namespace Bittrex.Net.Objects
         /// Id to track the order by
         /// </summary>
         public string ClientOrderId { get; set; } = string.Empty;
+        /// <summary>
+        /// Use awards
+        /// </summary>
+        public bool UseAwards { get; set; }
     }
 
     /// <summary>
@@ -58,19 +64,22 @@ namespace Bittrex.Net.Objects
         /// The id of the order
         /// </summary>
         public string Id { get; set; } = string.Empty;
-        
+
         /// <summary>
         /// The quantity that's been filled
         /// </summary>
-        public decimal FillQuantity { get; set; }
+        [JsonProperty("fillQuantity")]
+        public decimal QuantityFilled { get; set; }
         /// <summary>
-        /// The commission paid for this order
+        /// The fee paid for this order
         /// </summary>
-        public decimal Commission { get; set; }
+        [JsonProperty("commission")]
+        public decimal Fee { get; set; }
         /// <summary>
-        /// The proceeds of this order
+        /// The quote quantity filled of this order
         /// </summary>
-        public decimal Proceeds { get; set; }
+        [JsonProperty("proceeds")]
+        public decimal QuoteQuantityFilled { get; set; }
         /// <summary>
         /// The status of the order
         /// </summary>
@@ -79,15 +88,18 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// When the order was created
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        [JsonProperty("createdAt")]
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// When the order was last updated
         /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        [JsonProperty("updatedAt")]
+        public DateTime? UpdateTime { get; set; }
         /// <summary>
         /// When the order was closed
         /// </summary>
-        public DateTime? ClosedAt { get; set; }
+        [JsonProperty("closedAt")]
+        public DateTime? CloseTime { get; set; }
 
         /// <summary>
         /// Conditional order to cancel if this order executes
@@ -96,16 +108,16 @@ namespace Bittrex.Net.Objects
 
         string ICommonOrderId.CommonId => Id;
         string ICommonOrder.CommonSymbol => Symbol;
-        decimal ICommonOrder.CommonPrice => Limit ?? 0;
+        decimal ICommonOrder.CommonPrice => Price ?? 0;
         decimal ICommonOrder.CommonQuantity => Quantity ?? 0;
         IExchangeClient.OrderStatus ICommonOrder.CommonStatus =>
             Status == OrderStatus.Open ? IExchangeClient.OrderStatus.Active :
-            FillQuantity < Quantity ? IExchangeClient.OrderStatus.Canceled :
+            QuantityFilled < Quantity ? IExchangeClient.OrderStatus.Canceled :
             IExchangeClient.OrderStatus.Filled;
         bool ICommonOrder.IsActive => Status == OrderStatus.Open;
-        DateTime ICommonOrder.CommonOrderTime => CreatedAt;
+        DateTime ICommonOrder.CommonOrderTime => CreateTime;
 
-        IExchangeClient.OrderSide ICommonOrder.CommonSide => Direction == OrderSide.Sell
+        IExchangeClient.OrderSide ICommonOrder.CommonSide => Side == OrderSide.Sell
             ? IExchangeClient.OrderSide.Sell
             : IExchangeClient.OrderSide.Buy;
 
@@ -113,8 +125,7 @@ namespace Bittrex.Net.Objects
         {
             get
             {
-                if (Type == OrderType.CeilingLimit
-                    || Type == OrderType.Limit)
+                if (Type == OrderType.Limit)
                     return IExchangeClient.OrderType.Limit;
                 return IExchangeClient.OrderType.Market;
             }

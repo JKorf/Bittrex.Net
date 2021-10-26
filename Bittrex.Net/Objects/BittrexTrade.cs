@@ -1,5 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
@@ -8,7 +9,7 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Info on a trade
     /// </summary>
-    public class BittrexSymbolTrade: ICommonRecentTrade
+    public class BittrexTrade: ICommonRecentTrade
     {
         /// <summary>
         /// Unique id of the trade
@@ -20,20 +21,22 @@ namespace Bittrex.Net.Objects
         [JsonConverter(typeof(OrderSideConverter))]
         public OrderSide TakerSide { get; set; }
         /// <summary>
-        /// The quantity of the entry
+        /// The quantity of the trade
         /// </summary>
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The price of the entry
+        /// The price of the trade
         /// </summary>
-        public decimal Rate { get; set; }
+        [JsonProperty("rate")]
+        public decimal Price { get; set; }
         /// <summary>
         /// The timestamp of the trade execution
         /// </summary>
-        public DateTime ExecutedAt { get; set; }
+        [JsonProperty("executedAt")]
+        public DateTime Timestamp { get; set; }
 
-        decimal ICommonRecentTrade.CommonPrice => Rate;
+        decimal ICommonRecentTrade.CommonPrice => Price;
         decimal ICommonRecentTrade.CommonQuantity => Quantity;
-        DateTime ICommonRecentTrade.CommonTradeTime => ExecutedAt;
+        DateTime ICommonRecentTrade.CommonTradeTime => Timestamp;
     }
 }

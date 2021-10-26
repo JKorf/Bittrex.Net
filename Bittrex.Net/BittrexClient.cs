@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -33,7 +34,7 @@ namespace Bittrex.Net
         /// </summary>
         public event Action<ICommonOrderId>? OnOrderPlaced;
         /// <summary>
-        /// Event triggered when an order is cancelled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
+        /// Event triggered when an order is canceled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
         /// </summary>
         public event Action<ICommonOrderId>? OnOrderCanceled;
 
@@ -73,11 +74,7 @@ namespace Bittrex.Net
             SetAuthenticationProvider(new BittrexAuthenticationProvider(new ApiCredentials(apiKey, apiSecret)));
         }
 
-        /// <summary>
-        /// Gets the server time
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Time of the server</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
         {
             var result = await SendRequestAsync<BittrexServerTime>(GetUrl("ping"), HttpMethod.Get, ct).ConfigureAwait(false);
@@ -86,163 +83,100 @@ namespace Bittrex.Net
 
         #region symbols
 
-        /// <summary>
-        /// Gets information about all available symbols
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of symbols</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexSymbol>>> GetSymbolsAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexSymbol>>(GetUrl("markets"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get permissions for a specific currency
-        /// </summary>
-        /// <param name="currency">Currency</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BittrexCurrencyPermission>>> GetCurrencyPermissionAsync(string currency, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexAssetPermission>>> GetAssetPermissionAsync(string asset, CancellationToken ct = default)
         {
-            currency.ValidateNotNull(nameof(currency));
+            asset.ValidateNotNull(nameof(asset));
 
-            return await SendRequestAsync<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies/" + currency), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexAssetPermission>>(GetUrl("account/permissions/currencies/" + asset), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get permissions for all currencies
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BittrexCurrencyPermission>>> GetCurrencyPermissionsAsync(CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexAssetPermission>>> GetAssetPermissionsAsync(CancellationToken ct = default)
         {
-            return await SendRequestAsync<IEnumerable<BittrexCurrencyPermission>>(GetUrl("account/permissions/currencies"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexAssetPermission>>(GetUrl("account/permissions/currencies"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get permissions for a specific symbol
-        /// </summary>
-        /// <param name="symbol">Symbol</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketPermission>>> GetSymbolPermissionAsync(string symbol, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexSymbolPermission>>> GetSymbolPermissionAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateNotNull(nameof(symbol));
             symbol.ValidateBittrexSymbol();
 
-            return await SendRequestAsync<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets/" + symbol), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexSymbolPermission>>(GetUrl("account/permissions/markets/" + symbol), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get permissions for all symbols
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        public async Task<WebCallResult<IEnumerable<BittrexMarketPermission>>> GetSymbolPermissionsAsync(CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexSymbolPermission>>> GetSymbolPermissionsAsync(CancellationToken ct = default)
         {
-            return await SendRequestAsync<IEnumerable<BittrexMarketPermission>>(GetUrl("account/permissions/markets"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexSymbolPermission>>(GetUrl("account/permissions/markets"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets information about a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to get info for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol info</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexSymbol>> GetSymbolAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             return await SendRequestAsync<BittrexSymbol>(GetUrl("markets/" + symbol), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets summaries of all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of symbol summaries</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexSymbolSummary>>> GetSymbolSummariesAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexSymbolSummary>>(GetUrl("markets/summaries"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets summary of a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to get info for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol summary</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexSymbolSummary>> GetSymbolSummaryAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             return await SendRequestAsync<BittrexSymbolSummary>(GetUrl($"markets/{symbol}/summary"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets the order book of a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to get the order book for</param>
-        /// <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol order book</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             limit?.ValidateIntValues(nameof(limit), 1, 25, 500);
-            
+
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("depth", limit?.ToString(CultureInfo.InvariantCulture));
 
             var result = await SendRequestAsync<BittrexOrderBook>(GetUrl($"markets/{symbol}/orderbook"), HttpMethod.Get, ct, parameters).ConfigureAwait(false);
-            if(result.Data != null)
+            if (result.Data != null)
                 result.Data.Sequence = result.ResponseHeaders!.GetSequence() ?? 0;
             return result;
         }
 
-        /// <summary>
-        /// Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="symbol">The symbol to get trades for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol trade list</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexSymbolTrade>>> GetTradeHistoryAsync(string symbol, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexTrade>>> GetTradeHistoryAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            return await SendRequestAsync<IEnumerable<BittrexSymbolTrade>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexTrade>>(GetUrl($"markets/{symbol}/trades"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets the ticker of a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to get ticker for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol ticker</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexTick>> GetTickerAsync(string symbol, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             var result = await SendRequestAsync<BittrexTick>(GetUrl($"markets/{symbol}/ticker"), HttpMethod.Get, ct).ConfigureAwait(false);
-            if (result.Success)
+            if (result.Success && string.IsNullOrEmpty(result.Data.Symbol))
                 result.Data.Symbol = symbol;
             return result;
         }
 
-        /// <summary>
-        /// Gets list of tickers for all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol tickers</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexTick>>> GetTickersAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexTick>>(GetUrl("markets/tickers"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="symbol">The symbol to get klines for</param>
-        /// <param name="interval">The interval of the klines</param>
-        /// <param name="type">The type of klines</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol klines</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexKline>>> GetKlinesAsync(string symbol, KlineInterval interval, KlineType? type = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
@@ -250,22 +184,12 @@ namespace Bittrex.Net
             return await SendRequestAsync<IEnumerable<BittrexKline>>(GetUrl($"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant() : "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/recent"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets historical klines for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol to get klines for</param>
-        /// <param name="interval">The interval of the klines</param>
-        /// <param name="year">The year to get klines for</param>
-        /// <param name="month">The month to get klines for</param>
-        /// <param name="day">The day to get klines for</param>
-        /// <param name="type">The type of klines</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Symbol kline</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexKline>>> GetHistoricalKlinesAsync(string symbol, KlineInterval interval, int year, int? month = null, int? day = null, KlineType? type = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
 
-            if(interval == KlineInterval.OneDay && month.HasValue)
+            if (interval == KlineInterval.OneDay && month.HasValue)
                 throw new ArgumentException("Can't specify month value when using day interval");
 
             if (interval == KlineInterval.OneHour && day.HasValue)
@@ -275,7 +199,7 @@ namespace Bittrex.Net
                 throw new ArgumentException("Can't specify day value without month value");
 
             var url =
-                $"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant(): "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/historical/{year}";
+                $"markets/{symbol}/candles{(type.HasValue ? "/" + type.ToString().ToUpperInvariant() : "")}/{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}/historical/{year}";
             if (month.HasValue)
                 url += "/" + month;
             if (day.HasValue)
@@ -286,57 +210,36 @@ namespace Bittrex.Net
         #endregion
 
         #region currencies
-        
-        /// <summary>
-        /// Gets a list of all currencies
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of currencies</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexCurrency>>> GetCurrenciesAsync(CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexAsset>>> GetAssetsAsync(CancellationToken ct = default)
         {
-            return await SendRequestAsync<IEnumerable<BittrexCurrency>>(GetUrl("currencies"), HttpMethod.Get, ct).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexAsset>>(GetUrl("currencies"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets info on a currency
-        /// </summary>
-        /// <param name="currency">The name of the currency</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Currency info</returns>
-        public async Task<WebCallResult<BittrexCurrency>> GetCurrencyAsync(string currency, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexAsset>> GetAssetAsync(string asset, CancellationToken ct = default)
         {
-            currency.ValidateNotNull(nameof(currency));
-            return await SendRequestAsync<BittrexCurrency>(GetUrl($"currencies/{currency}"), HttpMethod.Get, ct).ConfigureAwait(false);
+            asset.ValidateNotNull(nameof(asset));
+            return await SendRequestAsync<BittrexAsset>(GetUrl($"currencies/{asset}"), HttpMethod.Get, ct).ConfigureAwait(false);
         }
         #endregion
 
         #region accounts
-        
-        /// <summary>
-        /// Get account info
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Account info</returns>
+
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexAccount>> GetAccountAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<BittrexAccount>(GetUrl("account"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get account trading fees
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Account trading fee</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexTradingFee>>> GetTradingFeesAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexTradingFee>>(GetUrl("account/fees/trading"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get account volume
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Account volume</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexAccountVolume>> GetAccountVolumeAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<BittrexAccountVolume>(GetUrl("account/volume"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
@@ -345,66 +248,42 @@ namespace Bittrex.Net
 
         #region balances
 
-       
-        /// <summary>
-        /// Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of balances</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexBalance>>> GetBalancesAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexBalance>>(GetUrl("balances"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
-              
-        /// <summary>
-        /// Gets current balance for a currency
-        /// </summary>
-        /// <param name="currency">The name of the currency to get balance for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Balance for currency</returns>
-        public async Task<WebCallResult<BittrexBalance>> GetBalanceAsync(string currency, CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexBalance>> GetBalanceAsync(string asset, CancellationToken ct = default)
         {
-            currency.ValidateNotNull(nameof(currency));
-            return await SendRequestAsync<BittrexBalance>(GetUrl($"balances/{currency}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            asset.ValidateNotNull(nameof(asset));
+            return await SendRequestAsync<BittrexBalance>(GetUrl($"balances/{asset}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
         #endregion
 
         #region addresses
-        
-        /// <summary>
-        /// Gets list of deposit addresses
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of deposit addresses</returns>
+
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexDepositAddress>>> GetDepositAddressesAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexDepositAddress>>(GetUrl("addresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets deposit addresses for a currency
-        /// </summary>
-        /// <param name="currency">The name of the currency to get the deposit address for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Deposit addresses</returns>
-        public async Task<WebCallResult<BittrexDepositAddress>> GetDepositAddressAsync(string currency, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexDepositAddress>> GetDepositAddressAsync(string asset, CancellationToken ct = default)
         {
-            currency.ValidateNotNull(nameof(currency));
-            return await SendRequestAsync<BittrexDepositAddress>(GetUrl($"addresses/{currency}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            asset.ValidateNotNull(nameof(asset));
+            return await SendRequestAsync<BittrexDepositAddress>(GetUrl($"addresses/{asset}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Request a deposit address for a currency
-        /// </summary>
-        /// <param name="currency">The name of the currency to get request a deposit address for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>The deposit address</returns>
-        public async Task<WebCallResult<BittrexDepositAddress>> RequestDepositAddressAsync(string currency, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexDepositAddress>> RequestDepositAddressAsync(string asset, CancellationToken ct = default)
         {
-            currency.ValidateNotNull(nameof(currency));
+            asset.ValidateNotNull(nameof(asset));
             var parameters = new Dictionary<string, object>()
             {
-                { "currencySymbol", currency }
+                { "currencySymbol", asset }
             };
 
             return await SendRequestAsync<BittrexDepositAddress>(GetUrl("addresses"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
@@ -412,45 +291,29 @@ namespace Bittrex.Net
         #endregion
 
         #region deposits
-       
-        /// <summary>
-        /// Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="currency">Filter the list by currency</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of deposits</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetOpenDepositsAsync(string? currency = null, CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetOpenDepositsAsync(string? asset = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", currency);
+            parameters.AddOptionalParameter("currencySymbol", asset);
 
             return await SendRequestAsync<IEnumerable<BittrexDeposit>>(GetUrl("deposits/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets list of closed deposits
-        /// </summary>
-        /// <param name="currency">Filter the list by currency</param>
-        /// <param name="status">Filter the list by status of the deposit</param>
-        /// <param name="startDate">Filter the list by date</param>
-        /// <param name="endDate">Filter the list by date</param>
-        /// <param name="pageSize">The max amount of results to return</param>
-        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last deposit id of the previous page</param>
-        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first deposit id of the next page</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of deposits</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetClosedDepositsAsync(string? currency = null, DepositStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetClosedDepositsAsync(string? asset = null, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             if (nextPageToken != null && previousPageToken != null)
-                throw new ArgumentException("Can't specify startDate and endData simultaneously");
+                throw new ArgumentException("Can't specify nextPageToken and previousPageToken simultaneously");
 
             pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
 
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", currency);
+            parameters.AddOptionalParameter("currencySymbol", asset);
             parameters.AddOptionalParameter("status", status.HasValue ? JsonConvert.SerializeObject(status, new DepositStatusConverter(false)) : null);
-            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("startDate", startTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("pageSize", pageSize);
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
@@ -458,24 +321,14 @@ namespace Bittrex.Net
             return await SendRequestAsync<IEnumerable<BittrexDeposit>>(GetUrl("deposits/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets list of deposits for a transaction id
-        /// </summary>
-        /// <param name="transactionId">The id of the transaction</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of deposits</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetDepositsByTransactionIdAsync(string transactionId, CancellationToken ct = default)
         {
             transactionId.ValidateNotNull(nameof(transactionId));
             return await SendRequestAsync<IEnumerable<BittrexDeposit>>(GetUrl($"deposits/ByTxId/{transactionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets a deposit by id
-        /// </summary>
-        /// <param name="depositId">The id of the deposit</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Deposit info</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexDeposit>> GetDepositAsync(string depositId, CancellationToken ct = default)
         {
             depositId.ValidateNotNull(nameof(depositId));
@@ -485,19 +338,9 @@ namespace Bittrex.Net
         #endregion
 
         #region orders
-        
-        /// <summary>
-        /// Gets a list of closed orders
-        /// </summary>
-        /// <param name="symbol">Filter the list by symbol</param>
-        /// <param name="startDate">Filter the list by date</param>
-        /// <param name="endDate">Filter the list by date</param>
-        /// <param name="pageSize">The max amount of results to return</param>
-        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last order id of the previous page</param>
-        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first order id of the next page</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of closed orders</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexOrder>>> GetClosedOrdersAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexOrder>>> GetClosedOrdersAsync(string? symbol = null, DateTime? startTime = null, DateTime? endTime = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
 
@@ -506,21 +349,16 @@ namespace Bittrex.Net
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
-            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("startDate", startTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("pageSize", pageSize);
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
             return await SendRequestAsync<IEnumerable<BittrexOrder>>(GetUrl("orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
-                
-        /// <summary>
-        /// Gets a list of open orders. Sequence number of the data available via ResponseHeaders.GetSequence()
-        /// </summary>
-        /// <param name="symbol">The symbol to get open orders for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of open orders</returns>
+
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexOrder>>> GetOpenOrdersAsync(string? symbol = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
@@ -529,82 +367,44 @@ namespace Bittrex.Net
             return await SendRequestAsync<IEnumerable<BittrexOrder>>(GetUrl("orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets info on an order
-        /// </summary>
-        /// <param name="orderId">The id of the order to retrieve</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Order info</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexOrder>> GetOrderAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
             return await SendRequestAsync<BittrexOrder>(GetUrl($"orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets info on an execution
-        /// </summary>
-        /// <param name="executionId">The id of the exeuction to retrieve</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Exceution info</returns>
-        public WebCallResult<BittrexExecution> GetExecutionById(string executionId, CancellationToken ct = default) => GetExecutionByIdAsync(executionId, ct).Result;
-
-        /// <summary>
-        /// Gets info on an execution
-        /// </summary>
-        /// <param name="executionId">The id of the exeuction to retrieve</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Exceution info</returns>
-        public async Task<WebCallResult<BittrexExecution>> GetExecutionByIdAsync(string executionId, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexUserTrade>> GetUserTradeByIdAsync(string tradeId, CancellationToken ct = default)
         {
-            executionId.ValidateNotNull(nameof(executionId));
-            return await SendRequestAsync<BittrexExecution>(GetUrl($"executions/{executionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            tradeId.ValidateNotNull(nameof(tradeId));
+            return await SendRequestAsync<BittrexUserTrade>(GetUrl($"executions/{tradeId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets executions (trades)
-        /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
-        /// <param name="startDate">Filter by date</param>
-        /// <param name="endDate">Filter by date</param>
-        /// <param name="pageSize">The max amount of results to return</param>
-        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
-        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Executions</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetUserTradesAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexUserTrade>>> GetUserTradesAsync(string? symbol = null, DateTime? startTime = null, DateTime? endTime = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             symbol?.ValidateBittrexSymbol();
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
-            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("startDate", startTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("pageSize", pageSize);
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await SendRequestAsync<IEnumerable<BittrexExecution>>(GetUrl($"executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexUserTrade>>(GetUrl($"executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets executions (trades) for a order
-        /// </summary>
-        /// <param name="orderId">The id of the order to retrieve executions for</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Executions</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexExecution>>> GetOrderTradesAsync(string orderId, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexUserTrade>>> GetOrderTradesAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
-            return await SendRequestAsync<IEnumerable<BittrexExecution>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await SendRequestAsync<IEnumerable<BittrexUserTrade>>(GetUrl($"orders/{orderId}/executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels an order
-        /// </summary>
-        /// <param name="orderId">The id of the order</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Order info</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexOrder>> CancelOrderAsync(string orderId, CancellationToken ct = default)
         {
             orderId.ValidateNotNull(nameof(orderId));
@@ -613,48 +413,37 @@ namespace Bittrex.Net
                 OnOrderCanceled?.Invoke(result.Data);
             return result;
         }
-        
-        /// <summary>
-        /// Cancels all open orders
-        /// </summary>
-        /// <param name="market">Only cancel open orders for a specific market</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Order info</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOpenOrdersAsync(string? market = null, CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOpenOrdersAsync(string? symbol = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("marketSymbol", market);
+            parameters.AddOptionalParameter("marketSymbol", symbol);
             return await SendRequestAsync<IEnumerable<BittrexOrder>>(GetUrl($"orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
         }
-        
-        /// <summary>
-        /// Places an order
-        /// </summary>
-        /// <param name="symbol">The symbol of the order</param>
-        /// <param name="direction">The direction of the order</param>
-        /// <param name="type">The type of order</param>
-        /// <param name="quantity">The quantity of the order</param>
-        /// <param name="timeInForce">The time in force of the order</param>
-        /// <param name="limit">The limit price of the order (limit orders only)</param>
-        /// <param name="ceiling">The ceiling price of the order (ceiling orders only)</param>
-        /// <param name="clientOrderId">Id to track the order by</param>
-        /// <param name="useAwards">Option to use Bittrex credits for the order</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>The order info</returns>
-        public async Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide direction, OrderType type, TimeInForce timeInForce, decimal? quantity, decimal? limit = null, decimal? ceiling = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide side, OrderType type, TimeInForce timeInForce, decimal? quantity, decimal? price = null, decimal? quoteQuantity = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
+            if ((quantity != null && quoteQuantity != null) || (quantity == null && quoteQuantity == null))
+                throw new ArgumentException("Specify one of either quantity or quoteQantity");
+
+            string orderType = JsonConvert.SerializeObject(type, new OrderTypeConverter(false));
+            if (quoteQuantity != null)
+                orderType = type == OrderType.Limit ? "CEILING_LIMIT" : "CEILING_MARKET";            
+
             var parameters = new Dictionary<string, object>()
             {
                 {"marketSymbol", symbol},
-                {"direction", JsonConvert.SerializeObject(direction, new OrderSideConverter(false))},
-                {"type", JsonConvert.SerializeObject(type, new OrderTypeConverter(false)) },
+                {"direction", JsonConvert.SerializeObject(side, new OrderSideConverter(false))},
+                {"type", orderType },
                 {"timeInForce",  JsonConvert.SerializeObject(timeInForce, new TimeInForceConverter(false)) }
             };
             parameters.AddOptionalParameter("quantity", quantity?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("limit", limit?.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("limit", price?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("clientOrderId", clientOrderId);
-            parameters.AddOptionalParameter("ceiling", ceiling?.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("ceiling", quoteQuantity?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("useAwards", useAwards);
 
             var result = await SendRequestAsync<BittrexOrder>(GetUrl("orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
@@ -666,47 +455,30 @@ namespace Bittrex.Net
         #endregion
 
         #region withdrawals
-        
-        /// <summary>
-        /// Gets a list of open withdrawals
-        /// </summary>
-        /// <param name="currency">Filter by currency</param>
-        /// <param name="status">Filter by status</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of open withdrawals</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetOpenWithdrawalsAsync(string? currency = null, WithdrawalStatus? status = null, CancellationToken ct = default)
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetOpenWithdrawalsAsync(string? asset = null, WithdrawalStatus? status = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", currency);
+            parameters.AddOptionalParameter("currencySymbol", asset);
             parameters.AddOptionalParameter("status", status);
 
             return await SendRequestAsync<IEnumerable<BittrexWithdrawal>>(GetUrl("withdrawals/open"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets a list of closed withdrawals
-        /// </summary>
-        /// <param name="currency">Filter by currency</param>
-        /// <param name="status">Filter by status</param>
-        /// <param name="startDate">Filter by date</param>
-        /// <param name="endDate">Filter by date</param>
-        /// <param name="pageSize">The max amount of results to return</param>
-        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last withdrawal id of the previous page</param>
-        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first withdrawal id of the next page</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of closed withdrawals</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetClosedWithdrawalsAsync(string? currency = null, WithdrawalStatus? status = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetClosedWithdrawalsAsync(string? asset = null, WithdrawalStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             if (nextPageToken != null && previousPageToken != null)
-                throw new ArgumentException("Can't specify startDate and endData simultaneously");
+                throw new ArgumentException("Can't specify startTime and endTime simultaneously");
 
             pageSize?.ValidateIntBetween(nameof(pageSize), 1, 200);
 
             var parameters = new Dictionary<string, object>();
-            parameters.AddOptionalParameter("currencySymbol", currency);
+            parameters.AddOptionalParameter("currencySymbol", asset);
             parameters.AddOptionalParameter("status", status.HasValue ? JsonConvert.SerializeObject(status, new WithdrawalStatusConverter(false)) : null);
-            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("startDate", startTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("pageSize", pageSize);
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
@@ -714,59 +486,35 @@ namespace Bittrex.Net
             return await SendRequestAsync<IEnumerable<BittrexWithdrawal>>(GetUrl("withdrawals/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets a list of withdrawals by transaction id
-        /// </summary>
-        /// <param name="transactionId">The id of the transaction</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List withdrawals</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetWithdrawalsByTransactionIdAsync(string transactionId, CancellationToken ct = default)
         {
             transactionId.ValidateNotNull(nameof(transactionId));
             return await SendRequestAsync<IEnumerable<BittrexWithdrawal>>(GetUrl($"withdrawals/ByTxId/{transactionId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets withdrawal by id
-        /// </summary>
-        /// <param name="id">The id of the withdrawal</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Withdrawal info</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexWithdrawal>> GetWithdrawalAsync(string id, CancellationToken ct = default)
         {
             id.ValidateNotNull(nameof(id));
             return await SendRequestAsync<BittrexWithdrawal>(GetUrl($"withdrawals/{id}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels a withdrawal
-        /// </summary>
-        /// <param name="id">The id of the withdrawal to cancel</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Withdrawal info</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexWithdrawal>> CancelWithdrawalAsync(string id, CancellationToken ct = default)
         {
             id.ValidateNotNull(nameof(id));
             return await SendRequestAsync<BittrexWithdrawal>(GetUrl($"withdrawals/{id}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Withdraw from Bittrex
-        /// </summary>
-        /// <param name="currency">The currency to withdraw</param>
-        /// <param name="quantity">The quantity to withdraw</param>
-        /// <param name="address">The address to withdraw to</param>
-        /// <param name="addressTag">A tag for the address</param>
-        /// <param name="clientWithdrawId">Client id to identify the withdrawal</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Info about the withdrawal</returns>
-        public async Task<WebCallResult<BittrexWithdrawal>> WithdrawAsync(string currency, decimal quantity, string address, string? addressTag = null, string? clientWithdrawId = null, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexWithdrawal>> WithdrawAsync(string asset, decimal quantity, string address, string? addressTag = null, string? clientWithdrawId = null, CancellationToken ct = default)
         {
-            currency.ValidateNotNull(nameof(currency));
+            asset.ValidateNotNull(nameof(asset));
             address.ValidateNotNull(nameof(address));
             var parameters = new Dictionary<string, object>()
             {
-                { "currencySymbol", currency},
+                { "currencySymbol", asset},
                 { "quantity", quantity},
                 { "cryptoAddress", address}
             };
@@ -777,11 +525,7 @@ namespace Bittrex.Net
             return await SendRequestAsync<BittrexWithdrawal>(GetUrl("withdrawals"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets a list of whitelisted address for withdrawals
-        /// </summary>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List withdrawal address</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexWhitelistAddress>>> GetWithdrawalWhitelistAddressesAsync(CancellationToken ct = default)
         {
             return await SendRequestAsync<IEnumerable<BittrexWhitelistAddress>>(GetUrl($"withdrawals/whitelistAddresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
@@ -789,41 +533,21 @@ namespace Bittrex.Net
         #endregion
 
         #region conditional orders
-        
-        /// <summary>
-        /// Get details on a condtional order
-        /// </summary>
-        /// <param name="orderId">Id of the conditional order</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Conditional order</returns>
+
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexConditionalOrder>> GetConditionalOrderAsync(string? orderId = null, CancellationToken ct = default)
         {
             return await SendRequestAsync<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Cancels a condtional order
-        /// </summary>
-        /// <param name="orderId">Id of the conditional order</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Conditional order</returns>
-        public async Task<WebCallResult<BittrexConditionalOrder>> CancelConditionalOrderAsync(string? orderId = null, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<BittrexConditionalOrder>> CancelConditionalOrderAsync(string orderId, CancellationToken ct = default)
         {
             return await SendRequestAsync<BittrexConditionalOrder>(GetUrl($"conditional-orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Gets a list of closed conditional orders
-        /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
-        /// <param name="startDate">Filter by date</param>
-        /// <param name="endDate">Filter by date</param>
-        /// <param name="pageSize">The max amount of results to return</param>
-        /// <param name="nextPageToken">The id of the object after which to return results. Typically the last id of the previous page</param>
-        /// <param name="previousPageToken">The id of the object before which to return results. Typically the first id of the next page</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>List of closed conditional orders</returns>
-        public async Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetClosedConditionalOrdersAsync(string? symbol = null, DateTime? startDate = null, DateTime? endDate = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetClosedConditionalOrdersAsync(string? symbol = null, DateTime? startTime = null, DateTime? endTime = null, int? pageSize = null, string? nextPageToken = null, string? previousPageToken = null, CancellationToken ct = default)
         {
             if (nextPageToken != null && previousPageToken != null)
                 throw new ArgumentException("Can't specify nextPageToken and previousPageToken simultaneously");
@@ -832,8 +556,8 @@ namespace Bittrex.Net
 
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
-            parameters.AddOptionalParameter("startDate", startDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            parameters.AddOptionalParameter("endDate", endDate?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("startDate", startTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            parameters.AddOptionalParameter("endDate", endTime?.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             parameters.AddOptionalParameter("pageSize", pageSize);
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
@@ -841,12 +565,7 @@ namespace Bittrex.Net
             return await SendRequestAsync<IEnumerable<BittrexConditionalOrder>>(GetUrl("conditional-orders/closed"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Get list op open conditional orders
-        /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Conditional orders</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetOpenConditionalOrdersAsync(string? symbol = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
@@ -854,21 +573,10 @@ namespace Bittrex.Net
             return await SendRequestAsync<IEnumerable<BittrexConditionalOrder>>(GetUrl($"conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Place a new conditional order
-        /// </summary>
-        /// <param name="symbol">The symbol of the order</param>
-        /// <param name="operand">The operand of the order</param>
-        /// <param name="orderToCreate">Order to create when condition is triggered</param>
-        /// <param name="orderToCancel">Order to cancel when condition is triggered</param>
-        /// <param name="triggerPrice">Trigger price</param>
-        /// <param name="trailingStopPercent">Trailing stop percent</param>
-        /// <param name="clientConditionalOrderId">Client order id for conditional order</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Condition order</returns>
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexConditionalOrder>> PlaceConditionalOrderAsync(
             string symbol,
-            BittrexConditionalOrderOperand operand,
+            ConditionalOrderOperand operand,
             BittrexUnplacedOrder? orderToCreate = null,
             BittrexLinkedOrder? orderToCancel = null,
             decimal? triggerPrice = null,
@@ -879,7 +587,7 @@ namespace Bittrex.Net
             var parameters = new Dictionary<string, object>()
             {
                 { "marketSymbol", symbol },
-                { "operand", JsonConvert.SerializeObject(operand, new BittrexConditionalOrderOperandConverter(false)) }
+                { "operand", JsonConvert.SerializeObject(operand, new ConditionalOrderOperandConverter(false)) }
             };
 
             parameters.AddOptionalParameter("triggerPrice", triggerPrice?.ToString(CultureInfo.InvariantCulture));
@@ -893,23 +601,18 @@ namespace Bittrex.Net
         #endregion
 
         #region batch
-        
-        /// <summary>
-        /// Place multiple orders in a single call
-        /// </summary>
-        /// <param name="orders">Orders to place</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the placed orders</returns>
+
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> PlaceMultipleOrdersAsync(BittrexNewBatchOrder[] orders, CancellationToken ct = default)
         {
             orders?.ValidateNotNull(nameof(orders));
             if (!orders.Any())
                 throw new ArgumentException("No orders provided");
 
-            var wrapper = new Dictionary<string, object>();            
+            var wrapper = new Dictionary<string, object>();
             var orderParameters = new Dictionary<string, object>[orders!.Length];
             int i = 0;
-            foreach(var order in orders)
+            foreach (var order in orders)
             {
                 var parameters = new Dictionary<string, object>();
                 parameters.Add("resource", "ORDER");
@@ -917,12 +620,12 @@ namespace Bittrex.Net
                 var orderParameter = new Dictionary<string, object>()
                 {
                     {"marketSymbol", order.Symbol},
-                    {"direction", JsonConvert.SerializeObject(order.Direction, new OrderSideConverter(false))},
+                    {"direction", JsonConvert.SerializeObject(order.Side, new OrderSideConverter(false))},
                     {"type", JsonConvert.SerializeObject(order.Type, new OrderTypeConverter(false)) },
                     {"timeInForce",  JsonConvert.SerializeObject(order.TimeInForce, new TimeInForceConverter(false)) }
                 };
-                orderParameter.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture));;
-                orderParameter.AddOptionalParameter("limit", order.Limit?.ToString(CultureInfo.InvariantCulture));
+                orderParameter.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture)); ;
+                orderParameter.AddOptionalParameter("limit", order.Price?.ToString(CultureInfo.InvariantCulture));
                 orderParameter.AddOptionalParameter("clientOrderId", order.ClientOrderId);
                 orderParameter.AddOptionalParameter("ceiling", order.Ceiling?.ToString(CultureInfo.InvariantCulture));
                 orderParameter.AddOptionalParameter("useAwards", order.UseAwards);
@@ -934,21 +637,16 @@ namespace Bittrex.Net
 
             var serializer = JsonSerializer.Create(new JsonSerializerSettings
             {
-                Converters = new List<JsonConverter> 
-                { 
+                Converters = new List<JsonConverter>
+                {
                     new BatchResultConverter<BittrexOrder>()
                 }
             });
 
             return await SendRequestAsync<IEnumerable<CallResult<BittrexOrder>>>(GetUrl("batch"), HttpMethod.Post, ct, wrapper, signed: true, deserializer: serializer).ConfigureAwait(false);
         }
-                
-        /// <summary>
-        /// Cancel multiple orders in a single call
-        /// </summary>
-        /// <param name="ordersToCancel">Orders to cancel</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>A WebCallResult indicating the result of the call, which contains a collection of CallResults for each of the cancelled orders</returns>
+
+        /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> CancelMultipleOrdersAsync(string[] ordersToCancel, CancellationToken ct = default)
         {
             ordersToCancel?.ValidateNotNull(nameof(ordersToCancel));
@@ -965,7 +663,7 @@ namespace Bittrex.Net
                 parameters.Add("operation", "DELETE");
                 var orderParameter = new Dictionary<string, object>()
                 {
-                    {"id", order},                    
+                    {"id", order},
                 };
                 parameters.Add("payload", orderParameter);
                 orderParameters[i] = parameters;
@@ -1022,9 +720,9 @@ namespace Bittrex.Net
             if (startTime.HasValue)
             {
                 var interval = GetKlineIntervalFromTimespan(timespan);
-                var klines = await GetHistoricalKlinesAsync(symbol, interval, 
+                var klines = await GetHistoricalKlinesAsync(symbol, interval,
                     startTime.Value.Year,
-                    interval == KlineInterval.OneDay ? null: (int?)startTime.Value.Month, 
+                    interval == KlineInterval.OneDay ? null : (int?)startTime.Value.Month,
                     interval == KlineInterval.OneDay || interval == KlineInterval.OneHour ? null : (int?)startTime.Value.Day).ConfigureAwait(false);
                 return klines.As<IEnumerable<ICommonKline>>(klines.Data);
             }
@@ -1037,7 +735,7 @@ namespace Bittrex.Net
 
         async Task<WebCallResult<ICommonOrderId>> IExchangeClient.PlaceOrderAsync(string symbol, IExchangeClient.OrderSide side, IExchangeClient.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
         {
-            var result = await PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), TimeInForce.GoodTillCancelled, quantity, limit: price).ConfigureAwait(false);
+            var result = await PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), TimeInForce.GoodTillCanceled, quantity, price: price).ConfigureAwait(false);
             return result.As<ICommonOrderId>(result.Data);
         }
 
@@ -1098,7 +796,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
         {
-            if(parameters.Any() && parameters.First().Key == string.Empty)
+            if (parameters.Any() && parameters.First().Key == string.Empty)
             {
                 var stringData = JsonConvert.SerializeObject(parameters.First().Value);
                 request.SetContent(stringData, contentType);

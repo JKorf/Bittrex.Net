@@ -1,0 +1,24 @@
+[
+  {
+    "id": "string (uuid)",
+    "marketSymbol": "string",
+    "direction": "BUY",
+    "type": "LIMIT",
+    "quantity": "1.2",
+    "limit": "1.3",
+    "ceiling": "1.4",
+    "timeInForce": "GOOD_TIL_CANCELLED",
+    "clientOrderId": "string (uuid)",
+    "fillQuantity": "1.5",
+    "commission": "1.6",
+    "proceeds": "1.7",
+    "status": "OPEN",
+    "createdAt": "2021-04-23T18:25:43.511Z",
+    "updatedAt": "2021-04-23T18:25:43.511Z",
+    "closedAt": "2021-04-23T18:25:43.511Z",
+    "orderToCancel": {
+      "type": "string",
+      "id": "string (uuid)"
+    }
+  }
+]

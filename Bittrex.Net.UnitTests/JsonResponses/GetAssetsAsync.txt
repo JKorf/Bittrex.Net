@@ -1,0 +1,22 @@
+[
+  {
+    "symbol": "string",
+    "name": "string",
+    "coinType": "string",
+    "status": "ONLINE",
+    "minConfirmations": "3",
+    "notice": "string",
+    "txFee": "0.1",
+    "logoUrl": "string",
+    "prohibitedIn": [
+      "string"
+    ],
+    "baseAddress": "string",
+    "associatedTermsOfService": [
+      "string"
+    ],
+    "tags": [
+      "string"
+    ]
+  }
+]

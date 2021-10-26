@@ -1,5 +1,6 @@
 ﻿using System;
 using CryptoExchange.Net.ExchangeInterfaces;
+using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
@@ -11,23 +12,28 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The opening time of this kline
         /// </summary>
-        public DateTime StartsAt { get; set; }
+        [JsonProperty("startsAt")]
+        public DateTime OpenTime { get; set; }
         /// <summary>
         /// The price at opening
         /// </summary>
-        public decimal Open { get; set; }
+        [JsonProperty("open")]
+        public decimal OpenPrice { get; set; }
         /// <summary>
         /// The price at closing
         /// </summary>
-        public decimal Close { get; set; }
+        [JsonProperty("close")]
+        public decimal ClosePrice { get; set; }
         /// <summary>
         /// The highest price during this kline
         /// </summary>
-        public decimal High { get; set; }
+        [JsonProperty("high")]
+        public decimal HighPrice { get; set; }
         /// <summary>
         /// The lowest price during this kline
         /// </summary>
-        public decimal Low { get; set; }
+        [JsonProperty("low")]
+        public decimal LowPrice { get; set; }
         /// <summary>
         /// The volume during this kline
         /// </summary>
@@ -37,11 +43,11 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public decimal QuoteVolume { get; set; }
 
-        decimal ICommonKline.CommonHigh => High;
-        decimal ICommonKline.CommonLow => Low;
-        decimal ICommonKline.CommonOpen => Open;
-        decimal ICommonKline.CommonClose => Close;
+        decimal ICommonKline.CommonHighPrice => HighPrice;
+        decimal ICommonKline.CommonLowPrice => LowPrice;
+        decimal ICommonKline.CommonOpenPrice => OpenPrice;
+        decimal ICommonKline.CommonClosePrice => ClosePrice;
         decimal ICommonKline.CommonVolume => Volume;
-        DateTime ICommonKline.CommonOpenTime => StartsAt;
+        DateTime ICommonKline.CommonOpenTime => OpenTime;
     }
 }

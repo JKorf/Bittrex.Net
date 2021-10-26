@@ -1,4 +1,5 @@
 ﻿using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -14,10 +15,10 @@ namespace Bittrex.Net.Objects
         [JsonProperty("marketSymbol")]
         public string Symbol { get; set; } 
         /// <summary>
-        /// Order direction
+        /// Order side
         /// </summary>
         [JsonProperty("direction"), JsonConverter(typeof(OrderSideConverter))]
-        public OrderSide Direction { get; set; }
+        public OrderSide Side { get; set; }
         /// <summary>
         /// Order type
         /// </summary>
@@ -34,12 +35,12 @@ namespace Bittrex.Net.Objects
         [JsonProperty("quantity")]
         public decimal? Quantity { get; set; }
         /// <summary>
-        /// Limit price
+        /// Order price
         /// </summary>
         [JsonProperty("limit")]
-        public decimal? Limit { get; set; }
+        public decimal? Price { get; set; }
         /// <summary>
-        /// Ceiling price
+        /// Ceiling
         /// </summary>
         [JsonProperty("ceiling")]
         public decimal? Ceiling { get; set; }
@@ -58,13 +59,13 @@ namespace Bittrex.Net.Objects
         /// Create a new batch order
         /// </summary>
         /// <param name="symbol">Symbol of the order</param>
-        /// <param name="direction">Direction of the order</param>
+        /// <param name="side">Side of the order</param>
         /// <param name="type">Type of the order</param>
         /// <param name="timeInForce">Time in force</param>
-        public BittrexNewBatchOrder(string symbol, OrderSide direction, OrderType type, TimeInForce timeInForce)
+        public BittrexNewBatchOrder(string symbol, OrderSide side, OrderType type, TimeInForce timeInForce)
         {
             Symbol = symbol;
-            Direction = direction;
+            Side = side;
             Type = type;
             TimeInForce = timeInForce;
         }

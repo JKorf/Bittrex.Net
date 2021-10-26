@@ -17,6 +17,7 @@ using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Authentication;
+using Bittrex.Net.Enums;
 
 namespace Bittrex.Net
 {
@@ -76,190 +77,104 @@ namespace Bittrex.Net
             defaultOptions = options;
         }
 
-        /// <summary>
-        /// Subscribe to heartbeat updates
-        /// </summary>
-        /// <param name="onHeartbeat">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DataEvent<DateTime>> onHeartbeat)
         {
             return await Subscribe("heartbeat", false, onHeartbeat).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to kline(candle) updates for a symbol
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="interval">Interval of the candles</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
             KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate)
             => SubscribeToKlineUpdatesAsync(new[] {symbol}, interval, onUpdate);
 
-        /// <summary>
-        /// Subscribe to kline(candle) updates for a symbol
-        /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="interval">Interval of the candles</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => $"candle_{s}_{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}").ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to all symbol summary updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<DataEvent<BittrexSummariesUpdate>> onUpdate)
         {
             return await Subscribe("market_summaries", false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to symbol summary updates
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
             Action<DataEvent<BittrexSymbolSummary>> onUpdate)
             => SubscribeToSymbolSummaryUpdatesAsync(new[] { symbol }, onUpdate);
 
-        /// <summary>
-        /// Subscribe to symbol summary updates
-        /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexSymbolSummary>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "market_summary_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to order book updates
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="depth">The depth of the oder book to receive update for</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
-        public  Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
+        /// <inheritdoc />
+        public Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
             Action<DataEvent<BittrexOrderBookUpdate>> onUpdate)
             => SubscribeToOrderBookUpdatesAsync(new[] {symbol}, depth, onUpdate);
 
-        /// <summary>
-        /// Subscribe to order book updates
-        /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="depth">The depth of the oder book to receive update for</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<DataEvent<BittrexOrderBookUpdate>> onUpdate)
         {
             depth.ValidateIntValues(nameof(depth), 1, 25, 500);
             return await Subscribe(symbols.Select(s => $"orderbook_{s}_{depth}").ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to all symbols ticker updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate)
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate)
         {
             return await Subscribe("tickers", false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to symbol ticker updates
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
-        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
-            Action<DataEvent<BittrexTick>> onUpdate) => SubscribeToSymbolTickerUpdatesAsync(new[] {symbol}, onUpdate);
+        /// <inheritdoc />
+        public Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol,
+            Action<DataEvent<BittrexTick>> onUpdate) => SubscribeToTickerUpdatesAsync(new[] {symbol}, onUpdate);
 
-        /// <summary>
-        /// Subscribe to symbol ticker updates
-        /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate)
+        /// <inheritdoc />
+        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "ticker_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to symbol trade updates
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
             Action<DataEvent<BittrexTradesUpdate>> onUpdate)
             => SubscribeToTradeUpdatesAsync(new[] {symbol}, onUpdate);
 
-        /// <summary>
-        /// Subscribe to symbol trade updates
-        /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate)
         {
             return await Subscribe(symbols.Select(s => "trade_" + s).ToArray(), false, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to order updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<DataEvent<BittrexOrderUpdate>> onUpdate)
         {
             return await Subscribe("order", true, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to balance updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BittrexBalanceUpdate>> onUpdate)
         {
             return await Subscribe("balance", true, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to execution updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(Action<DataEvent<BittrexExecutionUpdate>> onUpdate)
         {
             return await Subscribe("execution", true, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to deposit updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<DataEvent<BittrexDepositUpdate>> onUpdate)
         {
             return await Subscribe("deposit", true, onUpdate).ConfigureAwait(false);
         }
 
-        /// <summary>
-        /// Subscribe to conditional order updates
-        /// </summary>
-        /// <param name="onUpdate">Data handler</param>
-        /// <returns>Subscription result</returns>
+        /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Action<DataEvent<BittrexConditionalOrderUpdate>> onUpdate)
         {
             return await Subscribe("conditional_order", true, onUpdate).ConfigureAwait(false);

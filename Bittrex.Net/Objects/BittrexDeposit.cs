@@ -1,5 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
@@ -14,14 +15,18 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// The currency of the deposit
+        /// The asset of the deposit
         /// </summary>
         [JsonProperty("currencySymbol")]
-        public string Currency { get; set; } = string.Empty;
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// The quantity of the deposit
         /// </summary>
         public decimal Quantity { get; set; }
+        /// <summary>
+        /// Payment method id
+        /// </summary>
+        public string FundsTransferMethodId { get; set; } = string.Empty;
         /// <summary>
         /// The address of the deposit
         /// </summary>
@@ -42,22 +47,31 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public int Confirmations { get; set; }
         /// <summary>
-        /// The timestamp of the last update
+        /// Update time
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        [JsonProperty("updatedAt")]
+        public DateTime UpdateTime { get; set; }
         /// <summary>
-        /// The timestamp of when this deposit was completed
+        /// Completed time
         /// </summary>
-        public DateTime? CompletedAt { get; set; }
+        [JsonProperty("completedAt")]
+        public DateTime? CompleteTime { get; set; }
         /// <summary>
         /// The status of the deposit
         /// </summary>
         [JsonConverter(typeof(DepositStatusConverter))]
         public DepositStatus Status { get; set; }
-
         /// <summary>
         /// Source
         /// </summary>
         public string Source { get; set; } = string.Empty;
+        /// <summary>
+        /// Account id
+        /// </summary>
+        public string AccountId { get; set; } = string.Empty;
+        /// <summary>
+        /// Error info
+        /// </summary>
+        public BittrexError? Error { get; set; }
     }
 }

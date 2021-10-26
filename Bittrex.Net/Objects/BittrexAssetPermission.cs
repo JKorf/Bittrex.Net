@@ -1,12 +1,12 @@
 ﻿namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Currency permission
+    /// Asset permission
     /// </summary>
-    public class BittrexCurrencyPermission
+    public class BittrexAssetPermission
     {
         /// <summary>
-        /// Symbol
+        /// Symbol of the asset
         /// </summary>
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
@@ -16,17 +16,17 @@
         /// <summary>
         /// Allowed to buy
         /// </summary>
-        public BittrexCurrencyDepositPermission Deposit { get; set; } = default!;
+        public BittrexAssetDepositPermission Deposit { get; set; } = default!;
         /// <summary>
         /// Allowed to sell
         /// </summary>
-        public BittrexCurrencyWithdrawPermission Withdraw { get; set; } = default!;
+        public BittrexAssetWithdrawPermission Withdraw { get; set; } = default!;
     }
 
     /// <summary>
     /// Deposit permission
     /// </summary>
-    public class BittrexCurrencyDepositPermission
+    public class BittrexAssetDepositPermission
     {
         /// <summary>
         /// Allow to deposit via blockchain
@@ -40,12 +40,16 @@
         /// Allowed to deposit via wire transfer
         /// </summary>
         public bool WireTransfer { get; set; }
+        /// <summary>
+        /// Allowed  to deposit via ACH
+        /// </summary>
+        public bool Ach { get; set; }
     }
 
     /// <summary>
     /// Withdraw permission
     /// </summary>
-    public class BittrexCurrencyWithdrawPermission
+    public class BittrexAssetWithdrawPermission
     {
         /// <summary>
         /// Allowed to withdraw via blockchain
@@ -55,5 +59,9 @@
         /// Allowed to withdraw via wire transfer
         /// </summary>
         public bool WireTransfer { get; set; }
+        /// <summary>
+        /// Allowed  to deposit via ACH
+        /// </summary>
+        public bool Ach { get; set; }
     }
 }

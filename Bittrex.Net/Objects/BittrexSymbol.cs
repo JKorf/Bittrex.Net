@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
@@ -14,21 +15,23 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The symbol of the symbol
         /// </summary>
-        public string Symbol { get; set; } = string.Empty;
+        [JsonProperty("symbol")]
+        public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// The base currency of the symbol
+        /// The base asset of the symbol
         /// </summary>
         [JsonProperty("baseCurrencySymbol")]
-        public string BaseCurrency { get; set; } = string.Empty;
+        public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The quote currency of the symbol
+        /// The quote asset of the symbol
         /// </summary>
         [JsonProperty("quoteCurrencySymbol")]
-        public string QuoteCurrency { get; set; } = string.Empty;
+        public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The minimum trade size for this symbol
+        /// The minimum trade quantity for this symbol
         /// </summary>
-        public decimal MinTradeSize { get; set; }
+        [JsonProperty("minTradeSize")]
+        public decimal MinTradeQuantity { get; set; }
         /// <summary>
         /// The max precision for this symbol
         /// </summary>
@@ -41,7 +44,8 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// When the symbol was created
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        [JsonProperty("createdAt")]
+        public DateTime CreateTime { get; set; }
         /// <summary>
         /// Additional info
         /// </summary>
@@ -54,8 +58,12 @@ namespace Bittrex.Net.Objects
         /// List of associated terms of service.
         /// </summary>
         public IEnumerable<string> AssociatedTermsOfService { get; set; } = Array.Empty<string>();
+        /// <summary>
+        /// List of tags
+        /// </summary>
+        public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
 
-        string ICommonSymbol.CommonName => Symbol;
-        decimal ICommonSymbol.CommonMinimumTradeSize => MinTradeSize;
+        string ICommonSymbol.CommonName => Name;
+        decimal ICommonSymbol.CommonMinimumTradeQuantity => MinTradeQuantity;
     }
 }

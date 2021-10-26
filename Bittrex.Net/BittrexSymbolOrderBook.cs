@@ -61,7 +61,7 @@ namespace Bittrex.Net
                 return new CallResult<UpdateSubscription>(null, queryResult.Error);
             }
 
-            SetInitialOrderBook(queryResult.Data.Sequence, queryResult.Data.Bid, queryResult.Data.Ask);
+            SetInitialOrderBook(queryResult.Data.Sequence, queryResult.Data.Bids, queryResult.Data.Asks);
             return new CallResult<UpdateSubscription>(subResult.Data, null);
         }
 
@@ -77,7 +77,7 @@ namespace Bittrex.Net
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             
-            SetInitialOrderBook(queryResult.Data.Sequence, queryResult.Data.Bid, queryResult.Data.Ask);
+            SetInitialOrderBook(queryResult.Data.Sequence, queryResult.Data.Bids, queryResult.Data.Asks);
             return new CallResult<bool>(true, null);
         }
 

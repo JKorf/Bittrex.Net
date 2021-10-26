@@ -1,4 +1,7 @@
-﻿namespace Bittrex.Net.Objects
+﻿using System;
+using System.Collections.Generic;
+
+namespace Bittrex.Net.Objects
 {
     /// <summary>
     /// Account info
@@ -13,5 +16,10 @@
         /// Sub account id
         /// </summary>
         public string SubAccountId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Actions needed
+        /// </summary>
+        public IEnumerable<string> ActionsNeeded { get; set; } = Array.Empty<string>();
     }
 }

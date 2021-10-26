@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Bittrex.Net.Objects;
+using Bittrex.Net.Enums;
 using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
@@ -16,7 +16,7 @@ namespace Bittrex.Net.Converters
             new KeyValuePair<WithdrawalStatus, string>(WithdrawalStatus.Pending, "PENDING"),
             new KeyValuePair<WithdrawalStatus, string>(WithdrawalStatus.Completed, "COMPLETED"),
             new KeyValuePair<WithdrawalStatus, string>(WithdrawalStatus.InvalidAddress, "ERROR_INVALID_ADDRESS"),
-            new KeyValuePair<WithdrawalStatus, string>(WithdrawalStatus.Cancelled, "CANCELLED"),
+            new KeyValuePair<WithdrawalStatus, string>(WithdrawalStatus.Canceled, "CANCELLED"),
         };
     }
 }

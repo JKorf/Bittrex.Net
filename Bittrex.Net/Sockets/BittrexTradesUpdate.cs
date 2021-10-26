@@ -24,6 +24,6 @@ namespace Bittrex.Net.Sockets
         /// <summary>
         /// Trades
         /// </summary>
-        public IEnumerable<BittrexSymbolTrade> Deltas { get; set; } = Array.Empty<BittrexSymbolTrade>();
+        public IEnumerable<BittrexTrade> Deltas { get; set; } = Array.Empty<BittrexTrade>();
     }
 }

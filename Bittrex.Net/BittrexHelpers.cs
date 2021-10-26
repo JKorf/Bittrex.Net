@@ -20,7 +20,7 @@ namespace Bittrex.Net
                 throw new ArgumentException("Symbol is not provided");
 
             if (!Regex.IsMatch(symbolString, "^((([A-Z]|[0-9]){2,})[-](([A-Z]|[0-9]){2,}))$"))
-                throw new ArgumentException($"{symbolString} is not a valid Bittrex symbol. Should be [BaseCurrency]-[QuoteCurrency] e.g. ETH-BTC");
+                throw new ArgumentException($"{symbolString} is not a valid Bittrex symbol. Should be [BaseAsset]-[QuoteAsset] e.g. ETH-BTC");
         }
 
         /// <summary>

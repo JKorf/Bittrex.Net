@@ -1,5 +1,6 @@
 ﻿using System;
 using CryptoExchange.Net.ExchangeInterfaces;
+using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
@@ -15,11 +16,13 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The high price for this symbol in the last 24 hours
         /// </summary>
-        public decimal High { get; set; }
+        [JsonProperty("high")]
+        public decimal HighPrice { get; set; }
         /// <summary>
         /// The low price for this symbol in the last 24 hours
         /// </summary>
-        public decimal Low { get; set; }
+        [JsonProperty("low")]
+        public decimal LowPrice { get; set; }
         /// <summary>
         /// Volume within the last 24 hours
         /// </summary>
@@ -35,11 +38,12 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The timestamp of when this summary was last updated
         /// </summary>
-        public DateTime UpdatedAt { get; set; }
+        [JsonProperty("updatedAt")]
+        public DateTime UpdateTime { get; set; }
 
         string ICommonTicker.CommonSymbol => Symbol;
-        decimal ICommonTicker.CommonHigh => High;
-        decimal ICommonTicker.CommonLow => Low;
+        decimal ICommonTicker.CommonHighPrice => HighPrice;
+        decimal ICommonTicker.CommonLowPrice => LowPrice;
         decimal ICommonTicker.CommonVolume => Volume;
     }
 }

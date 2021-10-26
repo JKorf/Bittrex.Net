@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace Bittrex.Net.Objects
 {
     /// <summary>
@@ -13,14 +15,17 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The price of the last trade
         /// </summary>
-        public decimal LastTradeRate { get; set; }
+        [JsonProperty("lastTradeRate")]
+        public decimal LastPrice { get; set; }
         /// <summary>
         /// The highest bid price
         /// </summary>
-        public decimal BidRate { get; set; }
+        [JsonProperty("bidRate")]
+        public decimal BestBidPrice { get; set; }
         /// <summary>
         /// The lowest ask price
         /// </summary>
-        public decimal AskRate { get; set; }
+        [JsonProperty("askRate")]
+        public decimal BestAskPrice { get; set; }
     }
 }

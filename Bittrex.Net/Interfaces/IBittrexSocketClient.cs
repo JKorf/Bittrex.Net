@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bittrex.Net.Enums;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Sockets;
 using CryptoExchange.Net.Interfaces;
@@ -95,7 +96,7 @@ namespace Bittrex.Net.Interfaces
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol ticker updates
@@ -103,7 +104,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(string symbol,
+        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol,
             Action<DataEvent<BittrexTick>> onUpdate);
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace Bittrex.Net.Interfaces
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
         /// <returns>Subscription result</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToSymbolTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate);
+        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate);
 
         /// <summary>
         /// Subscribe to symbol trade updates

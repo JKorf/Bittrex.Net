@@ -18,14 +18,16 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The bids in this book
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> Bid { get; set; } = Array.Empty<BittrexOrderBookEntry>();
+        [JsonProperty("bid")]
+        public IEnumerable<BittrexOrderBookEntry> Bids { get; set; } = Array.Empty<BittrexOrderBookEntry>();
         /// <summary>
         /// The asks in this book
         /// </summary>
-        public IEnumerable<BittrexOrderBookEntry> Ask { get; set; } = Array.Empty<BittrexOrderBookEntry>();
+        [JsonProperty("ask")]
+        public IEnumerable<BittrexOrderBookEntry> Asks { get; set; } = Array.Empty<BittrexOrderBookEntry>();
 
-        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonBids => Bid;
-        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonAsks => Ask;
+        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonBids => Bids;
+        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonAsks => Asks;
     }
 
     /// <summary>
@@ -40,7 +42,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The price of the entry
         /// </summary>
-        [JsonProperty("Rate")]
+        [JsonProperty("rate")]
         public decimal Price { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 

@@ -1,29 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bittrex.Net.Converters;
+using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Bittrex currency info
+    /// Bittrex asset info
     /// </summary>
-    public class BittrexCurrency
+    public class BittrexAsset
     {
         /// <summary>
-        /// The symbol for this currency
+        /// The name for this asset
         /// </summary>
-        public string Symbol { get; set; } = string.Empty;
-        /// <summary>
-        /// The full name of the currency
-        /// </summary>
+        [JsonProperty("symbol")]
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// The type of the currency
+        /// The full name of the asset
+        /// </summary>
+        [JsonProperty("name")]
+        public string FullName { get; set; } = string.Empty;
+        /// <summary>
+        /// The type of the asset
         /// </summary>
         public string CoinType { get; set; } = string.Empty;
         /// <summary>
-        /// The status of the currency
+        /// The status of the asset
         /// </summary>
         [JsonConverter(typeof(SymbolStatusConverter))]
         public SymbolStatus Status { get; set; }
@@ -50,7 +53,7 @@ namespace Bittrex.Net.Objects
         public IEnumerable<string> ProhibitedIn { get; set; } = Array.Empty<string>();
 
         /// <summary>
-        /// Base address of the currency
+        /// Base address of the asset
         /// </summary>
         public string BaseAddress { get; set; } = string.Empty;
 
@@ -58,5 +61,10 @@ namespace Bittrex.Net.Objects
         /// List of associated terms of service.
         /// </summary>
         public IEnumerable<string> AssociatedTermsOfService { get; set; } = Array.Empty<string>();
+
+        /// <summary>
+        /// List of tags
+        /// </summary>
+        public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
     }
 }

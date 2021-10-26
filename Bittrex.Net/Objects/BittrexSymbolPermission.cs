@@ -1,9 +1,9 @@
 ﻿namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Market permission
+    /// Symbol permission
     /// </summary>
-    public class BittrexMarketPermission
+    public class BittrexSymbolPermission
     {
         /// <summary>
         /// Symbol

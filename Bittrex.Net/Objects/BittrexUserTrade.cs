@@ -6,12 +6,12 @@ using Newtonsoft.Json;
 namespace Bittrex.Net.Objects
 {
     /// <summary>
-    /// Trade execution
+    /// User trade info
     /// </summary>
-    public class BittrexExecution: ICommonTrade
+    public class BittrexUserTrade: ICommonTrade
     {
         /// <summary>
-        /// Id of the execution
+        /// Id of the trade
         /// </summary>
         public string Id { get; set; } = string.Empty;
         /// <summary>
@@ -22,33 +22,36 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Timestamp of execution
         /// </summary>
-        public DateTime ExecutedAt { get; set; }
+        [JsonProperty("executedAt")]
+        public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Quantity
+        /// Execution quantity
         /// </summary>
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Rate
+        /// Execution price
         /// </summary>
-        public decimal Rate { get; set; }
+        [JsonProperty("rate")]
+        public decimal Price { get; set; }
         /// <summary>
         /// Id of the order
         /// </summary>
         public string OrderId { get; set; } = string.Empty;
         /// <summary>
-        /// Paid commission
+        /// Paid fee
         /// </summary>
-        public decimal Commission { get; set; }
+        [JsonProperty("commission")]
+        public decimal Fee { get; set; }
         /// <summary>
         /// Is taker
         /// </summary>
         public bool IsTaker { get; set; }
 
         string ICommonTrade.CommonId => Id;
-        decimal ICommonTrade.CommonPrice => Rate;
+        decimal ICommonTrade.CommonPrice => Price;
         decimal ICommonTrade.CommonQuantity => Quantity;
-        decimal ICommonTrade.CommonFee => Commission;
+        decimal ICommonTrade.CommonFee => Fee;
         string ICommonTrade.CommonFeeAsset => Symbol.Split('-').Last();
-        DateTime ICommonTrade.CommonTradeTime => ExecutedAt;
+        DateTime ICommonTrade.CommonTradeTime => Timestamp;
     }
 }

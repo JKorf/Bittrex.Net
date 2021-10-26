@@ -54,16 +54,19 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public string? OrderCreationErrorCode { get; set; }
         /// <summary>
-        /// Order creation timestamp
+        /// Create time
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        [JsonProperty("createdAt")]
+        public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Timestamp of last update
+        /// Update time
         /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        [JsonProperty("updatedAt")]
+        public DateTime UpdateTime { get; set; }
         /// <summary>
-        /// Timestamp order was closed
+        /// Close time
         /// </summary>
-        public DateTime? ClosedAt { get; set; }
+        [JsonProperty("closedAt")]
+        public DateTime? CloseTime { get; set; }
     }
 }

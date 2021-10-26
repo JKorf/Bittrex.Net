@@ -1,0 +1,29 @@
+{
+  "id": "string (uuid)",
+  "marketSymbol": "string",
+  "operand": "string",
+  "triggerPrice": "1.2",
+  "trailingStopPercent": "1.3",
+  "createdOrderId": "string (uuid)",
+  "orderToCreate": {
+    "marketSymbol": "string",
+    "direction": "BUY",
+    "type": "LIMIT",
+    "quantity": "1.5",
+    "ceiling": "1.6",
+    "limit": "1.7",
+    "timeInForce": "GOOD_TIL_CANCELLED",
+    "clientOrderId": "string (uuid)",
+    "useAwards": "true"
+  },
+  "orderToCancel": {
+    "type": "limit",
+    "id": "string (uuid)"
+  },
+  "clientConditionalOrderId": "string (uuid)",
+  "status": "string",
+  "orderCreationErrorCode": "string",
+  "createdAt": "2021-04-23T18:25:43.511Z",
+  "updatedAt": "2021-04-23T18:25:43.511Z",
+  "closedAt": "2021-04-23T18:25:43.511Z"
+}

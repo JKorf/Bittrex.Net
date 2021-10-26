@@ -1,0 +1,17 @@
+[
+  {
+    "symbol": "string",
+    "view": "true",
+    "deposit": {
+      "blockchain": "true",
+      "creditCard": "true",
+      "wireTransfer": "true",
+      "ach": "true"
+    },
+    "withdraw": {
+      "blockchain": "true",
+      "wireTransfer": "true",
+      "ach": "true"
+    }
+  }
+]

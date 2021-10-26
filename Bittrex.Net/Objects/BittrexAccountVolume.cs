@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Bittrex.Net.Objects
 {
@@ -8,9 +9,10 @@ namespace Bittrex.Net.Objects
     public class BittrexAccountVolume
     {
         /// <summary>
-        /// Update time of the volume
+        /// Update time
         /// </summary>
-        public DateTime Updated { get; set; }
+        [JsonProperty("updated")]
+        public DateTime UpdateTime { get; set; }
         /// <summary>
         /// Volume 30 days
         /// </summary>
