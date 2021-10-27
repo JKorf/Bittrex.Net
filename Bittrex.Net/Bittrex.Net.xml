@@ -261,58 +261,58 @@
             </summary>
             <param name="options">Options to use for new clients</param>
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToKlineUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToKlineUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexSummariesUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexSummariesUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTickersUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTickersUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToBalanceUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexBalanceUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToBalanceUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexBalanceUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToUserTradeUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexExecutionUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToUserTradeUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexExecutionUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToDepositUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexDepositUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToDepositUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexDepositUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToConditionalOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexConditionalOrderUpdate}})">
+        <member name="M:Bittrex.Net.BittrexSocketClient.SubscribeToConditionalOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexConditionalOrderUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.BittrexSocketClient.GetSocketConnection(System.String,System.Boolean)">
@@ -1068,131 +1068,147 @@
             <param name="apiKey">The api key</param>
             <param name="apiSecret">The api secret</param>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to heartbeat updates
             </summary>
             <param name="onHeartbeat">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToKlineUpdatesAsync(System.String,Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to kline(candle) updates for a symbol
             </summary>
             <param name="symbol">The symbol</param>
             <param name="interval">Interval of the candles</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToKlineUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToKlineUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},Bittrex.Net.Enums.KlineInterval,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexKlineUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to kline(candle) updates for a symbol
             </summary>
             <param name="symbols">The symbols</param>
             <param name="interval">Interval of the candles</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexSummariesUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexSummariesUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to all symbol summary updates
             </summary>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to symbol summary updates
             </summary>
             <param name="symbol">The symbol</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToSymbolSummaryUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexSymbolSummary}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to symbol summary updates
             </summary>
             <param name="symbols">The symbols</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.String,System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to order book updates
             </summary>
             <param name="symbol">The symbol</param>
             <param name="depth">The depth of the oder book to receive update for</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderBookUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Int32,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderBookUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to order book updates
             </summary>
             <param name="symbols">The symbols</param>
             <param name="depth">The depth of the oder book to receive update for</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTickersUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTickersUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to all symbols ticker updates
             </summary>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTickerUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to symbol ticker updates
             </summary>
             <param name="symbol">The symbol</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTickerUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.BittrexTick}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to symbol ticker updates
             </summary>
             <param name="symbols">The symbols</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTradeUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to symbol trade updates
             </summary>
             <param name="symbol">The symbol</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToTradeUpdatesAsync(System.Collections.Generic.IEnumerable{System.String},System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexTradesUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to symbol trade updates
             </summary>
             <param name="symbols">The symbols</param>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexOrderUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to order updates
             </summary>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToBalanceUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexBalanceUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToBalanceUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexBalanceUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to balance updates
             </summary>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToDepositUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexDepositUpdate}})">
+        <member name="M:Bittrex.Net.Interfaces.IBittrexSocketClient.SubscribeToDepositUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Sockets.BittrexDepositUpdate}},System.Threading.CancellationToken)">
             <summary>
             Subscribe to deposit updates
             </summary>
             <param name="onUpdate">Data handler</param>
-            <returns>Subscription result</returns>
+            <param name="ct">Cancellation token for closing this subscription</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexAccount">
             <summary>

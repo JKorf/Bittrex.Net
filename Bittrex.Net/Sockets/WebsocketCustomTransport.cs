@@ -11,6 +11,7 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Objects;
+using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net.Sockets
 {
@@ -125,6 +126,18 @@ namespace Bittrex.Net.Sockets
         {
             connection?.Trace(TraceLevels.Events, "WS: OnClose()");
             connection?.Stop();
+        }
+
+        public override void Abort(IConnection connection, TimeSpan timeout, string connectionData)
+        {
+            if (websocket == null)
+                return;
+
+            var socket = websocket;
+            websocket = null;
+
+            socket.CloseAsync().Wait();
+            socket.Dispose();
         }
 
         private void WebSocketOnError(Exception e)
