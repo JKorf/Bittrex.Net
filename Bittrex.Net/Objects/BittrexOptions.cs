@@ -20,11 +20,6 @@ namespace Bittrex.Net.Objects
         };
 
         /// <summary>
-        /// The V2 API base address
-        /// </summary>
-        //public string BaseAddressV2 { get; set; } = "https://international.bittrex.com";
-
-        /// <summary>
         /// Ctor
         /// </summary>
         public BittrexClientSpotOptions()
