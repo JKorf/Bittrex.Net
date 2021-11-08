@@ -19,18 +19,16 @@ using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Authentication;
 using Bittrex.Net.Enums;
 using System.Threading;
+using Bittrex.Net.Interfaces.Clients.Socket;
 
 namespace Bittrex.Net
 {
     /// <summary>
     /// Client for the Bittrex V3 websocket API
     /// </summary>
-    public class BittrexSocketClient: SocketClient, IBittrexSocketClient
+    public class BittrexSocketClientSpot: SocketClient, IBittrexSocketClientSpot
     {
         #region fields
-        private static BittrexSocketClientOptions defaultOptions = new BittrexSocketClientOptions();
-        private static BittrexSocketClientOptions DefaultOptions => defaultOptions.Copy<BittrexSocketClientOptions>();
-
         private const string HubName = "c3";
         
         #endregion
@@ -39,7 +37,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Creates a new socket client using the default options
         /// </summary>
-        public BittrexSocketClient(): this(DefaultOptions)
+        public BittrexSocketClientSpot(): this(BittrexSocketClientSpotOptions.Default)
         {
         }
 
@@ -47,7 +45,7 @@ namespace Bittrex.Net
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
+        public BittrexSocketClientSpot(BittrexSocketClientSpotOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             SocketFactory = new ConnectionFactory(options.Proxy);
 
@@ -71,9 +69,9 @@ namespace Bittrex.Net
         /// Set the default options for new clients
         /// </summary>
         /// <param name="options">Options to use for new clients</param>
-        public static void SetDefaultOptions(BittrexSocketClientOptions options)
+        public static void SetDefaultOptions(BittrexSocketClientSpotOptions options)
         {
-            defaultOptions = options;
+            BittrexSocketClientSpotOptions.Default = options;
         }
 
         /// <inheritdoc />

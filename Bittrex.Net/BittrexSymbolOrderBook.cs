@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Bittrex.Net.Interfaces;
+using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Socket;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Sockets;
 using CryptoExchange.Net;
@@ -15,8 +17,8 @@ namespace Bittrex.Net
     /// </summary>
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
-        private readonly IBittrexSocketClient socketClient;
-        private readonly IBittrexClient restClient;
+        private readonly IBittrexSocketClientSpot socketClient;
+        private readonly IBittrexClientSpot restClient;
         private readonly int _limit;
         private readonly bool _socketOwner;
         private readonly bool _restOwner;
@@ -27,16 +29,20 @@ namespace Bittrex.Net
         /// <param name="symbol">The symbol the order book is for</param>
         /// <param name="limit">The number of entries in the order book</param>
         /// <param name="options">Options for the order book</param>
-        public BittrexSymbolOrderBook(string symbol, int limit, BittrexOrderBookOptions? options = null) : base(symbol, options ?? new BittrexOrderBookOptions())
+        public BittrexSymbolOrderBook(string symbol, int limit, BittrexOrderBookOptions? options = null) : base("Bittrex[Spot]", symbol, options ?? new BittrexOrderBookOptions())
         {
             symbol.ValidateBittrexSymbol();
             limit.ValidateIntValues(nameof(limit), 1, 25, 500);
             _limit = limit;
-            socketClient = options?.SocketClient ?? new BittrexSocketClient(new BittrexSocketClientOptions()
+
+            sequencesAreConsecutive = true;
+            strictLevels = true;
+
+            socketClient = options?.SocketClient ?? new BittrexSocketClientSpot(new BittrexSocketClientSpotOptions()
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });
-            restClient = options?.RestClient ?? new BittrexClient(new BittrexClientOptions()
+            restClient = options?.RestClient ?? new BittrexClientSpot(new BittrexClientSpotOptions()
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });
@@ -54,7 +60,7 @@ namespace Bittrex.Net
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
             await Task.Delay(300).ConfigureAwait(false);
-            var queryResult = await restClient.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
+            var queryResult = await restClient.ExchangeData.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
@@ -73,7 +79,7 @@ namespace Bittrex.Net
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResyncAsync()
         {
-            var queryResult = await restClient.GetOrderBookAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await restClient.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             

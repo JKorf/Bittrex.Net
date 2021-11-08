@@ -9,12 +9,12 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 
-namespace Bittrex.Net.Interfaces
+namespace Bittrex.Net.Interfaces.Clients.Socket
 {
     /// <summary>
     /// Interface for the Bittrex V3 socket client
     /// </summary>
-    public interface IBittrexSocketClient: ISocketClient
+    public interface IBittrexSocketClientSpot: ISocketClient
     {
         /// <summary>
         /// Set the API key and secret

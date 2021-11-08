@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bittrex.Net.Interfaces.Clients.Rest.Spot;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -61,40 +62,40 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             return self == to;
         }
 
-        public static BittrexSocketClient CreateSocketClient(IWebsocket socket, BittrexSocketClientOptions options = null)
+        public static BittrexSocketClientSpot CreateSocketClient(IWebsocket socket, BittrexSocketClientSpotOptions options = null)
         {
-            BittrexSocketClient client;
-            client = options != null ? new BittrexSocketClient(options) : new BittrexSocketClient();
+            BittrexSocketClientSpot client;
+            client = options != null ? new BittrexSocketClientSpot(options) : new BittrexSocketClientSpot();
             client.SocketFactory = Mock.Of<IWebsocketFactory>();
             Mock.Get(client.SocketFactory).Setup(f => f.CreateWebsocket(It.IsAny<Log>(), It.IsAny<string>())).Returns(socket);
             return client;
         }
 
-        public static IBittrexClient CreateClient(BittrexClientOptions options = null)
+        public static IBittrexClientSpot CreateClient(BittrexClientSpotOptions options = null)
         {
-            IBittrexClient client;
-            client = options != null ? new BittrexClient(options) : new BittrexClient();
+            IBittrexClientSpot client;
+            client = options != null ? new BittrexClientSpot(options) : new BittrexClientSpot();
             client.RequestFactory = Mock.Of<IRequestFactory>();
             return client;
         }
 
-        public static IBittrexClient CreateResponseClient(string response, BittrexClientOptions options = null)
+        public static IBittrexClientSpot CreateResponseClient(string response, BittrexClientSpotOptions options = null)
         {
-            var client = (BittrexClient)CreateClient(options);
+            var client = (BittrexClientSpot)CreateClient(options);
             SetResponse(client, response);
             return client;
         }
 
-        public static IBittrexClient CreateResponseClient<T>(T response, BittrexClientOptions options = null, HttpStatusCode code = HttpStatusCode.OK)
+        public static IBittrexClientSpot CreateResponseClient<T>(T response, BittrexClientSpotOptions options = null, HttpStatusCode code = HttpStatusCode.OK)
         {
-            var client = (BittrexClient)CreateClient(options);
+            var client = (BittrexClientSpot)CreateClient(options);
             SetResponse(client, JsonConvert.SerializeObject(response), code);
             return client;
         }
 
-        public static IBittrexClient CreateAuthenticatedResponseClient<T>(T response, BittrexClientOptions options = null)
+        public static IBittrexClientSpot CreateAuthenticatedResponseClient<T>(T response, BittrexClientSpotOptions options = null)
         {
-            var client = (BittrexClient)CreateClient(options ?? new BittrexClientOptions(){ApiCredentials = new ApiCredentials("Test", "Test")});
+            var client = (BittrexClientSpot)CreateClient(options ?? new BittrexClientSpotOptions(){ApiCredentials = new ApiCredentials("Test", "Test")});
             SetResponse(client, JsonConvert.SerializeObject(response));
             return client;
         }
