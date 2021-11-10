@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using Bittrex.Net.Interfaces;
-using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Interfaces.Clients.Socket;
 using CryptoExchange.Net.Objects;
 
@@ -9,12 +9,12 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Options for the Bittrex client
     /// </summary>
-    public class BittrexClientSpotOptions : RestClientOptions
+    public class BittrexClientOptions : RestClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
-        public static BittrexClientSpotOptions Default { get; set; } = new BittrexClientSpotOptions()
+        public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions()
         {
             BaseAddress = "https://api.bittrex.com"
         };
@@ -22,7 +22,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Ctor
         /// </summary>
-        public BittrexClientSpotOptions()
+        public BittrexClientOptions()
         {
             if (Default == null)
                 return;
@@ -34,12 +34,12 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Options for the Bittrex socket client
     /// </summary>
-    public class BittrexSocketClientSpotOptions : SocketClientOptions
+    public class BittrexSocketClientOptions : SocketClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
-        public static BittrexSocketClientSpotOptions Default { get; set; } = new BittrexSocketClientSpotOptions()
+        public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
         {
             BaseAddress = "https://socket-v3.bittrex.com",
             SocketSubscriptionsCombineTarget = 10
@@ -48,7 +48,7 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// Ctor
         /// </summary>
-        public BittrexSocketClientSpotOptions()
+        public BittrexSocketClientOptions()
         {
             if (Default == null)
                 return;
@@ -65,18 +65,18 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBittrexSocketClientSpot? SocketClient { get; }
+        public IBittrexSocketClient? SocketClient { get; }
 
         /// <summary>
         /// The rest client to use for requesting the initial order book
         /// </summary>
-        public IBittrexClientSpot? RestClient { get; }
+        public IBittrexClient? RestClient { get; }
 
         /// <summary>
         /// </summary>
         /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
         /// <param name="restClient">The client to use for the initial order book request.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClientSpot? socketClient = null, IBittrexClientSpot? restClient = null)
+        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null, IBittrexClient? restClient = null)
         {
             SocketClient = socketClient;
             RestClient = restClient;

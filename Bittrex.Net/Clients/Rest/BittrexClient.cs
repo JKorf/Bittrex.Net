@@ -5,10 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Bittrex.Net.Clients.Rest.Spot;
 using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -18,18 +17,18 @@ using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Bittrex.Net
+namespace Bittrex.Net.Clients.Rest
 {
     /// <summary>
     /// Client for the Bittrex V3 API
     /// </summary>
-    public class BittrexClientSpot : RestClient, IExchangeClient, IBittrexClientSpot
+    public class BittrexClient : RestClient, IExchangeClient, IBittrexClient
     {
         #region Subclients
 
-        public IBittrexClientSpotAccount Account { get; }
-        public IBittrexClientSpotExchangeData ExchangeData { get; }
-        public IBittrexClientSpotTrading Trading { get; }
+        public IBittrexClientAccount Account { get; }
+        public IBittrexClientExchangeData ExchangeData { get; }
+        public IBittrexClientTrading Trading { get; }
 
         #endregion
 
@@ -46,18 +45,18 @@ namespace Bittrex.Net
         /// <summary>
         /// Create a new instance of BittrexClient using the default options
         /// </summary>
-        public BittrexClientSpot() : this(BittrexClientSpotOptions.Default)
+        public BittrexClient() : this(BittrexClientOptions.Default)
         {
         }
 
         /// <summary>
         /// Create a new instance of BittrexClient using the default options
         /// </summary>
-        public BittrexClientSpot(BittrexClientSpotOptions options) : base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
+        public BittrexClient(BittrexClientOptions options) : base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
-            Account = new BittrexClientSpotAccount(this);
-            ExchangeData = new BittrexClientSpotExchangeData(this);
-            Trading = new BittrexClientSpotTrading(this);
+            Account = new BittrexClientAccount(this);
+            ExchangeData = new BittrexClientExchangeData(this);
+            Trading = new BittrexClientTrading(this);
         }
         #endregion
 
@@ -66,9 +65,9 @@ namespace Bittrex.Net
         /// Sets the default options to use for new clients
         /// </summary>
         /// <param name="options">The options to use for new clients</param>
-        public static void SetDefaultOptions(BittrexClientSpotOptions options)
+        public static void SetDefaultOptions(BittrexClientOptions options)
         {
-            BittrexClientSpotOptions.Default = options;
+            BittrexClientOptions.Default = options;
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
@@ -14,13 +14,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bittrex.Net.Clients.Rest.Spot
+namespace Bittrex.Net.Clients.Rest
 {
-    public class BittrexClientSpotTrading: IBittrexClientSpotTrading
+    public class BittrexClientTrading: IBittrexClientTrading
     {
-        private BittrexClientSpot _baseClient;
+        private BittrexClient _baseClient;
 
-        public BittrexClientSpotTrading(BittrexClientSpot baseClient)
+        internal BittrexClientTrading(BittrexClient baseClient)
         {
             _baseClient = baseClient;
         }
@@ -103,7 +103,7 @@ namespace Bittrex.Net.Clients.Rest.Spot
         }
 
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOpenOrdersAsync(string? symbol = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOrdersAsync(string? symbol = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);

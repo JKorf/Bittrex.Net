@@ -14,7 +14,7 @@ namespace Bittrex.Net.Interfaces.Clients.Socket
     /// <summary>
     /// Interface for the Bittrex V3 socket client
     /// </summary>
-    public interface IBittrexSocketClientSpot: ISocketClient
+    public interface IBittrexSocketClient: ISocketClient
     {
         /// <summary>
         /// Set the API key and secret

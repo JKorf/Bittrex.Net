@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bittrex.Net.Interfaces.Clients.Rest.Spot
+namespace Bittrex.Net.Interfaces.Clients.Rest
 {
-    public interface IBittrexClientSpotTrading
+    public interface IBittrexClientTrading
     {
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest.Spot
         /// <param name="symbol">Only cancel open orders for a specific symbol</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Order info</returns>
-        Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOpenOrdersAsync(string? symbol = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOrdersAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
         /// Places an order

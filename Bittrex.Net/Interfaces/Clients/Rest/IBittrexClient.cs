@@ -7,12 +7,12 @@ using Bittrex.Net.Objects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 
-namespace Bittrex.Net.Interfaces.Clients.Rest.Spot
+namespace Bittrex.Net.Interfaces.Clients.Rest
 {
     /// <summary>
     /// Interface for the Bittrex V3 API client
     /// </summary>
-    public interface IBittrexClientSpot : IRestClient
+    public interface IBittrexClient : IRestClient
     
     {
         /// <summary>
@@ -22,8 +22,8 @@ namespace Bittrex.Net.Interfaces.Clients.Rest.Spot
         /// <param name="apiSecret">The api secret</param>
         void SetApiCredentials(string apiKey, string apiSecret);
 
-        IBittrexClientSpotAccount Account { get; }
-        IBittrexClientSpotExchangeData ExchangeData { get; }
-        IBittrexClientSpotTrading Trading { get; }
+        IBittrexClientAccount Account { get; }
+        IBittrexClientExchangeData ExchangeData { get; }
+        IBittrexClientTrading Trading { get; }
     }
 }

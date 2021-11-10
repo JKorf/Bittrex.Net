@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Bittrex.Net.Clients.Rest;
+using Bittrex.Net.Clients.Socket;
 using Bittrex.Net.Interfaces;
-using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Interfaces.Clients.Socket;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Sockets;
@@ -17,8 +19,8 @@ namespace Bittrex.Net
     /// </summary>
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
-        private readonly IBittrexSocketClientSpot socketClient;
-        private readonly IBittrexClientSpot restClient;
+        private readonly IBittrexSocketClient socketClient;
+        private readonly IBittrexClient restClient;
         private readonly int _limit;
         private readonly bool _socketOwner;
         private readonly bool _restOwner;
@@ -38,11 +40,11 @@ namespace Bittrex.Net
             sequencesAreConsecutive = true;
             strictLevels = true;
 
-            socketClient = options?.SocketClient ?? new BittrexSocketClientSpot(new BittrexSocketClientSpotOptions()
+            socketClient = options?.SocketClient ?? new BittrexSocketClient(new BittrexSocketClientOptions()
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });
-            restClient = options?.RestClient ?? new BittrexClientSpot(new BittrexClientSpotOptions()
+            restClient = options?.RestClient ?? new BittrexClient(new BittrexClientOptions()
             {
                 LogLevel = options?.LogLevel ?? LogLevel.Information
             });

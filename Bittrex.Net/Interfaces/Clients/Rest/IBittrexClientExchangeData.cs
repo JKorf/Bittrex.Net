@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bittrex.Net.Interfaces.Clients.Rest.Spot
+namespace Bittrex.Net.Interfaces.Clients.Rest
 {
-    public interface IBittrexClientSpotExchangeData
+    public interface IBittrexClientExchangeData
     {
         /// <summary>
         /// Gets the server time

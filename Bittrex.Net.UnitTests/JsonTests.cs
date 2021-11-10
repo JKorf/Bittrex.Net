@@ -1,5 +1,5 @@
 ﻿using Bitfinex.Net.UnitTests;
-using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Objects;
 using Bittrex.Net.UnitTests.TestImplementations;
 using NUnit.Framework;
@@ -11,7 +11,7 @@ namespace Bittrex.Net.UnitTests
     [TestFixture]
     public class JsonTests
     {
-        private JsonToObjectComparer<IBittrexClientSpot> _comparer = new JsonToObjectComparer<IBittrexClientSpot>((json) => TestHelpers.CreateResponseClient(json, new BittrexClientSpotOptions()
+        private JsonToObjectComparer<IBittrexClient> _comparer = new JsonToObjectComparer<IBittrexClient>((json) => TestHelpers.CreateResponseClient(json, new BittrexClientOptions()
         { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), OutputOriginalData = true }));
 
         [Test]

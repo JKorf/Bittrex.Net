@@ -1,6 +1,6 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest.Spot;
+using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
@@ -12,13 +12,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bittrex.Net.Clients.Rest.Spot
+namespace Bittrex.Net.Clients.Rest
 {
-    public class BittrexClientSpotAccount: IBittrexClientSpotAccount
+    public class BittrexClientAccount: IBittrexClientAccount
     {
-        private BittrexClientSpot _baseClient;
+        private BittrexClient _baseClient;
 
-        public BittrexClientSpotAccount(BittrexClientSpot baseClient)
+        internal BittrexClientAccount(BittrexClient baseClient)
         {
             _baseClient = baseClient;
         }

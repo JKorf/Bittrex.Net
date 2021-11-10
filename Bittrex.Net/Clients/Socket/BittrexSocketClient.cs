@@ -21,12 +21,12 @@ using Bittrex.Net.Enums;
 using System.Threading;
 using Bittrex.Net.Interfaces.Clients.Socket;
 
-namespace Bittrex.Net
+namespace Bittrex.Net.Clients.Socket
 {
     /// <summary>
     /// Client for the Bittrex V3 websocket API
     /// </summary>
-    public class BittrexSocketClientSpot: SocketClient, IBittrexSocketClientSpot
+    public class BittrexSocketClient: SocketClient, IBittrexSocketClient
     {
         #region fields
         private const string HubName = "c3";
@@ -37,7 +37,7 @@ namespace Bittrex.Net
         /// <summary>
         /// Creates a new socket client using the default options
         /// </summary>
-        public BittrexSocketClientSpot(): this(BittrexSocketClientSpotOptions.Default)
+        public BittrexSocketClient(): this(BittrexSocketClientOptions.Default)
         {
         }
 
@@ -45,7 +45,7 @@ namespace Bittrex.Net
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClientSpot(BittrexSocketClientSpotOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
+        public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {
             SocketFactory = new ConnectionFactory(options.Proxy);
 
@@ -69,9 +69,9 @@ namespace Bittrex.Net
         /// Set the default options for new clients
         /// </summary>
         /// <param name="options">Options to use for new clients</param>
-        public static void SetDefaultOptions(BittrexSocketClientSpotOptions options)
+        public static void SetDefaultOptions(BittrexSocketClientOptions options)
         {
-            BittrexSocketClientSpotOptions.Default = options;
+            BittrexSocketClientOptions.Default = options;
         }
 
         /// <inheritdoc />
