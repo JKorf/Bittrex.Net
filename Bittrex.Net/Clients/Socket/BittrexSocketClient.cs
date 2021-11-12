@@ -416,10 +416,11 @@ namespace Bittrex.Net.Clients.Socket
 
             log.Write(LogLevel.Debug, "Socket received data: " + result);
 
-            var token = result.ToJToken(log);
-            if (token == null)
+            var tokenResult = ValidateJson(result);
+            if (!tokenResult)
                 return;
 
+            var token = tokenResult.Data;
             string? symbol = null;
             if (token["marketSymbol"] != null)
                 symbol = token["marketSymbol"]?.ToString();
