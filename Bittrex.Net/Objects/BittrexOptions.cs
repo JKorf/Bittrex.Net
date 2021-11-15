@@ -1,7 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using Bittrex.Net.Interfaces;
 using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Interfaces.Clients.Socket;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects
@@ -16,7 +19,12 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions()
         {
-            BaseAddress = "https://api.bittrex.com"
+            BaseAddress = "https://api.bittrex.com",
+            RateLimiters = new List<IRateLimiter>
+            {
+                new RateLimiter()
+                    .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
+            }
         };
 
         /// <summary>
