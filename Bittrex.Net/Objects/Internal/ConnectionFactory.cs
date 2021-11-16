@@ -4,7 +4,7 @@ using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Microsoft.AspNet.SignalR.Client;
 
-namespace Bittrex.Net.Sockets
+namespace Bittrex.Net.Objects.Internal
 {
     internal class ConnectionFactory : IWebsocketFactory
     {

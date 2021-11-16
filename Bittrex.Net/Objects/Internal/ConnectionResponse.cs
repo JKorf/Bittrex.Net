@@ -1,4 +1,4 @@
-﻿namespace Bittrex.Net.Sockets
+﻿namespace Bittrex.Net.Objects.Internal
 {
     internal class ConnectionResponse
     {

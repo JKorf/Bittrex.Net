@@ -11,9 +11,9 @@ using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;
 
-namespace Bittrex.Net.Sockets
+namespace Bittrex.Net.Objects.Internal
 {
-    internal class BittrexHubConnection: CryptoExchangeWebSocketClient, ISignalRSocket
+    internal class BittrexHubConnection : CryptoExchangeWebSocketClient, ISignalRSocket
     {
         private readonly HubConnection connection;
         private IHubProxy? hubProxy;
@@ -21,8 +21,8 @@ namespace Bittrex.Net.Sockets
 
         public new string Url { get; }
         public new bool IsOpen => connection.State == ConnectionState.Connected;
-        
-        public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection): base(null!, connection.Url)
+
+        public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection) : base(null!, connection.Url)
         {
             Url = connection.Url;
             this.connection = connection;
@@ -56,7 +56,7 @@ namespace Bittrex.Net.Sockets
                     connection.Stop(TimeSpan.FromMilliseconds(100));
                     break;
             }
-        }        
+        }
 
         public void SetHub(string name)
         {
@@ -69,10 +69,10 @@ namespace Bittrex.Net.Sockets
             if (!string.IsNullOrEmpty(proxy.Login))
                 connection.Proxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
         }
-        
+
         public async Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
         {
-            if(hubProxy == null)
+            if (hubProxy == null)
                 throw new InvalidOperationException("HubProxy not set");
 
             Error? error = null;

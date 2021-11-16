@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Interfaces;
-using Bittrex.Net.Sockets;
 using CryptoExchange.Net;
 using System.IO;
 using System.IO.Compression;
@@ -20,6 +19,8 @@ using CryptoExchange.Net.Authentication;
 using Bittrex.Net.Enums;
 using System.Threading;
 using Bittrex.Net.Interfaces.Clients.Socket;
+using Bittrex.Net.Sockets;
+using Bittrex.Net.Objects.Internal;
 
 namespace Bittrex.Net.Clients.Socket
 {

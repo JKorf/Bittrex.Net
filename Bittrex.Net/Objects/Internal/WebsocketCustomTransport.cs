@@ -11,9 +11,8 @@ using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Objects;
-using Microsoft.Extensions.Logging;
 
-namespace Bittrex.Net.Sockets
+namespace Bittrex.Net.Objects.Internal
 {
     internal class WebsocketCustomTransport : ClientTransportBase
     {
@@ -26,7 +25,7 @@ namespace Bittrex.Net.Sockets
 
         public override bool SupportsKeepAlive => true;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client, ApiProxy? proxy, Func<string, string>? interpreter): base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client, ApiProxy? proxy, Func<string, string>? interpreter) : base(client, "webSockets")
         {
             this.log = log;
             this.proxy = proxy;
@@ -65,7 +64,7 @@ namespace Bittrex.Net.Sockets
             websocket.OnMessage += WebSocketOnMessageReceived;
             websocket.DataInterpreterString = interpreter;
 
-            if (proxy != null)            
+            if (proxy != null)
                 websocket.SetProxy(proxy);
 
             if (!websocket.ConnectAsync().Result)
