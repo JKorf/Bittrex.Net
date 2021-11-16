@@ -19,8 +19,9 @@ using CryptoExchange.Net.Authentication;
 using Bittrex.Net.Enums;
 using System.Threading;
 using Bittrex.Net.Interfaces.Clients.Socket;
-using Bittrex.Net.Sockets;
 using Bittrex.Net.Objects.Internal;
+using Bittrex.Net.Objects.Models;
+using Bittrex.Net.Objects.Models.Socket;
 
 namespace Bittrex.Net.Clients.Socket
 {

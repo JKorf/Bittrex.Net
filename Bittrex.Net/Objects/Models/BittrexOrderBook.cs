@@ -4,7 +4,7 @@ using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     /// <summary>
     /// Order book

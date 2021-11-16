@@ -2,7 +2,7 @@
 using CryptoExchange.Net.Converters;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     internal class BittrexServerTime
     {

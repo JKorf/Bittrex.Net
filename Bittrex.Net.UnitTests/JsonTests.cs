@@ -5,6 +5,7 @@ using Bittrex.Net.UnitTests.TestImplementations;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net.UnitTests
 {
@@ -12,7 +13,7 @@ namespace Bittrex.Net.UnitTests
     public class JsonTests
     {
         private JsonToObjectComparer<IBittrexClient> _comparer = new JsonToObjectComparer<IBittrexClient>((json) => TestHelpers.CreateResponseClient(json, new BittrexClientOptions()
-        { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), OutputOriginalData = true }));
+        { ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), OutputOriginalData = true, RateLimiters = new List<IRateLimiter>() }));
 
         [Test]
         public async Task ValidateSpotAccountCalls()

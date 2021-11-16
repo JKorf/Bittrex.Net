@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bittrex.Net.Objects.Models;
 
 namespace Bittrex.Net.Interfaces.Clients.Rest
 {

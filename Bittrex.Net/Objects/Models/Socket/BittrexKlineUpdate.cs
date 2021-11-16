@@ -1,9 +1,8 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Sockets
+namespace Bittrex.Net.Objects.Models.Socket
 {
     /// <summary>
     /// Kline update data

@@ -4,7 +4,7 @@ using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     /// <summary>
     /// Bittrex asset info

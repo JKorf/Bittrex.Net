@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bittrex.Net.Objects;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Sockets
+namespace Bittrex.Net.Objects.Models.Socket
 {
     /// <summary>
     /// Symbol trade update

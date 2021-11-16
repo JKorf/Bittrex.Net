@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bittrex.Net.Objects.Models;
 
 namespace Bittrex.Net.Clients.Rest
 {

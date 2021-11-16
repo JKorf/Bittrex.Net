@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     /// <summary>
     /// Whitelist address

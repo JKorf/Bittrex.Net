@@ -4,7 +4,7 @@ using Bittrex.Net.Enums;
 using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     /// <summary>
     /// Data on an unplaced order

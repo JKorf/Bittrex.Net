@@ -1,6 +1,4 @@
-﻿using Bittrex.Net.Objects;
-
-namespace Bittrex.Net.Sockets
+﻿namespace Bittrex.Net.Objects.Models.Socket
 {
     /// <summary>
     /// Order update

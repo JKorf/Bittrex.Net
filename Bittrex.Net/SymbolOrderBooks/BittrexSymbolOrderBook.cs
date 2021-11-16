@@ -1,18 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Bittrex.Net.Clients.Rest;
 using Bittrex.Net.Clients.Socket;
-using Bittrex.Net.Interfaces;
 using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Interfaces.Clients.Socket;
 using Bittrex.Net.Objects;
-using Bittrex.Net.Sockets;
+using Bittrex.Net.Objects.Models.Socket;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
 
-namespace Bittrex.Net
+namespace Bittrex.Net.SymbolOrderBooks
 {
     /// <summary>
     /// Order book implementation

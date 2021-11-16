@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     /// <summary>
     /// Error info

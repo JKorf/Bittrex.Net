@@ -2,7 +2,7 @@
 using Bittrex.Net.Enums;
 using Newtonsoft.Json;
 
-namespace Bittrex.Net.Objects
+namespace Bittrex.Net.Objects.Models
 {
     /// <summary>
     /// Deposit address info
