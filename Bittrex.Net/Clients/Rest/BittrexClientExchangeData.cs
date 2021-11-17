@@ -1,7 +1,6 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
 using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
@@ -18,7 +16,7 @@ namespace Bittrex.Net.Clients.Rest
 {
     public class BittrexClientExchangeData: IBittrexClientExchangeData
     {
-        private BittrexClient _baseClient;
+        private readonly BittrexClient _baseClient;
 
         internal BittrexClientExchangeData(BittrexClient baseClient)
         {

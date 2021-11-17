@@ -15,19 +15,19 @@ namespace Bittrex.Net.Objects.Internal
 {
     internal class BittrexHubConnection : CryptoExchangeWebSocketClient, ISignalRSocket
     {
-        private readonly HubConnection connection;
-        private IHubProxy? hubProxy;
-        private ApiProxy? proxy;
+        private readonly HubConnection _connection;
+        private IHubProxy? _hubProxy;
+        private readonly ApiProxy? _proxy;
 
         public new string Url { get; }
-        public new bool IsOpen => connection.State == ConnectionState.Connected;
+        public new bool IsOpen => _connection.State == ConnectionState.Connected;
 
         public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection) : base(null!, connection.Url)
         {
             Url = connection.Url;
-            this.connection = connection;
+            this._connection = connection;
             this.log = log;
-            this.proxy = proxy;
+            this._proxy = proxy;
 
             connection.StateChanged += StateChangeHandler;
             connection.Error += s => Handle(errorHandlers, s);
@@ -53,26 +53,26 @@ namespace Bittrex.Net.Objects.Internal
                     Handle(closeHandlers);
                     break;
                 case ConnectionState.Reconnecting:
-                    connection.Stop(TimeSpan.FromMilliseconds(100));
+                    _connection.Stop(TimeSpan.FromMilliseconds(100));
                     break;
             }
         }
 
         public void SetHub(string name)
         {
-            hubProxy = connection.CreateHubProxy(name);
+            _hubProxy = _connection.CreateHubProxy(name);
         }
 
         public override void SetProxy(ApiProxy proxy)
         {
-            connection.Proxy = new WebProxy(proxy.Host, proxy.Port);
+            _connection.Proxy = new WebProxy(proxy.Host, proxy.Port);
             if (!string.IsNullOrEmpty(proxy.Login))
-                connection.Proxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
+                _connection.Proxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
         }
 
         public async Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
         {
-            if (hubProxy == null)
+            if (_hubProxy == null)
                 throw new InvalidOperationException("HubProxy not set");
 
             Error? error = null;
@@ -81,7 +81,7 @@ namespace Bittrex.Net.Objects.Internal
                 try
                 {
                     log.Write(LogLevel.Debug, $"Socket {Id} sending data: {call}, {ArrayToString(pars)}");
-                    var sub = await hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
+                    var sub = await _hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub, null);
                 }
                 catch (Exception e)
@@ -114,12 +114,12 @@ namespace Bittrex.Net.Objects.Internal
         {
             var client = new DefaultHttpClient();
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(log, client, proxy, DataInterpreterString)
+                new WebsocketCustomTransport(log, client, _proxy, DataInterpreterString)
             });
-            connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
+            _connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try
             {
-                await connection.Start(autoTransport).ConfigureAwait(false);
+                await _connection.Start(autoTransport).ConfigureAwait(false);
                 return true;
             }
             catch (Exception)
@@ -132,7 +132,7 @@ namespace Bittrex.Net.Objects.Internal
         {
             await Task.Run(() =>
             {
-                connection.Stop(TimeSpan.FromSeconds(1));
+                _connection.Stop(TimeSpan.FromSeconds(1));
             }).ConfigureAwait(false);
         }
     }

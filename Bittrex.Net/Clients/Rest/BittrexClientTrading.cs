@@ -1,7 +1,6 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
 using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -10,7 +9,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
@@ -19,7 +17,7 @@ namespace Bittrex.Net.Clients.Rest
 {
     public class BittrexClientTrading: IBittrexClientTrading
     {
-        private BittrexClient _baseClient;
+        private readonly BittrexClient _baseClient;
 
         internal BittrexClientTrading(BittrexClient baseClient)
         {
@@ -83,7 +81,7 @@ namespace Bittrex.Net.Clients.Rest
             parameters.AddOptionalParameter("nextPageToken", nextPageToken);
             parameters.AddOptionalParameter("previousPageToken", previousPageToken);
 
-            return await _baseClient.SendRequestAsync<IEnumerable<BittrexUserTrade>>(_baseClient.GetUrl($"executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<IEnumerable<BittrexUserTrade>>(_baseClient.GetUrl("executions"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -108,7 +106,7 @@ namespace Bittrex.Net.Clients.Rest
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("marketSymbol", symbol);
-            return await _baseClient.SendRequestAsync<IEnumerable<BittrexOrder>>(_baseClient.GetUrl($"orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<IEnumerable<BittrexOrder>>(_baseClient.GetUrl("orders/open/"), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -181,7 +179,7 @@ namespace Bittrex.Net.Clients.Rest
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddOptionalParameter("symbol", symbol);
-            return await _baseClient.SendRequestAsync<IEnumerable<BittrexConditionalOrder>>(_baseClient.GetUrl($"conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<IEnumerable<BittrexConditionalOrder>>(_baseClient.GetUrl("conditional-orders/open"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -207,7 +205,7 @@ namespace Bittrex.Net.Clients.Rest
             parameters.AddOptionalParameter("orderToCreate", orderToCreate);
             parameters.AddOptionalParameter("orderToCancel", orderToCancel);
 
-            return await _baseClient.SendRequestAsync<BittrexConditionalOrder>(_baseClient.GetUrl($"conditional-orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<BittrexConditionalOrder>(_baseClient.GetUrl("conditional-orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
         #endregion
 
@@ -216,8 +214,8 @@ namespace Bittrex.Net.Clients.Rest
         /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> PlaceMultipleOrdersAsync(BittrexNewBatchOrder[] orders, CancellationToken ct = default)
         {
-            orders?.ValidateNotNull(nameof(orders));
-            if (!orders.Any())
+            orders.ValidateNotNull(nameof(orders));
+            if (!orders!.Any())
                 throw new ArgumentException("No orders provided");
 
             var wrapper = new Dictionary<string, object>();
@@ -235,7 +233,7 @@ namespace Bittrex.Net.Clients.Rest
                     {"type", JsonConvert.SerializeObject(order.Type, new OrderTypeConverter(false)) },
                     {"timeInForce",  JsonConvert.SerializeObject(order.TimeInForce, new TimeInForceConverter(false)) }
                 };
-                orderParameter.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture)); ;
+                orderParameter.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture));
                 orderParameter.AddOptionalParameter("limit", order.Price?.ToString(CultureInfo.InvariantCulture));
                 orderParameter.AddOptionalParameter("clientOrderId", order.ClientOrderId);
                 orderParameter.AddOptionalParameter("ceiling", order.Ceiling?.ToString(CultureInfo.InvariantCulture));
@@ -260,8 +258,8 @@ namespace Bittrex.Net.Clients.Rest
         /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> CancelMultipleOrdersAsync(string[] ordersToCancel, CancellationToken ct = default)
         {
-            ordersToCancel?.ValidateNotNull(nameof(ordersToCancel));
-            if (!ordersToCancel.Any())
+            ordersToCancel.ValidateNotNull(nameof(ordersToCancel));
+            if (!ordersToCancel!.Any())
                 throw new ArgumentException("No orders provided");
 
             var wrapper = new Dictionary<string, object>();

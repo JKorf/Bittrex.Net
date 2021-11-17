@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
 using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Objects;

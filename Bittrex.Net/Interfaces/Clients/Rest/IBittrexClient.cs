@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Bittrex.Net.Enums;
-using Bittrex.Net.Objects;
-using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Objects;
+﻿using CryptoExchange.Net.Interfaces;
 
 namespace Bittrex.Net.Interfaces.Clients.Rest
 {

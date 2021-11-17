@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.Models;
 using Bittrex.Net.Objects.Models.Socket;
 using CryptoExchange.Net.Interfaces;

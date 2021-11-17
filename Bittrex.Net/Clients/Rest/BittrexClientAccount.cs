@@ -1,14 +1,12 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
 using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
@@ -17,7 +15,7 @@ namespace Bittrex.Net.Clients.Rest
 {
     public class BittrexClientAccount: IBittrexClientAccount
     {
-        private BittrexClient _baseClient;
+        private readonly BittrexClient _baseClient;
 
         internal BittrexClientAccount(BittrexClient baseClient)
         {
@@ -236,7 +234,7 @@ namespace Bittrex.Net.Clients.Rest
         /// <inheritdoc />
         public async Task<WebCallResult<IEnumerable<BittrexWhitelistAddress>>> GetWithdrawalWhitelistAddressesAsync(CancellationToken ct = default)
         {
-            return await _baseClient.SendRequestAsync<IEnumerable<BittrexWhitelistAddress>>(_baseClient.GetUrl($"withdrawals/whitelistAddresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+            return await _baseClient.SendRequestAsync<IEnumerable<BittrexWhitelistAddress>>(_baseClient.GetUrl("withdrawals/whitelistAddresses"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
         }
         #endregion
     }

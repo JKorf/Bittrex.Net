@@ -196,7 +196,7 @@ namespace Bittrex.Net.Clients.Socket
                     return;
                 }
 
-                if (!data.Data["A"].Any())
+                if (data.Data["A"]?.Any() != true)
                     return;
                 DecodeSignalRData(data, handler);
             }, ct).ConfigureAwait(false);
@@ -289,11 +289,14 @@ namespace Bittrex.Net.Clients.Socket
                 return false;
 
             var method = (string?) message["M"];
+            if (method == null)
+                return false;
+
             method = string.Join("_", Regex.Split(method, @"(?<!^)(?=[A-Z])").Select(s => s.ToLower()));
             if (method == "heartbeat")
                 return true;
 
-            var arguments = (string?) message["A"].FirstOrDefault();
+            var arguments = (string?) msg.FirstOrDefault();
             if (arguments == null)
                 return false;
 
@@ -333,6 +336,9 @@ namespace Bittrex.Net.Clients.Socket
                 if (channel.StartsWith("candle") && method == "candle")
                 {
                     var interval = tokenData["interval"]?.ToString();
+                    if (interval == null)
+                        return false;
+
                     return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(interval);
                 }
 
@@ -358,7 +364,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
-            if (authProvider == null || authProvider.Credentials?.Key == null)
+            if (authProvider?.Credentials?.Key == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
 
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

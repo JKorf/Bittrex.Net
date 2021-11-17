@@ -1,9 +1,7 @@
 ﻿using Bittrex.Net.Enums;
-using Bittrex.Net.Objects;
 using CryptoExchange.Net.Objects;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
