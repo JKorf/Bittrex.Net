@@ -12,6 +12,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
     {
         /// <summary>
         /// Gets the server time
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--ping-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Time of the server</returns>
@@ -19,6 +20,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets information about all available symbols
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of symbols</returns>
@@ -26,6 +28,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets information about a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
@@ -34,6 +37,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets summaries of all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets-summaries-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of symbol summaries</returns>
@@ -41,6 +45,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets summary of a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--summary-get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get info for</param>
         /// <param name="ct">Cancellation token</param>
@@ -49,6 +54,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the order book of a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--orderbook-get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get the order book for</param>
         /// <param name="limit">The number of results per side for the order book (1, 25 or 500)</param>
@@ -58,6 +64,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the trade history of a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--trades-get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get trades for</param>
         /// <param name="ct">Cancellation token</param>
@@ -66,6 +73,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the ticker of a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--ticker-get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get ticker for</param>
         /// <param name="ct">Cancellation token</param>
@@ -74,6 +82,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets list of tickers for all symbols. Sequence number of the data available via ResponseHeaders.GetSequence()
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets-tickers-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Symbol tickers</returns>
@@ -81,6 +90,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets the klines for a symbol. Sequence number of the data available via ResponseHeaders.GetSequence()
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--candles--candleType---candleInterval--recent-get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get klines for</param>
         /// <param name="interval">The interval of the klines</param>
@@ -91,6 +101,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets historical klines for a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--markets--marketSymbol--candles--candleType---candleInterval--historical--year---month---day--get" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get klines for</param>
         /// <param name="interval">The interval of the klines</param>
@@ -104,6 +115,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of all assets
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--currencies-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of assets</returns>
@@ -111,6 +123,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets info on a asset
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--currencies--symbol--get" /></para>
         /// </summary>
         /// <param name="asset">The name of the asset</param>
         /// <param name="ct">Cancellation token</param>

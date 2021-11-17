@@ -12,6 +12,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
     {
         /// <summary>
         /// Get permissions for a specific asset
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-permissions-currencies--currencySymbol--get" /></para>
         /// </summary>
         /// <param name="asset">Asset</param>
         /// <param name="ct">Cancellation token</param>
@@ -20,6 +21,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get permissions for all assets
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-permissions-currencies-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -27,6 +29,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get permissions for a specific symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-permissions-markets--marketSymbol--get" /></para>
         /// </summary>
         /// <param name="symbol">Symbol</param>
         /// <param name="ct">Cancellation token</param>
@@ -35,14 +38,15 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get permissions for all symbols
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-permissions-markets-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<IEnumerable<BittrexSymbolPermission>>> GetSymbolPermissionsAsync(CancellationToken ct = default);
 
-
         /// <summary>
         /// Get account info
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Account info</returns>
@@ -50,6 +54,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get account trading fees
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-fees-trading-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Account trading fee</returns>
@@ -57,6 +62,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Get account volume
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--account-volume-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Account volume</returns>
@@ -64,6 +70,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--balances-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of balances</returns>
@@ -71,6 +78,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets current balance for an asset
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--balances--currencySymbol--get" /></para>
         /// </summary>
         /// <param name="asset">The name of the asset to get balance for</param>
         /// <param name="ct">Cancellation token</param>
@@ -79,6 +87,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets list of deposit addresses
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--addresses-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposit addresses</returns>
@@ -86,6 +95,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets deposit addresses for an asset
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--addresses--currencySymbol--get" /></para>
         /// </summary>
         /// <param name="asset">The name of the asset to get the deposit address for</param>
         /// <param name="ct">Cancellation token</param>
@@ -94,6 +104,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Request a deposit address for an asset
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--addresses-post" /></para>
         /// </summary>
         /// <param name="asset">The name of the asset to get request a deposit address for</param>
         /// <param name="ct">Cancellation token</param>
@@ -102,6 +113,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--deposits-open-get" /></para>
         /// </summary>
         /// <param name="asset">Filter the list by asset</param>
         /// <param name="ct">Cancellation token</param>
@@ -110,6 +122,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets list of closed deposits
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--deposits-closed-get" /></para>
         /// </summary>
         /// <param name="asset">Filter the list by asset</param>
         /// <param name="status">Filter the list by status of the deposit</param>
@@ -124,6 +137,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets list of deposits for a transaction id
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--deposits-ByTxId--txId--get" /></para>
         /// </summary>
         /// <param name="transactionId">The id of the transaction</param>
         /// <param name="ct">Cancellation token</param>
@@ -132,6 +146,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a deposit by id
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--deposits--depositId--get" /></para>
         /// </summary>
         /// <param name="depositId">The id of the deposit</param>
         /// <param name="ct">Cancellation token</param>
@@ -141,6 +156,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of open withdrawals
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals-open-get" /></para>
         /// </summary>
         /// <param name="asset">Filter by asset</param>
         /// <param name="status">Filter by status</param>
@@ -150,6 +166,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of closed withdrawals
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals-closed-get" /></para>
         /// </summary>
         /// <param name="asset">Filter by asset</param>
         /// <param name="status">Filter by status</param>
@@ -164,6 +181,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of withdrawals by transaction id
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals-ByTxId--txId--get" /></para>
         /// </summary>
         /// <param name="transactionId">The id of the transaction</param>
         /// <param name="ct">Cancellation token</param>
@@ -172,6 +190,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets withdrawal by id
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals--withdrawalId--get" /></para>
         /// </summary>
         /// <param name="id">The id of the withdrawal</param>
         /// <param name="ct">Cancellation token</param>
@@ -180,6 +199,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Cancels a withdrawal
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals--withdrawalId--delete" /></para>
         /// </summary>
         /// <param name="id">The id of the withdrawal to cancel</param>
         /// <param name="ct">Cancellation token</param>
@@ -188,6 +208,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Withdraw from Bittrex
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals-post" /></para>
         /// </summary>
         /// <param name="asset">The asset to withdraw</param>
         /// <param name="quantity">The quantity to withdraw</param>
@@ -200,6 +221,7 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
 
         /// <summary>
         /// Gets a list of whitelisted address for withdrawals
+        /// <para><a href="https://bittrex.github.io/api/v3#operation--withdrawals-allowed-addresses-get" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List withdrawal address</returns>
