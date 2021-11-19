@@ -48,7 +48,7 @@ namespace Bittrex.Net.Clients.Rest
         }
 
         /// <summary>
-        /// Create a new instance of BittrexClient using the default options
+        /// Create a new instance of BittrexClient using the provided options
         /// </summary>
         public BittrexClient(BittrexClientOptions options) : base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
         {

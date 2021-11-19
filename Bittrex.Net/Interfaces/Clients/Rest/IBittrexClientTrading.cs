@@ -8,9 +8,11 @@ using Bittrex.Net.Objects.Models;
 
 namespace Bittrex.Net.Interfaces.Clients.Rest
 {
+    /// <summary>
+    /// Bittrex trading endpoints, placing and mananging orders.
+    /// </summary>
     public interface IBittrexClientTrading
     {
-
         /// <summary>
         /// Gets a list of closed orders
         /// <para><a href="https://bittrex.github.io/api/v3#operation--orders-closed-get" /></para>

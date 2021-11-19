@@ -3,10 +3,9 @@
 namespace Bittrex.Net.Interfaces.Clients.Rest
 {
     /// <summary>
-    /// Interface for the Bittrex V3 API client
+    /// Client for accessing the Bittrex API. 
     /// </summary>
-    public interface IBittrexClient : IRestClient
-    
+    public interface IBittrexClient : IRestClient    
     {
         /// <summary>
         /// Set the API key and secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
@@ -15,8 +14,19 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
         /// <param name="apiSecret">The api secret</param>
         void SetApiCredentials(string apiKey, string apiSecret);
 
+        /// <summary>
+        /// Endpoints related to account settings, info or actions
+        /// </summary>
         IBittrexClientAccount Account { get; }
+
+        /// <summary>
+        /// Endpoints related to retrieving market and system data
+        /// </summary>
         IBittrexClientExchangeData ExchangeData { get; }
+
+        /// <summary>
+        /// Endpoints related to orders and trades
+        /// </summary>
         IBittrexClientTrading Trading { get; }
     }
 }

@@ -8,6 +8,9 @@ using Bittrex.Net.Objects.Models;
 
 namespace Bittrex.Net.Interfaces.Clients.Rest
 {
+    /// <summary>
+    /// Bittrex account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
+    /// </summary>
     public interface IBittrexClientAccount
     {
         /// <summary>
