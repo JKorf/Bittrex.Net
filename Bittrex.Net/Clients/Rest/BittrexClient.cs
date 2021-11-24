@@ -210,7 +210,7 @@ namespace Bittrex.Net.Clients.Rest
         /// <returns></returns>
         internal Uri GetUrl(string endpoint)
         {
-            return new Uri($"{ClientOptions.BaseAddress}v3/{endpoint}");
+            return new Uri(ClientOptions.BaseAddress.AppendPath($"v3", endpoint));
         }
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(
