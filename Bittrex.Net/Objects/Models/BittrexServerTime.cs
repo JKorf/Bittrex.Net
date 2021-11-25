@@ -6,7 +6,7 @@ namespace Bittrex.Net.Objects.Models
 {
     internal class BittrexServerTime
     {
-        [JsonConverter(typeof(TimestampConverter))]
+        [JsonConverter(typeof(DateTimeConverter))]
         public DateTime ServerTime { get; set; }
     }
 }
