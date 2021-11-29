@@ -1,34 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Bittrex.Net.Clients.Rest;
 using Bittrex.Net.Enums;
 using Bittrex.Net.Interfaces.Clients.Rest;
+using Bittrex.Net.Interfaces.Clients.Spot;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
-using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Bittrex.Net.Clients.Rest
+namespace Bittrex.Net.Clients.Spot
 {
-    /// <summary>
-    /// Client for the Bittrex V3 API
-    /// </summary>
-    public class BittrexClient : RestClient, IExchangeClient, IBittrexClient
+    public class BittrexClientSpotMarket: RestSubClient, IBittrexClientSpotMarket, IExchangeClient
     {
+        private BittrexClient _baseClient;
+        private BittrexClientOptions _options;
+
         #region Subclients
 
-        public IBittrexClientAccount Account { get; }
-        public IBittrexClientExchangeData ExchangeData { get; }
-        public IBittrexClientTrading Trading { get; }
+        public IBittrexClientSpotMarketAccount Account { get; }
+        public IBittrexClientSpotMarketExchangeData ExchangeData { get; }
+        public IBittrexClientSpotMarketTrading Trading { get; }
 
         #endregion
+
+        internal BittrexClientSpotMarket(BittrexClient baseClient, BittrexClientOptions options): 
+            base(options.OptionsSpot, options.OptionsSpot.ApiCredentials == null ? null: new BittrexAuthenticationProvider(options.OptionsSpot.ApiCredentials))
+        {
+            _options = options;
+            _baseClient = baseClient;
+
+            Account = new BittrexClientSpotMarketAccount(this);
+            ExchangeData = new BittrexClientSpotMarketExchangeData(this);
+            Trading = new BittrexClientSpotMarketTrading(this);
+        }
 
         /// <summary>
         /// Event triggered when an order is placed via this client
@@ -38,45 +48,6 @@ namespace Bittrex.Net.Clients.Rest
         /// Event triggered when an order is canceled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
         /// </summary>
         public event Action<ICommonOrderId>? OnOrderCanceled;
-
-        #region ctor
-        /// <summary>
-        /// Create a new instance of BittrexClient using the default options
-        /// </summary>
-        public BittrexClient() : this(BittrexClientOptions.Default)
-        {
-        }
-
-        /// <summary>
-        /// Create a new instance of BittrexClient using the provided options
-        /// </summary>
-        public BittrexClient(BittrexClientOptions options) : base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
-        {
-            Account = new BittrexClientAccount(this);
-            ExchangeData = new BittrexClientExchangeData(this);
-            Trading = new BittrexClientTrading(this);
-        }
-        #endregion
-
-        #region methods
-        /// <summary>
-        /// Sets the default options to use for new clients
-        /// </summary>
-        /// <param name="options">The options to use for new clients</param>
-        public static void SetDefaultOptions(BittrexClientOptions options)
-        {
-            BittrexClientOptions.Default = options;
-        }
-
-        /// <summary>
-        /// Set the API key and secret. Api keys can be managed at https://bittrex.com/Manage#sectionApi
-        /// </summary>
-        /// <param name="apiKey">The api key</param>
-        /// <param name="apiSecret">The api secret</param>
-        public void SetApiCredentials(string apiKey, string apiSecret)
-        {
-            SetAuthenticationProvider(new BittrexAuthenticationProvider(new ApiCredentials(apiKey, apiSecret)));
-        }
 
         #region common interface
 #pragma warning disable 1066
@@ -171,57 +142,6 @@ namespace Bittrex.Net.Clients.Rest
         }
 #pragma warning restore 1066
 
-        #endregion
-
-        /// <inheritdoc />
-        protected override Error ParseErrorResponse(JToken data)
-        {
-            if (data["code"] == null)
-                return new UnknownError("Unknown response from server", data);
-
-            var info = (string)data["code"]!;
-            if (data["detail"] != null)
-                info += "; Details: " + (string)data["detail"]!;
-            if (data["data"] != null)
-                info += "; Data: " + data["data"];
-
-            return new ServerError(info);
-        }
-
-        /// <inheritdoc />
-        protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
-        {
-            if (parameters.Any() && parameters.First().Key == string.Empty)
-            {
-                var stringData = JsonConvert.SerializeObject(parameters.First().Value);
-                request.SetContent(stringData, contentType);
-            }
-            else
-            {
-                var stringData = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
-                request.SetContent(stringData, contentType);
-            }
-        }
-
-        /// <summary>
-        /// Get url for an endpoint
-        /// </summary>
-        /// <param name="endpoint"></param>
-        /// <returns></returns>
-        internal Uri GetUrl(string endpoint)
-        {
-            return new Uri(ClientOptions.BaseAddress.AppendPath($"v3", endpoint));
-        }
-
-        internal Task<WebCallResult<T>> SendRequestAsync<T>(
-             Uri uri,
-             HttpMethod method,
-             CancellationToken cancellationToken,
-             Dictionary<string, object>? parameters = null,
-             bool signed = false,
-             JsonSerializer? deserializer = null) where T : class
-                 => base.SendRequestAsync<T>(uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
-
         internal void InvokeOrderPlaced(ICommonOrderId id)
         {
             OnOrderPlaced?.Invoke(id);
@@ -258,9 +178,28 @@ namespace Bittrex.Net.Clients.Rest
             throw new ArgumentException("Unsupported order type for Bittrex order: " + type);
         }
 
-        #endregion
 
         /// <inheritdoc />
         public string GetSymbolName(string baseAsset, string quoteAsset) => $"{baseAsset}-{quoteAsset}".ToUpperInvariant();
+        #endregion
+
+        /// <summary>
+        /// Get url for an endpoint
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <returns></returns>
+        internal Uri GetUrl(string endpoint)
+        {
+            return new Uri(_options.OptionsSpot.BaseAddress.AppendPath($"v3", endpoint));
+        }
+
+        internal Task<WebCallResult<T>> SendRequestAsync<T>(
+             Uri uri,
+             HttpMethod method,
+             CancellationToken cancellationToken,
+             Dictionary<string, object>? parameters = null,
+             bool signed = false,
+             JsonSerializer? deserializer = null) where T : class
+                 => _baseClient.SendRequestAsync<T>(this, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
     }
 }

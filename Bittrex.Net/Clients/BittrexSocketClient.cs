@@ -32,7 +32,13 @@ namespace Bittrex.Net.Clients.Socket
     {
         #region fields
         private const string HubName = "c3";
-        
+
+        #endregion
+
+        #region SubClients
+
+        public IBittrexSocketClientSpotMarket SpotMarket { get; }
+
         #endregion
 
         #region ctor
@@ -47,148 +53,27 @@ namespace Bittrex.Net.Clients.Socket
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options, options.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.ApiCredentials))
+        public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options)
         {
             SocketFactory = new ConnectionFactory(options.Proxy);
+
+            SpotMarket = new BittrexSocketClientSpotMarket(this, options);
 
             AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
         #endregion
 
-        #region methods
-        #region public
-        /// <summary>
-        /// Set the API key and secret
-        /// </summary>
-        /// <param name="apiKey">The api key</param>
-        /// <param name="apiSecret">The api secret</param>
-        public void SetApiCredentials(string apiKey, string apiSecret)
-        {
-            SetAuthenticationProvider(new BittrexAuthenticationProvider(new ApiCredentials(apiKey, apiSecret)));
-        }
-
-        /// <summary>
-        /// Set the default options for new clients
-        /// </summary>
-        /// <param name="options">Options to use for new clients</param>
-        public static void SetDefaultOptions(BittrexSocketClientOptions options)
-        {
-            BittrexSocketClientOptions.Default = options;
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DataEvent<DateTime>> onHeartbeat, CancellationToken ct = default)
-        {
-            return await Subscribe("heartbeat", false, onHeartbeat, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
-            KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate, CancellationToken ct = default)
-            => SubscribeToKlineUpdatesAsync(new[] {symbol}, interval, onUpdate, ct);
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe(symbols.Select(s => $"candle_{s}_{JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false))}").ToArray(), false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action<DataEvent<BittrexSummariesUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("market_summaries", false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string symbol,
-            Action<DataEvent<BittrexSymbolSummary>> onUpdate, CancellationToken ct = default)
-            => SubscribeToSymbolSummaryUpdatesAsync(new[] { symbol }, onUpdate, ct);
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexSymbolSummary>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe(symbols.Select(s => "market_summary_" + s).ToArray(), false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
-            Action<DataEvent<BittrexOrderBookUpdate>> onUpdate, CancellationToken ct = default)
-            => SubscribeToOrderBookUpdatesAsync(new[] {symbol}, depth, onUpdate, ct);
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<DataEvent<BittrexOrderBookUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            depth.ValidateIntValues(nameof(depth), 1, 25, 500);
-            return await Subscribe(symbols.Select(s => $"orderbook_{s}_{depth}").ToArray(), false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(Action<DataEvent<BittrexTickersUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("tickers", false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol,
-            Action<DataEvent<BittrexTick>> onUpdate, CancellationToken ct = default) => SubscribeToTickerUpdatesAsync(new[] {symbol}, onUpdate, ct);
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe(symbols.Select(s => "ticker_" + s).ToArray(), false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
-            Action<DataEvent<BittrexTradesUpdate>> onUpdate, CancellationToken ct = default)
-            => SubscribeToTradeUpdatesAsync(new[] {symbol}, onUpdate, ct);
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe(symbols.Select(s => "trade_" + s).ToArray(), false, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<DataEvent<BittrexOrderUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("order", true, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataEvent<BittrexBalanceUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("balance", true, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToUserTradeUpdatesAsync(Action<DataEvent<BittrexExecutionUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("execution", true, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<DataEvent<BittrexDepositUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("deposit", true, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Action<DataEvent<BittrexConditionalOrderUpdate>> onUpdate, CancellationToken ct = default)
-        {
-            return await Subscribe("conditional_order", true, onUpdate, ct).ConfigureAwait(false);
-        }
-
-        #endregion
+        #region methods       
         #region private
 
-        private Task<CallResult<UpdateSubscription>> Subscribe<T>(string channel, bool authenticated,
-            Action<DataEvent<T>> handler, CancellationToken ct)
-            => Subscribe(new[] {channel}, authenticated, handler, ct);
 
-        private async Task<CallResult<UpdateSubscription>> Subscribe<T>(string[] channels, bool authenticated, Action<DataEvent<T>> handler, CancellationToken ct)
+        internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketSubClient subClient, string channel, bool authenticated,
+            Action<DataEvent<T>> handler, CancellationToken ct)
+            => SubscribeInternalAsync(subClient, new[] { channel }, authenticated, handler, ct);
+
+        internal async Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketSubClient subClient, string[] channels, bool authenticated, Action<DataEvent<T>> handler, CancellationToken ct)
         {
-            return await base.SubscribeAsync<JToken>(new ConnectionRequest("subscribe", channels), null, authenticated, data =>
+            return await base.SubscribeAsync<JToken>(subClient, new ConnectionRequest("subscribe", channels), null, authenticated, data =>
             {
                 if (data.Data["M"]?.ToString() == "heartbeat")
                 {
@@ -203,10 +88,12 @@ namespace Bittrex.Net.Clients.Socket
         }
 
         /// <inheritdoc />
-        protected override SocketConnection GetSocketConnection(string address, bool authenticated)
+        protected override SocketConnection GetSocketConnection(SocketSubClient subClient, string address, bool authenticated)
         {
             // Override because signalr puts `/signalr/` add the end of the url
-            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/" && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
+            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/"
+                                                  && (s.Value.SubClient.GetType() == subClient.GetType())
+                                                  && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
             var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
             if (result != null)
             {
@@ -219,7 +106,7 @@ namespace Bittrex.Net.Clients.Socket
 
             // Create new socket
             var socket = CreateSocket(address);
-            var socketWrapper = new SocketConnection(this, socket);
+            var socketWrapper = new SocketConnection(this, subClient, socket);
             foreach (var kvp in genericHandlers)
                 socketWrapper.AddSubscription(SocketSubscription.CreateForIdentifier(NextId(), kvp.Key, false, kvp.Value));
             return socketWrapper;
@@ -364,16 +251,16 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
-            if (authProvider?.Credentials?.Key == null)
+            if (s.SubClient.AuthenticationProvider?.Credentials?.Key == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
 
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var randomContent = $"{ Guid.NewGuid() }";
             var content = string.Join("", timestamp, randomContent);
-            var signedContent = authProvider.Sign(content);
+            var signedContent = s.SubClient.AuthenticationProvider.Sign(content);
             var socket = (ISignalRSocket)s.Socket;
 
-            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", authProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
+            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.SubClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {
                 log.Write(LogLevel.Error, "Authentication failed, api key/secret is probably invalid");

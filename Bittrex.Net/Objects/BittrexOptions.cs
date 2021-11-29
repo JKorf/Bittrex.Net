@@ -17,13 +17,18 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions()
         {
-            BaseAddress = "https://api.bittrex.com",
-            RateLimiters = new List<IRateLimiter>
+            OptionsSpot = new RestSubClientOptions
             {
-                new RateLimiter()
-                    .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
+                BaseAddress = "https://api.bittrex.com",
+                RateLimiters = new List<IRateLimiter>
+                {
+                    new RateLimiter()
+                        .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
+                }
             }
         };
+
+        public RestSubClientOptions OptionsSpot { get; set; }
 
         /// <summary>
         /// Ctor
@@ -33,7 +38,21 @@ namespace Bittrex.Net.Objects
             if (Default == null)
                 return;
 
-            Copy(this, Default);
+            Copy(this, Default);            
+        }
+
+        /// <summary>
+        /// Copy the values of the def to the input
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="def"></param>
+        public new void Copy<T>(T input, T def) where T : BittrexClientOptions
+        {
+            base.Copy(input, def);
+
+            input.OptionsSpot = new RestSubClientOptions();
+            def.OptionsSpot.Copy(input.OptionsSpot, def.OptionsSpot);
         }
     }
     
@@ -47,9 +66,15 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
         {
-            BaseAddress = "https://socket-v3.bittrex.com",
+            OptionsSpot = new SocketSubClientOptions
+            {
+                BaseAddress = "https://socket-v3.bittrex.com",
+            },
             SocketSubscriptionsCombineTarget = 10
         };
+
+        public SocketSubClientOptions OptionsSpot { get; set; }
+
 
         /// <summary>
         /// Ctor
@@ -60,6 +85,20 @@ namespace Bittrex.Net.Objects
                 return;
 
             Copy(this, Default);
+        }
+
+        /// <summary>
+        /// Copy the values of the def to the input
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="def"></param>
+        public new void Copy<T>(T input, T def) where T : BittrexSocketClientOptions
+        {
+            base.Copy(input, def);
+
+            input.OptionsSpot = new SocketSubClientOptions();
+            def.OptionsSpot.Copy(input.OptionsSpot, def.OptionsSpot);
         }
     }
 

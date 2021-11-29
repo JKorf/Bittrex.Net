@@ -11,14 +11,15 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
+using Bittrex.Net.Clients.Spot;
 
 namespace Bittrex.Net.Clients.Rest
 {
-    public class BittrexClientExchangeData: IBittrexClientExchangeData
+    public class BittrexClientSpotMarketExchangeData: IBittrexClientSpotMarketExchangeData
     {
-        private readonly BittrexClient _baseClient;
+        private readonly BittrexClientSpotMarket _baseClient;
 
-        internal BittrexClientExchangeData(BittrexClient baseClient)
+        internal BittrexClientSpotMarketExchangeData(BittrexClientSpotMarket baseClient)
         {
             _baseClient = baseClient;
         }

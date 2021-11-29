@@ -54,14 +54,14 @@ namespace Bittrex.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStartAsync()
         {
-            var subResult = await socketClient.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
+            var subResult = await socketClient.SpotMarket.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
                 return new CallResult<UpdateSubscription>(null, subResult.Error);
 
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
             await Task.Delay(300).ConfigureAwait(false);
-            var queryResult = await restClient.ExchangeData.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
+            var queryResult = await restClient.SpotMarket.ExchangeData.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
@@ -80,7 +80,7 @@ namespace Bittrex.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResyncAsync()
         {
-            var queryResult = await restClient.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await restClient.SpotMarket.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
                 return new CallResult<bool>(false, queryResult.Error);
             
