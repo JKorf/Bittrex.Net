@@ -66,14 +66,14 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
         {
-            OptionsSpot = new SocketSubClientOptions
+            OptionsSpot = new SubClientOptions
             {
                 BaseAddress = "https://socket-v3.bittrex.com",
             },
             SocketSubscriptionsCombineTarget = 10
         };
 
-        public SocketSubClientOptions OptionsSpot { get; set; }
+        public SubClientOptions OptionsSpot { get; set; }
 
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Bittrex.Net.Objects
         {
             base.Copy(input, def);
 
-            input.OptionsSpot = new SocketSubClientOptions();
+            input.OptionsSpot = new SubClientOptions();
             def.OptionsSpot.Copy(input.OptionsSpot, def.OptionsSpot);
         }
     }

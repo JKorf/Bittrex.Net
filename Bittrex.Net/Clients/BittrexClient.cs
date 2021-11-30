@@ -95,6 +95,11 @@ namespace Bittrex.Net.Clients.Rest
              JsonSerializer? deserializer = null) where T : class
                  => base.SendRequestAsync<T>(subClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
 
+        public override void Dispose()
+        {
+            SpotMarket.Dispose();
+            base.Dispose();
+        }
         #endregion
     }
 }

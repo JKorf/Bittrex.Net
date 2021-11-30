@@ -14,7 +14,7 @@ namespace Bittrex.Net.Interfaces.Clients.Socket
     /// <summary>
     /// Interface for the Bittrex V3 socket client
     /// </summary>
-    public interface IBittrexSocketClientSpotMarket
+    public interface IBittrexSocketClientSpotMarket: IDisposable
     {
         /// <summary>
         /// Subscribe to heartbeat updates

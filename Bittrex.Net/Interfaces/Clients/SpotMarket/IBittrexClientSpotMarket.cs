@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Bittrex.Net.Interfaces.Clients.Spot
 {
-    public interface IBittrexClientSpotMarket
+    public interface IBittrexClientSpotMarket: IDisposable
     {
         /// <summary>
         /// Endpoints related to account settings, info or actions

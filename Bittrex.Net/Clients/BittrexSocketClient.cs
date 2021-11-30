@@ -63,10 +63,7 @@ namespace Bittrex.Net.Clients.Socket
         }
         #endregion
 
-        #region methods       
-        #region private
-
-
+        #region methods     
         internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketSubClient subClient, string channel, bool authenticated,
             Action<DataEvent<T>> handler, CancellationToken ct)
             => SubscribeInternalAsync(subClient, new[] { channel }, authenticated, handler, ct);
@@ -358,7 +355,12 @@ namespace Bittrex.Net.Clients.Socket
                 return null;
             }
         }
-        #endregion
+
+        public override void Dispose()
+        {
+            SpotMarket.Dispose();
+            base.Dispose();
+        }
         #endregion
     }
 }
