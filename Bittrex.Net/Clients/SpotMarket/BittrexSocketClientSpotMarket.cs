@@ -28,7 +28,7 @@ namespace Bittrex.Net.Clients.Socket
     /// <summary>
     /// Client for the Bittrex V3 websocket API
     /// </summary>
-    public class BittrexSocketClientSpotMarket : SocketSubClient, IBittrexSocketClientSpotMarket
+    public class BittrexSocketClientSpotMarket : SocketApiClient, IBittrexSocketClientSpotMarket
     {
         #region fields
         private const string HubName = "c3";
@@ -41,11 +41,16 @@ namespace Bittrex.Net.Clients.Socket
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClientSpotMarket(BittrexSocketClient baseClient, BittrexSocketClientOptions options): base(options.OptionsSpot, options.OptionsSpot.ApiCredentials == null ? null : new BittrexAuthenticationProvider(options.OptionsSpot.ApiCredentials))
+        public BittrexSocketClientSpotMarket(BittrexSocketClient baseClient, BittrexSocketClientOptions options): 
+            base(options, options.SpotStreamOptions)
         {
             _baseClient = baseClient;
         }
         #endregion
+
+        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+            => new BittrexAuthenticationProvider(credentials);
+
 
         #region methods
         #region public

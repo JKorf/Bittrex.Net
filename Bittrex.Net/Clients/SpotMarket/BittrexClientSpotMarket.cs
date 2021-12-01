@@ -4,6 +4,7 @@ using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Interfaces.Clients.Spot;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -16,12 +17,12 @@ using System.Threading.Tasks;
 
 namespace Bittrex.Net.Clients.Spot
 {
-    public class BittrexClientSpotMarket: RestSubClient, IBittrexClientSpotMarket, IExchangeClient
+    public class BittrexClientSpotMarket: RestApiClient, IBittrexClientSpotMarket, IExchangeClient
     {
         private BittrexClient _baseClient;
         private BittrexClientOptions _options;
 
-        #region Subclients
+        #region Api clients
 
         public IBittrexClientSpotMarketAccount Account { get; }
         public IBittrexClientSpotMarketExchangeData ExchangeData { get; }
@@ -30,7 +31,7 @@ namespace Bittrex.Net.Clients.Spot
         #endregion
 
         internal BittrexClientSpotMarket(BittrexClient baseClient, BittrexClientOptions options): 
-            base(options.OptionsSpot, options.OptionsSpot.ApiCredentials == null ? null: new BittrexAuthenticationProvider(options.OptionsSpot.ApiCredentials))
+            base(options, options.SpotApiOptions)
         {
             _options = options;
             _baseClient = baseClient;
@@ -48,6 +49,9 @@ namespace Bittrex.Net.Clients.Spot
         /// Event triggered when an order is canceled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
         /// </summary>
         public event Action<ICommonOrderId>? OnOrderCanceled;
+
+        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+            => new BittrexAuthenticationProvider(credentials);
 
         #region common interface
 #pragma warning disable 1066
@@ -190,7 +194,7 @@ namespace Bittrex.Net.Clients.Spot
         /// <returns></returns>
         internal Uri GetUrl(string endpoint)
         {
-            return new Uri(_options.OptionsSpot.BaseAddress.AppendPath($"v3", endpoint));
+            return new Uri(_options.SpotApiOptions.BaseAddress.AppendPath($"v3", endpoint));
         }
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(

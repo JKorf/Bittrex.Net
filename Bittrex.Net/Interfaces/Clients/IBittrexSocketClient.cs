@@ -16,6 +16,6 @@ namespace Bittrex.Net.Interfaces.Clients.Socket
     /// </summary>
     public interface IBittrexSocketClient: ISocketClient
     {
-        IBittrexSocketClientSpotMarket SpotMarket { get; }
+        IBittrexSocketClientSpotMarket SpotStreams { get; }
     }
 }

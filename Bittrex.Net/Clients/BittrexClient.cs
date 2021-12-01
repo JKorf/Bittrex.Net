@@ -22,10 +22,10 @@ namespace Bittrex.Net.Clients.Rest
     /// <summary>
     /// Client for the Bittrex V3 API
     /// </summary>
-    public class BittrexClient : RestClient, IBittrexClient
+    public class BittrexClient : BaseRestClient, IBittrexClient
     {
-        #region Subclients
-        public IBittrexClientSpotMarket SpotMarket { get; }
+        #region Api clients
+        public IBittrexClientSpotMarket SpotApi { get; }
         #endregion
 
         #region ctor
@@ -41,7 +41,7 @@ namespace Bittrex.Net.Clients.Rest
         /// </summary>
         public BittrexClient(BittrexClientOptions options) : base("Bittrex", options)
         {
-            SpotMarket = new BittrexClientSpotMarket(this, options);
+            SpotApi = new BittrexClientSpotMarket(this, options);
         }
         #endregion
 
@@ -86,18 +86,18 @@ namespace Bittrex.Net.Clients.Rest
         }
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(
-             RestSubClient subClient,
+             RestApiClient apiClient,
              Uri uri,
              HttpMethod method,
              CancellationToken cancellationToken,
              Dictionary<string, object>? parameters = null,
              bool signed = false,
              JsonSerializer? deserializer = null) where T : class
-                 => base.SendRequestAsync<T>(subClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
+                 => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
 
         public override void Dispose()
         {
-            SpotMarket.Dispose();
+            SpotApi.Dispose();
             base.Dispose();
         }
         #endregion

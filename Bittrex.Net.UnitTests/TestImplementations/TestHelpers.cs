@@ -102,7 +102,7 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             return client;
         }
 
-        public static void SetResponse(RestClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
+        public static void SetResponse(BaseRestClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();

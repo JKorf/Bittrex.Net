@@ -10,25 +10,26 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Options for the Bittrex client
     /// </summary>
-    public class BittrexClientOptions : RestClientOptions
+    public class BittrexClientOptions : BaseRestClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
-        public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions()
+        public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions();
+
+        private RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bitfinex.com")
         {
-            OptionsSpot = new RestSubClientOptions
+            RateLimiters = new List<IRateLimiter>
             {
-                BaseAddress = "https://api.bittrex.com",
-                RateLimiters = new List<IRateLimiter>
-                {
-                    new RateLimiter()
-                        .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
-                }
+                new RateLimiter()
+                    .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
             }
         };
-
-        public RestSubClientOptions OptionsSpot { get; set; }
+        public RestApiClientOptions SpotApiOptions
+        {
+            get => _spotApiOptions;
+            set => _spotApiOptions.Copy(_spotApiOptions, value);
+        }
 
         /// <summary>
         /// Ctor
@@ -51,30 +52,29 @@ namespace Bittrex.Net.Objects
         {
             base.Copy(input, def);
 
-            input.OptionsSpot = new RestSubClientOptions();
-            def.OptionsSpot.Copy(input.OptionsSpot, def.OptionsSpot);
+            input.SpotApiOptions = new RestApiClientOptions(def.SpotApiOptions);
         }
     }
     
     /// <summary>
     /// Options for the Bittrex socket client
     /// </summary>
-    public class BittrexSocketClientOptions : SocketClientOptions
+    public class BittrexSocketClientOptions : BaseSocketClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
         public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
         {
-            OptionsSpot = new SubClientOptions
-            {
-                BaseAddress = "https://socket-v3.bittrex.com",
-            },
             SocketSubscriptionsCombineTarget = 10
         };
 
-        public SubClientOptions OptionsSpot { get; set; }
-
+        private ApiClientOptions _spotStreamOptions = new ApiClientOptions("https://socket-v3.bittrex.com");
+        public ApiClientOptions SpotStreamOptions
+        {
+            get => _spotStreamOptions;
+            set => _spotStreamOptions.Copy(_spotStreamOptions, value);
+        }
 
         /// <summary>
         /// Ctor
@@ -97,8 +97,7 @@ namespace Bittrex.Net.Objects
         {
             base.Copy(input, def);
 
-            input.OptionsSpot = new SubClientOptions();
-            def.OptionsSpot.Copy(input.OptionsSpot, def.OptionsSpot);
+            input.SpotStreamOptions = new ApiClientOptions(def.SpotStreamOptions);
         }
     }
 

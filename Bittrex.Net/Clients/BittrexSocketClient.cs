@@ -28,16 +28,16 @@ namespace Bittrex.Net.Clients.Socket
     /// <summary>
     /// Client for the Bittrex V3 websocket API
     /// </summary>
-    public class BittrexSocketClient: SocketClient, IBittrexSocketClient
+    public class BittrexSocketClient: BaseSocketClient, IBittrexSocketClient
     {
         #region fields
         private const string HubName = "c3";
 
         #endregion
 
-        #region SubClients
+        #region Api clients
 
-        public IBittrexSocketClientSpotMarket SpotMarket { get; }
+        public IBittrexSocketClientSpotMarket SpotStreams { get; }
 
         #endregion
 
@@ -57,20 +57,20 @@ namespace Bittrex.Net.Clients.Socket
         {
             SocketFactory = new ConnectionFactory(options.Proxy);
 
-            SpotMarket = new BittrexSocketClientSpotMarket(this, options);
+            SpotStreams = new BittrexSocketClientSpotMarket(this, options);
 
             AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
         #endregion
 
         #region methods     
-        internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketSubClient subClient, string channel, bool authenticated,
+        internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketApiClient apiClient, string channel, bool authenticated,
             Action<DataEvent<T>> handler, CancellationToken ct)
-            => SubscribeInternalAsync(subClient, new[] { channel }, authenticated, handler, ct);
+            => SubscribeInternalAsync(apiClient, new[] { channel }, authenticated, handler, ct);
 
-        internal async Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketSubClient subClient, string[] channels, bool authenticated, Action<DataEvent<T>> handler, CancellationToken ct)
+        internal async Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketApiClient apiClient, string[] channels, bool authenticated, Action<DataEvent<T>> handler, CancellationToken ct)
         {
-            return await base.SubscribeAsync<JToken>(subClient, new ConnectionRequest("subscribe", channels), null, authenticated, data =>
+            return await base.SubscribeAsync<JToken>(apiClient, new ConnectionRequest("subscribe", channels), null, authenticated, data =>
             {
                 if (data.Data["M"]?.ToString() == "heartbeat")
                 {
@@ -85,11 +85,11 @@ namespace Bittrex.Net.Clients.Socket
         }
 
         /// <inheritdoc />
-        protected override SocketConnection GetSocketConnection(SocketSubClient subClient, string address, bool authenticated)
+        protected override SocketConnection GetSocketConnection(SocketApiClient apiClient, string address, bool authenticated)
         {
             // Override because signalr puts `/signalr/` add the end of the url
             var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/"
-                                                  && (s.Value.SubClient.GetType() == subClient.GetType())
+                                                  && (s.Value.ApiClient.GetType() == apiClient.GetType())
                                                   && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
             var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
             if (result != null)
@@ -103,7 +103,7 @@ namespace Bittrex.Net.Clients.Socket
 
             // Create new socket
             var socket = CreateSocket(address);
-            var socketWrapper = new SocketConnection(this, subClient, socket);
+            var socketWrapper = new SocketConnection(this, apiClient, socket);
             foreach (var kvp in genericHandlers)
                 socketWrapper.AddSubscription(SocketSubscription.CreateForIdentifier(NextId(), kvp.Key, false, kvp.Value));
             return socketWrapper;
@@ -248,16 +248,16 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
-            if (s.SubClient.AuthenticationProvider?.Credentials?.Key == null)
+            if (s.ApiClient.AuthenticationProvider?.Credentials?.Key == null)
                 return new CallResult<bool>(false, new NoApiCredentialsError());
 
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var randomContent = $"{ Guid.NewGuid() }";
             var content = string.Join("", timestamp, randomContent);
-            var signedContent = s.SubClient.AuthenticationProvider.Sign(content);
+            var signedContent = s.ApiClient.AuthenticationProvider.Sign(content);
             var socket = (ISignalRSocket)s.Socket;
 
-            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.SubClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
+            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.ApiClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {
                 log.Write(LogLevel.Error, "Authentication failed, api key/secret is probably invalid");
@@ -358,7 +358,7 @@ namespace Bittrex.Net.Clients.Socket
 
         public override void Dispose()
         {
-            SpotMarket.Dispose();
+            SpotStreams.Dispose();
             base.Dispose();
         }
         #endregion

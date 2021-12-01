@@ -8,6 +8,6 @@ namespace Bittrex.Net.Interfaces.Clients.Rest
     /// </summary>
     public interface IBittrexClient : IRestClient    
     {
-        IBittrexClientSpotMarket SpotMarket { get; }
+        IBittrexClientSpotMarket SpotApi { get; }
     }
 }
