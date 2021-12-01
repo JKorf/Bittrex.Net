@@ -6,12 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
 
-namespace Bittrex.Net.Interfaces.Clients.Rest
+namespace Bittrex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Bittrex exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.
     /// </summary>
-    public interface IBittrexClientSpotMarketExchangeData
+    public interface IBittrexClientSpotApiExchangeData
     {
         /// <summary>
         /// Gets the server time

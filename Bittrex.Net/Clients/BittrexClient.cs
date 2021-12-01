@@ -4,20 +4,17 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Bittrex.Net.Clients.Spot;
-using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Interfaces.Clients.Spot;
+using Bittrex.Net.Clients.SpotApi;
+using Bittrex.Net.Interfaces.Clients;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
-using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Bittrex.Net.Clients.Rest
+namespace Bittrex.Net.Clients
 {
     /// <summary>
     /// Client for the Bittrex V3 API
@@ -25,7 +22,7 @@ namespace Bittrex.Net.Clients.Rest
     public class BittrexClient : BaseRestClient, IBittrexClient
     {
         #region Api clients
-        public IBittrexClientSpotMarket SpotApi { get; }
+        public IBittrexClientSpotApi SpotApi { get; }
         #endregion
 
         #region ctor
@@ -41,7 +38,7 @@ namespace Bittrex.Net.Clients.Rest
         /// </summary>
         public BittrexClient(BittrexClientOptions options) : base("Bittrex", options)
         {
-            SpotApi = new BittrexClientSpotMarket(this, options);
+            SpotApi = new BittrexClientSpotApi(this, options);
         }
         #endregion
 

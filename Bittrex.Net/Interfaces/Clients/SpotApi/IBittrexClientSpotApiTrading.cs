@@ -6,12 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
 
-namespace Bittrex.Net.Interfaces.Clients.Rest
+namespace Bittrex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Bittrex trading endpoints, placing and mananging orders.
     /// </summary>
-    public interface IBittrexClientSpotMarketTrading
+    public interface IBittrexClientSpotApiTrading
     {
         /// <summary>
         /// Gets a list of closed orders

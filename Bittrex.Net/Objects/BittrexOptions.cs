@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Interfaces.Clients.Socket;
+using Bittrex.Net.Interfaces.Clients;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 

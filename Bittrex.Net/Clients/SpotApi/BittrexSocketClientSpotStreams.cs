@@ -2,33 +2,25 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects;
-using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Bittrex.Net.Converters;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
-using Newtonsoft.Json.Linq;
-using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Authentication;
 using Bittrex.Net.Enums;
 using System.Threading;
-using Bittrex.Net.Interfaces.Clients.Socket;
-using Bittrex.Net.Objects.Internal;
 using Bittrex.Net.Objects.Models;
 using Bittrex.Net.Objects.Models.Socket;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
 
-namespace Bittrex.Net.Clients.Socket
+namespace Bittrex.Net.Clients.SpotApi
 {
     /// <summary>
     /// Client for the Bittrex V3 websocket API
     /// </summary>
-    public class BittrexSocketClientSpotMarket : SocketApiClient, IBittrexSocketClientSpotMarket
+    public class BittrexSocketClientSpotStreams : SocketApiClient, IBittrexSocketClientSpotStreams
     {
         #region fields
         private const string HubName = "c3";
@@ -41,7 +33,7 @@ namespace Bittrex.Net.Clients.Socket
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClientSpotMarket(BittrexSocketClient baseClient, BittrexSocketClientOptions options): 
+        public BittrexSocketClientSpotStreams(BittrexSocketClient baseClient, BittrexSocketClientOptions options) :
             base(options, options.SpotStreamOptions)
         {
             _baseClient = baseClient;
@@ -63,7 +55,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
             KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate, CancellationToken ct = default)
-            => SubscribeToKlineUpdatesAsync(new[] {symbol}, interval, onUpdate, ct);
+            => SubscribeToKlineUpdatesAsync(new[] { symbol }, interval, onUpdate, ct);
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<BittrexKlineUpdate>> onUpdate, CancellationToken ct = default)
@@ -91,7 +83,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int depth,
             Action<DataEvent<BittrexOrderBookUpdate>> onUpdate, CancellationToken ct = default)
-            => SubscribeToOrderBookUpdatesAsync(new[] {symbol}, depth, onUpdate, ct);
+            => SubscribeToOrderBookUpdatesAsync(new[] { symbol }, depth, onUpdate, ct);
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int depth, Action<DataEvent<BittrexOrderBookUpdate>> onUpdate, CancellationToken ct = default)
@@ -108,7 +100,7 @@ namespace Bittrex.Net.Clients.Socket
 
         /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol,
-            Action<DataEvent<BittrexTick>> onUpdate, CancellationToken ct = default) => SubscribeToTickerUpdatesAsync(new[] {symbol}, onUpdate, ct);
+            Action<DataEvent<BittrexTick>> onUpdate, CancellationToken ct = default) => SubscribeToTickerUpdatesAsync(new[] { symbol }, onUpdate, ct);
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTick>> onUpdate, CancellationToken ct = default)
@@ -119,7 +111,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         public Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
             Action<DataEvent<BittrexTradesUpdate>> onUpdate, CancellationToken ct = default)
-            => SubscribeToTradeUpdatesAsync(new[] {symbol}, onUpdate, ct);
+            => SubscribeToTradeUpdatesAsync(new[] { symbol }, onUpdate, ct);
 
         /// <inheritdoc />
         public async Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BittrexTradesUpdate>> onUpdate, CancellationToken ct = default)

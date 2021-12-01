@@ -1,6 +1,5 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -12,15 +11,15 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
-using Bittrex.Net.Clients.Spot;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
 
-namespace Bittrex.Net.Clients.Rest
+namespace Bittrex.Net.Clients.SpotApi
 {
-    public class BittrexClientSpotMarketTrading: IBittrexClientSpotMarketTrading
+    public class BittrexClientSpotApiTrading : IBittrexClientSpotApiTrading
     {
-        private readonly BittrexClientSpotMarket _baseClient;
+        private readonly BittrexClientSpotApi _baseClient;
 
-        internal BittrexClientSpotMarketTrading(BittrexClientSpotMarket baseClient)
+        internal BittrexClientSpotApiTrading(BittrexClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }
@@ -114,7 +113,7 @@ namespace Bittrex.Net.Clients.Rest
         public async Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide side, OrderType type, TimeInForce timeInForce, decimal? quantity, decimal? price = null, decimal? quoteQuantity = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
-            if ((quantity != null && quoteQuantity != null) || (quantity == null && quoteQuantity == null))
+            if (quantity != null && quoteQuantity != null || quantity == null && quoteQuantity == null)
                 throw new ArgumentException("Specify one of either quantity or quoteQantity");
 
             string orderType = JsonConvert.SerializeObject(type, new OrderTypeConverter(false));

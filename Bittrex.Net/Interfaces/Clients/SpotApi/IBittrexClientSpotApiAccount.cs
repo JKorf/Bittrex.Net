@@ -6,12 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
 
-namespace Bittrex.Net.Interfaces.Clients.Rest
+namespace Bittrex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Bittrex account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
     /// </summary>
-    public interface IBittrexClientSpotMarketAccount
+    public interface IBittrexClientSpotApiAccount
     {
         /// <summary>
         /// Get permissions for a specific asset

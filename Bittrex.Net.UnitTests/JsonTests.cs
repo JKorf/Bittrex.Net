@@ -1,11 +1,11 @@
 ﻿using Bitfinex.Net.UnitTests;
-using Bittrex.Net.Interfaces.Clients.Rest;
 using Bittrex.Net.Objects;
 using Bittrex.Net.UnitTests.TestImplementations;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Interfaces;
+using Bittrex.Net.Interfaces.Clients;
 
 namespace Bittrex.Net.UnitTests
 {

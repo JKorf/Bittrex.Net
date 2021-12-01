@@ -1,6 +1,5 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -10,15 +9,15 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
-using Bittrex.Net.Clients.Spot;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
 
-namespace Bittrex.Net.Clients.Rest
+namespace Bittrex.Net.Clients.SpotApi
 {
-    public class BittrexClientSpotMarketAccount: IBittrexClientSpotMarketAccount
+    public class BittrexClientSpotApiAccount : IBittrexClientSpotApiAccount
     {
-        private readonly BittrexClientSpotMarket _baseClient;
+        private readonly BittrexClientSpotApi _baseClient;
 
-        internal BittrexClientSpotMarketAccount(BittrexClientSpotMarket baseClient)
+        internal BittrexClientSpotApiAccount(BittrexClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }

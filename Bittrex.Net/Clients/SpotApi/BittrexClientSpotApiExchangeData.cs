@@ -1,6 +1,5 @@
 ﻿using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -11,15 +10,15 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
-using Bittrex.Net.Clients.Spot;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
 
-namespace Bittrex.Net.Clients.Rest
+namespace Bittrex.Net.Clients.SpotApi
 {
-    public class BittrexClientSpotMarketExchangeData: IBittrexClientSpotMarketExchangeData
+    public class BittrexClientSpotApiExchangeData : IBittrexClientSpotApiExchangeData
     {
-        private readonly BittrexClientSpotMarket _baseClient;
+        private readonly BittrexClientSpotApi _baseClient;
 
-        internal BittrexClientSpotMarketExchangeData(BittrexClientSpotMarket baseClient)
+        internal BittrexClientSpotApiExchangeData(BittrexClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }
@@ -34,7 +33,7 @@ namespace Bittrex.Net.Clients.Rest
         public async Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
         {
             var result = await _baseClient.SendRequestAsync<BittrexServerTime>(_baseClient.GetUrl("ping"), HttpMethod.Get, ct).ConfigureAwait(false);
-            return result.As<DateTime>(result.Data?.ServerTime ?? default);
+            return result.As(result.Data?.ServerTime ?? default);
         }
 
         /// <inheritdoc />

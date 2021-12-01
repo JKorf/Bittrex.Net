@@ -8,27 +8,23 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Bittrex.Net.Converters;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Newtonsoft.Json.Linq;
 using CryptoExchange.Net.Interfaces;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
-using CryptoExchange.Net.Authentication;
-using Bittrex.Net.Enums;
 using System.Threading;
-using Bittrex.Net.Interfaces.Clients.Socket;
 using Bittrex.Net.Objects.Internal;
-using Bittrex.Net.Objects.Models;
-using Bittrex.Net.Objects.Models.Socket;
+using Bittrex.Net.Interfaces.Clients;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
+using Bittrex.Net.Clients.SpotApi;
 
-namespace Bittrex.Net.Clients.Socket
+namespace Bittrex.Net.Clients
 {
     /// <summary>
     /// Client for the Bittrex V3 websocket API
     /// </summary>
-    public class BittrexSocketClient: BaseSocketClient, IBittrexSocketClient
+    public class BittrexSocketClient : BaseSocketClient, IBittrexSocketClient
     {
         #region fields
         private const string HubName = "c3";
@@ -37,7 +33,7 @@ namespace Bittrex.Net.Clients.Socket
 
         #region Api clients
 
-        public IBittrexSocketClientSpotMarket SpotStreams { get; }
+        public IBittrexSocketClientSpotStreams SpotStreams { get; }
 
         #endregion
 
@@ -45,7 +41,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <summary>
         /// Creates a new socket client using the default options
         /// </summary>
-        public BittrexSocketClient(): this(BittrexSocketClientOptions.Default)
+        public BittrexSocketClient() : this(BittrexSocketClientOptions.Default)
         {
         }
 
@@ -53,11 +49,11 @@ namespace Bittrex.Net.Clients.Socket
         /// Creates a new socket client using the provided options
         /// </summary>
         /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClient(BittrexSocketClientOptions options): base("Bittrex", options)
+        public BittrexSocketClient(BittrexSocketClientOptions options) : base("Bittrex", options)
         {
             SocketFactory = new ConnectionFactory(options.Proxy);
 
-            SpotStreams = new BittrexSocketClientSpotMarket(this, options);
+            SpotStreams = new BittrexSocketClientSpotStreams(this, options);
 
             AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
@@ -74,7 +70,7 @@ namespace Bittrex.Net.Clients.Socket
             {
                 if (data.Data["M"]?.ToString() == "heartbeat")
                 {
-                    handler(data.As((T) Convert.ChangeType(DateTime.UtcNow, typeof(T))));
+                    handler(data.As((T)Convert.ChangeType(DateTime.UtcNow, typeof(T))));
                     return;
                 }
 
@@ -89,12 +85,12 @@ namespace Bittrex.Net.Clients.Socket
         {
             // Override because signalr puts `/signalr/` add the end of the url
             var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/"
-                                                  && (s.Value.ApiClient.GetType() == apiClient.GetType())
+                                                  && s.Value.ApiClient.GetType() == apiClient.GetType()
                                                   && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
             var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
             if (result != null)
             {
-                if (result.SubscriptionCount < ClientOptions.SocketSubscriptionsCombineTarget || (sockets.Count >= MaxSocketConnections && sockets.All(s => s.Value.SubscriptionCount >= ClientOptions.SocketSubscriptionsCombineTarget)))
+                if (result.SubscriptionCount < ClientOptions.SocketSubscriptionsCombineTarget || sockets.Count >= MaxSocketConnections && sockets.All(s => s.Value.SubscriptionCount >= ClientOptions.SocketSubscriptionsCombineTarget))
                 {
                     // Use existing socket if it has less than target connections OR it has the least connections and we can't make new
                     return result;
@@ -112,7 +108,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> SubscribeAndWaitAsync(SocketConnection socket, object request, SocketSubscription subscription)
         {
-            var btRequest = (ConnectionRequest) request;
+            var btRequest = (ConnectionRequest)request;
             if (btRequest.RequestName != null)
             {
                 var subResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<ConnectionResponse[]>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
@@ -131,7 +127,7 @@ namespace Bittrex.Net.Clients.Socket
         /// <inheritdoc />
         protected override async Task<CallResult<T>> QueryAndWaitAsync<T>(SocketConnection socket, object request)
         {
-            var btRequest = (ConnectionRequest) request;
+            var btRequest = (ConnectionRequest)request;
             var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
             if (!queryResult.Success)
             {
@@ -172,7 +168,7 @@ namespace Bittrex.Net.Clients.Socket
             if (msg == null)
                 return false;
 
-            var method = (string?) message["M"];
+            var method = (string?)message["M"];
             if (method == null)
                 return false;
 
@@ -180,7 +176,7 @@ namespace Bittrex.Net.Clients.Socket
             if (method == "heartbeat")
                 return true;
 
-            var arguments = (string?) msg.FirstOrDefault();
+            var arguments = (string?)msg.FirstOrDefault();
             if (arguments == null)
                 return false;
 
@@ -188,13 +184,13 @@ namespace Bittrex.Net.Clients.Socket
             if (data == null)
                 return method == "heartbeat";
 
-            var bRequest = (ConnectionRequest) request;
+            var bRequest = (ConnectionRequest)request;
 
             var m = method.Replace("order_book", "orderbook");
 
             foreach (var parameter in bRequest.Parameters)
             {
-                foreach (var channel in (string[]) parameter)
+                foreach (var channel in (string[])parameter)
                 {
 
                     if (Check(channel, m, data))
@@ -209,7 +205,7 @@ namespace Bittrex.Net.Clients.Socket
         {
             if (channel == method)
                 return true;
-            
+
             if (channel.StartsWith(method))
             {
                 var tokenData = JToken.Parse(data);
@@ -274,7 +270,7 @@ namespace Bittrex.Net.Clients.Socket
             var bRequest = (ConnectionRequest)s.Request!;
             var unsub = new ConnectionRequest("unsubscribe", ((string[])bRequest!.Parameters[0])[0]);
             var queryResult = await ((ISignalRSocket)connection.Socket).InvokeProxy<ConnectionResponse[]>(unsub.RequestName, unsub.Parameters).ConfigureAwait(false);
-            
+
             return queryResult.Success;
         }
 
@@ -289,14 +285,14 @@ namespace Bittrex.Net.Clients.Socket
         private void DecodeSignalRData<T>(DataEvent<JToken> data, Action<DataEvent<T>> handler)
         {
             var internalData = data.Data["A"];
-            if(internalData == null || !internalData.Any())
+            if (internalData == null || !internalData.Any())
             {
                 log.Write(LogLevel.Warning, "Received update without data? " + data.Data);
                 return;
             }
 
             var actualData = internalData[0]?.ToString();
-            if(actualData == null)
+            if (actualData == null)
             {
                 log.Write(LogLevel.Warning, "Received update without actual data? " + data.Data);
                 return;
@@ -317,9 +313,9 @@ namespace Bittrex.Net.Clients.Socket
             if (token["marketSymbol"] != null)
                 symbol = token["marketSymbol"]?.ToString();
             else if (token["symbol"] != null)
-                symbol = token["symbol"]?.ToString(); 
+                symbol = token["symbol"]?.ToString();
             else if (token["deltas"]?.Count() > 0 && token["deltas"]![0]!["marketSymbol"] != null)
-                symbol = token["deltas"]![0]!["marketSymbol"]?.ToString(); 
+                symbol = token["deltas"]![0]!["marketSymbol"]?.ToString();
             else if (token["deltas"]?.Count() > 0 && token["deltas"]![0]!["symbol"] != null)
                 symbol = token["deltas"]![0]!["symbol"]?.ToString();
 

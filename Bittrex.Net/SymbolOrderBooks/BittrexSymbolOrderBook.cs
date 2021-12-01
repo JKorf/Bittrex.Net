@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Bittrex.Net.Clients.Rest;
-using Bittrex.Net.Clients.Socket;
-using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Interfaces.Clients.Socket;
+using Bittrex.Net.Clients;
+using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.Models.Socket;
 using CryptoExchange.Net;

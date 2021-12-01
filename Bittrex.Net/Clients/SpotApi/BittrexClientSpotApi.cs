@@ -1,7 +1,5 @@
-﻿using Bittrex.Net.Clients.Rest;
-using Bittrex.Net.Enums;
-using Bittrex.Net.Interfaces.Clients.Rest;
-using Bittrex.Net.Interfaces.Clients.Spot;
+﻿using Bittrex.Net.Enums;
+using Bittrex.Net.Interfaces.Clients.SpotApi;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
@@ -11,34 +9,33 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bittrex.Net.Clients.Spot
+namespace Bittrex.Net.Clients.SpotApi
 {
-    public class BittrexClientSpotMarket: RestApiClient, IBittrexClientSpotMarket, IExchangeClient
+    public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, IExchangeClient
     {
         private BittrexClient _baseClient;
         private BittrexClientOptions _options;
 
         #region Api clients
 
-        public IBittrexClientSpotMarketAccount Account { get; }
-        public IBittrexClientSpotMarketExchangeData ExchangeData { get; }
-        public IBittrexClientSpotMarketTrading Trading { get; }
+        public IBittrexClientSpotApiAccount Account { get; }
+        public IBittrexClientSpotApiExchangeData ExchangeData { get; }
+        public IBittrexClientSpotApiTrading Trading { get; }
 
         #endregion
 
-        internal BittrexClientSpotMarket(BittrexClient baseClient, BittrexClientOptions options): 
+        internal BittrexClientSpotApi(BittrexClient baseClient, BittrexClientOptions options) :
             base(options, options.SpotApiOptions)
         {
             _options = options;
             _baseClient = baseClient;
 
-            Account = new BittrexClientSpotMarketAccount(this);
-            ExchangeData = new BittrexClientSpotMarketExchangeData(this);
-            Trading = new BittrexClientSpotMarketTrading(this);
+            Account = new BittrexClientSpotApiAccount(this);
+            ExchangeData = new BittrexClientSpotApiExchangeData(this);
+            Trading = new BittrexClientSpotApiTrading(this);
         }
 
         /// <summary>

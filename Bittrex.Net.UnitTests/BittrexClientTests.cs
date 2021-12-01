@@ -3,9 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Bittrex.Net.Clients.Rest;
-using Bittrex.Net.Clients.Socket;
-using Bittrex.Net.Interfaces.Clients.Socket;
+using Bittrex.Net.Clients;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Objects;
@@ -61,7 +59,7 @@ namespace Bittrex.Net.UnitTests
                 foreach (var method in implementation.GetMethods().Where(m => m.ReturnType.IsAssignableTo(typeof(Task))))
                 {
                     var interfaceMethod = clientInterface.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
-                    Assert.NotNull(interfaceMethod);
+                    Assert.NotNull(interfaceMethod, $"Missing interface for method {method.Name} in {implementation.Name} implementing interface {clientInterface.Name}");
                     methods++;
                 }
                 Debug.WriteLine($"{clientInterface.Name} {methods} methods validated");
@@ -81,7 +79,7 @@ namespace Bittrex.Net.UnitTests
                 foreach (var method in implementation.GetMethods().Where(m => m.ReturnType.IsAssignableTo(typeof(Task<CallResult<UpdateSubscription>>))))
                 {
                     var interfaceMethod = clientInterface.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
-                    Assert.NotNull(interfaceMethod);
+                    Assert.NotNull(interfaceMethod, $"Missing interface for method {method.Name} in {implementation.Name} implementing interface {clientInterface.Name}");
                     methods++;
                 }
                 Debug.WriteLine($"{clientInterface.Name} {methods} methods validated");
