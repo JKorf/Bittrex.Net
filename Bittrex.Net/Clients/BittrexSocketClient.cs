@@ -21,9 +21,7 @@ using Bittrex.Net.Clients.SpotApi;
 
 namespace Bittrex.Net.Clients
 {
-    /// <summary>
-    /// Client for the Bittrex V3 websocket API
-    /// </summary>
+    /// <inheritdoc cref="IBittrexSocketClient" />
     public class BittrexSocketClient : BaseSocketClient, IBittrexSocketClient
     {
         #region fields
@@ -33,6 +31,7 @@ namespace Bittrex.Net.Clients
 
         #region Api clients
 
+        /// <inheritdoc />
         public IBittrexSocketClientSpotStreams SpotStreams { get; }
 
         #endregion
@@ -58,6 +57,15 @@ namespace Bittrex.Net.Clients
             AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
         #endregion
+
+        /// <summary>
+        /// Set the default options to be used when creating new clients
+        /// </summary>
+        /// <param name="options">Options to use as default</param>
+        public static void SetDefaultOptions(BittrexSocketClientOptions options)
+        {
+            BittrexSocketClientOptions.Default = options;
+        }
 
         #region methods     
         internal Task<CallResult<UpdateSubscription>> SubscribeInternalAsync<T>(SocketApiClient apiClient, string channel, bool authenticated,
@@ -162,7 +170,7 @@ namespace Bittrex.Net.Clients
         }
 
         /// <inheritdoc />
-        protected override bool MessageMatchesHandler(JToken message, object request)
+        protected override bool MessageMatchesHandler(SocketConnection socketConnection, JToken message, object request)
         {
             var msg = message["A"];
             if (msg == null)
@@ -229,7 +237,7 @@ namespace Bittrex.Net.Clients
         }
 
         /// <inheritdoc />
-        protected override bool MessageMatchesHandler(JToken message, string identifier)
+        protected override bool MessageMatchesHandler(SocketConnection socketConnection, JToken message, string identifier)
         {
             var msg = message["A"];
             if (msg == null)
@@ -352,6 +360,7 @@ namespace Bittrex.Net.Clients
             }
         }
 
+        /// <inheritdoc />
         public override void Dispose()
         {
             SpotStreams.Dispose();

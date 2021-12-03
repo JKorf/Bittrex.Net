@@ -15,6 +15,7 @@ using Bittrex.Net.Interfaces.Clients.SpotApi;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
+    /// <inheritdoc />
     public class BittrexClientSpotApiTrading : IBittrexClientSpotApiTrading
     {
         private readonly BittrexClientSpotApi _baseClient;

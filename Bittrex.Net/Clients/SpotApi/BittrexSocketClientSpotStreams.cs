@@ -17,30 +17,23 @@ using Bittrex.Net.Interfaces.Clients.SpotApi;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
-    /// <summary>
-    /// Client for the Bittrex V3 websocket API
-    /// </summary>
+    /// <inheritdoc cref="IBittrexSocketClientSpotStreams" />
     public class BittrexSocketClientSpotStreams : SocketApiClient, IBittrexSocketClientSpotStreams
     {
         #region fields
-        private const string HubName = "c3";
-
         private readonly BittrexSocketClient _baseClient;
         #endregion
 
         #region ctor
-        /// <summary>
-        /// Creates a new socket client using the provided options
-        /// </summary>
-        /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClientSpotStreams(BittrexSocketClient baseClient, BittrexSocketClientOptions options) :
+        internal BittrexSocketClientSpotStreams(BittrexSocketClient baseClient, BittrexSocketClientOptions options) :
             base(options, options.SpotStreamOptions)
         {
             _baseClient = baseClient;
         }
         #endregion
 
-        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        /// <inheritdoc />
+        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
             => new BittrexAuthenticationProvider(credentials);
 
 

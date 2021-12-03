@@ -2,6 +2,9 @@
 
 namespace Bittrex.Net.Interfaces.Clients.SpotApi
 {
+    /// <summary>
+    /// Bittrex spot API endpoints
+    /// </summary>
     public interface IBittrexClientSpotApi : IDisposable
     {
         /// <summary>

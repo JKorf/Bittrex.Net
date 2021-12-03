@@ -11,7 +11,7 @@ using CryptoExchange.Net.Sockets;
 namespace Bittrex.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
-    /// Interface for the Bittrex V3 socket client
+    /// Bittrex Spot streams
     /// </summary>
     public interface IBittrexSocketClientSpotStreams : IDisposable
     {

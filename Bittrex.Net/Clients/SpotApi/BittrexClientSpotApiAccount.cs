@@ -13,6 +13,7 @@ using Bittrex.Net.Interfaces.Clients.SpotApi;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
+    /// <inheritdoc />
     public class BittrexClientSpotApiAccount : IBittrexClientSpotApiAccount
     {
         private readonly BittrexClientSpotApi _baseClient;

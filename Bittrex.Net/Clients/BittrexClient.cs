@@ -16,12 +16,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Bittrex.Net.Clients
 {
-    /// <summary>
-    /// Client for the Bittrex V3 API
-    /// </summary>
+    /// <inheritdoc cref="IBittrexClient" />
     public class BittrexClient : BaseRestClient, IBittrexClient
     {
         #region Api clients
+        /// <inheritdoc />
         public IBittrexClientSpotApi SpotApi { get; }
         #endregion
 
@@ -43,10 +42,11 @@ namespace Bittrex.Net.Clients
         #endregion
 
         #region methods
+
         /// <summary>
-        /// Sets the default options to use for new clients
+        /// Set the default options to be used when creating new clients
         /// </summary>
-        /// <param name="options">The options to use for new clients</param>
+        /// <param name="options">Options to use as default</param>
         public static void SetDefaultOptions(BittrexClientOptions options)
         {
             BittrexClientOptions.Default = options;
@@ -92,6 +92,7 @@ namespace Bittrex.Net.Clients
              JsonSerializer? deserializer = null) where T : class
                  => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
 
+        /// <inheritdoc />
         public override void Dispose()
         {
             SpotApi.Dispose();

@@ -24,6 +24,9 @@ namespace Bittrex.Net.Objects
                     .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
             }
         };
+        /// <summary>
+        /// Options for the spot API
+        /// </summary>
         public RestApiClientOptions SpotApiOptions
         {
             get => _spotApiOptions;
@@ -69,6 +72,9 @@ namespace Bittrex.Net.Objects
         };
 
         private ApiClientOptions _spotStreamOptions = new ApiClientOptions("https://socket-v3.bittrex.com");
+        /// <summary>
+        /// Spot stream options
+        /// </summary>
         public ApiClientOptions SpotStreamOptions
         {
             get => _spotStreamOptions;

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
+    /// <inheritdoc cref="IBittrexClientSpotApi" />
     public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, IExchangeClient
     {
         private BittrexClient _baseClient;
@@ -21,8 +22,11 @@ namespace Bittrex.Net.Clients.SpotApi
 
         #region Api clients
 
+        /// <inheritdoc />
         public IBittrexClientSpotApiAccount Account { get; }
+        /// <inheritdoc />
         public IBittrexClientSpotApiExchangeData ExchangeData { get; }
+        /// <inheritdoc />
         public IBittrexClientSpotApiTrading Trading { get; }
 
         #endregion
@@ -47,7 +51,8 @@ namespace Bittrex.Net.Clients.SpotApi
         /// </summary>
         public event Action<ICommonOrderId>? OnOrderCanceled;
 
-        public override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        /// <inheritdoc />
+        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
             => new BittrexAuthenticationProvider(credentials);
 
         #region common interface
