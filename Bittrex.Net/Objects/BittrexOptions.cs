@@ -16,7 +16,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions();
 
-        private RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bitfinex.com")
+        private RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bittrex.com/")
         {
             RateLimiters = new List<IRateLimiter>
             {
