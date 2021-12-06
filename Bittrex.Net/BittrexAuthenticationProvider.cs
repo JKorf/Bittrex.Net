@@ -38,8 +38,7 @@ namespace Bittrex.Net
                 throw new ArgumentException("ApiKey/Secret needed");
 
             var result = new Dictionary<string, string>();
-            lock (locker)
-                result.Add("Api-Key", Credentials.Key.GetString());
+            result.Add("Api-Key", Credentials.Key.GetString());
             result.Add("Api-Timestamp", Math.Round((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
             var jsonContent = string.Empty;
             if (parameterPosition == HttpMethodParameterPosition.InBody)
@@ -54,7 +53,8 @@ namespace Bittrex.Net
 
             uri = WebUtility.UrlDecode(uri); // Sign needs the query parameters to not be encoded
             var sign = result["Api-Timestamp"] + uri + method + result["Api-Content-Hash"] + "";
-            result.Add("Api-Signature", ByteToString(encryptorHmac.ComputeHash(Encoding.UTF8.GetBytes(sign))));
+            lock (locker)
+                result.Add("Api-Signature", ByteToString(encryptorHmac.ComputeHash(Encoding.UTF8.GetBytes(sign))));
             return result;
         }
 
