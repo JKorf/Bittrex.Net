@@ -37,7 +37,7 @@ namespace Bittrex.Net.Clients
         /// </summary>
         public BittrexClient(BittrexClientOptions options) : base("Bittrex", options)
         {
-            SpotApi = new BittrexClientSpotApi(this, options);
+            SpotApi = new BittrexClientSpotApi(log, this, options);
         }
         #endregion
 
@@ -68,7 +68,7 @@ namespace Bittrex.Net.Clients
         }
 
         /// <inheritdoc />
-        protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
+        protected override void WriteParamBody(IRequest request, SortedDictionary<string, object> parameters, string contentType)
         {
             if (parameters.Any() && parameters.First().Key == string.Empty)
             {
@@ -77,7 +77,7 @@ namespace Bittrex.Net.Clients
             }
             else
             {
-                var stringData = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+                var stringData = JsonConvert.SerializeObject(parameters);
                 request.SetContent(stringData, contentType);
             }
         }

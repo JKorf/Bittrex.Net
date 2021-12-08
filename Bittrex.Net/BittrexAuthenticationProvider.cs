@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
+using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
 
@@ -15,53 +16,47 @@ namespace Bittrex.Net
 {
     internal class BittrexAuthenticationProvider : AuthenticationProvider
     {
-        private readonly HMACSHA512 encryptorHmac;
-        private readonly SHA512 encryptor;
-        private readonly object locker;
-
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
-            if (credentials.Secret == null)
-                throw new ArgumentException("ApiKey/Secret needed");
-
-            locker = new object();
-            encryptorHmac = new HMACSHA512(Encoding.ASCII.GetBytes(credentials.Secret.GetString()));
-            encryptor = SHA512.Create();
         }
 
-        public override Dictionary<string, string> AddAuthenticationToHeaders(string uri, HttpMethod method, Dictionary<string, object> parameters, bool signed, HttpMethodParameterPosition parameterPosition, ArrayParametersSerialization arraySerialization)
+        public override void AuthenticateBodyRequest(RestApiClient apiClient, Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
         {
-            if (!signed)
-                return new Dictionary<string, string>();
+            if (!auth)
+                return;
 
-            if (Credentials.Key == null)
-                throw new ArgumentException("ApiKey/Secret needed");
+            headers.Add("Api-Key", Credentials.Key!.GetString());
+            headers.Add("Api-Timestamp", GetTimestamp(apiClient));
 
-            var result = new Dictionary<string, string>();
-            result.Add("Api-Key", Credentials.Key.GetString());
-            result.Add("Api-Timestamp", Math.Round((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
             var jsonContent = string.Empty;
-            if (parameterPosition == HttpMethodParameterPosition.InBody)
-            {
-                if(parameters.Any() && parameters.First().Key == string.Empty)
-                    jsonContent = JsonConvert.SerializeObject(parameters.First().Value);
-                else
-                    jsonContent = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+            if (parameters.Any() && parameters.First().Key == string.Empty)
+                jsonContent = JsonConvert.SerializeObject(parameters.First().Value);
+            else
+                jsonContent = JsonConvert.SerializeObject(parameters.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value));
+            headers.Add("Api-Content-Hash", SignSHA512(jsonContent));
 
-            }
-            result.Add("Api-Content-Hash", ByteToString(encryptor.ComputeHash(Encoding.UTF8.GetBytes(jsonContent))).ToLower(CultureInfo.InvariantCulture));
-
-            uri = WebUtility.UrlDecode(uri); // Sign needs the query parameters to not be encoded
-            var sign = result["Api-Timestamp"] + uri + method + result["Api-Content-Hash"] + "";
-            lock (locker)
-                result.Add("Api-Signature", ByteToString(encryptorHmac.ComputeHash(Encoding.UTF8.GetBytes(sign))));
-            return result;
+            var uriString = WebUtility.UrlDecode(uri.ToString()); // Sign needs the query parameters to not be encoded
+            headers.Add("Api-Signature", SignHMACSHA512(headers["Api-Timestamp"] + uriString + method + headers["Api-Content-Hash"]));
         }
 
-        public override string Sign(string toSign)
+        public override void AuthenticateUriRequest(RestApiClient apiClient, ref Uri uri, HttpMethod method, SortedDictionary<string, object> parameters, Dictionary<string, string> headers, bool auth, ArrayParametersSerialization arraySerialization)
         {
-            lock (locker)
-                return BitConverter.ToString(encryptorHmac.ComputeHash(Encoding.ASCII.GetBytes(toSign))).Replace("-", string.Empty);
+            if (!auth)
+                return;
+
+            headers.Add("Api-Key", Credentials.Key!.GetString());
+            headers.Add("Api-Timestamp", Math.Round((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds).ToString(CultureInfo.InvariantCulture));
+            headers.Add("Api-Content-Hash", SignSHA512(string.Empty));
+
+            var uriString = WebUtility.UrlDecode(uri.ToString()); // Sign needs the query parameters to not be encoded
+            headers.Add("Api-Signature", SignHMACSHA512(headers["Api-Timestamp"] + uriString + method + headers["Api-Content-Hash"]));
+        }
+
+        public override string Sign(string toSign) => SignHMACSHA512(toSign);
+
+        internal string GetTimestamp(RestApiClient apiClient)
+        {
+            return DateTimeConverter.ConvertToMilliseconds(DateTime.UtcNow.Add(apiClient.GetTimeOffset()))!.Value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

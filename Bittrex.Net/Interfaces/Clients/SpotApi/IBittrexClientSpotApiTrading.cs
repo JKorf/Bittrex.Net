@@ -110,7 +110,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
         /// <param name="useAwards">Option to use Bittrex credits for the order</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order info</returns>
-        Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide side, OrderType type, TimeInForce timeInForce, decimal? quantity, decimal? price = null, decimal? quoteQuantity = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);
+        Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide side, OrderType type, TimeInForce timeInForce, decimal? quantity = null, decimal? price = null, decimal? quoteQuantity = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default);
 
         /// <summary>
         /// Place multiple orders in a single call

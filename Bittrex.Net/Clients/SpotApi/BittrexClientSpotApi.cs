@@ -4,7 +4,9 @@ using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,11 @@ namespace Bittrex.Net.Clients.SpotApi
     {
         private BittrexClient _baseClient;
         private BittrexClientOptions _options;
+        private Log _log;
+
+        internal static TimeSpan TimeOffset;
+        internal static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
+        internal static DateTime LastTimeSync;
 
         #region Api clients
 
@@ -31,10 +38,11 @@ namespace Bittrex.Net.Clients.SpotApi
 
         #endregion
 
-        internal BittrexClientSpotApi(BittrexClient baseClient, BittrexClientOptions options) :
+        internal BittrexClientSpotApi(Log log, BittrexClient baseClient, BittrexClientOptions options) :
             base(options, options.SpotApiOptions)
         {
             _options = options;
+            _log = log;
             _baseClient = baseClient;
 
             Account = new BittrexClientSpotApiAccount(this);
@@ -207,5 +215,31 @@ namespace Bittrex.Net.Clients.SpotApi
              bool signed = false,
              JsonSerializer? deserializer = null) where T : class
                  => _baseClient.SendRequestAsync<T>(this, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
+
+        /// <inheritdoc />
+        protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
+        {
+            return ExchangeData.GetServerTimeAsync();
+        }
+
+        /// <inheritdoc />
+        protected override TimeSyncModel GetTimeSyncParameters()
+        {
+            return new TimeSyncModel(_options.SpotApiOptions.AutoTimestamp, SemaphoreSlim, LastTimeSync);
+        }
+
+        /// <inheritdoc />
+        protected override void UpdateTimeOffset(TimeSpan timestamp)
+        {
+            LastTimeSync = DateTime.UtcNow;
+            if (timestamp.TotalMilliseconds > 0 && timestamp.TotalMilliseconds < 500)
+                return;
+
+            _log.Write(LogLevel.Information, $"Time offset set to {Math.Round(timestamp.TotalMilliseconds)}ms");
+            TimeOffset = timestamp;
+        }
+
+        /// <inheritdoc />
+        public override TimeSpan GetTimeOffset() => TimeOffset;
     }
 }
