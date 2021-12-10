@@ -219,7 +219,7 @@ namespace Bitfinex.Net.UnitTests
                 CheckPropertyValue(method, prop.Value, propertyValue, property.Name, prop.Name, property, ignoreProperties);
         }
 
-        private static void CheckPropertyValue(string method, JToken propValue, object propertyValue, string? propertyName = null, string? propName = null, PropertyInfo info = null, Dictionary<string, List<string>> ignoreProperties = null)
+        private static void CheckPropertyValue(string method, JToken propValue, object propertyValue, string propertyName = null, string propName = null, PropertyInfo info = null, Dictionary<string, List<string>> ignoreProperties = null)
         {
             if (propertyValue == default && propValue.Type != JTokenType.Null && !string.IsNullOrEmpty(propValue.ToString()))
             {
@@ -345,36 +345,29 @@ namespace Bitfinex.Net.UnitTests
 
         private static void CheckValues(string method, string property, JValue jsonValue, object objectValue)
         {
-            try
+            if (jsonValue.Type == JTokenType.String)
             {
-                if (jsonValue.Type == JTokenType.String)
+                if (objectValue is decimal dec)
                 {
-                    if (objectValue is decimal dec)
-                    {
-                        if (jsonValue.Value<decimal>() != dec)
-                            throw new Exception($"{method}: {property} not equal: {jsonValue.Value<decimal>()} vs {dec}");
-                    }
-                    else if (objectValue is DateTime time)
-                    {
-                        // timestamp, hard to check..
-                    }
-                    else if (jsonValue.Value<string>().ToLowerInvariant() != objectValue.ToString().ToLowerInvariant())
-                        throw new Exception($"{method}: {property} not equal: {jsonValue.Value<string>()} vs {objectValue.ToString()}");
+                    if (jsonValue.Value<decimal>() != dec)
+                        throw new Exception($"{method}: {property} not equal: {jsonValue.Value<decimal>()} vs {dec}");
                 }
-                else if (jsonValue.Type == JTokenType.Integer)
+                else if (objectValue is DateTime time)
                 {
-                    if (jsonValue.Value<long>() != Convert.ToInt64(objectValue))
-                        throw new Exception($"{method}: {property} not equal: {jsonValue.Value<long>()} vs {Convert.ToInt64(objectValue)}");
+                    // timestamp, hard to check..
                 }
-                else if (jsonValue.Type == JTokenType.Boolean)
-                {
-                    if (jsonValue.Value<bool>() != (bool)objectValue)
-                        throw new Exception($"{method}: {property} not equal: {jsonValue.Value<bool>()} vs {(bool)objectValue}");
-                }
+                else if (jsonValue.Value<string>().ToLowerInvariant() != objectValue.ToString().ToLowerInvariant())
+                    throw new Exception($"{method}: {property} not equal: {jsonValue.Value<string>()} vs {objectValue.ToString()}");
             }
-            catch(Exception ex)
+            else if (jsonValue.Type == JTokenType.Integer)
             {
-                throw;
+                if (jsonValue.Value<long>() != Convert.ToInt64(objectValue))
+                    throw new Exception($"{method}: {property} not equal: {jsonValue.Value<long>()} vs {Convert.ToInt64(objectValue)}");
+            }
+            else if (jsonValue.Type == JTokenType.Boolean)
+            {
+                if (jsonValue.Value<bool>() != (bool)objectValue)
+                    throw new Exception($"{method}: {property} not equal: {jsonValue.Value<bool>()} vs {(bool)objectValue}");
             }
         }
     }

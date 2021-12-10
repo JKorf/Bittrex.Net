@@ -17,6 +17,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     {
         /// <summary>
         /// Subscribe to heartbeat updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Heartbeat" /></para>
         /// </summary>
         /// <param name="onHeartbeat">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -25,6 +26,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to kline(candle) updates for a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Candle" /></para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="interval">Interval of the candles</param>
@@ -36,6 +38,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to kline(candle) updates for a symbol
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Candle" /></para>
         /// </summary>
         /// <param name="symbols">The symbols</param>
         /// <param name="interval">Interval of the candles</param>
@@ -46,6 +49,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to all symbol summary updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Market-Summaries" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -54,6 +58,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to symbol summary updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Market-Summary" /></para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
@@ -64,6 +69,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to symbol summary updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Market-Summary" /></para>
         /// </summary>
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
@@ -73,6 +79,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to order book updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Orderbook" /></para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="depth">The depth of the oder book to receive update for</param>
@@ -84,6 +91,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to order book updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Orderbook" /></para>
         /// </summary>
         /// <param name="symbols">The symbols</param>
         /// <param name="depth">The depth of the oder book to receive update for</param>
@@ -94,6 +102,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to all symbols ticker updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Tickers" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -102,6 +111,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to symbol ticker updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Ticker" /></para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
@@ -112,6 +122,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to symbol ticker updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Ticker" /></para>
         /// </summary>
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
@@ -121,6 +132,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to symbol trade updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Trade" /></para>
         /// </summary>
         /// <param name="symbol">The symbol</param>
         /// <param name="onUpdate">Data handler</param>
@@ -131,6 +143,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to symbol trade updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Trade" /></para>
         /// </summary>
         /// <param name="symbols">The symbols</param>
         /// <param name="onUpdate">Data handler</param>
@@ -140,6 +153,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to order updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Order" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -148,6 +162,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to balance updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Balance" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -156,6 +171,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to deposit updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Deposit" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -164,6 +180,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to user trade updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Execution" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
@@ -172,12 +189,12 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Subscribe to conditional order updates
+        /// <para><a href="https://bittrex.github.io/api/v3#method-Conditional-Order" /></para>
         /// </summary>
         /// <param name="onUpdate">Data handler</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Action<DataEvent<BittrexConditionalOrderUpdate>> onUpdate, CancellationToken ct = default);
-
 
     }
 }
