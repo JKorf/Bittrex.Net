@@ -16,7 +16,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions();
 
-        private RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bittrex.com/")
+        private readonly RestApiClientOptions _spotApiOptions = new RestApiClientOptions("https://api.bittrex.com/")
         {
             RateLimiters = new List<IRateLimiter>
             {
@@ -71,7 +71,7 @@ namespace Bittrex.Net.Objects
             SocketSubscriptionsCombineTarget = 10
         };
 
-        private ApiClientOptions _spotStreamOptions = new ApiClientOptions("https://socket-v3.bittrex.com");
+        private readonly ApiClientOptions _spotStreamOptions = new ApiClientOptions("https://socket-v3.bittrex.com");
         /// <summary>
         /// Spot stream options
         /// </summary>

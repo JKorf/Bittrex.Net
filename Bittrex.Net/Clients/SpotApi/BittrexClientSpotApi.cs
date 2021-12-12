@@ -19,9 +19,9 @@ namespace Bittrex.Net.Clients.SpotApi
     /// <inheritdoc cref="IBittrexClientSpotApi" />
     public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, IExchangeClient
     {
-        private BittrexClient _baseClient;
-        private BittrexClientOptions _options;
-        private Log _log;
+        private readonly BittrexClient _baseClient;
+        private readonly BittrexClientOptions _options;
+        private readonly Log _log;
 
         internal static TimeSyncState TimeSyncState = new TimeSyncState();
 
