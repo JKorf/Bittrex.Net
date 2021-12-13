@@ -26,13 +26,11 @@ namespace Bittrex.Net.SymbolOrderBooks
         /// Create a new order book instance
         /// </summary>
         /// <param name="symbol">The symbol the order book is for</param>
-        /// <param name="limit">The number of entries in the order book</param>
         /// <param name="options">Options for the order book</param>
-        public BittrexSymbolOrderBook(string symbol, int limit, BittrexOrderBookOptions? options = null) : base("Bittrex[Spot]", symbol, options ?? new BittrexOrderBookOptions())
+        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions? options = null) : base("Bittrex", symbol, options ?? new BittrexOrderBookOptions())
         {
             symbol.ValidateBittrexSymbol();
-            limit.ValidateIntValues(nameof(limit), 1, 25, 500);
-            _limit = limit;
+            _limit = options?.Limit ?? 25;
 
             sequencesAreConsecutive = true;
             strictLevels = true;

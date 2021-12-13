@@ -122,13 +122,8 @@ namespace Bittrex.Net.Objects
         public IBittrexClient? RestClient { get; }
 
         /// <summary>
+        /// The number of entries in the order book, should be one of: 1/25/500
         /// </summary>
-        /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        /// <param name="restClient">The client to use for the initial order book request.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null, IBittrexClient? restClient = null)
-        {
-            SocketClient = socketClient;
-            RestClient = restClient;
-        }
+        public int? Limit { get; }
     }
 }
