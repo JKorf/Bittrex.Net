@@ -52,7 +52,7 @@ namespace Bittrex.Net.Clients
         {
             SocketFactory = new ConnectionFactory(options.Proxy);
 
-            SpotStreams = new BittrexSocketClientSpotStreams(this, options);
+            SpotStreams = AddApiClient(new BittrexSocketClientSpotStreams(this, options));
 
             AddGenericHandler("Reauthenticate", async (messageEvent) => await AuthenticateSocketAsync(messageEvent.Connection).ConfigureAwait(false));
         }
@@ -358,13 +358,6 @@ namespace Bittrex.Net.Clients
                 log.Write(LogLevel.Warning, "Exception in decode data: " + e.ToLogString());
                 return null;
             }
-        }
-
-        /// <inheritdoc />
-        public override void Dispose()
-        {
-            SpotStreams.Dispose();
-            base.Dispose();
         }
         #endregion
     }

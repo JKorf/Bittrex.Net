@@ -37,7 +37,7 @@ namespace Bittrex.Net.Clients
         /// </summary>
         public BittrexClient(BittrexClientOptions options) : base("Bittrex", options)
         {
-            SpotApi = new BittrexClientSpotApi(log, this, options);
+            SpotApi = AddApiClient(new BittrexClientSpotApi(log, this, options));
         }
         #endregion
 
@@ -92,12 +92,6 @@ namespace Bittrex.Net.Clients
              JsonSerializer? deserializer = null) where T : class
                  => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
 
-        /// <inheritdoc />
-        public override void Dispose()
-        {
-            SpotApi.Dispose();
-            base.Dispose();
-        }
         #endregion
     }
 }
