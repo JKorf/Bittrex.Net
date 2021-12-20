@@ -114,16 +114,16 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBittrexSocketClient? SocketClient { get; }
+        public IBittrexSocketClient? SocketClient { get; set; }
 
         /// <summary>
         /// The rest client to use for requesting the initial order book
         /// </summary>
-        public IBittrexClient? RestClient { get; }
+        public IBittrexClient? RestClient { get; set; }
 
         /// <summary>
         /// The number of entries in the order book, should be one of: 1/25/500
         /// </summary>
-        public int? Limit { get; }
+        public int? Limit { get; set; }
     }
 }
