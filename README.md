@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 7.0.0-alpha2 - 21 Dec 2021
+    * Update to new CryptoExchange.Net version
+
 * Version 7.0.0-alpha1 - 07 Dec 2021
     * Initial version new CryptoExchange.Net. More documentation coming soon
 
