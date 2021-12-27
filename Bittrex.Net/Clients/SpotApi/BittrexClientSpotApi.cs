@@ -29,6 +29,9 @@ namespace Bittrex.Net.Clients.SpotApi
         internal static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
         internal static DateTime LastTimeSync;
 
+        /// <inheritdoc />
+        public string ExchangeName => "Bittrex";
+
         #region Api clients
 
         /// <inheritdoc />
@@ -230,5 +233,8 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <inheritdoc />
         public override TimeSpan GetTimeOffset()
             => TimeSyncState.TimeOffset;
+
+        /// <inheritdoc />
+        public IExchangeClient AsExchangeClient() => this;
     }
 }
