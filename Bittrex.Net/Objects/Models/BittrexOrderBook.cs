@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CryptoExchange.Net.ExchangeInterfaces;
 using CryptoExchange.Net.Interfaces;
 using Newtonsoft.Json;
 
@@ -9,7 +8,7 @@ namespace Bittrex.Net.Objects.Models
     /// <summary>
     /// Order book
     /// </summary>
-    public class BittrexOrderBook: ICommonOrderBook
+    public class BittrexOrderBook
     {
         /// <summary>
         /// The sequence number
@@ -25,9 +24,6 @@ namespace Bittrex.Net.Objects.Models
         /// </summary>
         [JsonProperty("ask")]
         public IEnumerable<BittrexOrderBookEntry> Asks { get; set; } = Array.Empty<BittrexOrderBookEntry>();
-
-        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonBids => Bids;
-        IEnumerable<ISymbolOrderBookEntry> ICommonOrderBook.CommonAsks => Asks;
     }
 
     /// <summary>

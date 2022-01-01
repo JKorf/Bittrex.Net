@@ -1,5 +1,4 @@
 ﻿using System;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.Models
@@ -7,7 +6,7 @@ namespace Bittrex.Net.Objects.Models
     /// <summary>
     /// Symbol kline info
     /// </summary>
-    public class BittrexKline: ICommonKline
+    public class BittrexKline
     {
         /// <summary>
         /// The opening time of this kline
@@ -42,12 +41,5 @@ namespace Bittrex.Net.Objects.Models
         /// The quote volume of this candle
         /// </summary>
         public decimal QuoteVolume { get; set; }
-
-        decimal ICommonKline.CommonHighPrice => HighPrice;
-        decimal ICommonKline.CommonLowPrice => LowPrice;
-        decimal ICommonKline.CommonOpenPrice => OpenPrice;
-        decimal ICommonKline.CommonClosePrice => ClosePrice;
-        decimal ICommonKline.CommonVolume => Volume;
-        DateTime ICommonKline.CommonOpenTime => OpenTime;
     }
 }

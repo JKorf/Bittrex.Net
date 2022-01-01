@@ -1,7 +1,6 @@
 ﻿using System;
 using Bittrex.Net.Converters;
 using Bittrex.Net.Enums;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.Models
@@ -36,9 +35,10 @@ namespace Bittrex.Net.Objects.Models
         [JsonProperty("limit")]
         public decimal? Price { get; set; }
         /// <summary>
-        /// The ceiling of the order
+        /// The quote quantity of the order, as specified by the user
         /// </summary>
-        public decimal? Ceiling { get; set; }
+        [JsonProperty("ceiling")]
+        public decimal? QuoteQuantity { get; set; }
         /// <summary>
         /// The time in force of the order
         /// </summary>
@@ -58,7 +58,7 @@ namespace Bittrex.Net.Objects.Models
     /// <summary>
     /// Bittrex order info
     /// </summary>
-    public class BittrexOrder: BittrexUnplacedOrder, ICommonOrder
+    public class BittrexOrder: BittrexUnplacedOrder
     {
         /// <summary>
         /// The id of the order
@@ -105,30 +105,5 @@ namespace Bittrex.Net.Objects.Models
         /// Conditional order to cancel if this order executes
         /// </summary>
         public BittrexLinkedOrder? OrderToCancel { get; set; }
-
-        string ICommonOrderId.CommonId => Id;
-        string ICommonOrder.CommonSymbol => Symbol;
-        decimal ICommonOrder.CommonPrice => Price ?? 0;
-        decimal ICommonOrder.CommonQuantity => Quantity ?? 0;
-        IExchangeClient.OrderStatus ICommonOrder.CommonStatus =>
-            Status == OrderStatus.Open ? IExchangeClient.OrderStatus.Active :
-            QuantityFilled < Quantity ? IExchangeClient.OrderStatus.Canceled :
-            IExchangeClient.OrderStatus.Filled;
-        bool ICommonOrder.IsActive => Status == OrderStatus.Open;
-        DateTime ICommonOrder.CommonOrderTime => CreateTime;
-
-        IExchangeClient.OrderSide ICommonOrder.CommonSide => Side == OrderSide.Sell
-            ? IExchangeClient.OrderSide.Sell
-            : IExchangeClient.OrderSide.Buy;
-
-        IExchangeClient.OrderType ICommonOrder.CommonType
-        {
-            get
-            {
-                if (Type == OrderType.Limit)
-                    return IExchangeClient.OrderType.Limit;
-                return IExchangeClient.OrderType.Market;
-            }
-        }
     }
 }

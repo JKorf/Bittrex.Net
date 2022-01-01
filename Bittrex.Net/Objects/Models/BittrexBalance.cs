@@ -1,5 +1,4 @@
 ﻿using System;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.Models
@@ -7,7 +6,7 @@ namespace Bittrex.Net.Objects.Models
     /// <summary>
     /// Balance info
     /// </summary>
-    public class BittrexBalance: ICommonBalance
+    public class BittrexBalance
     {
         /// <summary>
         /// The asset
@@ -27,9 +26,5 @@ namespace Bittrex.Net.Objects.Models
         /// </summary>
         [JsonProperty("updatedAt")]
         public DateTime UpdateTime { get; set; }
-
-        string ICommonBalance.CommonAsset => Asset;
-        decimal ICommonBalance.CommonAvailable => Available;
-        decimal ICommonBalance.CommonTotal => Total;
     }
 }

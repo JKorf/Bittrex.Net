@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.Models
@@ -8,7 +6,7 @@ namespace Bittrex.Net.Objects.Models
     /// <summary>
     /// User trade info
     /// </summary>
-    public class BittrexUserTrade: ICommonTrade
+    public class BittrexUserTrade
     {
         /// <summary>
         /// Id of the trade
@@ -46,12 +44,5 @@ namespace Bittrex.Net.Objects.Models
         /// Is taker
         /// </summary>
         public bool IsTaker { get; set; }
-
-        string ICommonTrade.CommonId => Id;
-        decimal ICommonTrade.CommonPrice => Price;
-        decimal ICommonTrade.CommonQuantity => Quantity;
-        decimal ICommonTrade.CommonFee => Fee;
-        string ICommonTrade.CommonFeeAsset => Symbol.Split('-').Last();
-        DateTime ICommonTrade.CommonTradeTime => Timestamp;
     }
 }

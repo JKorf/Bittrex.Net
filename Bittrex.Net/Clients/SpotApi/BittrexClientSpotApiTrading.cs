@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
+using CryptoExchange.Net.ComonObjects;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
@@ -98,7 +99,7 @@ namespace Bittrex.Net.Clients.SpotApi
             orderId.ValidateNotNull(nameof(orderId));
             var result = await _baseClient.SendRequestAsync<BittrexOrder>(_baseClient.GetUrl($"orders/{orderId}"), HttpMethod.Delete, ct, signed: true).ConfigureAwait(false);
             if (result)
-                _baseClient.InvokeOrderCanceled(result.Data);
+                _baseClient.InvokeOrderCanceled(new OrderId { SourceObject = result.Data, Id = result.Data.Id });
             return result;
         }
 
@@ -111,7 +112,7 @@ namespace Bittrex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
-        public async Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, OrderSide side, OrderType type, TimeInForce timeInForce, decimal? quantity = null, decimal? price = null, decimal? quoteQuantity = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BittrexOrder>> PlaceOrderAsync(string symbol, Enums.OrderSide side, Enums.OrderType type, TimeInForce timeInForce, decimal? quantity = null, decimal? price = null, decimal? quoteQuantity = null, string? clientOrderId = null, bool? useAwards = null, CancellationToken ct = default)
         {
             symbol.ValidateBittrexSymbol();
             if (quantity != null && quoteQuantity != null || quantity == null && quoteQuantity == null)
@@ -119,7 +120,7 @@ namespace Bittrex.Net.Clients.SpotApi
 
             string orderType = JsonConvert.SerializeObject(type, new OrderTypeConverter(false));
             if (quoteQuantity != null)
-                orderType = type == OrderType.Limit ? "CEILING_LIMIT" : "CEILING_MARKET";
+                orderType = type == Enums.OrderType.Limit ? "CEILING_LIMIT" : "CEILING_MARKET";
 
             var parameters = new Dictionary<string, object>()
             {
@@ -136,7 +137,7 @@ namespace Bittrex.Net.Clients.SpotApi
 
             var result = await _baseClient.SendRequestAsync<BittrexOrder>(_baseClient.GetUrl("orders"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
             if (result)
-                _baseClient.InvokeOrderPlaced(result.Data);
+                _baseClient.InvokeOrderPlaced(new OrderId { SourceObject = result.Data, Id = result.Data.Id });
             return result;
         }
 

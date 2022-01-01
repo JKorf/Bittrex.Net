@@ -3,13 +3,15 @@ using Bittrex.Net.Interfaces.Clients.SpotApi;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.ExchangeInterfaces;
+using CryptoExchange.Net.ComonObjects;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +19,7 @@ using System.Threading.Tasks;
 namespace Bittrex.Net.Clients.SpotApi
 {
     /// <inheritdoc cref="IBittrexClientSpotApi" />
-    public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, IExchangeClient
+    public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, ISpotClient
     {
         private readonly BittrexClient _baseClient;
         private readonly BittrexClientOptions _options;
@@ -58,11 +60,11 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <summary>
         /// Event triggered when an order is placed via this client
         /// </summary>
-        public event Action<ICommonOrderId>? OnOrderPlaced;
+        public event Action<OrderId>? OnOrderPlaced;
         /// <summary>
         /// Event triggered when an order is canceled via this client. Note that this does not trigger when using CancelAllOpenOrdersAsync
         /// </summary>
-        public event Action<ICommonOrderId>? OnOrderCanceled;
+        public event Action<OrderId>? OnOrderCanceled;
 
         /// <inheritdoc />
         protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
@@ -70,38 +72,97 @@ namespace Bittrex.Net.Clients.SpotApi
 
         #region common interface
 #pragma warning disable 1066
-        async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
+        async Task<WebCallResult<IEnumerable<Symbol>>> IBaseRestClient.GetSymbolsAsync()
         {
             var symbols = await ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
-            return symbols.As<IEnumerable<ICommonSymbol>>(symbols.Data);
+            if (!symbols)
+                return symbols.As<IEnumerable<Symbol>>(null);
+
+            return symbols.As(symbols.Data.Select(s => new Symbol
+            {
+                SourceObject = s,
+                Name = s.Name,
+                MinTradeQuantity = s.MinTradeQuantity,
+                PriceDecimals = s.Precision
+            }));
         }
 
-        async Task<WebCallResult<ICommonOrderBook>> IExchangeClient.GetOrderBookAsync(string symbol)
+        async Task<WebCallResult<OrderBook>> IBaseRestClient.GetOrderBookAsync(string symbol)
         {
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderBookAsync), nameof(symbol));
+
             var orderBookResult = await ExchangeData.GetOrderBookAsync(symbol).ConfigureAwait(false);
-            return orderBookResult.As<ICommonOrderBook>(orderBookResult.Data);
+            if (!orderBookResult)
+                return orderBookResult.As<OrderBook>(null);
+
+            return orderBookResult.As(new OrderBook
+            {
+                SourceObject = orderBookResult.Data,
+                Asks = orderBookResult.Data.Asks.Select(a => new OrderBookEntry { Price = a.Price, Quantity = a.Quantity }),
+                Bids = orderBookResult.Data.Bids.Select(b => new OrderBookEntry { Price = b.Price, Quantity = b.Quantity })
+            });
         }
 
-        async Task<WebCallResult<ICommonTicker>> IExchangeClient.GetTickerAsync(string symbol)
+        async Task<WebCallResult<Ticker>> IBaseRestClient.GetTickerAsync(string symbol)
         {
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetTickerAsync), nameof(symbol));
+
             var ticker = await ExchangeData.GetSymbolSummaryAsync(symbol).ConfigureAwait(false);
-            return ticker.As<ICommonTicker>(ticker.Data);
+            if (!ticker)
+                return ticker.As<Ticker>(null);
+
+            return ticker.As(new Ticker
+            {
+                SourceObject = ticker.Data,
+                Symbol = ticker.Data.Symbol,
+                HighPrice = ticker.Data.HighPrice,
+                LowPrice = ticker.Data.LowPrice,
+                Volume = ticker.Data.Volume
+            });
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonTicker>>> IExchangeClient.GetTickersAsync()
+        async Task<WebCallResult<IEnumerable<Ticker>>> IBaseRestClient.GetTickersAsync()
         {
-            var tradesResult = await ExchangeData.GetSymbolSummariesAsync().ConfigureAwait(false);
-            return tradesResult.As<IEnumerable<ICommonTicker>>(tradesResult.Data);
+            var tickers = await ExchangeData.GetSymbolSummariesAsync().ConfigureAwait(false);
+            if (!tickers)
+                return tickers.As<IEnumerable<Ticker>>(null);
+
+            return tickers.As(tickers.Data.Select(t => new Ticker
+            {
+                SourceObject = t,
+                Symbol = t.Symbol,
+                HighPrice = t.HighPrice,
+                LowPrice = t.LowPrice,
+                Volume = t.Volume
+            }));
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonRecentTrade>>> IExchangeClient.GetRecentTradesAsync(string symbol)
+        async Task<WebCallResult<IEnumerable<Trade>>> IBaseRestClient.GetRecentTradesAsync(string symbol)
         {
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetRecentTradesAsync), nameof(symbol));
+
             var tradesResult = await ExchangeData.GetTradeHistoryAsync(symbol).ConfigureAwait(false);
-            return tradesResult.As<IEnumerable<ICommonRecentTrade>>(tradesResult.Data);
+            if (!tradesResult)
+                return tradesResult.As<IEnumerable<Trade>>(null);
+
+            return tradesResult.As(tradesResult.Data.Select(t => new Trade
+            {
+                SourceObject = t,
+                Symbol = symbol,
+                Price = t.Price,
+                Quantity = t.Quantity,
+                Timestamp = t.Timestamp
+            }));
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonKline>>> IExchangeClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
+        async Task<WebCallResult<IEnumerable<Kline>>> IBaseRestClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
         {
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetKlinesAsync), nameof(symbol));
+
             if (startTime.HasValue)
             {
                 var interval = GetKlineIntervalFromTimespan(timespan);
@@ -109,64 +170,179 @@ namespace Bittrex.Net.Clients.SpotApi
                     startTime.Value.Year,
                     interval == KlineInterval.OneDay ? null : (int?)startTime.Value.Month,
                     interval == KlineInterval.OneDay || interval == KlineInterval.OneHour ? null : (int?)startTime.Value.Day).ConfigureAwait(false);
-                return klines.As<IEnumerable<ICommonKline>>(klines.Data);
+                if (!klines)
+                    return klines.As<IEnumerable<Kline>>(null);
+
+                return klines.As(klines.Data.Select(t => new Kline
+                {
+                    SourceObject = t,
+                    OpenPrice = t.OpenPrice,
+                    OpenTime = t.OpenTime,
+                    ClosePrice = t.ClosePrice,
+                    HighPrice = t.HighPrice,
+                    LowPrice = t.LowPrice,
+                    Volume = t.Volume                    
+                }));
             }
             else
             {
                 var klines = await ExchangeData.GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan)).ConfigureAwait(false);
-                return klines.As<IEnumerable<ICommonKline>>(klines.Data);
+                if (!klines)
+                    return klines.As<IEnumerable<Kline>>(null);
+
+                return klines.As(klines.Data.Select(t => new Kline
+                {
+                    SourceObject = t,
+                    OpenPrice = t.OpenPrice,
+                    OpenTime = t.OpenTime,
+                    ClosePrice = t.ClosePrice,
+                    HighPrice = t.HighPrice,
+                    LowPrice = t.LowPrice,
+                    Volume = t.Volume
+                }));
             }
         }
 
-        async Task<WebCallResult<ICommonOrderId>> IExchangeClient.PlaceOrderAsync(string symbol, IExchangeClient.OrderSide side, IExchangeClient.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
+        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CryptoExchange.Net.ComonObjects.OrderSide side, CryptoExchange.Net.ComonObjects.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
         {
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.PlaceOrderAsync), nameof(symbol));
+
             var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), TimeInForce.GoodTillCanceled, quantity, price: price).ConfigureAwait(false);
-            return result.As<ICommonOrderId>(result.Data);
+            if (!result)
+                return result.As<OrderId>(null);
+
+            return result.As(new OrderId { SourceObject = result.Data, Id = result.Data.Id });
         }
 
-        async Task<WebCallResult<ICommonOrder>> IExchangeClient.GetOrderAsync(string orderId, string? symbol)
+        async Task<WebCallResult<Order>> IBaseRestClient.GetOrderAsync(string orderId, string? symbol)
         {
+            if (string.IsNullOrEmpty(orderId))
+                throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.GetOrderAsync), nameof(orderId));
+
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderAsync), nameof(symbol));
+
             var result = await Trading.GetOrderAsync(orderId).ConfigureAwait(false);
-            return result.As<ICommonOrder>(result.Data);
+            if (!result)
+                return result.As<Order>(null);
+
+            return result.As(new Order
+            {
+                SourceObject = result.Data,
+                QuantityFilled = result.Data.QuantityFilled,
+                Id = result.Data.Id,
+                Price = result.Data.Price ?? 0,
+                Quantity = result.Data.Quantity ?? 0,
+                Symbol = result.Data.Symbol,
+                Timestamp = result.Data.CreateTime,
+                Side = result.Data.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy : CryptoExchange.Net.ComonObjects.OrderSide.Sell,
+                Status = result.Data.Status == Enums.OrderStatus.Open ? CryptoExchange.Net.ComonObjects.OrderStatus.Active : result.Data.QuantityFilled == result.Data.Quantity ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled : CryptoExchange.Net.ComonObjects.OrderStatus.Canceled,
+                Type = result.Data.Type == Enums.OrderType.Market ? CryptoExchange.Net.ComonObjects.OrderType.Market : result.Data.Type == Enums.OrderType.Limit ? CryptoExchange.Net.ComonObjects.OrderType.Limit : CryptoExchange.Net.ComonObjects.OrderType.Other
+            });
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonTrade>>> IExchangeClient.GetTradesAsync(string orderId, string? symbol = null)
+        async Task<WebCallResult<IEnumerable<UserTrade>>> IBaseRestClient.GetOrderTradesAsync(string orderId, string? symbol = null)
         {
+            if (string.IsNullOrEmpty(orderId))
+                throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(orderId))
+                    ;
+            if (string.IsNullOrEmpty(symbol))
+                throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(symbol));
+
             var result = await Trading.GetUserTradesAsync(orderId).ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonTrade>>(result.Data);
+            if (!result)
+                return result.As<IEnumerable<UserTrade>>(null);
+
+            return result.As(result.Data.Select(t => new UserTrade
+            {
+                SourceObject = t,
+                OrderId = t.OrderId,
+                Fee = t.Fee,
+                Id = t.Id,
+                Price = t.Price,
+                Quantity = t.Quantity,
+                Symbol = t.Symbol,
+                Timestamp = t.Timestamp
+            }));
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetOpenOrdersAsync(string? symbol)
+        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetOpenOrdersAsync(string? symbol)
         {
-            var result = await Trading.GetOpenOrdersAsync().ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonOrder>>(result.Data);
+            var result = await Trading.GetOpenOrdersAsync(symbol).ConfigureAwait(false);
+            if (!result)
+                return result.As<IEnumerable<Order>>(null);
+
+            return result.As(result.Data.Select(t => new Order
+            {
+                SourceObject = t,
+                QuantityFilled = t.QuantityFilled,
+                Id = t.Id,
+                Price = t.Price ?? 0,
+                Quantity = t.Quantity ?? 0,
+                Symbol = t.Symbol,
+                Timestamp = t.CreateTime,
+                Side = t.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy : CryptoExchange.Net.ComonObjects.OrderSide.Sell,
+                Status = t.Status == Enums.OrderStatus.Open ? CryptoExchange.Net.ComonObjects.OrderStatus.Active : t.QuantityFilled == t.Quantity ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled : CryptoExchange.Net.ComonObjects.OrderStatus.Canceled,
+                Type = t.Type == Enums.OrderType.Market ? CryptoExchange.Net.ComonObjects.OrderType.Market : t.Type == Enums.OrderType.Limit ? CryptoExchange.Net.ComonObjects.OrderType.Limit : CryptoExchange.Net.ComonObjects.OrderType.Other
+            }));
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonOrder>>> IExchangeClient.GetClosedOrdersAsync(string? symbol)
+        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetClosedOrdersAsync(string? symbol)
         {
             var result = await Trading.GetClosedOrdersAsync(symbol).ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonOrder>>(result.Data);
+            if (!result)
+                return result.As<IEnumerable<Order>>(null);
+
+            return result.As(result.Data.Select(t => new Order
+            {
+                SourceObject = t,
+                QuantityFilled = t.QuantityFilled,
+                Id = t.Id,
+                Price = t.Price ?? 0,
+                Quantity = t.Quantity ?? 0,
+                Symbol = t.Symbol,
+                Timestamp = t.CreateTime,
+                Side = t.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.ComonObjects.OrderSide.Buy: CryptoExchange.Net.ComonObjects.OrderSide.Sell,
+                Status = t.Status == Enums.OrderStatus.Open ? CryptoExchange.Net.ComonObjects.OrderStatus.Active: t.QuantityFilled == t.Quantity ? CryptoExchange.Net.ComonObjects.OrderStatus.Filled: CryptoExchange.Net.ComonObjects.OrderStatus.Canceled,
+                Type = t.Type == Enums.OrderType.Market ? CryptoExchange.Net.ComonObjects.OrderType.Market: t.Type == Enums.OrderType.Limit ? CryptoExchange.Net.ComonObjects.OrderType.Limit: CryptoExchange.Net.ComonObjects.OrderType.Other
+            }));
         }
 
-        async Task<WebCallResult<ICommonOrderId>> IExchangeClient.CancelOrderAsync(string orderId, string? symbol)
+        async Task<WebCallResult<OrderId>> IBaseRestClient.CancelOrderAsync(string orderId, string? symbol)
         {
+            if (string.IsNullOrEmpty(orderId))
+                throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.CancelOrderAsync), nameof(orderId));
+
             var result = await Trading.CancelOrderAsync(orderId).ConfigureAwait(false);
-            return result.As<ICommonOrderId>(result.Data);
+            if (!result)
+                return result.As<OrderId>(null);
+
+            return result.As(new OrderId { SourceObject = result.Data, Id = result.Data.Id });
         }
 
-        async Task<WebCallResult<IEnumerable<ICommonBalance>>> IExchangeClient.GetBalancesAsync(string? accountId = null)
+        async Task<WebCallResult<IEnumerable<Balance>>> IBaseRestClient.GetBalancesAsync(string? accountId = null)
         {
             var result = await Account.GetBalancesAsync().ConfigureAwait(false);
-            return result.As<IEnumerable<ICommonBalance>>(result.Data);
+            if (!result)
+                return result.As<IEnumerable<Balance>>(null);
+
+            return result.As(result.Data.Select(d => new Balance
+            {
+                SourceObject = d,
+                Asset = d.Asset,
+                Available = d.Available,
+                Total = d.Total
+            }));
         }
 #pragma warning restore 1066
 
-        internal void InvokeOrderPlaced(ICommonOrderId id)
+        internal void InvokeOrderPlaced(OrderId id)
         {
             OnOrderPlaced?.Invoke(id);
         }
 
-        internal void InvokeOrderCanceled(ICommonOrderId id)
+        internal void InvokeOrderCanceled(OrderId id)
         {
             OnOrderCanceled?.Invoke(id);
         }
@@ -181,18 +357,18 @@ namespace Bittrex.Net.Clients.SpotApi
             throw new ArgumentException("Unsupported timespan for Bittrex Klines, check supported intervals using Bittrex.Net.Objects.KlineInterval");
         }
 
-        private static OrderSide GetOrderSide(IExchangeClient.OrderSide side)
+        private static Enums.OrderSide GetOrderSide(CryptoExchange.Net.ComonObjects.OrderSide side)
         {
-            if (side == IExchangeClient.OrderSide.Sell) return OrderSide.Sell;
-            if (side == IExchangeClient.OrderSide.Buy) return OrderSide.Buy;
+            if (side == CryptoExchange.Net.ComonObjects.OrderSide.Sell) return Enums.OrderSide.Sell;
+            if (side == CryptoExchange.Net.ComonObjects.OrderSide.Buy) return Enums.OrderSide.Buy;
 
             throw new ArgumentException("Unsupported order side for Bittrex order: " + side);
         }
 
-        private static OrderType GetOrderType(IExchangeClient.OrderType type)
+        private static Enums.OrderType GetOrderType(CryptoExchange.Net.ComonObjects.OrderType type)
         {
-            if (type == IExchangeClient.OrderType.Limit) return OrderType.Limit;
-            if (type == IExchangeClient.OrderType.Market) return OrderType.Market;
+            if (type == CryptoExchange.Net.ComonObjects.OrderType.Limit) return Enums.OrderType.Limit;
+            if (type == CryptoExchange.Net.ComonObjects.OrderType.Market) return Enums.OrderType.Market;
 
             throw new ArgumentException("Unsupported order type for Bittrex order: " + type);
         }
@@ -235,6 +411,6 @@ namespace Bittrex.Net.Clients.SpotApi
             => TimeSyncState.TimeOffset;
 
         /// <inheritdoc />
-        public IExchangeClient AsExchangeClient() => this;
+        public ISpotClient ComonSpotClient => this;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using CryptoExchange.Net.ExchangeInterfaces;
 using Newtonsoft.Json;
 
 namespace Bittrex.Net.Objects.Models
@@ -7,7 +6,7 @@ namespace Bittrex.Net.Objects.Models
     /// <summary>
     /// Symbol summary info
     /// </summary>
-    public class BittrexSymbolSummary: ICommonTicker
+    public class BittrexSymbolSummary
     {
         /// <summary>
         /// the symbol the summary is for
@@ -40,10 +39,5 @@ namespace Bittrex.Net.Objects.Models
         /// </summary>
         [JsonProperty("updatedAt")]
         public DateTime UpdateTime { get; set; }
-
-        string ICommonTicker.CommonSymbol => Symbol;
-        decimal ICommonTicker.CommonHighPrice => HighPrice;
-        decimal ICommonTicker.CommonLowPrice => LowPrice;
-        decimal ICommonTicker.CommonVolume => Volume;
     }
 }
