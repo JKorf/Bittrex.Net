@@ -81,6 +81,9 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 7.0.0-alpha4 - 01 Jan 2022
+    * New comon implementation, added AddBittrex extension method
+
 * Version 7.0.0-alpha3 - 27 Dec 2021
     * Updated CryptoExchange.Net
 
