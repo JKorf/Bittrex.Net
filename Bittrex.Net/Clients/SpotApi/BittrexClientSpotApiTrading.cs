@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Objects.Models;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
-using CryptoExchange.Net.ComonObjects;
+using CryptoExchange.Net.CommonObjects;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
