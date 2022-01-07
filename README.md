@@ -81,6 +81,10 @@ else
 For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
+* Version 7.0.0-alpha6 - 07 Jan 2022
+    * Updated CrytpoExchange.Net
+    * Added optional parameter for socket client lifetime in AddBittrex
+
 * Version 7.0.0-alpha5 - 03 Jan 2022
     * Updated CryptoExchange.Net
 
