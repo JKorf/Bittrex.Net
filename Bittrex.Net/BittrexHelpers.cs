@@ -32,8 +32,12 @@ namespace Bittrex.Net
         /// </summary>
         /// <param name="services">The service collection</param>
         /// <param name="defaultOptionsCallback">Set default options for the client</param>
+        /// <param name="socketClientLifeTime">The lifetime of the IBittrexSocketClient for the service collection. Defaults to Scoped.</param>
         /// <returns></returns>
-        public static IServiceCollection AddBittrex(this IServiceCollection services, Action<BittrexClientOptions, BittrexSocketClientOptions>? defaultOptionsCallback = null)
+        public static IServiceCollection AddBittrex(
+            this IServiceCollection services, 
+            Action<BittrexClientOptions, BittrexSocketClientOptions>? defaultOptionsCallback = null,
+            ServiceLifetime? socketClientLifeTime = null)
         {
             if (defaultOptionsCallback != null)
             {
@@ -45,8 +49,12 @@ namespace Bittrex.Net
                 BittrexSocketClient.SetDefaultOptions(socketOptions);
             }
 
-            return services.AddTransient<IBittrexClient, BittrexClient>()
-                           .AddScoped<IBittrexSocketClient, BittrexSocketClient>();
+            services.AddTransient<IBittrexClient, BittrexClient>();
+            if (socketClientLifeTime == null)
+                services.AddScoped<IBittrexSocketClient, BittrexSocketClient>();
+            else
+                services.Add(new ServiceDescriptor(typeof(IBittrexSocketClient), typeof(BittrexSocketClient), socketClientLifeTime.Value));
+            return services;
         }
 
         /// <summary>
