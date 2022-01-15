@@ -52,7 +52,7 @@ namespace Bittrex.Net.SymbolOrderBooks
         {
             var subResult = await socketClient.SpotStreams.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
-                return new CallResult<UpdateSubscription>(null, subResult.Error);
+                return new CallResult<UpdateSubscription>(subResult.Error!);
 
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
@@ -61,11 +61,11 @@ namespace Bittrex.Net.SymbolOrderBooks
             if (!queryResult.Success)
             {
                 await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
-                return new CallResult<UpdateSubscription>(null, queryResult.Error);
+                return new CallResult<UpdateSubscription>(queryResult.Error!);
             }
 
             SetInitialOrderBook(queryResult.Data.Sequence, queryResult.Data.Bids, queryResult.Data.Asks);
-            return new CallResult<UpdateSubscription>(subResult.Data, null);
+            return new CallResult<UpdateSubscription>(subResult.Data);
         }
 
         private void HandleUpdate(DataEvent<BittrexOrderBookUpdate> data)
@@ -78,10 +78,10 @@ namespace Bittrex.Net.SymbolOrderBooks
         {
             var queryResult = await restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
-                return new CallResult<bool>(false, queryResult.Error);
+                return new CallResult<bool>(queryResult.Error!);
             
             SetInitialOrderBook(queryResult.Data.Sequence, queryResult.Data.Bids, queryResult.Data.Asks);
-            return new CallResult<bool>(true, null);
+            return new CallResult<bool>(true);
         }
 
         /// <inheritdoc />

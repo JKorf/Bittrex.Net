@@ -82,7 +82,7 @@ namespace Bittrex.Net.Objects.Internal
                 {
                     log.Write(LogLevel.Debug, $"Socket {Id} sending data: {call}, {ArrayToString(pars)}");
                     var sub = await _hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
-                    return new CallResult<T>(sub, null);
+                    return new CallResult<T>(sub);
                 }
                 catch (Exception e)
                 {
@@ -91,7 +91,7 @@ namespace Bittrex.Net.Objects.Internal
                 }
             }
 
-            return new CallResult<T>(default, error);
+            return new CallResult<T>(error!);
         }
 
         private string ArrayToString(object item)

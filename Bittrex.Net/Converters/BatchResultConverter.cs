@@ -45,17 +45,17 @@ namespace Bittrex.Net.Converters
                     }
 
                     var converted = (T)data.ToObject(typeof(T));
-                    result.Add(new CallResult<T>(converted, null));
+                    result.Add(new CallResult<T>(converted!));
                 }
                 else
                 {
                     var error = item["payload"];
                     if (error == null)
-                        result.Add(new CallResult<T>(default, new UnknownError("Unknown payload structure")));
+                        result.Add(new CallResult<T>(new UnknownError("Unknown payload structure")));
                     else
                     {
                         var msg = error["code"]?.ToString();
-                        result.Add(new CallResult<T>(default, new ServerError(status, msg ?? "Unknown error")));
+                        result.Add(new CallResult<T>(new ServerError(status, msg ?? "Unknown error")));
                     }
                 }
             }

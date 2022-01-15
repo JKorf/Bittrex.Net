@@ -124,12 +124,12 @@ namespace Bittrex.Net.Clients
                 if (!subResult.Success || data?.Success == false)
                 {
                     _ = socket.CloseAsync(subscription);
-                    return new CallResult<bool>(false, subResult.Error ?? new ServerError(data?.ErrorCode!));
+                    return new CallResult<bool>(subResult.Error ?? new ServerError(data?.ErrorCode!));
                 }
             }
 
             subscription.Confirmed = true;
-            return new CallResult<bool>(true, null);
+            return new CallResult<bool>(true);
         }
 
         /// <inheritdoc />
@@ -139,22 +139,22 @@ namespace Bittrex.Net.Clients
             var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
             if (!queryResult.Success)
             {
-                return new CallResult<T>(default, queryResult.Error);
+                return new CallResult<T>(queryResult.Error!);
             }
 
             var decResult = DecodeData(queryResult.Data);
             if (decResult == null)
             {
-                return new CallResult<T>(default, new DeserializeError("Failed to decode data", queryResult.Data));
+                return new CallResult<T>(new DeserializeError("Failed to decode data", queryResult.Data));
             }
 
             var desResult = Deserialize<T>(decResult);
             if (!desResult.Success)
             {
-                return new CallResult<T>(default, desResult.Error);
+                return new CallResult<T>(desResult.Error!);
             }
 
-            return new CallResult<T>(desResult.Data, null);
+            return new CallResult<T>(desResult.Data);
         }
 
         /// <inheritdoc />
@@ -253,7 +253,7 @@ namespace Bittrex.Net.Clients
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
             if (s.ApiClient.AuthenticationProvider?.Credentials?.Key == null)
-                return new CallResult<bool>(false, new NoApiCredentialsError());
+                return new CallResult<bool>(new NoApiCredentialsError());
 
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var randomContent = $"{ Guid.NewGuid() }";
@@ -265,11 +265,11 @@ namespace Bittrex.Net.Clients
             if (!result.Success || !result.Data.Success)
             {
                 log.Write(LogLevel.Error, "Authentication failed, api key/secret is probably invalid");
-                return new CallResult<bool>(false, result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
+                return new CallResult<bool>(result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
             }
 
             log.Write(LogLevel.Information, "Authentication successful");
-            return new CallResult<bool>(true, null);
+            return new CallResult<bool>(true);
         }
 
         /// <inheritdoc />
