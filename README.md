@@ -5,8 +5,7 @@ Bittrex.Net is a wrapper around the Bittrex API as described on [Bittrex](https:
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Bittrex.Net/issues)**
 
-## CryptoExchange.Net
-This library is build upon the CryptoExchange.Net library, make sure to check out the documentation on that for basic usage: [docs](https://github.com/JKorf/CryptoExchange.Net)
+[Documentation](https://jkorf.github.io/Bittrex.Net/)
 
 ## Donations
 I develop and maintain this package on my own for free in my spare time. Donations are greatly appreciated. If you prefer to donate any other currency please contact me.
@@ -17,68 +16,6 @@ I develop and maintain this package on my own for free in my spare time. Donatio
 
 ## Discord
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). Feel free to join for discussion and/or questions around the CryptoExchange.Net and implementation libraries.
-
-## Getting started
-Make sure you have installed the Bittrex.Net [Nuget](https://www.nuget.org/packages/Bittrex.Net/) package and add `using Bittrex.Net` to your usings.  You now have access to 2 clients:  
-**BittrexClient**  
-The client to interact with the Bittrex REST API. Getting prices:
-````C#
-var client = new BittrexClient(new BittrexClientOptions(){
- // Specify options for the client
-});
-var callResult = await client.GetTickersAsync();
-// Make sure to check if the call was successful
-if(!callResult.Success)
-{
-  // Call failed, check callResult.Error for more info
-}
-else
-{
-  // Call succeeded, callResult.Data will have the resulting data
-}
-````
-
-Placing an order:
-````C#
-var client = new BittrexClient(new BittrexClientOptions(){
- // Specify options for the client
- ApiCredentials = new ApiCredentials("Key", "Secret")
-});
-var callResult = await client.PlaceOrderAsync("BTC-USDT", OrderSide.Buy, OrderType.Limit, TimeInForce.GoodTillCancelled, quantity:10, limit: 50);
-// Make sure to check if the call was successful
-if(!callResult.Success)
-{
-  // Call failed, check callResult.Error for more info
-}
-else
-{
-  // Call succeeded, callResult.Data will have the resulting data
-}
-````
-
-**BittrexSocketClient**  
-The client to interact with the Bittrex websocket API. Basic usage:
-````C#
-var client = new BittrexSocketClient(new BittrexSocketClientOptions()
-{
-  // Specify options for the client
-});
-var subscribeResult = client.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC", data => {
-  // Handle data when it is received
-});
-// Make sure to check if the subscritpion was successful
-if(!subscribeResult.Success)
-{
-  // Subscription failed, check callResult.Error for more info
-}
-else
-{
-  // Subscription succeeded, the handler will start receiving data when it is available
-}
-````
-
-## Client options
-For the basic client options see also the CryptoExchange.Net [docs](https://github.com/JKorf/CryptoExchange.Net#client-options). 
 
 ## Release notes
 * Version 7.0.0-beta1 - 15 Jan 2022
