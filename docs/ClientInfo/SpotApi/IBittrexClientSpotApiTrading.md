@@ -2,7 +2,7 @@
 title: IBittrexClientSpotApiTrading
 has_children: false
 parent: IBittrexClientSpotApi
-grand_parent: IBittrexClient
+grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
 `BittrexClient > SpotApi > Trading`  

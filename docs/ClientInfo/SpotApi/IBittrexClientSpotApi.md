@@ -1,7 +1,7 @@
 ---
 title: IBittrexClientSpotApi
 has_children: true
-parent: IBittrexClient
+parent: Rest API documentation
 ---
 *[generated documentation]*  
 `BittrexClient > SpotApi`  

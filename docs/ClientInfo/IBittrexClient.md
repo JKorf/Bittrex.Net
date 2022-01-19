@@ -1,8 +1,9 @@
 ---
-title: IBittrexClient
+title: Rest API documentation
 has_children: true
 ---
 *[generated documentation]*  
+### BittrexClient  
 *Client for accessing the Bittrex Rest API.*
   
 ***

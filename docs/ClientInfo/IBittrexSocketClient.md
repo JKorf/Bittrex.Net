@@ -1,8 +1,9 @@
 ---
-title: IBittrexSocketClient
+title: Socket API documentation
 has_children: true
 ---
 *[generated documentation]*  
+### BittrexSocketClient  
 *Client for accessing the Bittrex websocket API*
   
 ***
