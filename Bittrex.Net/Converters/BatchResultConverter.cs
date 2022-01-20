@@ -19,7 +19,7 @@ namespace Bittrex.Net.Converters
             var result = new List<CallResult<T>>();
             if (reader.TokenType != JsonToken.StartArray)
             {
-                Debug.WriteLine("Failed to deserialize batch result. Data: " + result);
+                Trace.WriteLine($"{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff} | Warning | Failed to deserialize batch result. Data: " + result);
                 return default;
             }
 
@@ -30,7 +30,7 @@ namespace Bittrex.Net.Converters
                 var statusToken = item["status"];
                 if(statusToken == null || statusToken.Type == JTokenType.Null)
                 {
-                    Debug.WriteLine("Failed to deserialize batch result, no status property. Data: " + result);
+                    Trace.WriteLine($"{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff} | Warning | Failed to deserialize batch result, no status property. Data: " + result);
                     return default;
                 }
 
@@ -40,7 +40,7 @@ namespace Bittrex.Net.Converters
                     var data = item["payload"];
                     if (data == null || data.Type == JTokenType.Null)
                     {
-                        Debug.WriteLine("Failed to deserialize batch result, no payload property. Data: " + result);
+                        Trace.WriteLine($"{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff} | Warning | Failed to deserialize batch result, no payload property. Data: " + result);
                         return default;
                     }
 
