@@ -1,5 +1,4 @@
-﻿using Bitfinex.Net.UnitTests;
-using Bittrex.Net.Objects;
+﻿using Bittrex.Net.Objects;
 using Bittrex.Net.UnitTests.TestImplementations;
 using NUnit.Framework;
 using System.Collections.Generic;

@@ -29,5 +29,9 @@ namespace Bittrex.Net.Objects.Models.Socket
         /// Kline data
         /// </summary>
         public BittrexKline Delta { get; set; } = default!;
+        /// <summary>
+        /// Type of candle
+        /// </summary>
+        public string CandleType { get; set; } = string.Empty;
     }
 }

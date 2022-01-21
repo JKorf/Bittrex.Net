@@ -1,0 +1,1 @@
+﻿{"symbol":"BTC-USDT","lastTradeRate":"38405.28202588","bidRate":"38413.08676078","askRate":"38428.93760109"}
