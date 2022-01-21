@@ -40,6 +40,9 @@ namespace Bittrex.Net.UnitTests
            Dictionary<string, List<string>> ignoreProperties = null,
            List<string> takeFirstItemForCompare = null)
         {
+            var listener = new EnumValueTraceListener();
+            Trace.Listeners.Add(listener);
+
             var methods = typeof(K).GetMethods();
             var callResultMethods = methods.Where(m => m.Name.EndsWith("Async")).ToList();
             var skippedMethods = new List<string>();
@@ -89,6 +92,8 @@ namespace Bittrex.Net.UnitTests
                 Debug.WriteLine("Skipped methods:");
             foreach (var method in skippedMethods)
                 Debug.WriteLine(method);
+
+            Trace.Listeners.Remove(listener);
         }
 
         internal static void ProcessData(string method, object resultData, string json,
