@@ -7,7 +7,6 @@ using CryptoExchange.Net.CommonObjects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -203,7 +202,7 @@ namespace Bittrex.Net.Clients.SpotApi
             }
         }
 
-        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CryptoExchange.Net.CommonObjects.OrderSide side, CryptoExchange.Net.CommonObjects.OrderType type, decimal quantity, decimal? price = null, string? accountId = null)
+        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CommonOrderSide side, CommonOrderType type, decimal quantity, decimal? price = null, string? accountId = null)
         {
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.PlaceOrderAsync), nameof(symbol));
@@ -236,9 +235,9 @@ namespace Bittrex.Net.Clients.SpotApi
                 Quantity = result.Data.Quantity ?? 0,
                 Symbol = result.Data.Symbol,
                 Timestamp = result.Data.CreateTime,
-                Side = result.Data.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.CommonObjects.OrderSide.Buy : CryptoExchange.Net.CommonObjects.OrderSide.Sell,
-                Status = result.Data.Status == Enums.OrderStatus.Open ? CryptoExchange.Net.CommonObjects.OrderStatus.Active : result.Data.QuantityFilled == result.Data.Quantity ? CryptoExchange.Net.CommonObjects.OrderStatus.Filled : CryptoExchange.Net.CommonObjects.OrderStatus.Canceled,
-                Type = result.Data.Type == Enums.OrderType.Market ? CryptoExchange.Net.CommonObjects.OrderType.Market : result.Data.Type == Enums.OrderType.Limit ? CryptoExchange.Net.CommonObjects.OrderType.Limit : CryptoExchange.Net.CommonObjects.OrderType.Other
+                Side = result.Data.Side == OrderSide.Buy ? CommonOrderSide.Buy : CommonOrderSide.Sell,
+                Status = result.Data.Status == OrderStatus.Open ? CommonOrderStatus.Active : result.Data.QuantityFilled == result.Data.Quantity ? CommonOrderStatus.Filled : CommonOrderStatus.Canceled,
+                Type = result.Data.Type == OrderType.Market ? CommonOrderType.Market : result.Data.Type == OrderType.Limit ? CommonOrderType.Limit : CommonOrderType.Other
             });
         }
 
@@ -282,9 +281,9 @@ namespace Bittrex.Net.Clients.SpotApi
                 Quantity = t.Quantity ?? 0,
                 Symbol = t.Symbol,
                 Timestamp = t.CreateTime,
-                Side = t.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.CommonObjects.OrderSide.Buy : CryptoExchange.Net.CommonObjects.OrderSide.Sell,
-                Status = t.Status == Enums.OrderStatus.Open ? CryptoExchange.Net.CommonObjects.OrderStatus.Active : t.QuantityFilled == t.Quantity ? CryptoExchange.Net.CommonObjects.OrderStatus.Filled : CryptoExchange.Net.CommonObjects.OrderStatus.Canceled,
-                Type = t.Type == Enums.OrderType.Market ? CryptoExchange.Net.CommonObjects.OrderType.Market : t.Type == Enums.OrderType.Limit ? CryptoExchange.Net.CommonObjects.OrderType.Limit : CryptoExchange.Net.CommonObjects.OrderType.Other
+                Side = t.Side == OrderSide.Buy ? CommonOrderSide.Buy : CommonOrderSide.Sell,
+                Status = t.Status == OrderStatus.Open ? CommonOrderStatus.Active : t.QuantityFilled == t.Quantity ? CommonOrderStatus.Filled : CommonOrderStatus.Canceled,
+                Type = t.Type == OrderType.Market ? CommonOrderType.Market : t.Type == OrderType.Limit ? CommonOrderType.Limit : CommonOrderType.Other
             }));
         }
 
@@ -303,9 +302,9 @@ namespace Bittrex.Net.Clients.SpotApi
                 Quantity = t.Quantity ?? 0,
                 Symbol = t.Symbol,
                 Timestamp = t.CreateTime,
-                Side = t.Side == Enums.OrderSide.Buy ? CryptoExchange.Net.CommonObjects.OrderSide.Buy: CryptoExchange.Net.CommonObjects.OrderSide.Sell,
-                Status = t.Status == Enums.OrderStatus.Open ? CryptoExchange.Net.CommonObjects.OrderStatus.Active: t.QuantityFilled == t.Quantity ? CryptoExchange.Net.CommonObjects.OrderStatus.Filled: CryptoExchange.Net.CommonObjects.OrderStatus.Canceled,
-                Type = t.Type == Enums.OrderType.Market ? CryptoExchange.Net.CommonObjects.OrderType.Market: t.Type == Enums.OrderType.Limit ? CryptoExchange.Net.CommonObjects.OrderType.Limit: CryptoExchange.Net.CommonObjects.OrderType.Other
+                Side = t.Side == OrderSide.Buy ? CommonOrderSide.Buy: CommonOrderSide.Sell,
+                Status = t.Status == OrderStatus.Open ? CommonOrderStatus.Active: t.QuantityFilled == t.Quantity ? CommonOrderStatus.Filled: CommonOrderStatus.Canceled,
+                Type = t.Type == OrderType.Market ? CommonOrderType.Market: t.Type == OrderType.Limit ? CommonOrderType.Limit: CommonOrderType.Other
             }));
         }
 
@@ -357,18 +356,18 @@ namespace Bittrex.Net.Clients.SpotApi
             throw new ArgumentException("Unsupported timespan for Bittrex Klines, check supported intervals using Bittrex.Net.Objects.KlineInterval");
         }
 
-        private static Enums.OrderSide GetOrderSide(CryptoExchange.Net.CommonObjects.OrderSide side)
+        private static OrderSide GetOrderSide(CommonOrderSide side)
         {
-            if (side == CryptoExchange.Net.CommonObjects.OrderSide.Sell) return Enums.OrderSide.Sell;
-            if (side == CryptoExchange.Net.CommonObjects.OrderSide.Buy) return Enums.OrderSide.Buy;
+            if (side == CommonOrderSide.Sell) return Enums.OrderSide.Sell;
+            if (side == CommonOrderSide.Buy) return Enums.OrderSide.Buy;
 
             throw new ArgumentException("Unsupported order side for Bittrex order: " + side);
         }
 
-        private static Enums.OrderType GetOrderType(CryptoExchange.Net.CommonObjects.OrderType type)
+        private static OrderType GetOrderType(CommonOrderType type)
         {
-            if (type == CryptoExchange.Net.CommonObjects.OrderType.Limit) return Enums.OrderType.Limit;
-            if (type == CryptoExchange.Net.CommonObjects.OrderType.Market) return Enums.OrderType.Market;
+            if (type == CommonOrderType.Limit) return Enums.OrderType.Limit;
+            if (type == CommonOrderType.Market) return Enums.OrderType.Market;
 
             throw new ArgumentException("Unsupported order type for Bittrex order: " + type);
         }
