@@ -70,10 +70,9 @@ namespace Bittrex.Net.Clients.SpotApi
             => new BittrexAuthenticationProvider(credentials);
 
         #region common interface
-#pragma warning disable 1066
-        async Task<WebCallResult<IEnumerable<Symbol>>> IBaseRestClient.GetSymbolsAsync()
+        async Task<WebCallResult<IEnumerable<Symbol>>> IBaseRestClient.GetSymbolsAsync(CancellationToken ct)
         {
-            var symbols = await ExchangeData.GetSymbolsAsync().ConfigureAwait(false);
+            var symbols = await ExchangeData.GetSymbolsAsync(ct: ct).ConfigureAwait(false);
             if (!symbols)
                 return symbols.As<IEnumerable<Symbol>>(null);
 
@@ -86,12 +85,12 @@ namespace Bittrex.Net.Clients.SpotApi
             }));
         }
 
-        async Task<WebCallResult<OrderBook>> IBaseRestClient.GetOrderBookAsync(string symbol)
+        async Task<WebCallResult<OrderBook>> IBaseRestClient.GetOrderBookAsync(string symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderBookAsync), nameof(symbol));
 
-            var orderBookResult = await ExchangeData.GetOrderBookAsync(symbol).ConfigureAwait(false);
+            var orderBookResult = await ExchangeData.GetOrderBookAsync(symbol, ct: ct).ConfigureAwait(false);
             if (!orderBookResult)
                 return orderBookResult.As<OrderBook>(null);
 
@@ -103,12 +102,12 @@ namespace Bittrex.Net.Clients.SpotApi
             });
         }
 
-        async Task<WebCallResult<Ticker>> IBaseRestClient.GetTickerAsync(string symbol)
+        async Task<WebCallResult<Ticker>> IBaseRestClient.GetTickerAsync(string symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetTickerAsync), nameof(symbol));
 
-            var ticker = await ExchangeData.GetSymbolSummaryAsync(symbol).ConfigureAwait(false);
+            var ticker = await ExchangeData.GetSymbolSummaryAsync(symbol, ct: ct).ConfigureAwait(false);
             if (!ticker)
                 return ticker.As<Ticker>(null);
 
@@ -122,9 +121,9 @@ namespace Bittrex.Net.Clients.SpotApi
             });
         }
 
-        async Task<WebCallResult<IEnumerable<Ticker>>> IBaseRestClient.GetTickersAsync()
+        async Task<WebCallResult<IEnumerable<Ticker>>> IBaseRestClient.GetTickersAsync(CancellationToken ct)
         {
-            var tickers = await ExchangeData.GetSymbolSummariesAsync().ConfigureAwait(false);
+            var tickers = await ExchangeData.GetSymbolSummariesAsync(ct: ct).ConfigureAwait(false);
             if (!tickers)
                 return tickers.As<IEnumerable<Ticker>>(null);
 
@@ -138,12 +137,12 @@ namespace Bittrex.Net.Clients.SpotApi
             }));
         }
 
-        async Task<WebCallResult<IEnumerable<Trade>>> IBaseRestClient.GetRecentTradesAsync(string symbol)
+        async Task<WebCallResult<IEnumerable<Trade>>> IBaseRestClient.GetRecentTradesAsync(string symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetRecentTradesAsync), nameof(symbol));
 
-            var tradesResult = await ExchangeData.GetTradeHistoryAsync(symbol).ConfigureAwait(false);
+            var tradesResult = await ExchangeData.GetTradeHistoryAsync(symbol, ct: ct).ConfigureAwait(false);
             if (!tradesResult)
                 return tradesResult.As<IEnumerable<Trade>>(null);
 
@@ -157,7 +156,7 @@ namespace Bittrex.Net.Clients.SpotApi
             }));
         }
 
-        async Task<WebCallResult<IEnumerable<Kline>>> IBaseRestClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime = null, DateTime? endTime = null, int? limit = null)
+        async Task<WebCallResult<IEnumerable<Kline>>> IBaseRestClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime, DateTime? endTime, int? limit, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetKlinesAsync), nameof(symbol));
@@ -168,7 +167,7 @@ namespace Bittrex.Net.Clients.SpotApi
                 var klines = await ExchangeData.GetHistoricalKlinesAsync(symbol, interval,
                     startTime.Value.Year,
                     interval == KlineInterval.OneDay ? null : (int?)startTime.Value.Month,
-                    interval == KlineInterval.OneDay || interval == KlineInterval.OneHour ? null : (int?)startTime.Value.Day).ConfigureAwait(false);
+                    interval == KlineInterval.OneDay || interval == KlineInterval.OneHour ? null : (int?)startTime.Value.Day, ct: ct).ConfigureAwait(false);
                 if (!klines)
                     return klines.As<IEnumerable<Kline>>(null);
 
@@ -185,7 +184,7 @@ namespace Bittrex.Net.Clients.SpotApi
             }
             else
             {
-                var klines = await ExchangeData.GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan)).ConfigureAwait(false);
+                var klines = await ExchangeData.GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan), ct: ct).ConfigureAwait(false);
                 if (!klines)
                     return klines.As<IEnumerable<Kline>>(null);
 
@@ -202,19 +201,19 @@ namespace Bittrex.Net.Clients.SpotApi
             }
         }
 
-        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CommonOrderSide side, CommonOrderType type, decimal quantity, decimal? price = null, string? accountId = null)
+        async Task<WebCallResult<OrderId>> ISpotClient.PlaceOrderAsync(string symbol, CommonOrderSide side, CommonOrderType type, decimal quantity, decimal? price, string? accountId, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.PlaceOrderAsync), nameof(symbol));
 
-            var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), TimeInForce.GoodTillCanceled, quantity, price: price).ConfigureAwait(false);
+            var result = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), TimeInForce.GoodTillCanceled, quantity, price: price, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<OrderId>(null);
 
             return result.As(new OrderId { SourceObject = result.Data, Id = result.Data.Id });
         }
 
-        async Task<WebCallResult<Order>> IBaseRestClient.GetOrderAsync(string orderId, string? symbol)
+        async Task<WebCallResult<Order>> IBaseRestClient.GetOrderAsync(string orderId, string? symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(orderId))
                 throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.GetOrderAsync), nameof(orderId));
@@ -222,7 +221,7 @@ namespace Bittrex.Net.Clients.SpotApi
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderAsync), nameof(symbol));
 
-            var result = await Trading.GetOrderAsync(orderId).ConfigureAwait(false);
+            var result = await Trading.GetOrderAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<Order>(null);
 
@@ -241,7 +240,7 @@ namespace Bittrex.Net.Clients.SpotApi
             });
         }
 
-        async Task<WebCallResult<IEnumerable<UserTrade>>> IBaseRestClient.GetOrderTradesAsync(string orderId, string? symbol = null)
+        async Task<WebCallResult<IEnumerable<UserTrade>>> IBaseRestClient.GetOrderTradesAsync(string orderId, string? symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(orderId))
                 throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(orderId))
@@ -249,7 +248,7 @@ namespace Bittrex.Net.Clients.SpotApi
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(symbol));
 
-            var result = await Trading.GetUserTradesAsync(orderId).ConfigureAwait(false);
+            var result = await Trading.GetUserTradesAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<IEnumerable<UserTrade>>(null);
 
@@ -266,9 +265,9 @@ namespace Bittrex.Net.Clients.SpotApi
             }));
         }
 
-        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetOpenOrdersAsync(string? symbol)
+        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetOpenOrdersAsync(string? symbol, CancellationToken ct)
         {
-            var result = await Trading.GetOpenOrdersAsync(symbol).ConfigureAwait(false);
+            var result = await Trading.GetOpenOrdersAsync(symbol, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<IEnumerable<Order>>(null);
 
@@ -287,9 +286,9 @@ namespace Bittrex.Net.Clients.SpotApi
             }));
         }
 
-        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetClosedOrdersAsync(string? symbol)
+        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetClosedOrdersAsync(string? symbol, CancellationToken ct)
         {
-            var result = await Trading.GetClosedOrdersAsync(symbol).ConfigureAwait(false);
+            var result = await Trading.GetClosedOrdersAsync(symbol, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<IEnumerable<Order>>(null);
 
@@ -308,21 +307,21 @@ namespace Bittrex.Net.Clients.SpotApi
             }));
         }
 
-        async Task<WebCallResult<OrderId>> IBaseRestClient.CancelOrderAsync(string orderId, string? symbol)
+        async Task<WebCallResult<OrderId>> IBaseRestClient.CancelOrderAsync(string orderId, string? symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(orderId))
                 throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.CancelOrderAsync), nameof(orderId));
 
-            var result = await Trading.CancelOrderAsync(orderId).ConfigureAwait(false);
+            var result = await Trading.CancelOrderAsync(orderId, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<OrderId>(null);
 
             return result.As(new OrderId { SourceObject = result.Data, Id = result.Data.Id });
         }
 
-        async Task<WebCallResult<IEnumerable<Balance>>> IBaseRestClient.GetBalancesAsync(string? accountId = null)
+        async Task<WebCallResult<IEnumerable<Balance>>> IBaseRestClient.GetBalancesAsync(string? accountId, CancellationToken ct)
         {
-            var result = await Account.GetBalancesAsync().ConfigureAwait(false);
+            var result = await Account.GetBalancesAsync(ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.As<IEnumerable<Balance>>(null);
 
@@ -334,7 +333,6 @@ namespace Bittrex.Net.Clients.SpotApi
                 Total = d.Total
             }));
         }
-#pragma warning restore 1066
 
         internal void InvokeOrderPlaced(OrderId id)
         {

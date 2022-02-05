@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Bittrex.Net.Clients;
 using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Objects;
@@ -48,11 +49,17 @@ namespace Bittrex.Net.SymbolOrderBooks
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<UpdateSubscription>> DoStartAsync()
+        protected override async Task<CallResult<UpdateSubscription>> DoStartAsync(CancellationToken ct)
         {
             var subResult = await socketClient.SpotStreams.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
                 return new CallResult<UpdateSubscription>(subResult.Error!);
+
+            if (ct.IsCancellationRequested)
+            {
+                await subResult.Data.CloseAsync().ConfigureAwait(false);
+                return subResult.AsError<UpdateSubscription>(new CancellationRequestedError());
+            }
 
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
@@ -60,7 +67,7 @@ namespace Bittrex.Net.SymbolOrderBooks
             var queryResult = await restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
-                await socketClient.UnsubscribeAllAsync().ConfigureAwait(false);
+                await subResult.Data.CloseAsync().ConfigureAwait(false);
                 return new CallResult<UpdateSubscription>(queryResult.Error!);
             }
 
@@ -74,7 +81,7 @@ namespace Bittrex.Net.SymbolOrderBooks
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> DoResyncAsync()
+        protected override async Task<CallResult<bool>> DoResyncAsync(CancellationToken ct)
         {
             var queryResult = await restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
