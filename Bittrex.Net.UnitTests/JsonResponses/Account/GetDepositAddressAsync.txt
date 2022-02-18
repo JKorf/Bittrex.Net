@@ -1,0 +1,7 @@
+
+  {
+    "status": "PROVISIONED",
+    "currencySymbol": "string",
+    "cryptoAddress": "string",
+    "cryptoAddressTag": "string"
+  }

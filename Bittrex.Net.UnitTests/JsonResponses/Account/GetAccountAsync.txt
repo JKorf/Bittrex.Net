@@ -1,0 +1,7 @@
+{
+  "subaccountId": "string (uuid)",
+  "accountId": "string (uuid)",
+  "actionsNeeded": [
+    "string"
+  ]
+}

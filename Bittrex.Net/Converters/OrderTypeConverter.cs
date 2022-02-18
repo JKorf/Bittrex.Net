@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Bittrex.Net.Objects;
+using Bittrex.Net.Enums;
 using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters
@@ -13,8 +13,8 @@ namespace Bittrex.Net.Converters
         {
             new KeyValuePair<OrderType, string>(OrderType.Limit, "LIMIT"),
             new KeyValuePair<OrderType, string>(OrderType.Market, "MARKET"),
-            new KeyValuePair<OrderType, string>(OrderType.CeilingLimit, "CEILING_LIMIT"),
-            new KeyValuePair<OrderType, string>(OrderType.CeilingMarket, "CEILING_MARKET"),
+            new KeyValuePair<OrderType, string>(OrderType.Limit, "CEILING_LIMIT"),
+            new KeyValuePair<OrderType, string>(OrderType.Market, "CEILING_MARKET"),
         };
     }
 }

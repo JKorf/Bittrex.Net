@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
@@ -7,9 +7,9 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
     <Authors>JKorf</Authors>
-    <PackageVersion>6.1.5</PackageVersion>
-    <AssemblyVersion>6.1.5</AssemblyVersion>
-    <FileVersion>6.1.5</FileVersion>
+    <PackageVersion>7.0.0</PackageVersion>
+    <AssemblyVersion>7.0.0</AssemblyVersion>
+    <FileVersion>7.0.0</FileVersion>
     <Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -20,7 +20,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>6.1.5 - Updated CryptoExchange.Net to fix some socket issues</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://github.com/JKorf/Bittrex.Net#release-notes </PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
@@ -39,14 +39,14 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CryptoExchange.Net" Version="4.2.8" />
+    <PackageReference Include="CryptoExchange.Net" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

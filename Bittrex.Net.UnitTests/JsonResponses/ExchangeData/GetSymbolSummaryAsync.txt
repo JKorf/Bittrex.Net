@@ -1,0 +1,10 @@
+
+  {
+    "symbol": "string",
+    "high": "1.2",
+    "low": "1.3",
+    "volume": "1.4",
+    "quoteVolume": "1.5",
+    "percentChange": "1.6",
+    "updatedAt": "2021-04-23T18:25:43.511Z"
+  }

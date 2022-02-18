@@ -1,16 +1,11 @@
-﻿using Bittrex.Net;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Bittrex.Net.Objects;
+using Bittrex.Net.Clients;
 
 namespace WinformsClient
 {
     public partial class Form1 : Form
     {
         private BittrexSocketClient socketClient;
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -21,17 +16,17 @@ namespace WinformsClient
         private void LoadDone(object sender, EventArgs e)
         {
             socketClient = new BittrexSocketClient();
-            socketClient.SubscribeToSymbolTickerUpdatesAsync("ETH-BTC",  data =>
+            socketClient.SpotStreams.SubscribeToTickerUpdatesAsync("ETH-BTC", data =>
             {
-                UpdateLastPrice(data.Data.LastTradeRate);
+                UpdateLastPrice(data.Data.LastPrice);
             });
 
             Task.Run(async () =>
             {
                 using (var client = new BittrexClient())
                 {
-                    var result = await client.GetTickerAsync("ETH-BTC");
-                    UpdateLastPrice(result.Data.LastTradeRate);
+                    var result = await client.SpotApi.ExchangeData.GetTickerAsync("ETH-BTC");
+                    UpdateLastPrice(result.Data.LastPrice);
                 }
             });
         }

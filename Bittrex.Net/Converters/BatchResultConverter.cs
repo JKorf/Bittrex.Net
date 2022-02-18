@@ -19,7 +19,7 @@ namespace Bittrex.Net.Converters
             var result = new List<CallResult<T>>();
             if (reader.TokenType != JsonToken.StartArray)
             {
-                Debug.WriteLine($"Failed to deserialize batch result. Data: " + result.ToString());
+                Trace.WriteLine($"{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff} | Warning | Failed to deserialize batch result. Data: " + result);
                 return default;
             }
 
@@ -30,7 +30,7 @@ namespace Bittrex.Net.Converters
                 var statusToken = item["status"];
                 if(statusToken == null || statusToken.Type == JTokenType.Null)
                 {
-                    Debug.WriteLine($"Failed to deserialize batch result, no status property. Data: " + result.ToString());
+                    Trace.WriteLine($"{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff} | Warning | Failed to deserialize batch result, no status property. Data: " + result);
                     return default;
                 }
 
@@ -40,22 +40,22 @@ namespace Bittrex.Net.Converters
                     var data = item["payload"];
                     if (data == null || data.Type == JTokenType.Null)
                     {
-                        Debug.WriteLine($"Failed to deserialize batch result, no payload property. Data: " + result.ToString());
+                        Trace.WriteLine($"{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff} | Warning | Failed to deserialize batch result, no payload property. Data: " + result);
                         return default;
                     }
 
                     var converted = (T)data.ToObject(typeof(T));
-                    result.Add(new CallResult<T>(converted, null));
+                    result.Add(new CallResult<T>(converted!));
                 }
                 else
                 {
                     var error = item["payload"];
                     if (error == null)
-                        result.Add(new CallResult<T>(default, new UnknownError("Unknown payload structure")));
+                        result.Add(new CallResult<T>(new UnknownError("Unknown payload structure")));
                     else
                     {
                         var msg = error["code"]?.ToString();
-                        result.Add(new CallResult<T>(default, new ServerError(status, msg ?? "Unknown error")));
+                        result.Add(new CallResult<T>(new ServerError(status, msg ?? "Unknown error")));
                     }
                 }
             }

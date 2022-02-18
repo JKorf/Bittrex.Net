@@ -1,0 +1,7 @@
+[
+  {
+    "marketSymbol": "string",
+    "makerRate": "0.1",
+    "takerRate": "0.2"
+  }
+]

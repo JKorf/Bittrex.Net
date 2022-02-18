@@ -1,0 +1,1 @@
+﻿{"sequence":4952,"marketSymbol":"BTC-USDT","interval":"MINUTE_1","delta":{"startsAt":"2022-01-21T13:07:00Z","open":"38414.42200030","high":"38434.89147075","low":"38414.42200030","close":"38434.89147075","volume":"0.00230818","quoteVolume":"88.69015835"},"candleType":"TRADE"}

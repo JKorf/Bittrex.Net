@@ -1,0 +1,1 @@
+﻿{"deltas":[{"id":"cabd2d0e-4b35-4772-b7d4-8b4b44c8c3cf","executedAt":"2022-01-21T13:19:57.63Z","quantity":"0.00039000","rate":"38439.38600001","takerSide":"SELL"},{"id":"0999bca9-be57-4369-b719-2fde370fb056","executedAt":"2022-01-21T13:19:57.63Z","quantity":"0.00205948","rate":"38439.38600000","takerSide":"SELL"}],"sequence":5752,"marketSymbol":"BTC-USDT"}

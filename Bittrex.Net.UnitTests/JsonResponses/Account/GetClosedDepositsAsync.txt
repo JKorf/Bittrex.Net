@@ -1,0 +1,21 @@
+[
+  {
+    "id": "string (uuid)",
+    "currencySymbol": "string",
+    "quantity": "1.2",
+    "cryptoAddress": "string",
+    "fundsTransferMethodId": "string (uuid)",
+    "cryptoAddressTag": "string",
+    "txId": "string",
+    "confirmations": "4",
+    "updatedAt": "2021-04-23T18:25:43.511Z",
+    "completedAt": "2021-04-23T18:25:43.511Z",
+    "status": "COMPLETED",
+    "source": "string",
+    "accountId": "string (uuid)",
+    "error": {
+      "code": "string",
+      "detail": "string"
+    }
+  }
+]

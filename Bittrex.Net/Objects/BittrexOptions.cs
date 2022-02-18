@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
-using Bittrex.Net.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using Bittrex.Net.Interfaces.Clients;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects
@@ -7,60 +9,100 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Options for the Bittrex client
     /// </summary>
-    public class BittrexClientOptions : RestClientOptions
+    public class BittrexClientOptions : BaseRestClientOptions
     {
         /// <summary>
-        /// Create new client options
+        /// Default options for the spot client
         /// </summary>
-        public BittrexClientOptions() : base("https://api.bittrex.com")
+        public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions();
+
+        private readonly RestApiClientOptions _spotApiOptions = new RestApiClientOptions(BittrexApiAddresses.Default.RestClientAddress)
         {
+            RateLimiters = new List<IRateLimiter>
+            {
+                new RateLimiter()
+                    .AddTotalRateLimit(60, TimeSpan.FromMinutes(1))
+            }
+        };
+        /// <summary>
+        /// Options for the spot API
+        /// </summary>
+        public RestApiClientOptions SpotApiOptions
+        {
+            get => _spotApiOptions;
+            set => _spotApiOptions.Copy(_spotApiOptions, value);
         }
 
         /// <summary>
-        /// Create new client options
+        /// Ctor
         /// </summary>
-        /// <param name="client">HttpClient to use for requests from this client</param>
-        public BittrexClientOptions(HttpClient client) : base(client, "https://api.bittrex.com")
+        public BittrexClientOptions()
         {
+            if (Default == null)
+                return;
+
+            Copy(this, Default);            
         }
 
         /// <summary>
-        /// Create new client options
+        /// Copy the values of the def to the input
         /// </summary>
-        /// <param name="apiAddress">Custom API address to use</param>
-        /// <param name="client">HttpClient to use for requests from this client</param>
-        public BittrexClientOptions(HttpClient client, string apiAddress) : base(client, apiAddress)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="def"></param>
+        public new void Copy<T>(T input, T def) where T : BittrexClientOptions
         {
-        }
+            base.Copy(input, def);
 
-        /// <summary>
-        /// The V2 API base address
-        /// </summary>
-        public string BaseAddressV2 { get; set; } = "https://international.bittrex.com";
-
-        /// <summary>
-        /// Copy the options
-        /// </summary>
-        /// <returns></returns>
-        public BittrexClientOptions Copy()
-        {
-            var copy = Copy<BittrexClientOptions>();
-            copy.BaseAddressV2 = BaseAddressV2;
-            return copy;
+            input.SpotApiOptions = new RestApiClientOptions(def.SpotApiOptions);
         }
     }
     
     /// <summary>
     /// Options for the Bittrex socket client
     /// </summary>
-    public class BittrexSocketClientOptions : SocketClientOptions
+    public class BittrexSocketClientOptions : BaseSocketClientOptions
     {
         /// <summary>
-        /// ctor
+        /// Default options for the spot client
         /// </summary>
-        public BittrexSocketClientOptions() : base("https://socket-v3.bittrex.com")
+        public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
         {
-            SocketSubscriptionsCombineTarget = 10;
+            SocketSubscriptionsCombineTarget = 10
+        };
+
+        private readonly ApiClientOptions _spotStreamOptions = new ApiClientOptions(BittrexApiAddresses.Default.SocketClientAddress);
+        /// <summary>
+        /// Spot stream options
+        /// </summary>
+        public ApiClientOptions SpotStreamOptions
+        {
+            get => _spotStreamOptions;
+            set => _spotStreamOptions.Copy(_spotStreamOptions, value);
+        }
+
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        public BittrexSocketClientOptions()
+        {
+            if (Default == null)
+                return;
+
+            Copy(this, Default);
+        }
+
+        /// <summary>
+        /// Copy the values of the def to the input
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="def"></param>
+        public new void Copy<T>(T input, T def) where T : BittrexSocketClientOptions
+        {
+            base.Copy(input, def);
+
+            input.SpotStreamOptions = new ApiClientOptions(def.SpotStreamOptions);
         }
     }
 
@@ -72,21 +114,16 @@ namespace Bittrex.Net.Objects
         /// <summary>
         /// The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.
         /// </summary>
-        public IBittrexSocketClient? SocketClient { get; }
+        public IBittrexSocketClient? SocketClient { get; set; }
 
         /// <summary>
         /// The rest client to use for requesting the initial order book
         /// </summary>
-        public IBittrexClient? RestClient { get; }
+        public IBittrexClient? RestClient { get; set; }
 
         /// <summary>
+        /// The number of entries in the order book, should be one of: 1/25/500
         /// </summary>
-        /// <param name="socketClient">The client to use for the socket connection. When using the same client for multiple order books the connection can be shared.</param>
-        /// <param name="restClient">The client to use for the initial order book request.</param>
-        public BittrexOrderBookOptions(IBittrexSocketClient? socketClient = null, IBittrexClient? restClient = null) : base("Bittrex", true, true)
-        {
-            SocketClient = socketClient;
-            RestClient = restClient;
-        }
+        public int? Limit { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Bittrex.Net.Objects;
+using Bittrex.Net.Enums;
 using CryptoExchange.Net.Converters;
 
 namespace Bittrex.Net.Converters

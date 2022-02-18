@@ -1,0 +1,10 @@
+{
+  "id": "string (uuid)",
+  "marketSymbol": "string",
+  "executedAt": "2021-04-23T18:25:43.511Z",
+  "quantity": "0.3",
+  "rate": "0.2",
+  "orderId": "string (uuid)",
+  "commission": "0.1",
+  "isTaker": "true"
+}

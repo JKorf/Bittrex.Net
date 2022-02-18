@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Bittrex.Net.Clients;
+using Bittrex.Net.Interfaces.Clients;
+using Bittrex.Net.Objects;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -20,7 +24,37 @@ namespace Bittrex.Net
                 throw new ArgumentException("Symbol is not provided");
 
             if (!Regex.IsMatch(symbolString, "^((([A-Z]|[0-9]){2,})[-](([A-Z]|[0-9]){2,}))$"))
-                throw new ArgumentException($"{symbolString} is not a valid Bittrex symbol. Should be [BaseCurrency]-[QuoteCurrency] e.g. ETH-BTC");
+                throw new ArgumentException($"{symbolString} is not a valid Bittrex symbol. Should be [BaseAsset]-[QuoteAsset] e.g. ETH-BTC");
+        }
+
+        /// <summary>
+        /// Add the IBittrexClient and IBittrexSocketClient to the sevice collection so they can be injected
+        /// </summary>
+        /// <param name="services">The service collection</param>
+        /// <param name="defaultOptionsCallback">Set default options for the client</param>
+        /// <param name="socketClientLifeTime">The lifetime of the IBittrexSocketClient for the service collection. Defaults to Scoped.</param>
+        /// <returns></returns>
+        public static IServiceCollection AddBittrex(
+            this IServiceCollection services, 
+            Action<BittrexClientOptions, BittrexSocketClientOptions>? defaultOptionsCallback = null,
+            ServiceLifetime? socketClientLifeTime = null)
+        {
+            if (defaultOptionsCallback != null)
+            {
+                var options = new BittrexClientOptions();
+                var socketOptions = new BittrexSocketClientOptions();
+                defaultOptionsCallback?.Invoke(options, socketOptions);
+
+                BittrexClient.SetDefaultOptions(options);
+                BittrexSocketClient.SetDefaultOptions(socketOptions);
+            }
+
+            services.AddTransient<IBittrexClient, BittrexClient>();
+            if (socketClientLifeTime == null)
+                services.AddScoped<IBittrexSocketClient, BittrexSocketClient>();
+            else
+                services.Add(new ServiceDescriptor(typeof(IBittrexSocketClient), typeof(BittrexSocketClient), socketClientLifeTime.Value));
+            return services;
         }
 
         /// <summary>

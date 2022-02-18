@@ -1,0 +1,26 @@
+﻿{
+  "accountId": "asdf",
+  "sequence": "1",
+  "delta": {
+    "id": "123daf",
+    "marketSymbol": "BTC-USDT",
+    "direction": "SELL",
+    "type": "LIMIT",
+    "quantity": "1.123",
+    "limit": "3.123",
+    "ceiling": null,
+    "timeInForce": "GOOD_TIL_CANCELLED",
+    "clientOrderId": null,
+    "fillQuantity": "1.123",
+    "commission": "0.1",
+    "proceeds": "123",
+    "status": "CLOSED",
+    "createdAt": "2022-01-21T13:15:25.48Z",
+    "updatedAt": "2022-01-21T13:15:25.48Z",
+    "closedAt": "2022-01-21T13:15:25.48Z",
+    "orderToCancel": {
+      "type": "ORDER",
+      "id": "123adf"
+    }
+    }
+}
