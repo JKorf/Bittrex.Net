@@ -1,4 +1,5 @@
 ﻿using CryptoExchange.Net.Interfaces;
+using CryptoExchange.Net.Interfaces.CommonClients;
 using System;
 
 namespace Bittrex.Net.Interfaces.Clients.SpotApi
