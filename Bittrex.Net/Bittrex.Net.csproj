@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
@@ -7,9 +7,9 @@
   <PropertyGroup>
     <PackageId>Bittrex.Net</PackageId>
     <Authors>JKorf</Authors>
-    <PackageVersion>7.0.0-beta4</PackageVersion>
+    <PackageVersion>7.0.0</PackageVersion>
     <AssemblyVersion>7.0.0</AssemblyVersion>
-    <FileVersion>7.0.0-beta4</FileVersion>
+    <FileVersion>7.0.0</FileVersion>
     <Description>Bittrex.Net is a .Net wrapper for the Bittrex API, including the SignalR websocket. It includes all features the API provides using clear and readable objects including but not limited to Reading market info, Placing and managing orders and Reading balances and funds</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>Bittrex Bittrex.Net CryptoCurrency Exchange API wrapper</PackageTags>
@@ -20,7 +20,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes>7.0.0-beta4 - Updated CryptoExchange.Net, adding Cancellation token support for Common interface and SymbolOrderBook</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://github.com/JKorf/Bittrex.Net#release-notes </PackageReleaseNotes>
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>Bittrex.Net.xml</DocumentationFile>
