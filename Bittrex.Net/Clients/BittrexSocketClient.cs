@@ -217,7 +217,10 @@ namespace Bittrex.Net.Clients
             if (channel.StartsWith(method))
             {
                 var tokenData = JToken.Parse(data);
-                var symbol = (tokenData["symbol"] ?? tokenData["marketSymbol"])!.ToString();
+                var symbol = (tokenData["symbol"] ?? tokenData["marketSymbol"])?.ToString();
+                if (symbol == null)
+                    return false;
+
                 if (channel.Length < method.Length + symbol.Length + 1)
                     return false;
 
