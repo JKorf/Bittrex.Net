@@ -76,7 +76,7 @@ namespace Bittrex.Net.Clients
         {
             return await base.SubscribeAsync<JToken>(apiClient, new ConnectionRequest("subscribe", channels), null, authenticated, data =>
             {
-                if (data.Data["M"]?.ToString() == "heartbeat")
+                if (data.Data["M"]?.ToString() == "heartbeat" && channels[0] == "heartbeat")
                 {
                     handler(data.As((T)Convert.ChangeType(DateTime.UtcNow, typeof(T))));
                     return;
