@@ -91,17 +91,17 @@ namespace Bittrex.Net.SymbolOrderBooks
             return new CallResult<bool>(true);
         }
 
-        /// <inheritdoc />
-        public override void Dispose()
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        protected override void Dispose(bool disposing)
         {
-            processBuffer.Clear();
-            asks.Clear();
-            bids.Clear();
-
-            if(_restOwner)
-                restClient?.Dispose();
             if (_socketOwner)
                 socketClient?.Dispose();
+            if (_restOwner)
+                restClient?.Dispose();
+
+            base.Dispose(disposing);
         }
     }
 }

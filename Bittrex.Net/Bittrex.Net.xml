@@ -1395,16 +1395,14 @@
         </member>
         <member name="M:Bittrex.Net.Objects.BittrexClientOptions.#ctor">
             <summary>
-            Ctor
+            ctor
             </summary>
         </member>
-        <member name="M:Bittrex.Net.Objects.BittrexClientOptions.Copy``1(``0,``0)">
+        <member name="M:Bittrex.Net.Objects.BittrexClientOptions.#ctor(Bittrex.Net.Objects.BittrexClientOptions)">
             <summary>
-            Copy the values of the def to the input
+            ctor
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="input"></param>
-            <param name="def"></param>
+            <param name="baseOn">Base the new options on other options</param>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexSocketClientOptions">
             <summary>
@@ -1423,16 +1421,14 @@
         </member>
         <member name="M:Bittrex.Net.Objects.BittrexSocketClientOptions.#ctor">
             <summary>
-            Ctor
+            ctor
             </summary>
         </member>
-        <member name="M:Bittrex.Net.Objects.BittrexSocketClientOptions.Copy``1(``0,``0)">
+        <member name="M:Bittrex.Net.Objects.BittrexSocketClientOptions.#ctor(Bittrex.Net.Objects.BittrexSocketClientOptions)">
             <summary>
-            Copy the values of the def to the input
+            ctor
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="input"></param>
-            <param name="def"></param>
+            <param name="baseOn">Base the new options on other options</param>
         </member>
         <member name="T:Bittrex.Net.Objects.BittrexOrderBookOptions">
             <summary>
@@ -2681,8 +2677,10 @@
         <member name="M:Bittrex.Net.SymbolOrderBooks.BittrexSymbolOrderBook.DoResyncAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.SymbolOrderBooks.BittrexSymbolOrderBook.Dispose">
-            <inheritdoc />
+        <member name="M:Bittrex.Net.SymbolOrderBooks.BittrexSymbolOrderBook.Dispose(System.Boolean)">
+            <summary>
+            Dispose
+            </summary>
         </member>
     </members>
 </doc>

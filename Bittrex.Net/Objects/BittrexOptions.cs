@@ -16,7 +16,7 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexClientOptions Default { get; set; } = new BittrexClientOptions();
 
-        private readonly RestApiClientOptions _spotApiOptions = new RestApiClientOptions(BittrexApiAddresses.Default.RestClientAddress)
+        private RestApiClientOptions _spotApiOptions = new RestApiClientOptions(BittrexApiAddresses.Default.RestClientAddress)
         {
             RateLimiters = new List<IRateLimiter>
             {
@@ -30,31 +30,26 @@ namespace Bittrex.Net.Objects
         public RestApiClientOptions SpotApiOptions
         {
             get => _spotApiOptions;
-            set => _spotApiOptions.Copy(_spotApiOptions, value);
+            set => _spotApiOptions = new RestApiClientOptions(_spotApiOptions, value);
         }
 
         /// <summary>
-        /// Ctor
+        /// ctor
         /// </summary>
-        public BittrexClientOptions()
+        public BittrexClientOptions() : this(Default)
         {
-            if (Default == null)
+        }
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="baseOn">Base the new options on other options</param>
+        internal BittrexClientOptions(BittrexClientOptions baseOn) : base(baseOn)
+        {
+            if (baseOn == null)
                 return;
 
-            Copy(this, Default);            
-        }
-
-        /// <summary>
-        /// Copy the values of the def to the input
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="input"></param>
-        /// <param name="def"></param>
-        public new void Copy<T>(T input, T def) where T : BittrexClientOptions
-        {
-            base.Copy(input, def);
-
-            input.SpotApiOptions = new RestApiClientOptions(def.SpotApiOptions);
+            _spotApiOptions = new RestApiClientOptions(baseOn.SpotApiOptions, null);
         }
     }
     
@@ -71,38 +66,33 @@ namespace Bittrex.Net.Objects
             SocketSubscriptionsCombineTarget = 10
         };
 
-        private readonly ApiClientOptions _spotStreamOptions = new ApiClientOptions(BittrexApiAddresses.Default.SocketClientAddress);
+        private ApiClientOptions _spotStreamOptions = new ApiClientOptions(BittrexApiAddresses.Default.SocketClientAddress);
         /// <summary>
         /// Spot stream options
         /// </summary>
         public ApiClientOptions SpotStreamOptions
         {
             get => _spotStreamOptions;
-            set => _spotStreamOptions.Copy(_spotStreamOptions, value);
+            set => _spotStreamOptions = new ApiClientOptions(_spotStreamOptions, value);
         }
 
         /// <summary>
-        /// Ctor
+        /// ctor
         /// </summary>
-        public BittrexSocketClientOptions()
+        public BittrexSocketClientOptions() : this(Default)
         {
-            if (Default == null)
+        }
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="baseOn">Base the new options on other options</param>
+        internal BittrexSocketClientOptions(BittrexSocketClientOptions baseOn) : base(baseOn)
+        {
+            if (baseOn == null)
                 return;
 
-            Copy(this, Default);
-        }
-
-        /// <summary>
-        /// Copy the values of the def to the input
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="input"></param>
-        /// <param name="def"></param>
-        public new void Copy<T>(T input, T def) where T : BittrexSocketClientOptions
-        {
-            base.Copy(input, def);
-
-            input.SpotStreamOptions = new ApiClientOptions(def.SpotStreamOptions);
+            _spotStreamOptions = new ApiClientOptions(baseOn.SpotStreamOptions, null);
         }
     }
 
