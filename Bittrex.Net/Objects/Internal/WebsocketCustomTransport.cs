@@ -71,8 +71,12 @@ namespace Bittrex.Net.Objects.Internal
                     _websocket.SetProxy(_proxy);
             }
 
-            if (!_websocket.ConnectAsync().Result)
-                OnStartFailed();
+            _ = Task.Run(async () =>
+            {
+                var connectResult = await _websocket.ConnectAsync().ConfigureAwait(false);
+                if (!connectResult)
+                    TryFailStart(new Exception("Failed to connect"));
+            });
         }
 
         public override Task Send(IConnection con, string data, string conData)
