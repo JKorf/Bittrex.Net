@@ -89,8 +89,9 @@ namespace Bittrex.Net.Clients
              CancellationToken cancellationToken,
              Dictionary<string, object>? parameters = null,
              bool signed = false,
-             JsonSerializer? deserializer = null) where T : class
-                 => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
+             JsonSerializer? deserializer = null,
+             bool ignoreRateLimit = false) where T : class
+                 => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer, ignoreRatelimit: ignoreRateLimit);
 
         #endregion
     }

@@ -392,8 +392,9 @@ namespace Bittrex.Net.Clients.SpotApi
              CancellationToken cancellationToken,
              Dictionary<string, object>? parameters = null,
              bool signed = false,
-             JsonSerializer? deserializer = null) where T : class
-                 => _baseClient.SendRequestAsync<T>(this, uri, method, cancellationToken, parameters, signed, deserializer: deserializer);
+             JsonSerializer? deserializer = null,
+             bool ignoreRateLimit = false) where T : class
+                 => _baseClient.SendRequestAsync<T>(this, uri, method, cancellationToken, parameters, signed, deserializer: deserializer, ignoreRateLimit: ignoreRateLimit);
 
 
         /// <inheritdoc />

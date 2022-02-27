@@ -33,7 +33,7 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <inheritdoc />
         public async Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
         {
-            var result = await _baseClient.SendRequestAsync<BittrexServerTime>(_baseClient.GetUrl("ping"), HttpMethod.Get, ct).ConfigureAwait(false);
+            var result = await _baseClient.SendRequestAsync<BittrexServerTime>(_baseClient.GetUrl("ping"), HttpMethod.Get, ct, ignoreRateLimit: true).ConfigureAwait(false);
             return result.As(result.Data?.ServerTime ?? default);
         }
 
