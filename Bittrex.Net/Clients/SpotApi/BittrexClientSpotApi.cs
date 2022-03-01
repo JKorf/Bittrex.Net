@@ -25,7 +25,7 @@ namespace Bittrex.Net.Clients.SpotApi
         private readonly BittrexClientOptions _options;
         private readonly Log _log;
 
-        internal static TimeSyncState TimeSyncState = new TimeSyncState();
+        internal static TimeSyncState TimeSyncState = new TimeSyncState("Api");
 
         internal static TimeSpan TimeOffset;
         internal static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
