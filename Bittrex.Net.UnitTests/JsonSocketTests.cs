@@ -18,37 +18,37 @@ namespace Bittrex.Net.UnitTests
         [Test]
         public async Task ValidateKlineUpdateStreamJson()
         {
-            await TestFileToObject<BittrexKlineUpdate>(@"JsonResponses\Socket\KlineUpdate.txt");
+            await TestFileToObject<BittrexKlineUpdate>(@"JsonResponses/Socket/KlineUpdate.txt");
         }
 
         [Test]
         public async Task ValidateSummaryUpdateStreamJson()
         {
-            await TestFileToObject<BittrexSymbolSummary>(@"JsonResponses\Socket\SummaryUpdate.txt");
+            await TestFileToObject<BittrexSymbolSummary>(@"JsonResponses/Socket/SummaryUpdate.txt");
         }
 
         [Test]
         public async Task ValidateTickerUpdateStreamJson()
         {
-            await TestFileToObject<BittrexTick>(@"JsonResponses\Socket\TickerUpdate.txt");
+            await TestFileToObject<BittrexTick>(@"JsonResponses/Socket/TickerUpdate.txt");
         }
 
         [Test]
         public async Task ValidateTradeUpdateStreamJson()
         {
-            await TestFileToObject<BittrexTradesUpdate>(@"JsonResponses\Socket\TradeUpdate.txt");
+            await TestFileToObject<BittrexTradesUpdate>(@"JsonResponses/Socket/TradeUpdate.txt");
         }
 
         [Test]
         public async Task ValidateUserTradeUpdateStreamJson()
         {
-            await TestFileToObject<BittrexExecutionUpdate>(@"JsonResponses\Socket\UserTradeUpdate.txt");
+            await TestFileToObject<BittrexExecutionUpdate>(@"JsonResponses/Socket/UserTradeUpdate.txt");
         }
 
         [Test]
         public async Task ValidateOrderUpdateStreamJson()
         {
-            await TestFileToObject<BittrexOrderUpdate>(@"JsonResponses\Socket\OrderUpdate.txt");
+            await TestFileToObject<BittrexOrderUpdate>(@"JsonResponses/Socket/OrderUpdate.txt");
         }
 
         private static async Task TestFileToObject<T>(string filePath, List<string> ignoreProperties = null)
