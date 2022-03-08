@@ -38,7 +38,7 @@ namespace Bittrex.Net
             }
             headers.Add("Api-Content-Hash", SignSHA512(jsonContent));
 
-            uri = uri.SetParameters(uriParameters);
+            uri = uri.SetParameters(uriParameters, arraySerialization);
             var uriString = WebUtility.UrlDecode(uri.ToString()); // Sign needs the query parameters to not be encoded
             headers.Add("Api-Signature", SignHMACSHA512(headers["Api-Timestamp"] + uriString + method + headers["Api-Content-Hash"]));
         }
