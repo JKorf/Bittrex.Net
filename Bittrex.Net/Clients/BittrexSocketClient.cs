@@ -271,7 +271,7 @@ namespace Bittrex.Net.Clients
                 return new CallResult<bool>(result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
             }
 
-            log.Write(LogLevel.Information, "Authentication successful");
+            log.Write(LogLevel.Debug, "Authentication successful");
             return new CallResult<bool>(true);
         }
 
