@@ -68,7 +68,7 @@ namespace Bittrex.Net.Clients
         }
 
         /// <inheritdoc />
-        protected override void WriteParamBody(IRequest request, SortedDictionary<string, object> parameters, string contentType)
+        protected override void WriteParamBody(BaseApiClient apiClient, IRequest request, SortedDictionary<string, object> parameters, string contentType)
         {
             if (parameters.Any() && parameters.First().Key == string.Empty)
             {

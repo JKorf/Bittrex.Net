@@ -56,7 +56,7 @@
         <member name="M:Bittrex.Net.Clients.BittrexClient.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.Clients.BittrexClient.WriteParamBody(CryptoExchange.Net.Interfaces.IRequest,System.Collections.Generic.SortedDictionary{System.String,System.Object},System.String)">
+        <member name="M:Bittrex.Net.Clients.BittrexClient.WriteParamBody(CryptoExchange.Net.BaseApiClient,CryptoExchange.Net.Interfaces.IRequest,System.Collections.Generic.SortedDictionary{System.String,System.Object},System.String)">
             <inheritdoc />
         </member>
         <member name="T:Bittrex.Net.Clients.BittrexSocketClient">
