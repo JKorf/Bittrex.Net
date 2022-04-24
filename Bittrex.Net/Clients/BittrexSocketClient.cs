@@ -92,13 +92,13 @@ namespace Bittrex.Net.Clients
         protected override SocketConnection GetSocketConnection(SocketApiClient apiClient, string address, bool authenticated)
         {
             // Override because signalr puts `/signalr/` add the end of the url
-            var socketResult = sockets.Where(s => s.Value.Socket.Url == address + "/signalr/"
+            var socketResult = socketConnections.Where(s => s.Value.Uri.ToString() == address + "/signalr/"
                                                   && s.Value.ApiClient.GetType() == apiClient.GetType()
                                                   && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
             var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
             if (result != null)
             {
-                if (result.SubscriptionCount < ClientOptions.SocketSubscriptionsCombineTarget || sockets.Count >= MaxSocketConnections && sockets.All(s => s.Value.SubscriptionCount >= ClientOptions.SocketSubscriptionsCombineTarget))
+                if (result.SubscriptionCount < ClientOptions.SocketSubscriptionsCombineTarget || socketConnections.Count >= MaxSocketConnections && socketConnections.All(s => s.Value.SubscriptionCount >= ClientOptions.SocketSubscriptionsCombineTarget))
                 {
                     // Use existing socket if it has less than target connections OR it has the least connections and we can't make new
                     return result;
@@ -119,7 +119,7 @@ namespace Bittrex.Net.Clients
             var btRequest = (ConnectionRequest)request;
             if (btRequest.RequestName != null)
             {
-                var subResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<ConnectionResponse[]>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
+                var subResult = await ((ISignalRSocket)socket.GetSocket()).InvokeProxy<ConnectionResponse[]>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
                 var data = subResult.Data?.First();
                 if (!subResult.Success || data?.Success == false)
                 {
@@ -136,7 +136,7 @@ namespace Bittrex.Net.Clients
         protected override async Task<CallResult<T>> QueryAndWaitAsync<T>(SocketConnection socket, object request)
         {
             var btRequest = (ConnectionRequest)request;
-            var queryResult = await ((ISignalRSocket)socket.Socket).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
+            var queryResult = await ((ISignalRSocket)socket.GetSocket()).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 return new CallResult<T>(queryResult.Error!);
@@ -262,7 +262,7 @@ namespace Bittrex.Net.Clients
             var randomContent = $"{ Guid.NewGuid() }";
             var content = string.Join("", timestamp, randomContent);
             var signedContent = s.ApiClient.AuthenticationProvider.Sign(content);
-            var socket = (ISignalRSocket)s.Socket;
+            var socket = (ISignalRSocket)s.GetSocket();
 
             var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.ApiClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
@@ -280,7 +280,7 @@ namespace Bittrex.Net.Clients
         {
             var bRequest = (ConnectionRequest)s.Request!;
             var unsub = new ConnectionRequest("unsubscribe", ((string[])bRequest!.Parameters[0])[0]);
-            var queryResult = await ((ISignalRSocket)connection.Socket).InvokeProxy<ConnectionResponse[]>(unsub.RequestName, unsub.Parameters).ConfigureAwait(false);
+            var queryResult = await ((ISignalRSocket)connection.GetSocket()).InvokeProxy<ConnectionResponse[]>(unsub.RequestName, unsub.Parameters).ConfigureAwait(false);
 
             return queryResult.Success;
         }

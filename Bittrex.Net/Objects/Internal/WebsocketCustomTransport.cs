@@ -61,7 +61,7 @@ namespace Bittrex.Net.Objects.Internal
             }
             else
             {
-                _websocket = new CryptoExchangeWebSocketClient(_log, connectUrl, cookies, _connection.Headers);
+                _websocket = new CryptoExchangeWebSocketClient(_log, new Uri(connectUrl), cookies, _connection.Headers);
                 _websocket.OnError += WebSocketOnError;
                 _websocket.OnClose += WebSocketOnClosed;
                 _websocket.OnMessage += WebSocketOnMessageReceived;

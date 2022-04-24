@@ -19,12 +19,10 @@ namespace Bittrex.Net.Objects.Internal
         private IHubProxy? _hubProxy;
         private readonly ApiProxy? _proxy;
 
-        public new string Url { get; }
         public new bool IsOpen => _connection.State == ConnectionState.Connected;
 
-        public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection) : base(null!, connection.Url)
+        public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection) : base(null!, new Uri(connection.Url))
         {
-            Url = connection.Url;
             this._connection = connection;
             this.log = log;
             this._proxy = proxy;
