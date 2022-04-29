@@ -37,6 +37,7 @@ namespace Bittrex.Net.Objects.Internal
             Dispose(false);
         }
 
+
         protected override void OnStart(IConnection con, string conData, CancellationToken disconToken)
         {
             _connection = con;
@@ -76,6 +77,8 @@ namespace Bittrex.Net.Objects.Internal
                 var connectResult = await _websocket.ConnectAsync().ConfigureAwait(false);
                 if (!connectResult)
                     TryFailStart(new Exception("Failed to connect"));
+                else
+                    _ = _websocket.ProcessAsync();
             });
         }
 
