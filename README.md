@@ -18,6 +18,10 @@ I develop and maintain this package on my own for free in my spare time. Donatio
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). Feel free to join for discussion and/or questions around the CryptoExchange.Net and implementation libraries.
 
 ## Release notes
+* Version 7.0.9 - 01 May 2022
+    * Fixed socket connection
+    * Cleaned up socket id logging
+
 * Version 7.0.8 - 01 May 2022
     * Updated CryptoExchange.Net which fixed an timing related issue in the websocket reconnection logic
     * Added seconds representation to KlineInterval enum
