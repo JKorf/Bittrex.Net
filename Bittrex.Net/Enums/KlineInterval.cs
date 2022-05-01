@@ -1,25 +1,25 @@
 ﻿namespace Bittrex.Net.Enums
 {
     /// <summary>
-    /// Interval of klines
+    /// Interval of klines, int value represent the time in seconds
     /// </summary>
     public enum KlineInterval
     {
         /// <summary>
         /// 1m
         /// </summary>
-        OneMinute,
+        OneMinute = 60,
         /// <summary>
         /// 5m
         /// </summary>
-        FiveMinutes,
+        FiveMinutes = 60 * 5,
         /// <summary>
         /// 1h
         /// </summary>
-        OneHour,
+        OneHour = 60 * 60,
         /// <summary>
         /// 1d
         /// </summary>
-        OneDay
+        OneDay = 60 * 60 * 24
     }
 }
