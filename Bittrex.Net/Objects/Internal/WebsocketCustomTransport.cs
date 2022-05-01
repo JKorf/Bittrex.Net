@@ -24,6 +24,7 @@ namespace Bittrex.Net.Objects.Internal
         private readonly Func<string, string>? _interpreter;
 
         public override bool SupportsKeepAlive => true;
+        public int? SocketId => _websocket?.Id;
 
         public WebsocketCustomTransport(Log log, IHttpClient client, ApiProxy? proxy, Func<string, string>? interpreter) : base(client, "webSockets")
         {

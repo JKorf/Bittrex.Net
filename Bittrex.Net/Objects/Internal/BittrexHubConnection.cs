@@ -18,8 +18,10 @@ namespace Bittrex.Net.Objects.Internal
         private readonly HubConnection _connection;
         private IHubProxy? _hubProxy;
         private readonly ApiProxy? _proxy;
+        private WebsocketCustomTransport? _transport;
 
         public new bool IsOpen => _connection.State == ConnectionState.Connected;
+        public new int Id => _transport?.SocketId ?? base.Id;
 
         public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection) : base(null!, new Uri(connection.Url))
         {
@@ -38,6 +40,11 @@ namespace Bittrex.Net.Objects.Internal
                 }
                 Handle(messageHandlers, str);
             };
+        }
+
+        public override Task ProcessAsync()
+        {
+            return Task.CompletedTask;
         }
 
         private void StateChangeHandler(StateChange change)
@@ -78,13 +85,13 @@ namespace Bittrex.Net.Objects.Internal
             {
                 try
                 {
-                    log.Write(LogLevel.Debug, $"Socket {Id} sending data: {call}, {ArrayToString(pars)}");
+                    log.Write(LogLevel.Debug, $"Socket {_transport?.SocketId} sending data: {call}, {ArrayToString(pars)}");
                     var sub = await _hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub);
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogLevel.Warning, $"Socket {Id} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
+                    log.Write(LogLevel.Warning, $"Socket {_transport?.SocketId} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
                     error = new UnknownError("Failed to invoke proxy: " + (e.InnerException?.Message ?? e.Message));
                 }
             }
@@ -111,8 +118,9 @@ namespace Bittrex.Net.Objects.Internal
         public override async Task<bool> ConnectAsync()
         {
             var client = new DefaultHttpClient();
+            _transport = new WebsocketCustomTransport(log, client, _proxy, DataInterpreterString);
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                new WebsocketCustomTransport(log, client, _proxy, DataInterpreterString)
+                _transport
             });
             _connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try
@@ -125,6 +133,8 @@ namespace Bittrex.Net.Objects.Internal
                 return false;
             }
         }
+
+
 
         public override async Task CloseAsync()
         {

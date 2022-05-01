@@ -267,11 +267,11 @@ namespace Bittrex.Net.Clients
             var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.ApiClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {
-                log.Write(LogLevel.Error, "Authentication failed, api key/secret is probably invalid");
+                log.Write(LogLevel.Error, $"Socket {s.SocketId} Authentication failed, api key/secret is probably invalid");
                 return new CallResult<bool>(result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
             }
 
-            log.Write(LogLevel.Debug, "Authentication successful");
+            log.Write(LogLevel.Debug, $"Socket {s.SocketId} Authentication successful");
             return new CallResult<bool>(true);
         }
 
