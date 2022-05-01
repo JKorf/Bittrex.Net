@@ -444,7 +444,7 @@
         </member>
         <member name="T:Bittrex.Net.Enums.KlineInterval">
             <summary>
-            Interval of klines
+            Interval of klines, int value represent the time in seconds
             </summary>
         </member>
         <member name="F:Bittrex.Net.Enums.KlineInterval.OneMinute">
