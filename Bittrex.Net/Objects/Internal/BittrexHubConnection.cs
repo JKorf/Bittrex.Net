@@ -18,16 +18,18 @@ namespace Bittrex.Net.Objects.Internal
         private readonly HubConnection _connection;
         private IHubProxy? _hubProxy;
         private readonly ApiProxy? _proxy;
+        private readonly TimeSpan? _dataTimeout;
         private WebsocketCustomTransport? _transport;
 
         public new bool IsOpen => _connection.State == ConnectionState.Connected;
         public new int Id => _transport?.SocketId ?? base.Id;
 
-        public BittrexHubConnection(Log log, ApiProxy? proxy, HubConnection connection) : base(null!, new Uri(connection.Url))
+        public BittrexHubConnection(Log log, ApiProxy? proxy, TimeSpan? dataTimeout, HubConnection connection) : base(null!, new Uri(connection.Url))
         {
             this._connection = connection;
             this.log = log;
             this._proxy = proxy;
+            _dataTimeout = dataTimeout;
 
             connection.StateChanged += StateChangeHandler;
             connection.Error += s => Handle(errorHandlers, s);
@@ -42,9 +44,9 @@ namespace Bittrex.Net.Objects.Internal
             };
         }
 
-        public override Task ProcessAsync()
+        public override async Task ProcessAsync()
         {
-            return Task.CompletedTask;
+            await _transport!.ProcessAsync().ConfigureAwait(false);
         }
 
         private void StateChangeHandler(StateChange change)
@@ -118,7 +120,7 @@ namespace Bittrex.Net.Objects.Internal
         public override async Task<bool> ConnectAsync()
         {
             var client = new DefaultHttpClient();
-            _transport = new WebsocketCustomTransport(log, client, _proxy, DataInterpreterString);
+            _transport = new WebsocketCustomTransport(log, client, _dataTimeout, _proxy, DataInterpreterString);
             var autoTransport = new AutoTransport(client, new IClientTransport[] {
                 _transport
             });
@@ -133,8 +135,6 @@ namespace Bittrex.Net.Objects.Internal
                 return false;
             }
         }
-
-
 
         public override async Task CloseAsync()
         {

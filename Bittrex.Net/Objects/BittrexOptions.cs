@@ -63,7 +63,8 @@ namespace Bittrex.Net.Objects
         /// </summary>
         public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
         {
-            SocketSubscriptionsCombineTarget = 10
+            SocketSubscriptionsCombineTarget = 10,
+            SocketNoDataTimeout = TimeSpan.FromSeconds(30)
         };
 
         private ApiClientOptions _spotStreamOptions = new ApiClientOptions(BittrexApiAddresses.Default.SocketClientAddress);

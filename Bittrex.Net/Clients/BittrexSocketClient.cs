@@ -50,7 +50,7 @@ namespace Bittrex.Net.Clients
         /// <param name="options">Options to use for this client</param>
         public BittrexSocketClient(BittrexSocketClientOptions options) : base("Bittrex", options)
         {
-            SocketFactory = new ConnectionFactory(options.Proxy);
+            SocketFactory = new ConnectionFactory(options.Proxy, options.SocketNoDataTimeout);
 
             SpotStreams = AddApiClient(new BittrexSocketClientSpotStreams(this, options));
 

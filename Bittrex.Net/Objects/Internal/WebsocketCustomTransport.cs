@@ -22,22 +22,24 @@ namespace Bittrex.Net.Objects.Internal
         private readonly ApiProxy? _proxy;
         private readonly Log _log;
         private readonly Func<string, string>? _interpreter;
+        private Task _processTask;
+        private readonly TimeSpan? _dataTimeout;
 
         public override bool SupportsKeepAlive => true;
         public int? SocketId => _websocket?.Id;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client, ApiProxy? proxy, Func<string, string>? interpreter) : base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client, TimeSpan? dataTimeout, ApiProxy? proxy, Func<string, string>? interpreter) : base(client, "webSockets")
         {
             _log = log;
             _proxy = proxy;
             _interpreter = interpreter;
+            _dataTimeout = dataTimeout;
         }
 
         ~WebsocketCustomTransport()
         {
             Dispose(false);
         }
-
 
         protected override void OnStart(IConnection con, string conData, CancellationToken disconToken)
         {
@@ -64,6 +66,7 @@ namespace Bittrex.Net.Objects.Internal
             else
             {
                 _websocket = new CryptoExchangeWebSocketClient(_log, new Uri(connectUrl), cookies, _connection.Headers);
+                _websocket.Timeout = _dataTimeout ?? default;
                 _websocket.OnError += WebSocketOnError;
                 _websocket.OnClose += WebSocketOnClosed;
                 _websocket.OnMessage += WebSocketOnMessageReceived;
@@ -79,9 +82,17 @@ namespace Bittrex.Net.Objects.Internal
                 if (!connectResult)
                     TryFailStart(new Exception("Failed to connect"));
                 else
-                    _ = _websocket.ProcessAsync();
+                {
+                    _processTask = _websocket.ProcessAsync();
+                }
             });
         }
+
+        public Task ProcessAsync()
+        {
+            return _processTask;
+        }
+
 
         public override Task Send(IConnection con, string data, string conData)
         {
