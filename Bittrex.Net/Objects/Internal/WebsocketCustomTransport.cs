@@ -22,7 +22,7 @@ namespace Bittrex.Net.Objects.Internal
         private readonly ApiProxy? _proxy;
         private readonly Log _log;
         private readonly Func<string, string>? _interpreter;
-        private Task _processTask;
+        private Task? _processTask;
         private readonly TimeSpan? _dataTimeout;
 
         public override bool SupportsKeepAlive => true;
@@ -90,7 +90,7 @@ namespace Bittrex.Net.Objects.Internal
 
         public Task ProcessAsync()
         {
-            return _processTask;
+            return _processTask!;
         }
 
 
