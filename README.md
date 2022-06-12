@@ -18,6 +18,9 @@ I develop and maintain this package on my own for free in my spare time. Donatio
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). Feel free to join for discussion and/or questions around the CryptoExchange.Net and implementation libraries.
 
 ## Release notes
+* Version 7.0.13 - 12 Jun 2022
+    * Updated CryptoExchange.Net
+
 * Version 7.0.12 - 24 May 2022
     * Updated CryptoExchange.Net
 
