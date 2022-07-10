@@ -288,7 +288,7 @@ namespace Bittrex.Net.Clients
             if (result == null)
                 return;
 
-            log.Write(LogLevel.Debug, "Socket received data: " + result);
+            log.Write(LogLevel.Trace, "Socket received data: " + result);
 
             var tokenResult = ValidateJson(result);
             if (!tokenResult)
