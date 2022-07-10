@@ -13,68 +13,53 @@ using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net.Objects.Internal
 {
-    internal class BittrexHubConnection : CryptoExchangeWebSocketClient, ISignalRSocket
+    internal class BittrexHubConnection : ISignalRSocket
     {
         private readonly HubConnection _connection;
+        private readonly WebsocketCustomTransport _transport;
+        private readonly Log _log;
         private IHubProxy? _hubProxy;
-        private readonly ApiProxy? _proxy;
-        private readonly TimeSpan? _dataTimeout;
-        private WebsocketCustomTransport? _transport;
 
-        public new bool IsOpen => _connection.State == ConnectionState.Connected;
-        public new int Id => _transport?.SocketId ?? base.Id;
+        public event Action? OnClose;
+        public event Action<string>? OnMessage;
+        public event Action<Exception>? OnError;
+        public event Action? OnOpen;
+        public event Action? OnReconnecting;
+        public event Action? OnReconnected;
 
-        public BittrexHubConnection(Log log, ApiProxy? proxy, TimeSpan? dataTimeout, HubConnection connection) : base(null!, new Uri(connection.Url))
+        public bool IsOpen => _connection.State == ConnectionState.Connected;
+        public int Id => _transport.Socket.Id;
+        public double IncomingKbps => _transport.Socket.IncomingKbps;
+        public Uri Uri => _transport.Socket.Uri;
+        public bool IsClosed => _transport.Socket.IsClosed;
+
+        public BittrexHubConnection(Log log, WebSocketParameters parameters)
         {
-            this._connection = connection;
-            this.log = log;
-            this._proxy = proxy;
-            _dataTimeout = dataTimeout;
+            _connection = new HubConnection(parameters.Uri.ToString());
+            _log = log;
 
-            connection.StateChanged += StateChangeHandler;
-            connection.Error += s => Handle(errorHandlers, s);
-            connection.Received += str =>
+            var client = new DefaultHttpClient();
+            _transport = new WebsocketCustomTransport(log, client, parameters);
+            _transport.Socket.OnReconnecting += () => OnReconnecting?.Invoke();
+            _transport.Socket.OnReconnected += () => OnReconnected?.Invoke();
+            _transport.Socket.OnOpen += () => OnOpen?.Invoke();
+            _transport.Socket.OnClose += () => OnClose?.Invoke();
+            _transport.Socket.OnError += (a) => OnError?.Invoke(a);
+            // Messages will be received via the connection to make sure SignalR knows about them and can handle heartbeat and timeouts
+            _connection.Received += (str) => OnMessage?.Invoke(str);
+
+            if (parameters.Proxy != null)
             {
-                lock (_receivedMessagesLock)
-                {
-                    UpdateReceivedMessages();
-                    _receivedMessages.Add(new ReceiveItem(DateTime.UtcNow, str.Length));
-                }
-                Handle(messageHandlers, str);
-            };
-        }
-
-        public override async Task ProcessAsync()
-        {
-            await _transport!.ProcessAsync().ConfigureAwait(false);
-        }
-
-        private void StateChangeHandler(StateChange change)
-        {
-            switch (change.NewState)
-            {
-                case ConnectionState.Connected:
-                    Handle(openHandlers);
-                    break;
-                case ConnectionState.Disconnected:
-                    Handle(closeHandlers);
-                    break;
-                case ConnectionState.Reconnecting:
-                    _connection.Stop(TimeSpan.FromMilliseconds(100));
-                    break;
+                _connection.Proxy = new WebProxy(parameters.Proxy.Host, parameters.Proxy.Port);
+                if (!string.IsNullOrEmpty(parameters.Proxy.Login))
+                    _connection.Proxy.Credentials = new NetworkCredential(parameters.Proxy.Login, parameters.Proxy.Password);
             }
+
         }
 
         public void SetHub(string name)
         {
             _hubProxy = _connection.CreateHubProxy(name);
-        }
-
-        public override void SetProxy(ApiProxy proxy)
-        {
-            _connection.Proxy = new WebProxy(proxy.Host, proxy.Port);
-            if (!string.IsNullOrEmpty(proxy.Login))
-                _connection.Proxy.Credentials = new NetworkCredential(proxy.Login, proxy.Password);
         }
 
         public async Task<CallResult<T>> InvokeProxy<T>(string call, params object[] pars)
@@ -87,13 +72,13 @@ namespace Bittrex.Net.Objects.Internal
             {
                 try
                 {
-                    log.Write(LogLevel.Debug, $"Socket {_transport?.SocketId} sending data: {call}, {ArrayToString(pars)}");
+                    _log.Write(LogLevel.Debug, $"Socket {_transport.Socket.Id} sending data: {call}, {ArrayToString(pars)}");
                     var sub = await _hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub);
                 }
                 catch (Exception e)
                 {
-                    log.Write(LogLevel.Warning, $"Socket {_transport?.SocketId} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
+                    _log.Write(LogLevel.Warning, $"Socket {_transport.Socket.Id} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
                     error = new UnknownError("Failed to invoke proxy: " + (e.InnerException?.Message ?? e.Message));
                 }
             }
@@ -117,17 +102,12 @@ namespace Bittrex.Net.Objects.Internal
             return result;
         }
 
-        public override async Task<bool> ConnectAsync()
+        public async Task<bool> ConnectAsync()
         {
-            var client = new DefaultHttpClient();
-            _transport = new WebsocketCustomTransport(log, client, _dataTimeout, _proxy, DataInterpreterString);
-            var autoTransport = new AutoTransport(client, new IClientTransport[] {
-                _transport
-            });
             _connection.TransportConnectTimeout = new TimeSpan(0, 0, 10);
             try
             {
-                await _connection.Start(autoTransport).ConfigureAwait(false);
+                await _connection.Start(_transport).ConfigureAwait(false);
                 return true;
             }
             catch (Exception)
@@ -136,12 +116,22 @@ namespace Bittrex.Net.Objects.Internal
             }
         }
 
-        public override async Task CloseAsync()
+        public async Task CloseAsync()
         {
             await Task.Run(() =>
             {
                 _connection.Stop(TimeSpan.FromSeconds(1));
             }).ConfigureAwait(false);
         }
+
+        public void Send(string data)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public Task ReconnectAsync() => _transport.Socket.ReconnectAsync();
     }
 }

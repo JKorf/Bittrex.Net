@@ -50,7 +50,7 @@ namespace Bittrex.Net.Clients
         /// <param name="options">Options to use for this client</param>
         public BittrexSocketClient(BittrexSocketClientOptions options) : base("Bittrex", options)
         {
-            SocketFactory = new ConnectionFactory(options.Proxy, options.SocketNoDataTimeout);
+            SocketFactory = new BittrexWebsocketFactory();
 
             SpotStreams = AddApiClient(new BittrexSocketClientSpotStreams(this, options));
 
@@ -86,31 +86,6 @@ namespace Bittrex.Net.Clients
                     return;
                 DecodeSignalRData(data, handler);
             }, ct).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        protected override SocketConnection GetSocketConnection(SocketApiClient apiClient, string address, bool authenticated)
-        {
-            // Override because signalr puts `/signalr/` add the end of the url
-            var socketResult = socketConnections.Where(s => s.Value.Uri.ToString() == address + "/signalr/"
-                                                  && s.Value.ApiClient.GetType() == apiClient.GetType()
-                                                  && (s.Value.Authenticated == authenticated || !authenticated) && s.Value.Connected).OrderBy(s => s.Value.SubscriptionCount).FirstOrDefault();
-            var result = socketResult.Equals(default(KeyValuePair<int, SocketConnection>)) ? null : socketResult.Value;
-            if (result != null)
-            {
-                if (result.SubscriptionCount < ClientOptions.SocketSubscriptionsCombineTarget || socketConnections.Count >= ClientOptions.MaxSocketConnections && socketConnections.All(s => s.Value.SubscriptionCount >= ClientOptions.SocketSubscriptionsCombineTarget))
-                {
-                    // Use existing socket if it has less than target connections OR it has the least connections and we can't make new
-                    return result;
-                }
-            }
-
-            // Create new socket
-            var socket = CreateSocket(address);
-            var socketWrapper = new SocketConnection(this, apiClient, socket);
-            foreach (var kvp in genericHandlers)
-                socketWrapper.AddSubscription(SocketSubscription.CreateForIdentifier(NextId(), kvp.Key, false, kvp.Value));
-            return socketWrapper;
         }
 
         /// <inheritdoc />

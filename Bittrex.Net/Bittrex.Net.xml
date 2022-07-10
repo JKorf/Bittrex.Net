@@ -82,9 +82,6 @@
             </summary>
             <param name="options">Options to use as default</param>
         </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.GetSocketConnection(CryptoExchange.Net.SocketApiClient,System.String,System.Boolean)">
-            <inheritdoc />
-        </member>
         <member name="M:Bittrex.Net.Clients.BittrexSocketClient.SubscribeAndWaitAsync(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
             <inheritdoc />
         </member>

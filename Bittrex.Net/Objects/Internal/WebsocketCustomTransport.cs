@@ -10,30 +10,29 @@ using System.Threading.Tasks;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
-using CryptoExchange.Net.Objects;
 
 namespace Bittrex.Net.Objects.Internal
 {
     internal class WebsocketCustomTransport : ClientTransportBase
     {
+        private readonly Log _log;
+        private readonly IWebsocket _websocket;
+        private readonly WebSocketParameters _parameters;
+
         private IConnection? _connection;
         private string? _connectionData;
-        private IWebsocket? _websocket;
-        private readonly ApiProxy? _proxy;
-        private readonly Log _log;
-        private readonly Func<string, string>? _interpreter;
-        private Task? _processTask;
-        private readonly TimeSpan? _dataTimeout;
+        private bool _started = false;
 
         public override bool SupportsKeepAlive => true;
-        public int? SocketId => _websocket?.Id;
+        public IWebsocket Socket => _websocket;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client, TimeSpan? dataTimeout, ApiProxy? proxy, Func<string, string>? interpreter) : base(client, "webSockets")
+        public WebsocketCustomTransport(Log log, IHttpClient client, WebSocketParameters parameters) : base(client, "webSockets")
         {
             _log = log;
-            _proxy = proxy;
-            _interpreter = interpreter;
-            _dataTimeout = dataTimeout;
+            _parameters = parameters;
+
+            _websocket = new CryptoExchangeWebSocketClient(_log, _parameters);
+            _websocket.OnMessage += WebSocketOnMessageReceived;
         }
 
         ~WebsocketCustomTransport()
@@ -43,6 +42,10 @@ namespace Bittrex.Net.Objects.Internal
 
         protected override void OnStart(IConnection con, string conData, CancellationToken disconToken)
         {
+            if (_started)
+                return;
+
+            _started = true;
             _connection = con;
             _connectionData = conData;
 
@@ -59,113 +62,40 @@ namespace Bittrex.Net.Objects.Internal
                     cookies.Add(cookie.Name, cookie.Value);
             }
 
-            if (_websocket != null)
-            {
-                _websocket.Reset();
-            }
-            else
-            {
-                _websocket = new CryptoExchangeWebSocketClient(_log, new Uri(connectUrl), cookies, _connection.Headers);
-                _websocket.Timeout = _dataTimeout ?? default;
-                _websocket.OnError += WebSocketOnError;
-                _websocket.OnClose += WebSocketOnClosed;
-                _websocket.OnMessage += WebSocketOnMessageReceived;
-                _websocket.DataInterpreterString = _interpreter;
-
-                if (_proxy != null)
-                    _websocket.SetProxy(_proxy);
-            }
+            _parameters.Uri = new Uri(connectUrl);
+            _parameters.Cookies = cookies;
+            _parameters.Headers = _connection.Headers;
 
             _ = Task.Run(async () =>
             {
                 var connectResult = await _websocket.ConnectAsync().ConfigureAwait(false);
                 if (!connectResult)
                     TryFailStart(new Exception("Failed to connect"));
-                else
-                {
-                    _processTask = _websocket.ProcessAsync();
-                }
             });
         }
 
-        public Task ProcessAsync()
-        {
-            return _processTask!;
-        }
-
-
         public override Task Send(IConnection con, string data, string conData)
         {
-            if (_websocket != null && _websocket.IsOpen)
-            {
-                _websocket.Send(data);
-                return Task.FromResult(0);
-            }
-
-            var ex = new InvalidOperationException("Socket closed");
-            _connection?.OnError(ex);
-
-            throw ex;
+            _websocket.Send(data);
+            return Task.CompletedTask;
         }
 
-        public override void LostConnection(IConnection con)
-        {
-            _connection?.Stop();
-        }
+        private void WebSocketOnMessageReceived(string data) => ProcessResponse(_connection, data);
+        
+        public override void Abort(IConnection connection, TimeSpan timeout, string connectionData) => _websocket.CloseAsync().Wait();
+
+        protected override void OnStartFailed() { }
+        public override void LostConnection(IConnection con) { }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (_websocket != null)
-                    DisposeWebSocket();
+                _websocket.CloseAsync().Wait();
+                _websocket.Dispose();
             }
 
             base.Dispose(disposing);
-        }
-
-        private void DisposeWebSocket()
-        {
-            if (_websocket == null)
-                return;
-
-            _websocket.OnError -= WebSocketOnError;
-            _websocket.OnClose -= WebSocketOnClosed;
-            _websocket.OnMessage -= WebSocketOnMessageReceived;
-
-            _websocket.Dispose();
-            _websocket = null;
-        }
-
-        private void WebSocketOnClosed()
-        {
-            _connection?.Stop();
-        }
-
-        public override void Abort(IConnection connection, TimeSpan timeout, string connectionData)
-        {
-            if (_websocket == null)
-                return;
-
-            var socket = _websocket;
-            _websocket = null;
-
-            socket.CloseAsync().Wait();
-            socket.Dispose();
-        }
-
-        private void WebSocketOnError(Exception e)
-        {
-            _connection?.OnError(e);
-        }
-
-        private void WebSocketOnMessageReceived(string data)
-        {
-            ProcessResponse(_connection, data);
-        }
-
-        protected override void OnStartFailed()
-        {
         }
     }
 }
