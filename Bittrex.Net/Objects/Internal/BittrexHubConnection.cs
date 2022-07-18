@@ -32,6 +32,7 @@ namespace Bittrex.Net.Objects.Internal
         public double IncomingKbps => _transport.Socket.IncomingKbps;
         public Uri Uri => _transport.Socket.Uri;
         public bool IsClosed => _transport.Socket.IsClosed;
+        public Func<Task<Uri?>> GetReconnectionUrl { get; set; }
 
         public BittrexHubConnection(Log log, WebSocketParameters parameters)
         {
