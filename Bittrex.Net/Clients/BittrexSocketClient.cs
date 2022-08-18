@@ -208,7 +208,7 @@ namespace Bittrex.Net.Clients
                     return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(interval);
                 }
 
-                if (channel.Substring(method.Length + 1, symbol.Length) == symbol)
+                if (channel.Substring(method.Length + 1, channel.Length - (method.Length + 1)) == symbol)
                     return true;
             }
             return false;
