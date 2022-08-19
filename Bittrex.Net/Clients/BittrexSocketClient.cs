@@ -214,7 +214,8 @@ namespace Bittrex.Net.Clients
                     if (depth == null)
                         return false;
 
-                    return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(depth);
+                    var segments = channel.Split('_');
+                    return segments.ElementAtOrDefault(1) == symbol && channel.Split('_').ElementAtOrDefault(2) == depth;
                 }
 
                 if (channel.Substring(method.Length + 1, channel.Length - (method.Length + 1)) == symbol)
