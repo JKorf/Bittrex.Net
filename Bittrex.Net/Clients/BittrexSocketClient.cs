@@ -208,6 +208,15 @@ namespace Bittrex.Net.Clients
                     return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(interval);
                 }
 
+                if (channel.StartsWith("orderbook") && method == "orderbook")
+                {
+                    var depth = tokenData["depth"]?.ToString();
+                    if (depth == null)
+                        return false;
+
+                    return channel.Substring(method.Length + 1, symbol.Length) == symbol && channel.EndsWith(depth);
+                }
+
                 if (channel.Substring(method.Length + 1, channel.Length - (method.Length + 1)) == symbol)
                     return true;
             }
