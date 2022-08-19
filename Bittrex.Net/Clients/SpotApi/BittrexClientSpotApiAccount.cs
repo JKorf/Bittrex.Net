@@ -65,6 +65,12 @@ namespace Bittrex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BittrexFiatFee>>> GetFiatTransactionFeesAsync(CancellationToken ct = default)
+        {
+            return await _baseClient.SendRequestAsync<IEnumerable<BittrexFiatFee>>(_baseClient.GetUrl("account/fees/fiat"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
         public async Task<WebCallResult<BittrexAccountVolume>> GetAccountVolumeAsync(CancellationToken ct = default)
         {
             return await _baseClient.SendRequestAsync<BittrexAccountVolume>(_baseClient.GetUrl("account/volume"), HttpMethod.Get, ct, signed: true).ConfigureAwait(false);

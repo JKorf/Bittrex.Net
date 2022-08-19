@@ -1,0 +1,9 @@
+[
+  {
+    "fees": 1.123,
+    "currencySymbol": "string",
+    "transactionType": "DEPOSIT",
+    "transferType": "SEPA",
+    "feeType": "PERCENT"
+  }
+]

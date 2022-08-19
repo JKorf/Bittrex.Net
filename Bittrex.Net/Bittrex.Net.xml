@@ -180,6 +180,9 @@
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApiAccount.GetTradingFeesAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApiAccount.GetFiatTransactionFeesAsync(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApiAccount.GetAccountVolumeAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -439,6 +442,21 @@
             Invalidated
             </summary>
         </member>
+        <member name="T:Bittrex.Net.Enums.FeeType">
+            <summary>
+            Fee type
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.FeeType.Fixed">
+            <summary>
+            Fixed
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.FeeType.Percent">
+            <summary>
+            Percent
+            </summary>
+        </member>
         <member name="T:Bittrex.Net.Enums.KlineInterval">
             <summary>
             Interval of klines, int value represent the time in seconds
@@ -567,6 +585,51 @@
         <member name="F:Bittrex.Net.Enums.TimeInForce.PostOnlyGoodTillDate">
             <summary>
             Post only good till specific date
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Enums.TransactionType">
+            <summary>
+            Transaction type
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransactionType.Deposit">
+            <summary>
+            Deposit
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransactionType.Withdrawal">
+            <summary>
+            Withdrawal
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Enums.TransferType">
+            <summary>
+            Transfer type
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransferType.Wire">
+            <summary>
+            Wire transfer
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransferType.Sepa">
+            <summary>
+            Sepa transfer
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransferType.InstantSettlement">
+            <summary>
+            Instant settlement
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransferType.Ach">
+            <summary>
+            Ach
+            </summary>
+        </member>
+        <member name="F:Bittrex.Net.Enums.TransferType.Sen">
+            <summary>
+            Sen
             </summary>
         </member>
         <member name="T:Bittrex.Net.Enums.WithdrawalStatus">
@@ -704,6 +767,14 @@
             </summary>
             <param name="ct">Cancellation token</param>
             <returns>Account trading fee</returns>
+        </member>
+        <member name="M:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApiAccount.GetFiatTransactionFeesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account withdrawal/deposit fees
+            </summary>
+            <para><a href="https://bittrex.github.io/api/v3#operation--account-fees-fiat-get" /></para>
+            <param name="ct">Cancellation token</param>
+            <returns>Account fiat fees</returns>
         </member>
         <member name="M:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApiAccount.GetAccountVolumeAsync(System.Threading.CancellationToken)">
             <summary>
@@ -1835,6 +1906,36 @@
         <member name="P:Bittrex.Net.Objects.Models.BittrexError.Data">
             <summary>
             Additional data for the error
+            </summary>
+        </member>
+        <member name="T:Bittrex.Net.Objects.Models.BittrexFiatFee">
+            <summary>
+            Fiat fee info
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.Models.BittrexFiatFee.Asset">
+            <summary>
+            Asset name
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.Models.BittrexFiatFee.Fees">
+            <summary>
+            Fee value
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.Models.BittrexFiatFee.TransactionType">
+            <summary>
+            Transaction type
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.Models.BittrexFiatFee.TransferType">
+            <summary>
+            Transfer type
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Objects.Models.BittrexFiatFee.FeeType">
+            <summary>
+            Fee type
             </summary>
         </member>
         <member name="T:Bittrex.Net.Objects.Models.BittrexKline">
