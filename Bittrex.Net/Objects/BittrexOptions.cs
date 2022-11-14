@@ -9,7 +9,7 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Options for the Bittrex client
     /// </summary>
-    public class BittrexClientOptions : BaseRestClientOptions
+    public class BittrexClientOptions : ClientOptions
     {
         /// <summary>
         /// Default options for the spot client
@@ -56,25 +56,26 @@ namespace Bittrex.Net.Objects
     /// <summary>
     /// Options for the Bittrex socket client
     /// </summary>
-    public class BittrexSocketClientOptions : BaseSocketClientOptions
+    public class BittrexSocketClientOptions : ClientOptions
     {
         /// <summary>
         /// Default options for the spot client
         /// </summary>
-        public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions()
+        public static BittrexSocketClientOptions Default { get; set; } = new BittrexSocketClientOptions();
+
+        private SocketApiClientOptions _spotStreamOptions = new SocketApiClientOptions(BittrexApiAddresses.Default.SocketClientAddress)
         {
             SocketSubscriptionsCombineTarget = 10,
             SocketNoDataTimeout = TimeSpan.FromSeconds(30)
         };
 
-        private ApiClientOptions _spotStreamOptions = new ApiClientOptions(BittrexApiAddresses.Default.SocketClientAddress);
         /// <summary>
         /// Spot stream options
         /// </summary>
-        public ApiClientOptions SpotStreamOptions
+        public SocketApiClientOptions SpotStreamOptions
         {
             get => _spotStreamOptions;
-            set => _spotStreamOptions = new ApiClientOptions(_spotStreamOptions, value);
+            set => _spotStreamOptions = new SocketApiClientOptions(_spotStreamOptions, value);
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace Bittrex.Net.Objects
             if (baseOn == null)
                 return;
 
-            _spotStreamOptions = new ApiClientOptions(baseOn.SpotStreamOptions, null);
+            _spotStreamOptions = new SocketApiClientOptions(baseOn.SpotStreamOptions, null);
         }
     }
 

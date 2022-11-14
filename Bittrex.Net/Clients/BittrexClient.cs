@@ -37,7 +37,7 @@ namespace Bittrex.Net.Clients
         /// </summary>
         public BittrexClient(BittrexClientOptions options) : base("Bittrex", options)
         {
-            SpotApi = AddApiClient(new BittrexClientSpotApi(log, this, options));
+            SpotApi = AddApiClient(new BittrexClientSpotApi(log, options));
         }
         #endregion
 
@@ -51,48 +51,6 @@ namespace Bittrex.Net.Clients
         {
             BittrexClientOptions.Default = options;
         }
-
-        /// <inheritdoc />
-        protected override Error ParseErrorResponse(JToken data)
-        {
-            if (data["code"] == null)
-                return new UnknownError("Unknown response from server", data);
-
-            var info = (string)data["code"]!;
-            if (data["detail"] != null)
-                info += "; Details: " + (string)data["detail"]!;
-            if (data["data"] != null)
-                info += "; Data: " + data["data"];
-
-            return new ServerError(info);
-        }
-
-        /// <inheritdoc />
-        protected override void WriteParamBody(BaseApiClient apiClient, IRequest request, SortedDictionary<string, object> parameters, string contentType)
-        {
-            if (parameters.Any() && parameters.First().Key == string.Empty)
-            {
-                var stringData = JsonConvert.SerializeObject(parameters.First().Value);
-                request.SetContent(stringData, contentType);
-            }
-            else
-            {
-                var stringData = JsonConvert.SerializeObject(parameters);
-                request.SetContent(stringData, contentType);
-            }
-        }
-
-        internal Task<WebCallResult<T>> SendRequestAsync<T>(
-             RestApiClient apiClient,
-             Uri uri,
-             HttpMethod method,
-             CancellationToken cancellationToken,
-             Dictionary<string, object>? parameters = null,
-             bool signed = false,
-             JsonSerializer? deserializer = null,
-             bool ignoreRateLimit = false) where T : class
-                 => base.SendRequestAsync<T>(apiClient, uri, method, cancellationToken, parameters, signed, deserializer: deserializer, ignoreRatelimit: ignoreRateLimit);
-
         #endregion
     }
 }

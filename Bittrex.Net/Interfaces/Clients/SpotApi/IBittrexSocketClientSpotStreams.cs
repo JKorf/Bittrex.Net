@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bittrex.Net.Enums;
 using Bittrex.Net.Objects.Models;
 using Bittrex.Net.Objects.Models.Socket;
+using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 
@@ -15,6 +16,11 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// </summary>
     public interface IBittrexSocketClientSpotStreams : IDisposable
     {
+        /// <summary>
+        /// The factory for creating sockets. Used for unit testing
+        /// </summary>
+        IWebsocketFactory SocketFactory { get; set; }
+
         /// <summary>
         /// Subscribe to heartbeat updates
         /// <para><a href="https://bittrex.github.io/api/v3#method-Heartbeat" /></para>

@@ -14,9 +14,9 @@ namespace Bittrex.Net.UnitTests
         private JsonToObjectComparer<IBittrexClient> _comparer = new JsonToObjectComparer<IBittrexClient>((json) => TestHelpers.CreateResponseClient(json, new BittrexClientOptions()
         { 
             ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), 
-            OutputOriginalData = true,
             SpotApiOptions = new CryptoExchange.Net.Objects.RestApiClientOptions
             {
+                OutputOriginalData = true,
                 RateLimiters = new List<IRateLimiter>()
             }
         }));

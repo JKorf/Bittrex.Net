@@ -53,12 +53,6 @@
             </summary>
             <param name="options">Options to use as default</param>
         </member>
-        <member name="M:Bittrex.Net.Clients.BittrexClient.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexClient.WriteParamBody(CryptoExchange.Net.BaseApiClient,CryptoExchange.Net.Interfaces.IRequest,System.Collections.Generic.SortedDictionary{System.String,System.Object},System.String)">
-            <inheritdoc />
-        </member>
         <member name="T:Bittrex.Net.Clients.BittrexSocketClient">
             <inheritdoc cref="T:Bittrex.Net.Interfaces.Clients.IBittrexSocketClient" />
         </member>
@@ -81,33 +75,6 @@
             Set the default options to be used when creating new clients
             </summary>
             <param name="options">Options to use as default</param>
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.SubscribeAndWaitAsync(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.QueryAndWaitAsync``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.HandleQueryResponse``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{``0}@)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.HandleSubscriptionResponse(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{System.Object}@)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.MessageMatchesHandler(CryptoExchange.Net.Sockets.SocketConnection,Newtonsoft.Json.Linq.JToken,System.Object)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.MessageMatchesHandler(CryptoExchange.Net.Sockets.SocketConnection,Newtonsoft.Json.Linq.JToken,System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.AuthenticateSocketAsync(CryptoExchange.Net.Sockets.SocketConnection)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.UnsubscribeAsync(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription)">
-            <inheritdoc />
-        </member>
-        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.CreateSocket(System.String)">
-            <inheritdoc />
         </member>
         <member name="T:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApi">
             <inheritdoc cref="T:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi" />
@@ -146,6 +113,12 @@
             </summary>
             <param name="endpoint"></param>
             <returns></returns>
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApi.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApi.WriteParamBody(CryptoExchange.Net.Interfaces.IRequest,System.Collections.Generic.SortedDictionary{System.String,System.Object},System.String)">
+            <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApi.GetServerTimestampAsync">
             <inheritdoc />
@@ -385,6 +358,33 @@
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.SubscribeToConditionalOrderUpdatesAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{Bittrex.Net.Objects.Models.Socket.BittrexConditionalOrderUpdate}},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.SubscribeAndWaitAsync(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.QueryAndWaitAsync``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.HandleQueryResponse``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{``0}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.HandleSubscriptionResponse(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{System.Object}@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.MessageMatchesHandler(CryptoExchange.Net.Sockets.SocketConnection,Newtonsoft.Json.Linq.JToken,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.MessageMatchesHandler(CryptoExchange.Net.Sockets.SocketConnection,Newtonsoft.Json.Linq.JToken,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.AuthenticateSocketAsync(CryptoExchange.Net.Sockets.SocketConnection)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.UnsubscribeAsync(CryptoExchange.Net.Sockets.SocketConnection,CryptoExchange.Net.Sockets.SocketSubscription)">
+            <inheritdoc />
+        </member>
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotStreams.CreateSocket(System.String)">
             <inheritdoc />
         </member>
         <member name="T:Bittrex.Net.Enums.ConditionalOrderOperand">
@@ -690,6 +690,11 @@
         <member name="T:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi">
             <summary>
             Bittrex spot API endpoints
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi.RequestFactory">
+            <summary>
+            The factory for creating requests. Used for unit testing
             </summary>
         </member>
         <member name="P:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi.Account">
@@ -1248,6 +1253,11 @@
         <member name="T:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexSocketClientSpotStreams">
             <summary>
             Bittrex Spot streams
+            </summary>
+        </member>
+        <member name="P:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexSocketClientSpotStreams.SocketFactory">
+            <summary>
+            The factory for creating sockets. Used for unit testing
             </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexSocketClientSpotStreams.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}},System.Threading.CancellationToken)">

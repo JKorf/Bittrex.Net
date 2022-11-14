@@ -9,6 +9,7 @@ using CryptoExchange.Net.Interfaces.CommonClients;
 using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,6 @@ namespace Bittrex.Net.Clients.SpotApi
     /// <inheritdoc cref="IBittrexClientSpotApi" />
     public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, ISpotClient
     {
-        private readonly BittrexClient _baseClient;
-        private readonly BittrexClientOptions _options;
-        private readonly Log _log;
-
         internal static TimeSyncState TimeSyncState = new TimeSyncState("Api");
 
         internal static TimeSpan TimeOffset;
@@ -45,13 +42,9 @@ namespace Bittrex.Net.Clients.SpotApi
 
         #endregion
 
-        internal BittrexClientSpotApi(Log log, BittrexClient baseClient, BittrexClientOptions options) :
-            base(options, options.SpotApiOptions)
+        internal BittrexClientSpotApi(Log log, BittrexClientOptions options) :
+            base(log, options, options.SpotApiOptions)
         {
-            _options = options;
-            _log = log;
-            _baseClient = baseClient;
-
             Account = new BittrexClientSpotApiAccount(this);
             ExchangeData = new BittrexClientSpotApiExchangeData(this);
             Trading = new BittrexClientSpotApiTrading(this);
@@ -383,7 +376,37 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <returns></returns>
         internal Uri GetUrl(string endpoint)
         {
-            return new Uri(_options.SpotApiOptions.BaseAddress.AppendPath($"v3", endpoint));
+            return new Uri(Options.BaseAddress.AppendPath($"v3", endpoint));
+        }
+
+        /// <inheritdoc />
+        protected override Error ParseErrorResponse(JToken data)
+        {
+            if (data["code"] == null)
+                return new UnknownError("Unknown response from server", data);
+
+            var info = (string)data["code"]!;
+            if (data["detail"] != null)
+                info += "; Details: " + (string)data["detail"]!;
+            if (data["data"] != null)
+                info += "; Data: " + data["data"];
+
+            return new ServerError(info);
+        }
+
+        /// <inheritdoc />
+        protected override void WriteParamBody(IRequest request, SortedDictionary<string, object> parameters, string contentType)
+        {
+            if (parameters.Any() && parameters.First().Key == string.Empty)
+            {
+                var stringData = JsonConvert.SerializeObject(parameters.First().Value);
+                request.SetContent(stringData, contentType);
+            }
+            else
+            {
+                var stringData = JsonConvert.SerializeObject(parameters);
+                request.SetContent(stringData, contentType);
+            }
         }
 
         internal Task<WebCallResult<T>> SendRequestAsync<T>(
@@ -394,8 +417,7 @@ namespace Bittrex.Net.Clients.SpotApi
              bool signed = false,
              JsonSerializer? deserializer = null,
              bool ignoreRateLimit = false) where T : class
-                 => _baseClient.SendRequestAsync<T>(this, uri, method, cancellationToken, parameters, signed, deserializer: deserializer, ignoreRateLimit: ignoreRateLimit);
-
+                 => base.SendRequestAsync<T>(uri, method, cancellationToken, parameters, signed, deserializer: deserializer, ignoreRatelimit: ignoreRateLimit);
 
         /// <inheritdoc />
         protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
@@ -403,7 +425,7 @@ namespace Bittrex.Net.Clients.SpotApi
 
         /// <inheritdoc />
         public override TimeSyncInfo GetTimeSyncInfo()
-            => new TimeSyncInfo(_log, _options.SpotApiOptions.AutoTimestamp, _options.SpotApiOptions.TimestampRecalculationInterval, TimeSyncState);
+            => new TimeSyncInfo(_log, Options.AutoTimestamp, Options.TimestampRecalculationInterval, TimeSyncState);
 
         /// <inheritdoc />
         public override TimeSpan GetTimeOffset()
