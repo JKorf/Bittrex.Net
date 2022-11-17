@@ -343,6 +343,30 @@ Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetDepositsByTransactionIdAsync
 
 ***
 
+## GetFiatTransactionFeesAsync  
+
+[https://bittrex.github.io/api/v3#operation--account-fees-fiat-get](https://bittrex.github.io/api/v3#operation--account-fees-fiat-get)  
+<p>
+
+*Get account withdrawal/deposit fees*  
+
+```csharp  
+var client = new BittrexClient();  
+var result = await client.SpotApi.Account.GetFiatTransactionFeesAsync();  
+```  
+
+```csharp  
+Task<WebCallResult<IEnumerable<BittrexFiatFee>>> GetFiatTransactionFeesAsync(CancellationToken ct = default);  
+```  
+
+|Parameter|Description|
+|---|---|
+|_[Optional]_ ct|Cancellation token|
+
+</p>
+
+***
+
 ## GetOpenDepositsAsync  
 
 [https://bittrex.github.io/api/v3#operation--deposits-open-get](https://bittrex.github.io/api/v3#operation--deposits-open-get)  

@@ -65,8 +65,8 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Get account withdrawal/deposit fees
-        /// </summary>
         /// <para><a href="https://bittrex.github.io/api/v3#operation--account-fees-fiat-get" /></para>
+        /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Account fiat fees</returns>
         Task<WebCallResult<IEnumerable<BittrexFiatFee>>> GetFiatTransactionFeesAsync(CancellationToken ct = default);
