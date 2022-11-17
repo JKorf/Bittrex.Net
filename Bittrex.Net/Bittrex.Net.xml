@@ -776,8 +776,8 @@
         <member name="M:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApiAccount.GetFiatTransactionFeesAsync(System.Threading.CancellationToken)">
             <summary>
             Get account withdrawal/deposit fees
-            </summary>
             <para><a href="https://bittrex.github.io/api/v3#operation--account-fees-fiat-get" /></para>
+            </summary>
             <param name="ct">Cancellation token</param>
             <returns>Account fiat fees</returns>
         </member>
