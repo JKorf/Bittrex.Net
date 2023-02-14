@@ -9,6 +9,7 @@ using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
 using Bittrex.Net.Objects;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -50,6 +51,12 @@ namespace Bittrex.Net.Clients
         public static void SetDefaultOptions(BittrexClientOptions options)
         {
             BittrexClientOptions.Default = options;
+        }
+
+        /// <inheritdoc />
+        public void SetApiCredentials(ApiCredentials credentials)
+        {
+            SpotApi.SetApiCredentials(credentials);
         }
         #endregion
     }

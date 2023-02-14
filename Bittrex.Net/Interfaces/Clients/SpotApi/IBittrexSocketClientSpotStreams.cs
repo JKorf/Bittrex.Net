@@ -14,13 +14,8 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// <summary>
     /// Bittrex Spot streams
     /// </summary>
-    public interface IBittrexSocketClientSpotStreams : IDisposable
+    public interface IBittrexSocketClientSpotStreams : ISocketApiClient, IDisposable
     {
-        /// <summary>
-        /// The factory for creating sockets. Used for unit testing
-        /// </summary>
-        IWebsocketFactory SocketFactory { get; set; }
-
         /// <summary>
         /// Subscribe to heartbeat updates
         /// <para><a href="https://bittrex.github.io/api/v3#method-Heartbeat" /></para>

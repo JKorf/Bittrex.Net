@@ -18,6 +18,7 @@ using Bittrex.Net.Objects.Internal;
 using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
 using Bittrex.Net.Clients.SpotApi;
+using CryptoExchange.Net.Authentication;
 
 namespace Bittrex.Net.Clients
 {
@@ -60,6 +61,12 @@ namespace Bittrex.Net.Clients
         public static void SetDefaultOptions(BittrexSocketClientOptions options)
         {
             BittrexSocketClientOptions.Default = options;
+        }
+
+        /// <inheritdoc />
+        public void SetApiCredentials(ApiCredentials credentials)
+        {
+            SpotStreams.SetApiCredentials(credentials);
         }
     }
 }

@@ -24,10 +24,6 @@ namespace Bittrex.Net.Clients.SpotApi
     {
         internal static TimeSyncState TimeSyncState = new TimeSyncState("Api");
 
-        internal static TimeSpan TimeOffset;
-        internal static SemaphoreSlim SemaphoreSlim = new SemaphoreSlim(1, 1);
-        internal static DateTime LastTimeSync;
-
         /// <inheritdoc />
         public string ExchangeName => "Bittrex";
 
@@ -424,11 +420,11 @@ namespace Bittrex.Net.Clients.SpotApi
             => ExchangeData.GetServerTimeAsync();
 
         /// <inheritdoc />
-        public override TimeSyncInfo GetTimeSyncInfo()
+        public override TimeSyncInfo? GetTimeSyncInfo()
             => new TimeSyncInfo(_log, Options.AutoTimestamp, Options.TimestampRecalculationInterval, TimeSyncState);
 
         /// <inheritdoc />
-        public override TimeSpan GetTimeOffset()
+        public override TimeSpan? GetTimeOffset()
             => TimeSyncState.TimeOffset;
 
         /// <inheritdoc />

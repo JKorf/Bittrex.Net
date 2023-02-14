@@ -53,6 +53,9 @@
             </summary>
             <param name="options">Options to use as default</param>
         </member>
+        <member name="M:Bittrex.Net.Clients.BittrexClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <inheritdoc />
+        </member>
         <member name="T:Bittrex.Net.Clients.BittrexSocketClient">
             <inheritdoc cref="T:Bittrex.Net.Interfaces.Clients.IBittrexSocketClient" />
         </member>
@@ -75,6 +78,9 @@
             Set the default options to be used when creating new clients
             </summary>
             <param name="options">Options to use as default</param>
+        </member>
+        <member name="M:Bittrex.Net.Clients.BittrexSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <inheritdoc />
         </member>
         <member name="T:Bittrex.Net.Clients.SpotApi.BittrexClientSpotApi">
             <inheritdoc cref="T:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi" />
@@ -677,6 +683,12 @@
             Spot API
             </summary>
         </member>
+        <member name="M:Bittrex.Net.Interfaces.Clients.IBittrexClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <summary>
+            Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.
+            </summary>
+            <param name="credentials">The credentials to set</param>
+        </member>
         <member name="T:Bittrex.Net.Interfaces.Clients.IBittrexSocketClient">
             <summary>
             Client for accessing the Bittrex websocket API
@@ -687,14 +699,15 @@
             Spot streams
             </summary>
         </member>
+        <member name="M:Bittrex.Net.Interfaces.Clients.IBittrexSocketClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
+            <summary>
+            Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.
+            </summary>
+            <param name="credentials">The credentials to set</param>
+        </member>
         <member name="T:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi">
             <summary>
             Bittrex spot API endpoints
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi.RequestFactory">
-            <summary>
-            The factory for creating requests. Used for unit testing
             </summary>
         </member>
         <member name="P:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexClientSpotApi.Account">
@@ -1253,11 +1266,6 @@
         <member name="T:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexSocketClientSpotStreams">
             <summary>
             Bittrex Spot streams
-            </summary>
-        </member>
-        <member name="P:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexSocketClientSpotStreams.SocketFactory">
-            <summary>
-            The factory for creating sockets. Used for unit testing
             </summary>
         </member>
         <member name="M:Bittrex.Net.Interfaces.Clients.SpotApi.IBittrexSocketClientSpotStreams.SubscribeToHeartbeatAsync(System.Action{CryptoExchange.Net.Sockets.DataEvent{System.DateTime}},System.Threading.CancellationToken)">

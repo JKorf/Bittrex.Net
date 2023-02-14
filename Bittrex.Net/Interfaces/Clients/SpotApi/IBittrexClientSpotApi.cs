@@ -7,13 +7,8 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// <summary>
     /// Bittrex spot API endpoints
     /// </summary>
-    public interface IBittrexClientSpotApi : IDisposable
+    public interface IBittrexClientSpotApi : IRestApiClient, IDisposable
     {
-        /// <summary>
-        /// The factory for creating requests. Used for unit testing
-        /// </summary>
-        IRequestFactory RequestFactory { get; set; }
-
         /// <summary>
         /// Endpoints related to account settings, info or actions
         /// </summary>
