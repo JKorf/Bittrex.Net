@@ -7,5 +7,8 @@ has_children: true
 *Client for accessing the Bittrex websocket API*
   
 ***
+*Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.*  
+**void SetApiCredentials(ApiCredentials credentials);**  
+***
 *Spot streams*  
 **[IBittrexSocketClientSpotStreams](SpotApi/IBittrexSocketClientSpotStreams.html) SpotStreams { get; }**  
