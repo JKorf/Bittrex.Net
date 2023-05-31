@@ -17,11 +17,11 @@ using CryptoExchange.Net.CommonObjects;
 namespace Bittrex.Net.Clients.SpotApi
 {
     /// <inheritdoc />
-    public class BittrexClientSpotApiTrading : IBittrexClientSpotApiTrading
+    public class BittrexRestClientSpotApiTrading : IBittrexRestClientSpotApiTrading
     {
-        private readonly BittrexClientSpotApi _baseClient;
+        private readonly BittrexRestClientSpotApi _baseClient;
 
-        internal BittrexClientSpotApiTrading(BittrexClientSpotApi baseClient)
+        internal BittrexRestClientSpotApiTrading(BittrexRestClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }

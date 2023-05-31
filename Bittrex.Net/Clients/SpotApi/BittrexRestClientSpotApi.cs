@@ -1,13 +1,13 @@
 ﻿using Bittrex.Net.Enums;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
-using Bittrex.Net.Objects;
+using Bittrex.Net.Objects.Options;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.CommonObjects;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Interfaces.CommonClients;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Objects;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -19,8 +19,8 @@ using System.Threading.Tasks;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
-    /// <inheritdoc cref="IBittrexClientSpotApi" />
-    public class BittrexClientSpotApi : RestApiClient, IBittrexClientSpotApi, ISpotClient
+    /// <inheritdoc cref="IBittrexRestClientSpotApi" />
+    public class BittrexRestClientSpotApi : RestApiClient, IBittrexRestClientSpotApi, ISpotClient
     {
         internal static TimeSyncState TimeSyncState = new TimeSyncState("Api");
 
@@ -30,20 +30,20 @@ namespace Bittrex.Net.Clients.SpotApi
         #region Api clients
 
         /// <inheritdoc />
-        public IBittrexClientSpotApiAccount Account { get; }
+        public IBittrexRestClientSpotApiAccount Account { get; }
         /// <inheritdoc />
-        public IBittrexClientSpotApiExchangeData ExchangeData { get; }
+        public IBittrexRestClientSpotApiExchangeData ExchangeData { get; }
         /// <inheritdoc />
-        public IBittrexClientSpotApiTrading Trading { get; }
+        public IBittrexRestClientSpotApiTrading Trading { get; }
 
         #endregion
 
-        internal BittrexClientSpotApi(Log log, BittrexClientOptions options) :
-            base(log, options, options.SpotApiOptions)
+        internal BittrexRestClientSpotApi(ILogger logger, HttpClient? httpClient, BittrexRestOptions options) :
+            base(logger, httpClient, options.Environment.RestAddress, options, options.SpotOptions)
         {
-            Account = new BittrexClientSpotApiAccount(this);
-            ExchangeData = new BittrexClientSpotApiExchangeData(this);
-            Trading = new BittrexClientSpotApiTrading(this);
+            Account = new BittrexRestClientSpotApiAccount(this);
+            ExchangeData = new BittrexRestClientSpotApiExchangeData(this);
+            Trading = new BittrexRestClientSpotApiTrading(this);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <returns></returns>
         internal Uri GetUrl(string endpoint)
         {
-            return new Uri(Options.BaseAddress.AppendPath($"v3", endpoint));
+            return new Uri(BaseAddress.AppendPath($"v3", endpoint));
         }
 
         /// <inheritdoc />
@@ -421,7 +421,7 @@ namespace Bittrex.Net.Clients.SpotApi
 
         /// <inheritdoc />
         public override TimeSyncInfo? GetTimeSyncInfo()
-            => new TimeSyncInfo(_log, Options.AutoTimestamp, Options.TimestampRecalculationInterval, TimeSyncState);
+            => new TimeSyncInfo(_logger, Options.AutoTimestamp, Options.TimestampRecalculationInterval, TimeSyncState);
 
         /// <inheritdoc />
         public override TimeSpan? GetTimeOffset()

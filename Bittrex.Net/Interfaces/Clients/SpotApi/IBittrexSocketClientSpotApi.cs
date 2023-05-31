@@ -14,7 +14,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// <summary>
     /// Bittrex Spot streams
     /// </summary>
-    public interface IBittrexSocketClientSpotStreams : ISocketApiClient, IDisposable
+    public interface IBittrexSocketClientSpotApi : ISocketApiClient, IDisposable
     {
         /// <summary>
         /// Subscribe to heartbeat updates

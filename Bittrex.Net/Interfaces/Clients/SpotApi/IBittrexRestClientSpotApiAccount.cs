@@ -11,7 +11,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// <summary>
     /// Bittrex account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings
     /// </summary>
-    public interface IBittrexClientSpotApiAccount
+    public interface IBittrexRestClientSpotApiAccount
     {
         /// <summary>
         /// Get permissions for a specific asset

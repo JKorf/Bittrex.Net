@@ -11,12 +11,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Clients;
 using Bittrex.Net.Interfaces.Clients;
-using Bittrex.Net.Objects;
-using CryptoExchange.Net;
+using Bittrex.Net.Objects.Options;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 
@@ -64,45 +63,45 @@ namespace Bittrex.Net.UnitTests.TestImplementations
             return self == to;
         }
 
-        public static BittrexSocketClient CreateSocketClient(IWebsocket socket, BittrexSocketClientOptions options = null)
+        public static BittrexSocketClient CreateSocketClient(IWebsocket socket, Action<BittrexSocketOptions> options = null)
         {
             BittrexSocketClient client;
             client = options != null ? new BittrexSocketClient(options) : new BittrexSocketClient();
-            client.SpotStreams.SocketFactory = Mock.Of<IWebsocketFactory>();
-            Mock.Get(client.SpotStreams.SocketFactory).Setup(f => f.CreateWebsocket(It.IsAny<Log>(), It.IsAny<WebSocketParameters>())).Returns(socket);
+            client.SpotApi.SocketFactory = Mock.Of<IWebsocketFactory>();
+            Mock.Get(client.SpotApi.SocketFactory).Setup(f => f.CreateWebsocket(It.IsAny<ILogger>(), It.IsAny<WebSocketParameters>())).Returns(socket);
             return client;
         }
 
-        public static IBittrexClient CreateClient(BittrexClientOptions options = null)
+        public static IBittrexRestClient CreateClient(Action<BittrexRestOptions> options = null) 
         {
-            IBittrexClient client;
-            client = options != null ? new BittrexClient(options) : new BittrexClient();
+            IBittrexRestClient client;
+            client = options != null ? new BittrexRestClient(options) : new BittrexRestClient();
             client.SpotApi.RequestFactory = Mock.Of<IRequestFactory>();
             return client;
         }
 
-        public static IBittrexClient CreateResponseClient(string response, BittrexClientOptions options = null)
+        public static IBittrexRestClient CreateResponseClient(string response, Action<BittrexRestOptions> options = null)
         {
-            var client = (BittrexClient)CreateClient(options);
+            var client = (BittrexRestClient)CreateClient(options);
             SetResponse(client, response);
             return client;
         }
 
-        public static IBittrexClient CreateResponseClient<T>(T response, BittrexClientOptions options = null, HttpStatusCode code = HttpStatusCode.OK)
+        public static IBittrexRestClient CreateResponseClient<T>(T response, Action<BittrexRestOptions> options = null, HttpStatusCode code = HttpStatusCode.OK)
         {
-            var client = (BittrexClient)CreateClient(options);
+            var client = (BittrexRestClient)CreateClient(options);
             SetResponse(client, JsonConvert.SerializeObject(response), code);
             return client;
         }
 
-        public static IBittrexClient CreateAuthenticatedResponseClient<T>(T response, BittrexClientOptions options = null)
+        public static IBittrexRestClient CreateAuthenticatedResponseClient<T>(T response, Action<BittrexRestOptions> options = null)
         {
-            var client = (BittrexClient)CreateClient(options ?? new BittrexClientOptions(){ApiCredentials = new ApiCredentials("Test", "Test")});
+            var client = (BittrexRestClient)CreateClient(options ?? new Action<BittrexRestOptions>(x => { x.ApiCredentials = new ApiCredentials("Test", "Test"); })); 
             SetResponse(client, JsonConvert.SerializeObject(response));
             return client;
         }
 
-        public static void SetResponse(BittrexClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
+        public static void SetResponse(BittrexRestClient client, string responseData, HttpStatusCode code = HttpStatusCode.OK)
         {
             var expectedBytes = Encoding.UTF8.GetBytes(responseData);
             var responseStream = new MemoryStream();

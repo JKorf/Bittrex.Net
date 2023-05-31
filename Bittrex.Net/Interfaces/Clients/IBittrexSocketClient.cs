@@ -12,7 +12,7 @@ namespace Bittrex.Net.Interfaces.Clients
         /// <summary>
         /// Spot streams
         /// </summary>
-        IBittrexSocketClientSpotStreams SpotStreams { get; }
+        IBittrexSocketClientSpotApi SpotApi { get; }
 
         /// <summary>
         /// Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.

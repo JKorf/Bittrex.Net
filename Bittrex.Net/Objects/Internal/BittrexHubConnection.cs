@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
-using Microsoft.AspNet.SignalR.Client.Transports;
 using Microsoft.AspNet.SignalR.Client.Http;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
 using CryptoExchange.Net.Objects;
 using Microsoft.Extensions.Logging;
@@ -17,7 +15,7 @@ namespace Bittrex.Net.Objects.Internal
     {
         private readonly HubConnection _connection;
         private readonly WebsocketCustomTransport _transport;
-        private readonly Log _log;
+        private readonly ILogger _logger;
         private IHubProxy? _hubProxy;
 
         public event Action? OnClose;
@@ -34,13 +32,13 @@ namespace Bittrex.Net.Objects.Internal
         public bool IsClosed => _transport.Socket.IsClosed;
         public Func<Task<Uri?>>? GetReconnectionUrl { get; set; }
 
-        public BittrexHubConnection(Log log, WebSocketParameters parameters)
+        public BittrexHubConnection(ILogger logger, WebSocketParameters parameters)
         {
             _connection = new HubConnection(parameters.Uri.ToString());
-            _log = log;
+            _logger = logger;
 
             var client = new DefaultHttpClient();
-            _transport = new WebsocketCustomTransport(log, client, parameters);
+            _transport = new WebsocketCustomTransport(_logger, client, parameters);
             _transport.Socket.OnReconnecting += () => OnReconnecting?.Invoke();
             _transport.Socket.OnReconnected += () => OnReconnected?.Invoke();
             _transport.Socket.OnOpen += () => OnOpen?.Invoke();
@@ -73,13 +71,13 @@ namespace Bittrex.Net.Objects.Internal
             {
                 try
                 {
-                    _log.Write(LogLevel.Debug, $"Socket {_transport.Socket.Id} sending data: {call}, {ArrayToString(pars)}");
+                    _logger.Log(LogLevel.Debug, $"Socket {_transport.Socket.Id} sending data: {call}, {ArrayToString(pars)}");
                     var sub = await _hubProxy.Invoke<T>(call, pars).ConfigureAwait(false);
                     return new CallResult<T>(sub);
                 }
                 catch (Exception e)
                 {
-                    _log.Write(LogLevel.Warning, $"Socket {_transport.Socket.Id} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
+                    _logger.Log(LogLevel.Warning, $"Socket {_transport.Socket.Id} failed to invoke proxy, try {i}: " + (e.InnerException?.Message ?? e.Message));
                     error = new UnknownError("Failed to invoke proxy: " + (e.InnerException?.Message ?? e.Message));
                 }
             }

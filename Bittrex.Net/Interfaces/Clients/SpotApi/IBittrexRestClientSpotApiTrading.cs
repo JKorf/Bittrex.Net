@@ -11,7 +11,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// <summary>
     /// Bittrex trading endpoints, placing and mananging orders.
     /// </summary>
-    public interface IBittrexClientSpotApiTrading
+    public interface IBittrexRestClientSpotApiTrading
     {
         /// <summary>
         /// Gets a list of closed orders

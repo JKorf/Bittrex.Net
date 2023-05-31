@@ -15,11 +15,11 @@ using Bittrex.Net.Interfaces.Clients.SpotApi;
 namespace Bittrex.Net.Clients.SpotApi
 {
     /// <inheritdoc />
-    public class BittrexClientSpotApiExchangeData : IBittrexClientSpotApiExchangeData
+    public class BittrexRestClientSpotApiExchangeData : IBittrexRestClientSpotApiExchangeData
     {
-        private readonly BittrexClientSpotApi _baseClient;
+        private readonly BittrexRestClientSpotApi _baseClient;
 
-        internal BittrexClientSpotApiExchangeData(BittrexClientSpotApi baseClient)
+        internal BittrexRestClientSpotApiExchangeData(BittrexRestClientSpotApi baseClient)
         {
             _baseClient = baseClient;
         }

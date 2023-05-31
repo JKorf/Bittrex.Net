@@ -1,24 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bittrex.Net.Objects;
-using Bittrex.Net.Interfaces;
 using CryptoExchange.Net;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text.RegularExpressions;
-using CryptoExchange.Net.Objects;
-using CryptoExchange.Net.Sockets;
-using Newtonsoft.Json.Linq;
-using CryptoExchange.Net.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Threading;
-using Bittrex.Net.Objects.Internal;
 using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
 using Bittrex.Net.Clients.SpotApi;
 using CryptoExchange.Net.Authentication;
+using Bittrex.Net.Objects.Options;
 
 namespace Bittrex.Net.Clients
 {
@@ -32,41 +19,58 @@ namespace Bittrex.Net.Clients
         #region Api clients
 
         /// <inheritdoc />
-        public IBittrexSocketClientSpotStreams SpotStreams { get; }
+        public IBittrexSocketClientSpotApi SpotApi { get; }
 
         #endregion
 
         #region ctor
+
         /// <summary>
-        /// Creates a new socket client using the default options
+        /// Create a new instance of the BittrexSocketClient
         /// </summary>
-        public BittrexSocketClient() : this(BittrexSocketClientOptions.Default)
+        /// <param name="loggerFactory">The logger factory</param>
+        public BittrexSocketClient(ILoggerFactory? loggerFactory = null) : this((x) => { }, loggerFactory)
         {
         }
 
         /// <summary>
-        /// Creates a new socket client using the provided options
+        /// Create a new instance of the BittrexSocketClient
         /// </summary>
-        /// <param name="options">Options to use for this client</param>
-        public BittrexSocketClient(BittrexSocketClientOptions options) : base("Bittrex", options)
+        /// <param name="optionsDelegate">Option configuration delegate</param>
+        public BittrexSocketClient(Action<BittrexSocketOptions> optionsDelegate) : this(optionsDelegate, null)
         {
-            SpotStreams = AddApiClient(new BittrexSocketClientSpotStreams(log, options));
+        }
+
+        /// <summary>
+        /// Create a new instance of the BittrexSocketClient
+        /// </summary>
+        /// <param name="loggerFactory">The logger factory</param>
+        /// <param name="optionsDelegate">Option configuration delegate</param>
+        public BittrexSocketClient(Action<BittrexSocketOptions> optionsDelegate, ILoggerFactory? loggerFactory = null) : base(loggerFactory, "Bittrex")
+        {
+            var options = BittrexSocketOptions.Default.Copy();
+            optionsDelegate(options);
+            Initialize(options);
+
+            SpotApi = AddApiClient(new BittrexSocketClientSpotApi(_logger, options));
         }
         #endregion
 
         /// <summary>
         /// Set the default options to be used when creating new clients
         /// </summary>
-        /// <param name="options">Options to use as default</param>
-        public static void SetDefaultOptions(BittrexSocketClientOptions options)
+        /// <param name="optionsDelegate">Option configuration delegate</param>
+        public static void SetDefaultOptions(Action<BittrexSocketOptions> optionsDelegate)
         {
-            BittrexSocketClientOptions.Default = options;
+            var options = BittrexSocketOptions.Default.Copy();
+            optionsDelegate(options);
+            BittrexSocketOptions.Default = options;
         }
 
         /// <inheritdoc />
         public void SetApiCredentials(ApiCredentials credentials)
         {
-            SpotStreams.SetApiCredentials(credentials);
+            SpotApi.SetApiCredentials(credentials);
         }
     }
 }

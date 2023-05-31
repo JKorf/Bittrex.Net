@@ -1,11 +1,16 @@
 ﻿using Bittrex.Net.Clients;
 using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Objects;
+using Bittrex.Net.Objects.Options;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net;
 using System.Text.RegularExpressions;
+using Bitfinex.Net.SymbolOrderBooks;
+using Bittrex.Net.Interfaces;
 
 namespace Bittrex.Net
 {
@@ -31,27 +36,47 @@ namespace Bittrex.Net
         /// Add the IBittrexClient and IBittrexSocketClient to the sevice collection so they can be injected
         /// </summary>
         /// <param name="services">The service collection</param>
-        /// <param name="defaultOptionsCallback">Set default options for the client</param>
-        /// <param name="socketClientLifeTime">The lifetime of the IBittrexSocketClient for the service collection. Defaults to Scoped.</param>
+        /// <param name="defaultRestOptionsDelegate">Set default options for the rest client</param>
+        /// <param name="defaultSocketOptionsDelegate">Set default options for the socket client</param>
+        /// <param name="socketClientLifeTime">The lifetime of the IBittrexSocketClient for the service collection. Defaults to Singleton.</param>
         /// <returns></returns>
         public static IServiceCollection AddBittrex(
-            this IServiceCollection services, 
-            Action<BittrexClientOptions, BittrexSocketClientOptions>? defaultOptionsCallback = null,
+            this IServiceCollection services,
+            Action<BittrexRestOptions>? defaultRestOptionsDelegate = null,
+            Action<BittrexSocketOptions>? defaultSocketOptionsDelegate = null,
             ServiceLifetime? socketClientLifeTime = null)
         {
-            if (defaultOptionsCallback != null)
-            {
-                var options = new BittrexClientOptions();
-                var socketOptions = new BittrexSocketClientOptions();
-                defaultOptionsCallback?.Invoke(options, socketOptions);
+            var restOptions = BittrexRestOptions.Default.Copy();
 
-                BittrexClient.SetDefaultOptions(options);
-                BittrexSocketClient.SetDefaultOptions(socketOptions);
+            if (defaultRestOptionsDelegate != null)
+            {
+                defaultRestOptionsDelegate(restOptions);
+                BittrexRestClient.SetDefaultOptions(defaultRestOptionsDelegate);
             }
 
-            services.AddTransient<IBittrexClient, BittrexClient>();
+            if (defaultSocketOptionsDelegate != null)
+                BittrexSocketClient.SetDefaultOptions(defaultSocketOptionsDelegate);
+
+            services.AddHttpClient<IBittrexRestClient, BittrexRestClient>(options =>
+            {
+                options.Timeout = restOptions.RequestTimeout;
+            }).ConfigurePrimaryHttpMessageHandler(() => {
+                var handler = new HttpClientHandler();
+                if (restOptions.Proxy != null)
+                {
+                    handler.Proxy = new WebProxy
+                    {
+                        Address = new Uri($"{restOptions.Proxy.Host}:{restOptions.Proxy.Port}"),
+                        Credentials = restOptions.Proxy.Password == null ? null : new NetworkCredential(restOptions.Proxy.Login, restOptions.Proxy.Password)
+                    };
+                }
+                return handler;
+            });
+
+            services.AddSingleton<IBittrexOrderBookFactory, BittrexOrderBookFactory>();
+            services.AddTransient<IBittrexRestClient, BittrexRestClient>();
             if (socketClientLifeTime == null)
-                services.AddScoped<IBittrexSocketClient, BittrexSocketClient>();
+                services.AddSingleton<IBittrexSocketClient, BittrexSocketClient>();
             else
                 services.Add(new ServiceDescriptor(typeof(IBittrexSocketClient), typeof(BittrexSocketClient), socketClientLifeTime.Value));
             return services;

@@ -8,14 +8,14 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using CryptoExchange.Net.Interfaces;
-using CryptoExchange.Net.Logging;
 using CryptoExchange.Net.Sockets;
+using Microsoft.Extensions.Logging;
 
 namespace Bittrex.Net.Objects.Internal
 {
     internal class WebsocketCustomTransport : ClientTransportBase
     {
-        private readonly Log _log;
+        private readonly ILogger _logger;
         private readonly IWebsocket _websocket;
         private readonly WebSocketParameters _parameters;
 
@@ -26,12 +26,12 @@ namespace Bittrex.Net.Objects.Internal
         public override bool SupportsKeepAlive => true;
         public IWebsocket Socket => _websocket;
 
-        public WebsocketCustomTransport(Log log, IHttpClient client, WebSocketParameters parameters) : base(client, "webSockets")
+        public WebsocketCustomTransport(ILogger log, IHttpClient client, WebSocketParameters parameters) : base(client, "webSockets")
         {
-            _log = log;
+            _logger = log;
             _parameters = parameters;
 
-            _websocket = new CryptoExchangeWebSocketClient(_log, _parameters);
+            _websocket = new CryptoExchangeWebSocketClient(_logger, _parameters);
             _websocket.OnMessage += WebSocketOnMessageReceived;
         }
 

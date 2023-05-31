@@ -7,12 +7,12 @@ namespace Bittrex.Net.Interfaces.Clients
     /// <summary>
     /// Client for accessing the Bittrex Rest API. 
     /// </summary>
-    public interface IBittrexClient : IRestClient
+    public interface IBittrexRestClient : IRestClient
     {
         /// <summary>
         /// Spot API
         /// </summary>
-        IBittrexClientSpotApi SpotApi { get; }
+        IBittrexRestClientSpotApi SpotApi { get; }
 
         /// <summary>
         /// Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.

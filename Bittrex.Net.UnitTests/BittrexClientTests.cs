@@ -48,7 +48,7 @@ namespace Bittrex.Net.UnitTests
         [Test]
         public void CheckRestInterfaces()
         {
-            var assembly = Assembly.GetAssembly(typeof(BittrexClient));
+            var assembly = Assembly.GetAssembly(typeof(BittrexRestClient));
             var ignore = new string[] { "IBittrexClient" };
             var clientInterfaces = assembly.GetTypes().Where(t => t.Name.StartsWith("IBittrexClient") && !ignore.Contains(t.Name));
 
