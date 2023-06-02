@@ -25,8 +25,7 @@ namespace Bittrex.Net.UnitTests
             var authProvider = new BittrexAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // assert
-            Assert.AreEqual(authProvider.Credentials.Key.GetString(), "TestKey");
-            Assert.AreEqual(authProvider.Credentials.Secret.GetString(), "TestSecret");
+            Assert.AreEqual(authProvider.GetApiKey(), "TestKey");
         }
 
         [TestCase("BTC-USDT", true)]

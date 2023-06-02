@@ -22,7 +22,7 @@ namespace Bittrex.Net.Clients.SpotApi
     /// <inheritdoc cref="IBittrexRestClientSpotApi" />
     public class BittrexRestClientSpotApi : RestApiClient, IBittrexRestClientSpotApi, ISpotClient
     {
-        internal static TimeSyncState TimeSyncState = new TimeSyncState("Api");
+        internal static TimeSyncState _timeSyncState = new TimeSyncState("Api");
 
         /// <inheritdoc />
         public string ExchangeName => "Bittrex";
@@ -233,8 +233,8 @@ namespace Bittrex.Net.Clients.SpotApi
         async Task<WebCallResult<IEnumerable<UserTrade>>> IBaseRestClient.GetOrderTradesAsync(string orderId, string? symbol, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(orderId))
-                throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(orderId))
-                    ;
+                throw new ArgumentException(nameof(orderId) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(orderId));
+
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetOrderTradesAsync), nameof(symbol));
 
@@ -421,11 +421,11 @@ namespace Bittrex.Net.Clients.SpotApi
 
         /// <inheritdoc />
         public override TimeSyncInfo? GetTimeSyncInfo()
-            => new TimeSyncInfo(_logger, Options.AutoTimestamp, Options.TimestampRecalculationInterval, TimeSyncState);
+            => new TimeSyncInfo(_logger, ApiOptions.AutoTimestamp, ApiOptions.TimestampRecalculationInterval, _timeSyncState);
 
         /// <inheritdoc />
         public override TimeSpan? GetTimeOffset()
-            => TimeSyncState.TimeOffset;
+            => _timeSyncState.TimeOffset;
 
         /// <inheritdoc />
         public ISpotClient CommonSpotClient => this;

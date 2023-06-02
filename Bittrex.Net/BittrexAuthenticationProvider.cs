@@ -12,6 +12,8 @@ namespace Bittrex.Net
 {
     internal class BittrexAuthenticationProvider : AuthenticationProvider
     {
+        public string GetApiKey() => _credentials.Key!.GetString();
+
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
         }
@@ -25,7 +27,7 @@ namespace Bittrex.Net
             if (!auth)
                 return;
 
-            headers.Add("Api-Key", Credentials.Key!.GetString());
+            headers.Add("Api-Key", _credentials.Key!.GetString());
             headers.Add("Api-Timestamp", GetMillisecondTimestamp(apiClient));
 
             string jsonContent = string.Empty;

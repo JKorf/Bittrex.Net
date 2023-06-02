@@ -327,7 +327,7 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
-            if (s.ApiClient.AuthenticationProvider?.Credentials?.Key == null)
+            if (s.ApiClient.AuthenticationProvider == null)
                 return new CallResult<bool>(new NoApiCredentialsError());
 
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -336,7 +336,8 @@ namespace Bittrex.Net.Clients.SpotApi
             var signedContent = s.ApiClient.AuthenticationProvider.Sign(content);
             var socket = (ISignalRSocket)s.GetSocket();
 
-            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.ApiClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
+            var bittrexAuthProvider = (BittrexAuthenticationProvider)s.ApiClient.AuthenticationProvider;
+            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", bittrexAuthProvider.GetApiKey(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {
                 _logger.Log(LogLevel.Error, $"Socket {s.SocketId} Authentication failed, api key/secret is probably invalid");
