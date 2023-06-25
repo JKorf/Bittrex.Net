@@ -11,14 +11,11 @@ namespace Bittrex.Net.UnitTests
     [TestFixture]
     public class JsonTests
     {
-        private JsonToObjectComparer<IBittrexClient> _comparer = new JsonToObjectComparer<IBittrexClient>((json) => TestHelpers.CreateResponseClient(json, new BittrexClientOptions()
-        { 
-            ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123"), 
-            SpotApiOptions = new CryptoExchange.Net.Objects.RestApiClientOptions
-            {
-                OutputOriginalData = true,
-                RateLimiters = new List<IRateLimiter>()
-            }
+        private JsonToObjectComparer<IBittrexRestClient> _comparer = new JsonToObjectComparer<IBittrexRestClient>((json) => TestHelpers.CreateResponseClient(json, x =>
+        {
+            x.ApiCredentials = new CryptoExchange.Net.Authentication.ApiCredentials("123", "123");
+            x.SpotOptions.RateLimiters = new List<IRateLimiter>();
+            x.SpotOptions.OutputOriginalData = true;
         }));
 
         [Test]

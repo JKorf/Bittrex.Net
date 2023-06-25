@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Bittrex.Net.Clients;
 using Bittrex.Net.Interfaces.Clients;
 using Bittrex.Net.Objects;
 using Bittrex.Net.Objects.Models.Socket;
+using Bittrex.Net.Objects.Options;
 using CryptoExchange.Net;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.OrderBook;
@@ -17,41 +19,56 @@ namespace Bittrex.Net.SymbolOrderBooks
     /// </summary>
     public class BittrexSymbolOrderBook: SymbolOrderBook
     {
-        private readonly IBittrexSocketClient socketClient;
-        private readonly IBittrexClient restClient;
+        private readonly IBittrexSocketClient _socketClient;
+        private readonly IBittrexRestClient _restClient;
         private readonly int _limit;
-        private readonly bool _socketOwner;
-        private readonly bool _restOwner;
+        private readonly bool _clientOwner;
 
         /// <summary>
         /// Create a new order book instance
         /// </summary>
         /// <param name="symbol">The symbol the order book is for</param>
-        /// <param name="options">Options for the order book</param>
-        public BittrexSymbolOrderBook(string symbol, BittrexOrderBookOptions? options = null) : base("Bittrex", symbol, options ?? new BittrexOrderBookOptions())
+        /// <param name="optionsDelegate">Option configuration delegate</param>
+        public BittrexSymbolOrderBook(string symbol, Action<BittrexOrderBookOptions>? optionsDelegate = null)
+            : this(symbol, optionsDelegate, null, null, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new order book instance
+        /// </summary>
+        /// <param name="symbol">The symbol the order book is for</param>
+        /// <param name="optionsDelegate">Option configuration delegate</param>
+        /// <param name="logger">Logger</param>
+        /// <param name="restClient">Rest client instance</param>
+        /// <param name="socketClient">Socket client instance</param>
+        public BittrexSymbolOrderBook(string symbol,
+            Action<BittrexOrderBookOptions>? optionsDelegate,
+            ILogger<BittrexSymbolOrderBook>? logger,
+            IBittrexRestClient? restClient,
+            IBittrexSocketClient? socketClient) : base(logger, "Bittrex", symbol)
         {
             symbol.ValidateBittrexSymbol();
+
+            var options = BittrexOrderBookOptions.Default.Copy();
+            if (optionsDelegate != null)
+                optionsDelegate(options);
+            Initialize(options);
+
             _limit = options?.Limit ?? 25;
 
-            sequencesAreConsecutive = true;
-            strictLevels = true;
+            _sequencesAreConsecutive = true;
+            _strictLevels = true;
 
-            socketClient = options?.SocketClient ?? new BittrexSocketClient(new BittrexSocketClientOptions()
-            {
-                LogLevel = options?.LogLevel ?? LogLevel.Information
-            });
-            restClient = options?.RestClient ?? new BittrexClient(new BittrexClientOptions()
-            {
-                LogLevel = options?.LogLevel ?? LogLevel.Information
-            });
-            _socketOwner = options?.SocketClient == null;
-            _restOwner = options?.RestClient == null;
+            _socketClient = socketClient ?? new BittrexSocketClient();
+            _restClient = restClient ?? new BittrexRestClient();
+            _clientOwner = restClient == null;
         }
 
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStartAsync(CancellationToken ct)
         {
-            var subResult = await socketClient.SpotStreams.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
+            var subResult = await _socketClient.SpotApi.SubscribeToOrderBookUpdatesAsync(Symbol, _limit, HandleUpdate).ConfigureAwait(false);
             if (!subResult.Success)
                 return new CallResult<UpdateSubscription>(subResult.Error!);
 
@@ -64,7 +81,7 @@ namespace Bittrex.Net.SymbolOrderBooks
             Status = OrderBookStatus.Syncing;
             // Slight wait to make sure the order book snapshot is from after the start of the stream
             await Task.Delay(300).ConfigureAwait(false);
-            var queryResult = await restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
+            var queryResult = await _restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol, _limit).ConfigureAwait(false);
             if (!queryResult.Success)
             {
                 await subResult.Data.CloseAsync().ConfigureAwait(false);
@@ -83,7 +100,7 @@ namespace Bittrex.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> DoResyncAsync(CancellationToken ct)
         {
-            var queryResult = await restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
+            var queryResult = await _restClient.SpotApi.ExchangeData.GetOrderBookAsync(Symbol).ConfigureAwait(false);
             if (!queryResult.Success)
                 return new CallResult<bool>(queryResult.Error!);
             
@@ -96,10 +113,11 @@ namespace Bittrex.Net.SymbolOrderBooks
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (_socketOwner)
-                socketClient?.Dispose();
-            if (_restOwner)
-                restClient?.Dispose();
+            if (_clientOwner)
+            {
+                _socketClient?.Dispose();
+                _restClient?.Dispose();
+            }
 
             base.Dispose(disposing);
         }

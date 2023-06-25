@@ -12,8 +12,12 @@ namespace Bittrex.Net
 {
     internal class BittrexAuthenticationProvider : AuthenticationProvider
     {
+        public string GetApiKey() => _credentials.Key!.GetString();
+
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
+            if (credentials.CredentialType != ApiCredentialsType.Hmac)
+                throw new Exception("Only Hmac authentication is supported");
         }
 
         public override void AuthenticateRequest(RestApiClient apiClient, Uri uri, HttpMethod method, Dictionary<string, object> providedParameters, bool auth, ArrayParametersSerialization arraySerialization, HttpMethodParameterPosition parameterPosition, out SortedDictionary<string, object> uriParameters, out SortedDictionary<string, object> bodyParameters, out Dictionary<string, string> headers)
@@ -25,7 +29,7 @@ namespace Bittrex.Net
             if (!auth)
                 return;
 
-            headers.Add("Api-Key", Credentials.Key!.GetString());
+            headers.Add("Api-Key", _credentials.Key!.GetString());
             headers.Add("Api-Timestamp", GetMillisecondTimestamp(apiClient));
 
             string jsonContent = string.Empty;

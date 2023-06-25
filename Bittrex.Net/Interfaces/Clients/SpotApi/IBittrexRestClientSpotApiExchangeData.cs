@@ -11,7 +11,7 @@ namespace Bittrex.Net.Interfaces.Clients.SpotApi
     /// <summary>
     /// Bittrex exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.
     /// </summary>
-    public interface IBittrexClientSpotApiExchangeData
+    public interface IBittrexRestClientSpotApiExchangeData
     {
         /// <summary>
         /// Gets the server time

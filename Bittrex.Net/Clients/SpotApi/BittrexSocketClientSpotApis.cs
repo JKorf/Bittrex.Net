@@ -14,7 +14,6 @@ using System.Threading;
 using Bittrex.Net.Objects.Models;
 using Bittrex.Net.Objects.Models.Socket;
 using Bittrex.Net.Interfaces.Clients.SpotApi;
-using CryptoExchange.Net.Logging;
 using Newtonsoft.Json.Linq;
 using Bittrex.Net.Objects.Internal;
 using Bittrex.Net.Interfaces;
@@ -23,19 +22,20 @@ using Microsoft.Extensions.Logging;
 using CryptoExchange.Net.Interfaces;
 using System.IO;
 using System.IO.Compression;
+using Bittrex.Net.Objects.Options;
 
 namespace Bittrex.Net.Clients.SpotApi
 {
-    /// <inheritdoc cref="IBittrexSocketClientSpotStreams" />
-    public class BittrexSocketClientSpotStreams : SocketApiClient, IBittrexSocketClientSpotStreams
+    /// <inheritdoc cref="IBittrexSocketClientSpotApi" />
+    public class BittrexSocketClientSpotApi : SocketApiClient, IBittrexSocketClientSpotApi
     {
         #region fields
         private const string _hubName = "c3";
         #endregion
 
         #region ctor
-        internal BittrexSocketClientSpotStreams(Log log, BittrexSocketClientOptions options) :
-            base(log, options, options.SpotStreamOptions)
+        internal BittrexSocketClientSpotApi(ILogger log, BittrexSocketOptions options) :
+            base(log, options.Environment.SocketAddress, options, options.SpotOptions)
         {
             SocketFactory = new BittrexWebsocketFactory();
 
@@ -327,7 +327,7 @@ namespace Bittrex.Net.Clients.SpotApi
         /// <inheritdoc />
         protected override async Task<CallResult<bool>> AuthenticateSocketAsync(SocketConnection s)
         {
-            if (s.ApiClient.AuthenticationProvider?.Credentials?.Key == null)
+            if (s.ApiClient.AuthenticationProvider == null)
                 return new CallResult<bool>(new NoApiCredentialsError());
 
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -336,14 +336,15 @@ namespace Bittrex.Net.Clients.SpotApi
             var signedContent = s.ApiClient.AuthenticationProvider.Sign(content);
             var socket = (ISignalRSocket)s.GetSocket();
 
-            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", s.ApiClient.AuthenticationProvider.Credentials.Key.GetString(), timestamp, randomContent, signedContent).ConfigureAwait(false);
+            var bittrexAuthProvider = (BittrexAuthenticationProvider)s.ApiClient.AuthenticationProvider;
+            var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", bittrexAuthProvider.GetApiKey(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {
-                _log.Write(LogLevel.Error, $"Socket {s.SocketId} Authentication failed, api key/secret is probably invalid");
+                _logger.Log(LogLevel.Error, $"Socket {s.SocketId} Authentication failed, api key/secret is probably invalid");
                 return new CallResult<bool>(result.Error ?? new ServerError("Authentication failed. Api key/secret is probably invalid"));
             }
 
-            _log.Write(LogLevel.Debug, $"Socket {s.SocketId} Authentication successful");
+            _logger.Log(LogLevel.Debug, $"Socket {s.SocketId} Authentication successful");
             return new CallResult<bool>(true);
         }
 
@@ -370,14 +371,14 @@ namespace Bittrex.Net.Clients.SpotApi
             var internalData = data.Data["A"];
             if (internalData == null || !internalData.Any())
             {
-                _log.Write(LogLevel.Warning, "Received update without data? " + data.Data);
+                _logger.Log(LogLevel.Warning, "Received update without data? " + data.Data);
                 return;
             }
 
             var actualData = internalData[0]?.ToString();
             if (actualData == null)
             {
-                _log.Write(LogLevel.Warning, "Received update without actual data? " + data.Data);
+                _logger.Log(LogLevel.Warning, "Received update without actual data? " + data.Data);
                 return;
             }
 
@@ -385,7 +386,7 @@ namespace Bittrex.Net.Clients.SpotApi
             if (result == null)
                 return;
 
-            _log.Write(LogLevel.Trace, "Socket received data: " + result);
+            _logger.Log(LogLevel.Trace, "Socket received data: " + result);
 
             var tokenResult = ValidateJson(result);
             if (!tokenResult)
@@ -405,7 +406,7 @@ namespace Bittrex.Net.Clients.SpotApi
 
             var decodeResult = Deserialize<T>(token);
             if (!decodeResult.Success)
-                _log.Write(LogLevel.Debug, "Failed to decode data: " + decodeResult.Error);
+                _logger.Log(LogLevel.Debug, "Failed to decode data: " + decodeResult.Error);
 
             handler(data.As(decodeResult.Data, symbol));
         }
@@ -430,7 +431,7 @@ namespace Bittrex.Net.Clients.SpotApi
             }
             catch (Exception e)
             {
-                _log.Write(LogLevel.Warning, "Exception in decode data: " + e.ToLogString());
+                _logger.Log(LogLevel.Warning, "Exception in decode data: " + e.ToLogString());
                 return null;
             }
         }

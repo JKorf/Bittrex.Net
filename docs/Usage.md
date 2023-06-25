@@ -4,42 +4,51 @@ nav_order: 2
 ---
 
 ## Creating client
-There are 2 clients available to interact with the Bittrex API, the `BittrexClient` and `BittrexSocketClient`.
+There are 2 clients available to interact with the Bittrex API, the `BittrexRestClient` and `BittrexSocketClient`. They can be created manually on the fly or be added to the dotnet DI using the `AddBittrex` extension method.
 
-*Create a new rest client*
+*Manually create a new client*
 ```csharp
-var bittrexClient = new BittrexClient(new BittrexClientOptions()
+var bittrexRestClient = new BittrexRestClient(options =>
+{
+	// Set options here for this client
+});
+
+var bittrexSocketClient = new BittrexSocketClient(options =>
 {
 	// Set options here for this client
 });
 ```
 
-*Create a new socket client*
+*Using dotnet dependency inject*
 ```csharp
-var bittrexSocketClient = new BittrexSocketClient(new BittrexSocketClientOptions()
-{
-	// Set options here for this client
-});
+services.AddBittrex(
+	restOptions => {
+		// set options for the rest client
+	},
+	socketClientOptions => {
+		// set options for the socket client
+	});	
+	
+// IBittrexRestClient, IBittrexSocketClient and IBittrexOrderBookFactory are now available for injecting
 ```
 
 Different options are available to set on the clients, see this example
 ```csharp
-var bittrexClient = new BittrexClient(new BittrexClientOptions()
+var bittrexRestClient = new BittrexRestClient(options =>
 {
-	ApiCredentials = new ApiCredentials("API-KEY", "API-SECRET"),
-	LogLevel = LogLevel.Trace,
-	RequestTimeout = TimeSpan.FromSeconds(60)
+	options.ApiCredentials = new ApiCredentials("API-KEY", "API-SECRET");
+	options.RequestTimeout = TimeSpan.FromSeconds(60);
 });
 ```
-Alternatively, options can be provided before creating clients by using `SetDefaultOptions`:
+Alternatively, options can be provided before creating clients by using `SetDefaultOptions` or during the registration in the DI container: 
 ```csharp
-BittrexClient.SetDefaultOptions(new BittrexClientOptions{
+BittrexRestClient.SetDefaultOptions(options => {
 	// Set options here for all new clients
 });
-var bittrexClient = new BittrexClient();
+var bittrexRestClient = new BittrexRestClient();
 ```
 More info on the specific options can be found in the [CryptoExchange.Net documentation](https://jkorf.github.io/CryptoExchange.Net/Options.html)
 
 ### Dependency injection
-See [CryptoExchange.Net documentation](https://jkorf.github.io/CryptoExchange.Net/Clients.html#dependency-injection)
+See [CryptoExchange.Net documentation](https://jkorf.github.io/CryptoExchange.Net/Dependency%20Injection.html)
 
