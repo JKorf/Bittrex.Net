@@ -35,16 +35,16 @@ var orderData = await bittrexRestClient.SpotApi.Trading.PlaceOrderAsync(
                 TimeInForce.GoodTillCanceled,
                 0.001m,
                 50000);
-		
+        
 // Placing a market buy order for 50USDT
 var orderData = await bittrexRestClient.SpotApi.Trading.PlaceOrderAsync(
                 "BTC-USDT",
                 OrderSide.Buy,
                 OrderType.Market,
                 TimeInForce.FillOrKill,
-                quoteQuantity: 50);			
-				
-													
+                quoteQuantity: 50);         
+                
+                                                    
 // Place a stop loss order, place a limit order of 0.001 BTC at 39000USDT each when the last trade price drops below 40000USDT
 var orderData = await bittrexRestClient.SpotApi.Trading.PlaceConditionalOrderAsync(
                 "BTC-USDT",
@@ -88,15 +88,15 @@ var userTradesResult = await bittrexRestClient.SpotApi.Trading.GetUserTradesAsyn
 ```csharp
 var subscribeResult = await bittrexSocketClient.SpotStreams.SubscribeToTickerUpdatesAsync(data =>
 {
-	// Handle ticker data
+    // Handle ticker data
 });
 ```
 
 ### Subscribing to order updates
 ```csharp
 var subscribeResult = await bittrexSocketClient.SpotStreams.SubscribeToOrderUpdatesAsync(data =>
-	data =>
-	{
-	  // Handle order updates
-	});
+    data =>
+    {
+      // Handle order updates
+    });
 ```
