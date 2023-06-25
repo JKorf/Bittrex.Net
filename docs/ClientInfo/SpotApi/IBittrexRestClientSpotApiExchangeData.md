@@ -1,11 +1,11 @@
 ---
-title: IBittrexClientSpotApiExchangeData
+title: IBittrexRestClientSpotApiExchangeData
 has_children: false
 parent: IBittrexClientSpotApi
 grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
-`BittrexClient > SpotApi > ExchangeData`  
+`BittrexClient > SpotApi > IBittrexRestClientExchangeData`  
 *Bittrex exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.*
   
 
@@ -20,7 +20,7 @@ grand_parent: Rest API documentation
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetAssetAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetAssetAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -45,7 +45,7 @@ Task<WebCallResult<BittrexAsset>> GetAssetAsync(string asset, CancellationToken 
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetAssetsAsync();  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetAssetsAsync();  
 ```  
 
 ```csharp  
@@ -69,7 +69,7 @@ Task<WebCallResult<IEnumerable<BittrexAsset>>> GetAssetsAsync(CancellationToken 
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetHistoricalKlinesAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetHistoricalKlinesAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -99,7 +99,7 @@ Task<WebCallResult<IEnumerable<BittrexKline>>> GetHistoricalKlinesAsync(string s
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetKlinesAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetKlinesAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -126,7 +126,7 @@ Task<WebCallResult<IEnumerable<BittrexKline>>> GetKlinesAsync(string symbol, Kli
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetOrderBookAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetOrderBookAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -152,7 +152,7 @@ Task<WebCallResult<BittrexOrderBook>> GetOrderBookAsync(string symbol, int? limi
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetServerTimeAsync();  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetServerTimeAsync();  
 ```  
 
 ```csharp  
@@ -176,7 +176,7 @@ Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default)
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetSymbolAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetSymbolAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -201,7 +201,7 @@ Task<WebCallResult<BittrexSymbol>> GetSymbolAsync(string symbol, CancellationTok
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetSymbolsAsync();  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetSymbolsAsync();  
 ```  
 
 ```csharp  
@@ -225,7 +225,7 @@ Task<WebCallResult<IEnumerable<BittrexSymbol>>> GetSymbolsAsync(CancellationToke
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetSymbolSummariesAsync();  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetSymbolSummariesAsync();  
 ```  
 
 ```csharp  
@@ -249,7 +249,7 @@ Task<WebCallResult<IEnumerable<BittrexSymbolSummary>>> GetSymbolSummariesAsync(C
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetSymbolSummaryAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetSymbolSummaryAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -274,7 +274,7 @@ Task<WebCallResult<BittrexSymbolSummary>> GetSymbolSummaryAsync(string symbol, C
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetTickerAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetTickerAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -299,7 +299,7 @@ Task<WebCallResult<BittrexTick>> GetTickerAsync(string symbol, CancellationToken
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetTickersAsync();  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetTickersAsync();  
 ```  
 
 ```csharp  
@@ -323,7 +323,7 @@ Task<WebCallResult<IEnumerable<BittrexTick>>> GetTickersAsync(CancellationToken 
 
 ```csharp  
 var client = new BittrexClient();  
-var result = await client.SpotApi.ExchangeData.GetTradeHistoryAsync(/* parameters */);  
+var result = await client.SpotApi.IBittrexRestClientExchangeData.GetTradeHistoryAsync(/* parameters */);  
 ```  
 
 ```csharp  

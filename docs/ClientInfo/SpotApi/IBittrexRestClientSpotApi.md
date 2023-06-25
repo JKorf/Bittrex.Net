@@ -1,10 +1,11 @@
 ---
-title: IBittrexClientSpotApi
+title: IBittrexRestClientSpotApi
 has_children: true
-parent: Rest API documentation
+parent: IBittrexClientSpotApi
+grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
-`BittrexClient > SpotApi`  
+`BittrexClient > SpotApi > IBittrexRestClient`  
 *Bittrex spot API endpoints*
   
 ***
@@ -12,10 +13,10 @@ parent: Rest API documentation
 **ISpotClient CommonSpotClient { get; }**  
 ***
 *Endpoints related to account settings, info or actions*  
-**[IBittrexClientSpotApiAccount](IBittrexClientSpotApiAccount.html) Account { get; }**  
+**IBittrexRestClientSpotApiAccount Account { get; }**  
 ***
 *Endpoints related to retrieving market and system data*  
-**[IBittrexClientSpotApiExchangeData](IBittrexClientSpotApiExchangeData.html) ExchangeData { get; }**  
+**IBittrexRestClientSpotApiExchangeData ExchangeData { get; }**  
 ***
 *Endpoints related to orders and trades*  
-**[IBittrexClientSpotApiTrading](IBittrexClientSpotApiTrading.html) Trading { get; }**  
+**IBittrexRestClientSpotApiTrading Trading { get; }**  

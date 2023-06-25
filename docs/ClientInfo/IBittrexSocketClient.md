@@ -11,4 +11,4 @@ has_children: true
 **void SetApiCredentials(ApiCredentials credentials);**  
 ***
 *Spot streams*  
-**[IBittrexSocketClientSpotStreams](SpotApi/IBittrexSocketClientSpotStreams.html) SpotStreams { get; }**  
+**[IBittrexSocketClientSpotApi](SpotApi/IBittrexSocketClientSpotApi.html) SpotApi { get; }**  
