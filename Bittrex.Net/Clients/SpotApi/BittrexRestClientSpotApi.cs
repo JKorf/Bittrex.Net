@@ -421,7 +421,7 @@ namespace Bittrex.Net.Clients.SpotApi
 
         /// <inheritdoc />
         public override TimeSyncInfo? GetTimeSyncInfo()
-            => new TimeSyncInfo(_logger, ApiOptions.AutoTimestamp, ApiOptions.TimestampRecalculationInterval, _timeSyncState);
+            => new TimeSyncInfo(_logger, (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp), (ApiOptions.TimestampRecalculationInterval ?? ClientOptions.TimestampRecalculationInterval), _timeSyncState);
 
         /// <inheritdoc />
         public override TimeSpan? GetTimeOffset()

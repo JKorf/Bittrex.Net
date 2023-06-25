@@ -9,26 +9,26 @@ Make sure to read the [CryptoExchange.Net documentation](https://jkorf.github.io
 ### Get market data
 ```csharp
 // Getting info on all symbols
-var symbolData = await bittrexClient.SpotApi.ExchangeData.GetSymbolsAsync();
+var symbolData = await bittrexRestClient.SpotApi.ExchangeData.GetSymbolsAsync();
 
 // Getting tickers for all symbols
-var tickerData = await bittrexClient.SpotApi.ExchangeData.GetTickersAsync();
+var tickerData = await bittrexRestClient.SpotApi.ExchangeData.GetTickersAsync();
 
 // Getting the order book of a symbol
-var orderBookData = await bittrexClient.SpotApi.ExchangeData.GetOrderBookAsync("BTC-USDT");
+var orderBookData = await bittrexRestClient.SpotApi.ExchangeData.GetOrderBookAsync("BTC-USDT");
 
 // Getting recent trades of a symbol
-var tradeHistoryData = await bittrexClient.SpotApi.ExchangeData.GetTradeHistoryAsync("BTC-USDT");
+var tradeHistoryData = await bittrexRestClient.SpotApi.ExchangeData.GetTradeHistoryAsync("BTC-USDT");
 ```
 
 ### Requesting balances
 ```csharp
-var accountData = await bittrexClient.SpotApi.Account.GetBalancesAsync();
+var accountData = await bittrexRestClient.SpotApi.Account.GetBalancesAsync();
 ```
 ### Placing order
 ```csharp
 // Placing a buy limit order for 0.001 BTC at a price of 50000USDT each
-var orderData = await bittrexClient.SpotApi.Trading.PlaceOrderAsync(
+var orderData = await bittrexRestClient.SpotApi.Trading.PlaceOrderAsync(
                 "BTC-USDT",
                 OrderSide.Buy,
                 OrderType.Limit,
@@ -37,7 +37,7 @@ var orderData = await bittrexClient.SpotApi.Trading.PlaceOrderAsync(
                 50000);
 		
 // Placing a market buy order for 50USDT
-var orderData = await bittrexClient.SpotApi.Trading.PlaceOrderAsync(
+var orderData = await bittrexRestClient.SpotApi.Trading.PlaceOrderAsync(
                 "BTC-USDT",
                 OrderSide.Buy,
                 OrderType.Market,
@@ -46,7 +46,7 @@ var orderData = await bittrexClient.SpotApi.Trading.PlaceOrderAsync(
 				
 													
 // Place a stop loss order, place a limit order of 0.001 BTC at 39000USDT each when the last trade price drops below 40000USDT
-var orderData = await bittrexClient.SpotApi.Trading.PlaceConditionalOrderAsync(
+var orderData = await bittrexRestClient.SpotApi.Trading.PlaceConditionalOrderAsync(
                 "BTC-USDT",
                 ConditionalOrderOperand.LesserThan,
                 new BittrexUnplacedOrder
@@ -64,24 +64,24 @@ var orderData = await bittrexClient.SpotApi.Trading.PlaceConditionalOrderAsync(
 ### Requesting a specific order
 ```csharp
 // Request info on order with id `1234`
-var orderData = await bittrexClient.SpotApi.Trading.GetOrderAsync("1234");
+var orderData = await bittrexRestClient.SpotApi.Trading.GetOrderAsync("1234");
 ```
 
 ### Requesting order history
 ```csharp
 // Get all orders conform the parameters
- var ordersData = await bittrexClient.SpotApi.Trading.GetClosedOrdersAsync();
+ var ordersData = await bittrexRestClient.SpotApi.Trading.GetClosedOrdersAsync();
 ```
 
 ### Cancel order
 ```csharp
 // Cancel order with id `1234`
-var orderData = await bittrexClient.SpotApi.Trading.CancelOrderAsync("1234");
+var orderData = await bittrexRestClient.SpotApi.Trading.CancelOrderAsync("1234");
 ```
 
 ### Get user trades
 ```csharp
-var userTradesResult = await bittrexClient.SpotApi.Trading.GetUserTradesAsync();
+var userTradesResult = await bittrexRestClient.SpotApi.Trading.GetUserTradesAsync();
 ```
 
 ### Subscribing to market data updates

@@ -16,6 +16,8 @@ namespace Bittrex.Net
 
         public BittrexAuthenticationProvider(ApiCredentials credentials) : base(credentials)
         {
+            if (credentials.CredentialType != ApiCredentialsType.Hmac)
+                throw new Exception("Only Hmac authentication is supported");
         }
 
         public override void AuthenticateRequest(RestApiClient apiClient, Uri uri, HttpMethod method, Dictionary<string, object> providedParameters, bool auth, ArrayParametersSerialization arraySerialization, HttpMethodParameterPosition parameterPosition, out SortedDictionary<string, object> uriParameters, out SortedDictionary<string, object> bodyParameters, out Dictionary<string, string> headers)
