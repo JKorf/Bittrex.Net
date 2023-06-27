@@ -1,9 +1,9 @@
 ---
-title: IBittrexRestClient
+title: Rest API documentation
 has_children: true
 ---
 *[generated documentation]*  
-### BittrexClient  
+### BittrexRestClient  
 *Client for accessing the Bittrex Rest API.*
   
 ***
@@ -11,4 +11,4 @@ has_children: true
 **void SetApiCredentials(ApiCredentials credentials);**  
 ***
 *Spot API*  
-**IBittrexRestClientSpotApi SpotApi { get; }**  
+**[IBittrexRestClientSpotApi](SpotApi/IBittrexRestClientSpotApi.html) SpotApi { get; }**  

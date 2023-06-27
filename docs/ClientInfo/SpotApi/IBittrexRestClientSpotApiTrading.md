@@ -1,11 +1,11 @@
 ---
 title: IBittrexRestClientSpotApiTrading
 has_children: false
-parent: IBittrexClientSpotApi
+parent: IBittrexRestClientSpotApi
 grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
-`BittrexClient > SpotApi > IBittrexRestClientTrading`  
+`BittrexRestClient > SpotApi > Trading`  
 *Bittrex trading endpoints, placing and mananging orders.*
   
 
@@ -19,8 +19,8 @@ grand_parent: Rest API documentation
 *Cancels all open orders*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.CancelAllOrdersAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.CancelAllOrdersAsync();  
 ```  
 
 ```csharp  
@@ -44,8 +44,8 @@ Task<WebCallResult<IEnumerable<BittrexOrder>>> CancelAllOrdersAsync(string? symb
 *Cancels a condtional order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.CancelConditionalOrderAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.CancelConditionalOrderAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -69,8 +69,8 @@ Task<WebCallResult<BittrexConditionalOrder>> CancelConditionalOrderAsync(string 
 *Cancel multiple orders in a single call*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.CancelMultipleOrdersAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.CancelMultipleOrdersAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -94,8 +94,8 @@ Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> CancelMultipleOrdersA
 *Cancels an order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.CancelOrderAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.CancelOrderAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -119,8 +119,8 @@ Task<WebCallResult<BittrexOrder>> CancelOrderAsync(string orderId, CancellationT
 *Gets a list of closed conditional orders*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetClosedConditionalOrdersAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetClosedConditionalOrdersAsync();  
 ```  
 
 ```csharp  
@@ -149,8 +149,8 @@ Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetClosedConditionalOr
 *Gets a list of closed orders*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetClosedOrdersAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetClosedOrdersAsync();  
 ```  
 
 ```csharp  
@@ -179,8 +179,8 @@ Task<WebCallResult<IEnumerable<BittrexOrder>>> GetClosedOrdersAsync(string? symb
 *Get details on a condtional order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetConditionalOrderAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetConditionalOrderAsync();  
 ```  
 
 ```csharp  
@@ -204,8 +204,8 @@ Task<WebCallResult<BittrexConditionalOrder>> GetConditionalOrderAsync(string? or
 *Get list op open conditional orders*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetOpenConditionalOrdersAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetOpenConditionalOrdersAsync();  
 ```  
 
 ```csharp  
@@ -229,8 +229,8 @@ Task<WebCallResult<IEnumerable<BittrexConditionalOrder>>> GetOpenConditionalOrde
 *Gets a list of open orders. Sequence number of the data available via ResponseHeaders.GetSequence()*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetOpenOrdersAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetOpenOrdersAsync();  
 ```  
 
 ```csharp  
@@ -254,8 +254,8 @@ Task<WebCallResult<IEnumerable<BittrexOrder>>> GetOpenOrdersAsync(string? symbol
 *Gets info on an order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetOrderAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetOrderAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -279,8 +279,8 @@ Task<WebCallResult<BittrexOrder>> GetOrderAsync(string orderId, CancellationToke
 *Gets trades for an order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetOrderTradesAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetOrderTradesAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -304,8 +304,8 @@ Task<WebCallResult<IEnumerable<BittrexUserTrade>>> GetOrderTradesAsync(string or
 *Gets info on a user trade*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetUserTradeByIdAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetUserTradeByIdAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -329,8 +329,8 @@ Task<WebCallResult<BittrexUserTrade>> GetUserTradeByIdAsync(string tradeId, Canc
 *Gets user trades*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.GetUserTradesAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.GetUserTradesAsync();  
 ```  
 
 ```csharp  
@@ -359,8 +359,8 @@ Task<WebCallResult<IEnumerable<BittrexUserTrade>>> GetUserTradesAsync(string? sy
 *Place a new conditional order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.PlaceConditionalOrderAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.PlaceConditionalOrderAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -390,8 +390,8 @@ Task<WebCallResult<BittrexConditionalOrder>> PlaceConditionalOrderAsync(string s
 *Place multiple orders in a single call*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.PlaceMultipleOrdersAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.PlaceMultipleOrdersAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -415,8 +415,8 @@ Task<WebCallResult<IEnumerable<CallResult<BittrexOrder>>>> PlaceMultipleOrdersAs
 *Places an order*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientTrading.PlaceOrderAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Trading.PlaceOrderAsync(/* parameters */);  
 ```  
 
 ```csharp  

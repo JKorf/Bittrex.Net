@@ -1,11 +1,11 @@
 ---
 title: IBittrexRestClientSpotApiAccount
 has_children: false
-parent: IBittrexClientSpotApi
+parent: IBittrexRestClientSpotApi
 grand_parent: Rest API documentation
 ---
 *[generated documentation]*  
-`BittrexClient > SpotApi > IBittrexRestClientAccount`  
+`BittrexRestClient > SpotApi > Account`  
 *Bittrex account endpoints. Account endpoints include balance info, withdraw/deposit info and requesting and account settings*
   
 
@@ -19,8 +19,8 @@ grand_parent: Rest API documentation
 *Cancels a withdrawal*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.CancelWithdrawalAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.CancelWithdrawalAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -44,8 +44,8 @@ Task<WebCallResult<BittrexWithdrawal>> CancelWithdrawalAsync(string id, Cancella
 *Get account info*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetAccountAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetAccountAsync();  
 ```  
 
 ```csharp  
@@ -68,8 +68,8 @@ Task<WebCallResult<BittrexAccount>> GetAccountAsync(CancellationToken ct = defau
 *Get account volume*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetAccountVolumeAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetAccountVolumeAsync();  
 ```  
 
 ```csharp  
@@ -92,8 +92,8 @@ Task<WebCallResult<BittrexAccountVolume>> GetAccountVolumeAsync(CancellationToke
 *Get permissions for a specific asset*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetAssetPermissionAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetAssetPermissionAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -117,8 +117,8 @@ Task<WebCallResult<IEnumerable<BittrexAssetPermission>>> GetAssetPermissionAsync
 *Get permissions for all assets*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetAssetPermissionsAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetAssetPermissionsAsync();  
 ```  
 
 ```csharp  
@@ -141,8 +141,8 @@ Task<WebCallResult<IEnumerable<BittrexAssetPermission>>> GetAssetPermissionsAsyn
 *Gets current balance for an asset*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetBalanceAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetBalanceAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -166,8 +166,8 @@ Task<WebCallResult<BittrexBalance>> GetBalanceAsync(string asset, CancellationTo
 *Gets current balances. Sequence number of the data available via ResponseHeaders.GetSequence()*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetBalancesAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetBalancesAsync();  
 ```  
 
 ```csharp  
@@ -190,8 +190,8 @@ Task<WebCallResult<IEnumerable<BittrexBalance>>> GetBalancesAsync(CancellationTo
 *Gets list of closed deposits*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetClosedDepositsAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetClosedDepositsAsync();  
 ```  
 
 ```csharp  
@@ -221,8 +221,8 @@ Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetClosedDepositsAsync(string? 
 *Gets a list of closed withdrawals*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetClosedWithdrawalsAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetClosedWithdrawalsAsync();  
 ```  
 
 ```csharp  
@@ -252,8 +252,8 @@ Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetClosedWithdrawalsAsync(st
 *Gets deposit addresses for an asset*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetDepositAddressAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetDepositAddressAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -277,8 +277,8 @@ Task<WebCallResult<BittrexDepositAddress>> GetDepositAddressAsync(string asset, 
 *Gets list of deposit addresses*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetDepositAddressesAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetDepositAddressesAsync();  
 ```  
 
 ```csharp  
@@ -301,8 +301,8 @@ Task<WebCallResult<IEnumerable<BittrexDepositAddress>>> GetDepositAddressesAsync
 *Gets a deposit by id*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetDepositAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetDepositAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -326,8 +326,8 @@ Task<WebCallResult<BittrexDeposit>> GetDepositAsync(string depositId, Cancellati
 *Gets list of deposits for a transaction id*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetDepositsByTransactionIdAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetDepositsByTransactionIdAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -351,8 +351,8 @@ Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetDepositsByTransactionIdAsync
 *Get account withdrawal/deposit fees*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetFiatTransactionFeesAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetFiatTransactionFeesAsync();  
 ```  
 
 ```csharp  
@@ -375,8 +375,8 @@ Task<WebCallResult<IEnumerable<BittrexFiatFee>>> GetFiatTransactionFeesAsync(Can
 *Gets list of open deposits. Sequence number of the data available via ResponseHeaders.GetSequence()*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetOpenDepositsAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetOpenDepositsAsync();  
 ```  
 
 ```csharp  
@@ -400,8 +400,8 @@ Task<WebCallResult<IEnumerable<BittrexDeposit>>> GetOpenDepositsAsync(string? as
 *Gets a list of open withdrawals*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetOpenWithdrawalsAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetOpenWithdrawalsAsync();  
 ```  
 
 ```csharp  
@@ -426,8 +426,8 @@ Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetOpenWithdrawalsAsync(stri
 *Get permissions for a specific symbol*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetSymbolPermissionAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetSymbolPermissionAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -451,8 +451,8 @@ Task<WebCallResult<IEnumerable<BittrexSymbolPermission>>> GetSymbolPermissionAsy
 *Get permissions for all symbols*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetSymbolPermissionsAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetSymbolPermissionsAsync();  
 ```  
 
 ```csharp  
@@ -475,8 +475,8 @@ Task<WebCallResult<IEnumerable<BittrexSymbolPermission>>> GetSymbolPermissionsAs
 *Get account trading fees*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetTradingFeesAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetTradingFeesAsync();  
 ```  
 
 ```csharp  
@@ -499,8 +499,8 @@ Task<WebCallResult<IEnumerable<BittrexTradingFee>>> GetTradingFeesAsync(Cancella
 *Gets withdrawal by id*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetWithdrawalAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetWithdrawalAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -524,8 +524,8 @@ Task<WebCallResult<BittrexWithdrawal>> GetWithdrawalAsync(string id, Cancellatio
 *Gets a list of withdrawals by transaction id*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetWithdrawalsByTransactionIdAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetWithdrawalsByTransactionIdAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -549,8 +549,8 @@ Task<WebCallResult<IEnumerable<BittrexWithdrawal>>> GetWithdrawalsByTransactionI
 *Gets a list of whitelisted address for withdrawals*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.GetWithdrawalWhitelistAddressesAsync();  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.GetWithdrawalWhitelistAddressesAsync();  
 ```  
 
 ```csharp  
@@ -573,8 +573,8 @@ Task<WebCallResult<IEnumerable<BittrexWhitelistAddress>>> GetWithdrawalWhitelist
 *Request a deposit address for an asset*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.RequestDepositAddressAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.RequestDepositAddressAsync(/* parameters */);  
 ```  
 
 ```csharp  
@@ -598,8 +598,8 @@ Task<WebCallResult<BittrexDepositAddress>> RequestDepositAddressAsync(string ass
 *Withdraw from Bittrex*  
 
 ```csharp  
-var client = new BittrexClient();  
-var result = await client.SpotApi.IBittrexRestClientAccount.WithdrawAsync(/* parameters */);  
+var client = new BittrexRestClient();  
+var result = await client.SpotApi.Account.WithdrawAsync(/* parameters */);  
 ```  
 
 ```csharp  

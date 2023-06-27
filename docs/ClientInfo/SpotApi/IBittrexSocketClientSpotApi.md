@@ -1,10 +1,10 @@
 ---
 title: IBittrexSocketClientSpotApi
 has_children: true
-parent: Rest API documentation
+parent: Socket API documentation
 ---
 *[generated documentation]*  
-`BittrexClient > SpotApi`  
+`BittrexSocketClient > SpotApi`  
 *Bittrex Spot streams*
   
 
@@ -18,7 +18,7 @@ parent: Rest API documentation
 *Subscribe to balance updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToBalanceUpdatesAsync(/* parameters */);  
 ```  
 
@@ -43,7 +43,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToBalanceUpdatesAsync(Action<DataE
 *Subscribe to conditional order updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToConditionalOrderUpdatesAsync(/* parameters */);  
 ```  
 
@@ -68,7 +68,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToConditionalOrderUpdatesAsync(Act
 *Subscribe to deposit updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToDepositUpdatesAsync(/* parameters */);  
 ```  
 
@@ -93,7 +93,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToDepositUpdatesAsync(Action<DataE
 *Subscribe to heartbeat updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToHeartbeatAsync(/* parameters */);  
 ```  
 
@@ -118,7 +118,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToHeartbeatAsync(Action<DataEvent<
 *Subscribe to kline(candle) updates for a symbol*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToKlineUpdatesAsync(/* parameters */);  
 ```  
 
@@ -145,7 +145,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol,
 *Subscribe to kline(candle) updates for a symbol*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToKlineUpdatesAsync(/* parameters */);  
 ```  
 
@@ -172,7 +172,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<st
 *Subscribe to order book updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToOrderBookUpdatesAsync(/* parameters */);  
 ```  
 
@@ -199,7 +199,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string sym
 *Subscribe to order book updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToOrderBookUpdatesAsync(/* parameters */);  
 ```  
 
@@ -226,7 +226,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerabl
 *Subscribe to order updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToOrderUpdatesAsync(/* parameters */);  
 ```  
 
@@ -251,7 +251,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(Action<DataEve
 *Subscribe to all symbol summary updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToSymbolSummaryUpdatesAsync(/* parameters */);  
 ```  
 
@@ -276,7 +276,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(Action
 *Subscribe to symbol summary updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToSymbolSummaryUpdatesAsync(/* parameters */);  
 ```  
 
@@ -302,7 +302,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(string
 *Subscribe to symbol summary updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToSymbolSummaryUpdatesAsync(/* parameters */);  
 ```  
 
@@ -328,7 +328,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToSymbolSummaryUpdatesAsync(IEnume
 *Subscribe to all symbols ticker updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToTickerUpdatesAsync(/* parameters */);  
 ```  
 
@@ -353,7 +353,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(Action<DataEv
 *Subscribe to symbol ticker updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToTickerUpdatesAsync(/* parameters */);  
 ```  
 
@@ -379,7 +379,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol
 *Subscribe to symbol ticker updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToTickerUpdatesAsync(/* parameters */);  
 ```  
 
@@ -405,7 +405,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<s
 *Subscribe to symbol trade updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToTradeUpdatesAsync(/* parameters */);  
 ```  
 
@@ -431,7 +431,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol,
 *Subscribe to symbol trade updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToTradeUpdatesAsync(/* parameters */);  
 ```  
 
@@ -457,7 +457,7 @@ Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<st
 *Subscribe to user trade updates*  
 
 ```csharp  
-var client = new BittrexClient();  
+var client = new BittrexSocketClient();  
 var result = await client.SpotApi.SubscribeToUserTradeUpdatesAsync(/* parameters */);  
 ```  
 
