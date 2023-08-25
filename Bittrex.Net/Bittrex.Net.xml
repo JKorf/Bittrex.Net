@@ -167,7 +167,7 @@
             <param name="endpoint"></param>
             <returns></returns>
         </member>
-        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexRestClientSpotApi.ParseErrorResponse(Newtonsoft.Json.Linq.JToken)">
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexRestClientSpotApi.ParseErrorResponse(System.Int32,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Collections.Generic.IEnumerable{System.String}}},System.String)">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexRestClientSpotApi.WriteParamBody(CryptoExchange.Net.Interfaces.IRequest,System.Collections.Generic.SortedDictionary{System.String,System.Object},System.String)">
@@ -416,7 +416,7 @@
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotApi.SubscribeAndWaitAsync(CryptoExchange.Net.Sockets.SocketConnection,System.Object,CryptoExchange.Net.Sockets.SocketSubscription)">
             <inheritdoc />
         </member>
-        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotApi.QueryAndWaitAsync``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object)">
+        <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotApi.QueryAndWaitAsync``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object,System.Int32)">
             <inheritdoc />
         </member>
         <member name="M:Bittrex.Net.Clients.SpotApi.BittrexSocketClientSpotApi.HandleQueryResponse``1(CryptoExchange.Net.Sockets.SocketConnection,System.Object,Newtonsoft.Json.Linq.JToken,CryptoExchange.Net.Objects.CallResult{``0}@)">

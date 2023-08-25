@@ -195,7 +195,7 @@ namespace Bittrex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<T>> QueryAndWaitAsync<T>(SocketConnection socket, object request)
+        protected override async Task<CallResult<T>> QueryAndWaitAsync<T>(SocketConnection socket, object request, int weight)
         {
             var btRequest = (ConnectionRequest)request;
             var queryResult = await ((ISignalRSocket)socket.GetSocket()).InvokeProxy<string>(btRequest.RequestName, btRequest.Parameters).ConfigureAwait(false);

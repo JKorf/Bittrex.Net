@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using CryptoExchange.Net.Interfaces;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using CryptoExchange.Net;
 
 namespace Bittrex.Net.Objects.Internal
 {
@@ -76,7 +77,7 @@ namespace Bittrex.Net.Objects.Internal
 
         public override Task Send(IConnection con, string data, string conData)
         {
-            _websocket.Send(data);
+            _websocket.Send(ExchangeHelpers.NextId(), data, 1);
             return Task.CompletedTask;
         }
 

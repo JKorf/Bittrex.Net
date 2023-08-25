@@ -20,6 +20,7 @@ namespace Bittrex.Net.Objects.Internal
 
         public event Action? OnClose;
         public event Action<string>? OnMessage;
+        public event Action<int>? OnRequestSent;
         public event Action<Exception>? OnError;
         public event Action? OnOpen;
         public event Action? OnReconnecting;
@@ -44,6 +45,7 @@ namespace Bittrex.Net.Objects.Internal
             _transport.Socket.OnOpen += () => OnOpen?.Invoke();
             _transport.Socket.OnClose += () => OnClose?.Invoke();
             _transport.Socket.OnError += (a) => OnError?.Invoke(a);
+            _transport.Socket.OnRequestSent += (a) => OnRequestSent?.Invoke(a);
             // Messages will be received via the connection to make sure SignalR knows about them and can handle heartbeat and timeouts
             _connection.Received += (str) => OnMessage?.Invoke(str);
 
@@ -123,7 +125,7 @@ namespace Bittrex.Net.Objects.Internal
             }).ConfigureAwait(false);
         }
 
-        public void Send(string data)
+        public void Send(int requestId, string data, int weight)
         {
         }
 

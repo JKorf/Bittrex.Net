@@ -376,16 +376,20 @@ namespace Bittrex.Net.Clients.SpotApi
         }
 
         /// <inheritdoc />
-        protected override Error ParseErrorResponse(JToken data)
+        protected override Error ParseErrorResponse(int httpStatusCode, IEnumerable<KeyValuePair<string, IEnumerable<string>>> responseHeaders, string data)
         {
-            if (data["code"] == null)
+            var errorData = ValidateJson(data);
+            if (!errorData)
+                return new ServerError(data);
+
+            if (errorData.Data["code"] == null)
                 return new UnknownError("Unknown response from server", data);
 
-            var info = (string)data["code"]!;
-            if (data["detail"] != null)
-                info += "; Details: " + (string)data["detail"]!;
-            if (data["data"] != null)
-                info += "; Data: " + data["data"];
+            var info = (string)errorData.Data["code"]!;
+            if (errorData.Data["detail"] != null)
+                info += "; Details: " + (string)errorData.Data["detail"]!;
+            if (errorData.Data["data"] != null)
+                info += "; Data: " + errorData.Data["data"];
 
             return new ServerError(info);
         }
