@@ -18,6 +18,7 @@
     <PackageProjectUrl>https://github.com/JKorf/Bittrex.Net</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReleaseNotes>8.0.2 - Updated CryptoExchange.Net version, Added ISpotClient to DI injection, Updated ISpotClient.GetTickerAsync to return LastPrice as well</PackageReleaseNotes>
@@ -53,5 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon\icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
