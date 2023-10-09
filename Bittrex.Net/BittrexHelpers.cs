@@ -75,6 +75,7 @@ namespace Bittrex.Net
 
             services.AddSingleton<IBittrexOrderBookFactory, BittrexOrderBookFactory>();
             services.AddTransient<IBittrexRestClient, BittrexRestClient>();
+            services.AddTransient(x => x.GetRequiredService<IBittrexRestClient>().SpotApi.CommonSpotClient);
             if (socketClientLifeTime == null)
                 services.AddSingleton<IBittrexSocketClient, BittrexSocketClient>();
             else

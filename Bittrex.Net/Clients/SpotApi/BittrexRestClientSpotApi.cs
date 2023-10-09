@@ -97,33 +97,47 @@ namespace Bittrex.Net.Clients.SpotApi
             if (string.IsNullOrEmpty(symbol))
                 throw new ArgumentException(nameof(symbol) + " required for Bittrex " + nameof(ISpotClient.GetTickerAsync), nameof(symbol));
 
-            var ticker = await ExchangeData.GetSymbolSummaryAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!ticker)
-                return ticker.As<Ticker>(null);
+            var tickerTask = ExchangeData.GetTickerAsync(symbol, ct: ct);
+            var summaryTask = ExchangeData.GetSymbolSummaryAsync(symbol, ct: ct);
+            await Task.WhenAll(tickerTask, summaryTask).ConfigureAwait(false);
 
-            return ticker.As(new Ticker
+            if (!tickerTask.Result)
+                return tickerTask.Result.As<Ticker>(null);
+
+            if (!summaryTask.Result)
+                return summaryTask.Result.As<Ticker>(null);
+
+            return tickerTask.Result.As(new Ticker
             {
-                SourceObject = ticker.Data,
-                Symbol = ticker.Data.Symbol,
-                HighPrice = ticker.Data.HighPrice,
-                LowPrice = ticker.Data.LowPrice,
-                Volume = ticker.Data.Volume
+                SourceObject = tickerTask.Result.Data,
+                Symbol = tickerTask.Result.Data.Symbol,
+                HighPrice = summaryTask.Result.Data.HighPrice,
+                LowPrice = summaryTask.Result.Data.LowPrice,
+                Volume = summaryTask.Result.Data.Volume,
+                LastPrice = tickerTask.Result.Data.LastPrice
             });
         }
 
         async Task<WebCallResult<IEnumerable<Ticker>>> IBaseRestClient.GetTickersAsync(CancellationToken ct)
         {
-            var tickers = await ExchangeData.GetSymbolSummariesAsync(ct: ct).ConfigureAwait(false);
-            if (!tickers)
-                return tickers.As<IEnumerable<Ticker>>(null);
+            var tickerTask = ExchangeData.GetTickersAsync(ct: ct);
+            var summaryTask = ExchangeData.GetSymbolSummariesAsync(ct: ct);
+            await Task.WhenAll(tickerTask, summaryTask).ConfigureAwait(false);
 
-            return tickers.As(tickers.Data.Select(t => new Ticker
+            if (!tickerTask.Result)
+                return tickerTask.Result.As<IEnumerable<Ticker>>(null);
+
+            if (!summaryTask.Result)
+                return summaryTask.Result.As<IEnumerable<Ticker>>(null);
+
+            return tickerTask.Result.As(summaryTask.Result.Data.Select(t => new Ticker
             {
                 SourceObject = t,
                 Symbol = t.Symbol,
                 HighPrice = t.HighPrice,
                 LowPrice = t.LowPrice,
-                Volume = t.Volume
+                Volume = t.Volume,
+                LastPrice = tickerTask.Result.Data.SingleOrDefault(ti => ti.Symbol == t.Symbol)?.LastPrice
             }));
         }
 
