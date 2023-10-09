@@ -30,6 +30,11 @@ Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/s
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). Feel free to join for discussion and/or questions around the CryptoExchange.Net and implementation libraries.
 
 ## Release notes
+* Version 8.0.2 - 09 Oct 2023
+    * Updated CryptoExchange.Net version
+    * Added ISpotClient to DI injection
+    * Updated ISpotClient.GetTickerAsync to return LastPrice as well
+
 * Version 8.0.1 - 25 Aug 2023
     * Updated CryptoExchange.Net
 
