@@ -330,13 +330,13 @@ namespace Bittrex.Net.Clients.SpotApi
             if (s.ApiClient.AuthenticationProvider == null)
                 return new CallResult<bool>(new NoApiCredentialsError());
 
+            var bittrexAuthProvider = (BittrexAuthenticationProvider)s.ApiClient.AuthenticationProvider;
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var randomContent = $"{Guid.NewGuid()}";
             var content = string.Join("", timestamp, randomContent);
-            var signedContent = s.ApiClient.AuthenticationProvider.Sign(content);
+            var signedContent = bittrexAuthProvider.Sign(content);
             var socket = (ISignalRSocket)s.GetSocket();
 
-            var bittrexAuthProvider = (BittrexAuthenticationProvider)s.ApiClient.AuthenticationProvider;
             var result = await socket.InvokeProxy<ConnectionResponse>("Authenticate", bittrexAuthProvider.GetApiKey(), timestamp, randomContent, signedContent).ConfigureAwait(false);
             if (!result.Success || !result.Data.Success)
             {

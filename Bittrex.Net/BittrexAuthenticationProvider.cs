@@ -47,6 +47,6 @@ namespace Bittrex.Net
             headers.Add("Api-Signature", SignHMACSHA512(headers["Api-Timestamp"] + uriString + method + headers["Api-Content-Hash"]));
         }
 
-        public override string Sign(string toSign) => SignHMACSHA512(toSign);
+        public string Sign(string toSign) => SignHMACSHA512(toSign);
     }
 }
